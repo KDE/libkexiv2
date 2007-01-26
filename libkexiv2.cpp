@@ -59,16 +59,16 @@
 
 // Local includes.
 
-#include "exiv2iface.h"
+#include "libkexiv2.h"
 
-namespace KIPIPlugins
+namespace KExiv2Library
 {
 
-class Exiv2IfacePriv
+class LibKExiv2Priv
 {
 public:
 
-    Exiv2IfacePriv(){}
+    LibKExiv2Priv(){}
 
     std::string     imageComments;  
 
@@ -77,17 +77,17 @@ public:
     Exiv2::IptcData iptcMetadata;
 };
 
-Exiv2Iface::Exiv2Iface()
+LibKExiv2::LibKExiv2()
 {
-    d = new Exiv2IfacePriv;
+    d = new LibKExiv2Priv;
 }
 
-Exiv2Iface::~Exiv2Iface()
+LibKExiv2::~LibKExiv2()
 {
     delete d;
 }
 
-bool Exiv2Iface::clearExif()
+bool LibKExiv2::clearExif()
 {
     try
     {    
@@ -104,7 +104,7 @@ bool Exiv2Iface::clearExif()
     return false;       
 }
 
-bool Exiv2Iface::clearIptc()
+bool LibKExiv2::clearIptc()
 {
     try
     {    
@@ -121,14 +121,14 @@ bool Exiv2Iface::clearIptc()
     return false;       
 }
 
-QByteArray Exiv2Iface::getComments() const
+QByteArray LibKExiv2::getComments() const
 {
     QByteArray data(d->imageComments.size());
     memcpy(data.data(), d->imageComments.c_str(), d->imageComments.size());
     return data;
 }
 
-bool Exiv2Iface::setComments(const QByteArray& data)
+bool LibKExiv2::setComments(const QByteArray& data)
 {
     QString string(data);
     const std::string str(string.utf8());
@@ -136,7 +136,7 @@ bool Exiv2Iface::setComments(const QByteArray& data)
     return true;
 }
 
-QByteArray Exiv2Iface::getExif() const
+QByteArray LibKExiv2::getExif() const
 {
     try
     {    
@@ -160,7 +160,7 @@ QByteArray Exiv2Iface::getExif() const
     return QByteArray();
 }
 
-QByteArray Exiv2Iface::getIptc(bool addIrbHeader) const
+QByteArray LibKExiv2::getIptc(bool addIrbHeader) const
 {
     try
     {    
@@ -199,7 +199,7 @@ QByteArray Exiv2Iface::getIptc(bool addIrbHeader) const
     return QByteArray();
 }
 
-bool Exiv2Iface::setExif(const QByteArray& data)
+bool LibKExiv2::setExif(const QByteArray& data)
 {
     try
     {    
@@ -221,7 +221,7 @@ bool Exiv2Iface::setExif(const QByteArray& data)
     return false;
 }
 
-bool Exiv2Iface::setIptc(const QByteArray& data)
+bool LibKExiv2::setIptc(const QByteArray& data)
 {
     try
     {    
@@ -243,7 +243,7 @@ bool Exiv2Iface::setIptc(const QByteArray& data)
     return false;    
 }
 
-bool Exiv2Iface::load(const QString& filePath)
+bool LibKExiv2::load(const QString& filePath)
 {
     try
     {    
@@ -277,7 +277,7 @@ bool Exiv2Iface::load(const QString& filePath)
     }
 }
 
-bool Exiv2Iface::save(const QString& filePath)
+bool LibKExiv2::save(const QString& filePath)
 {
     if (filePath.isEmpty())
         return false;
@@ -335,7 +335,7 @@ bool Exiv2Iface::save(const QString& filePath)
     }
 }
 
-bool Exiv2Iface::isReadOnly(const QString& filePath)
+bool LibKExiv2::isReadOnly(const QString& filePath)
 {
     QFileInfo fi(filePath);
     QString ext = fi.extension(false).upper();
@@ -346,7 +346,7 @@ bool Exiv2Iface::isReadOnly(const QString& filePath)
     return false;
 }
 
-bool Exiv2Iface::setImageProgramId(const QString& program, const QString& version)
+bool LibKExiv2::setImageProgramId(const QString& program, const QString& version)
 {
     try
     {
@@ -369,7 +369,7 @@ bool Exiv2Iface::setImageProgramId(const QString& program, const QString& versio
     return false;
 }
 
-bool Exiv2Iface::setImageDimensions(const QSize& size)
+bool LibKExiv2::setImageDimensions(const QSize& size)
 {
     try
     {    
@@ -389,7 +389,7 @@ bool Exiv2Iface::setImageDimensions(const QSize& size)
     return false;
 }
 
-bool Exiv2Iface::setExifThumbnail(const QImage& thumb)
+bool LibKExiv2::setExifThumbnail(const QImage& thumb)
 {
     try
     {   
@@ -411,7 +411,7 @@ bool Exiv2Iface::setExifThumbnail(const QImage& thumb)
     return false;
 }
 
-QString Exiv2Iface::getExifTagString(const char* exifTagName, bool escapeCR) const
+QString LibKExiv2::getExifTagString(const char* exifTagName, bool escapeCR) const
 {
     try
     {
@@ -441,7 +441,7 @@ QString Exiv2Iface::getExifTagString(const char* exifTagName, bool escapeCR) con
     return QString();
 }
 
-bool Exiv2Iface::setExifTagString(const char *exifTagName, const QString& value)
+bool LibKExiv2::setExifTagString(const char *exifTagName, const QString& value)
 {
     try
     {
@@ -458,7 +458,7 @@ bool Exiv2Iface::setExifTagString(const char *exifTagName, const QString& value)
     return false;
 }
 
-QString Exiv2Iface::getIptcTagString(const char* iptcTagName, bool escapeCR) const
+QString LibKExiv2::getIptcTagString(const char* iptcTagName, bool escapeCR) const
 {
     try
     {
@@ -488,7 +488,7 @@ QString Exiv2Iface::getIptcTagString(const char* iptcTagName, bool escapeCR) con
     return QString();
 }
 
-bool Exiv2Iface::setIptcTagString(const char *iptcTagName, const QString& value)
+bool LibKExiv2::setIptcTagString(const char *iptcTagName, const QString& value)
 {
     try
     {
@@ -505,7 +505,7 @@ bool Exiv2Iface::setIptcTagString(const char *iptcTagName, const QString& value)
     return false;
 }
 
-bool Exiv2Iface::getExifTagLong(const char* exifTagName, long &val)
+bool LibKExiv2::getExifTagLong(const char* exifTagName, long &val)
 {
     try
     {    
@@ -529,7 +529,7 @@ bool Exiv2Iface::getExifTagLong(const char* exifTagName, long &val)
     return false;    
 }
 
-QByteArray Exiv2Iface::getExifTagData(const char* exifTagName) const
+QByteArray LibKExiv2::getExifTagData(const char* exifTagName) const
 {
     try
     {
@@ -554,7 +554,7 @@ QByteArray Exiv2Iface::getExifTagData(const char* exifTagName) const
     return QByteArray();
 }
 
-QByteArray Exiv2Iface::getIptcTagData(const char *iptcTagName) const
+QByteArray LibKExiv2::getIptcTagData(const char *iptcTagName) const
 {
     try
     {
@@ -579,7 +579,7 @@ QByteArray Exiv2Iface::getIptcTagData(const char *iptcTagName) const
     return QByteArray();
 }
 
-bool Exiv2Iface::getExifTagRational(const char *exifTagName, long int &num, long int &den, int component)
+bool LibKExiv2::getExifTagRational(const char *exifTagName, long int &num, long int &den, int component)
 {
     try
     {
@@ -604,7 +604,7 @@ bool Exiv2Iface::getExifTagRational(const char *exifTagName, long int &num, long
     return false;
 }
 
-bool Exiv2Iface::setExifTagLong(const char *exifTagName, long val)
+bool LibKExiv2::setExifTagLong(const char *exifTagName, long val)
 {
     try
     {
@@ -621,7 +621,7 @@ bool Exiv2Iface::setExifTagLong(const char *exifTagName, long val)
     return false;
 }
 
-bool Exiv2Iface::setExifTagRational(const char *exifTagName, long int num, long int den)
+bool LibKExiv2::setExifTagRational(const char *exifTagName, long int num, long int den)
 {
     try
     {
@@ -638,7 +638,7 @@ bool Exiv2Iface::setExifTagRational(const char *exifTagName, long int num, long 
     return false;
 }
 
-bool Exiv2Iface::removeExifTag(const char *exifTagName)
+bool LibKExiv2::removeExifTag(const char *exifTagName)
 {
     try
     {  
@@ -660,7 +660,7 @@ bool Exiv2Iface::removeExifTag(const char *exifTagName)
     return false;
 }
 
-bool Exiv2Iface::removeIptcTag(const char *iptcTagName)
+bool LibKExiv2::removeIptcTag(const char *iptcTagName)
 {
     try
     {  
@@ -682,7 +682,7 @@ bool Exiv2Iface::removeIptcTag(const char *iptcTagName)
     return false;
 }
 
-bool Exiv2Iface::setImagePreview(const QImage& preview)
+bool LibKExiv2::setImagePreview(const QImage& preview)
 {
     try
     {
@@ -724,7 +724,7 @@ bool Exiv2Iface::setImagePreview(const QImage& preview)
     return false;
 }
 
-QDateTime Exiv2Iface::getImageDateTime() const
+QDateTime LibKExiv2::getImageDateTime() const
 {
     try
     {    
@@ -855,7 +855,7 @@ QDateTime Exiv2Iface::getImageDateTime() const
     return QDateTime();
 }
 
-Exiv2Iface::ImageOrientation Exiv2Iface::getImageOrientation()
+LibKExiv2::ImageOrientation LibKExiv2::getImageOrientation()
 {
     if (d->exifMetadata.empty())
        return ORIENTATION_UNSPECIFIED;
@@ -948,7 +948,7 @@ Exiv2Iface::ImageOrientation Exiv2Iface::getImageOrientation()
     return ORIENTATION_UNSPECIFIED;
 }
 
-bool Exiv2Iface::setImageOrientation(ImageOrientation orientation)
+bool LibKExiv2::setImageOrientation(ImageOrientation orientation)
 {
     if (d->exifMetadata.empty())
        return false;
@@ -1015,7 +1015,7 @@ bool Exiv2Iface::setImageOrientation(ImageOrientation orientation)
     return false;
 }
 
-bool Exiv2Iface::getGPSInfo(double& altitude, double& latitude, double& longitude)
+bool LibKExiv2::getGPSInfo(double& altitude, double& latitude, double& longitude)
 {
     try
     {    
@@ -1115,7 +1115,7 @@ bool Exiv2Iface::getGPSInfo(double& altitude, double& latitude, double& longitud
     return false;
 }
 
-bool Exiv2Iface::setGPSInfo(double altitude, double latitude, double longitude)
+bool LibKExiv2::setGPSInfo(double altitude, double latitude, double longitude)
 {
     try
     {    
@@ -1237,7 +1237,7 @@ bool Exiv2Iface::setGPSInfo(double altitude, double latitude, double longitude)
     return false;
 }
 
-bool Exiv2Iface::removeGPSInfo()
+bool LibKExiv2::removeGPSInfo()
 {
     try
     {  
@@ -1272,7 +1272,7 @@ bool Exiv2Iface::removeGPSInfo()
     return false;
 }
 
-void Exiv2Iface::convertToRational(double number, long int* numerator, 
+void LibKExiv2::convertToRational(double number, long int* numerator, 
                                    long int* denominator, int rounding)
 {
     // This function converts the given decimal number
@@ -1332,7 +1332,7 @@ void Exiv2Iface::convertToRational(double number, long int* numerator,
     *denominator = (int)denTemp;
 }
 
-QStringList Exiv2Iface::getImageKeywords() const
+QStringList LibKExiv2::getImageKeywords() const
 {
     try
     {    
@@ -1365,7 +1365,7 @@ QStringList Exiv2Iface::getImageKeywords() const
     return QStringList();
 }
 
-bool Exiv2Iface::setImageKeywords(const QStringList& oldKeywords, const QStringList& newKeywords)
+bool LibKExiv2::setImageKeywords(const QStringList& oldKeywords, const QStringList& newKeywords)
 {
     try
     {    
@@ -1415,7 +1415,7 @@ bool Exiv2Iface::setImageKeywords(const QStringList& oldKeywords, const QStringL
     return false;
 }
 
-QStringList Exiv2Iface::getImageSubjects() const
+QStringList LibKExiv2::getImageSubjects() const
 {
     try
     {    
@@ -1448,7 +1448,7 @@ QStringList Exiv2Iface::getImageSubjects() const
     return QStringList();
 }
 
-bool Exiv2Iface::setImageSubjects(const QStringList& oldSubjects, const QStringList& newSubjects)
+bool LibKExiv2::setImageSubjects(const QStringList& oldSubjects, const QStringList& newSubjects)
 {
     try
     {    
@@ -1498,7 +1498,7 @@ bool Exiv2Iface::setImageSubjects(const QStringList& oldSubjects, const QStringL
     return false;
 }
 
-QStringList Exiv2Iface::getImageSubCategories() const
+QStringList LibKExiv2::getImageSubCategories() const
 {
     try
     {    
@@ -1531,7 +1531,7 @@ QStringList Exiv2Iface::getImageSubCategories() const
     return QStringList();
 }
 
-bool Exiv2Iface::setImageSubCategories(const QStringList& oldSubCategories, const QStringList& newSubCategories)
+bool LibKExiv2::setImageSubCategories(const QStringList& oldSubCategories, const QStringList& newSubCategories)
 {
     try
     {    
@@ -1581,7 +1581,7 @@ bool Exiv2Iface::setImageSubCategories(const QStringList& oldSubCategories, cons
     return false;
 }
 
-QString Exiv2Iface::getExifComment() const
+QString LibKExiv2::getExifComment() const
 {
     try
     {
@@ -1611,7 +1611,7 @@ QString Exiv2Iface::getExifComment() const
     return QString();
 }
 
-bool Exiv2Iface::setExifComment(const QString& comment)
+bool LibKExiv2::setExifComment(const QString& comment)
 {
     try
     {
@@ -1653,7 +1653,7 @@ bool Exiv2Iface::setExifComment(const QString& comment)
     return false;
 }
 
-QString Exiv2Iface::convertCommentValue(const Exiv2::Exifdatum &exifDatum)
+QString LibKExiv2::convertCommentValue(const Exiv2::Exifdatum &exifDatum)
 {
     try
     {
@@ -1726,7 +1726,7 @@ QString Exiv2Iface::convertCommentValue(const Exiv2::Exifdatum &exifDatum)
     return QString();
 }
 
-QString Exiv2Iface::detectEncodingAndDecode(const std::string &value)
+QString LibKExiv2::detectEncodingAndDecode(const std::string &value)
 {
     // For charset autodetection, we could use sophisticated code
     // (Mozilla chardet, KHTML's autodetection, QTextCodec::codecForContent),
@@ -1770,4 +1770,4 @@ QString Exiv2Iface::detectEncodingAndDecode(const std::string &value)
         return QString::fromLatin1(value.c_str());
 }
 
-}  // NameSpace KIPIPlugins
+}  // NameSpace KExiv2Library

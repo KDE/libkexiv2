@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef EXIV2IFACE_H
-#define EXIV2IFACE_H
+#ifndef LIB_KEXIV2_H
+#define LIB_KEXIV2_H
 
 // C++ includes.
 
@@ -42,12 +42,12 @@ namespace Exiv2
     class Exifdatum;
 }
 
-namespace KIPIPlugins
+namespace KExiv2Library
 {
 
-class Exiv2IfacePriv;
+class LibKExiv2Priv;
 
-class Exiv2Iface
+class LibKExiv2
 {
 
 public:
@@ -67,8 +67,8 @@ public:
 
 public:
 
-    Exiv2Iface();
-    ~Exiv2Iface();
+    LibKExiv2();
+    ~LibKExiv2();
     
     bool load(const QString& filePath);
     bool save(const QString& filePath);
@@ -121,7 +121,7 @@ public:
     bool removeExifTag(const char *exifTagName);
     bool removeIptcTag(const char *iptcTagName);
 
-    Exiv2Iface::ImageOrientation getImageOrientation();
+    LibKExiv2::ImageOrientation getImageOrientation();
     QDateTime getImageDateTime() const;
 
     static bool isReadOnly(const QString& filePath);
@@ -132,9 +132,9 @@ public:
 
 private:
 
-    Exiv2IfacePriv *d;
+    LibKExiv2Priv *d;
 };
 
-}  // NameSpace KIPIPlugins
+}  // NameSpace KExiv2Library
 
-#endif /* EXIV2IFACE_H */
+#endif /* LIB_KEXIV2_H */
