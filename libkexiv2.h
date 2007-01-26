@@ -37,6 +37,10 @@
 #include <qimage.h>
 #include <qdatetime.h>
 
+// Local includes.
+
+#include "libkexiv2_export.h"
+
 namespace Exiv2
 {
     class Exifdatum;
@@ -47,7 +51,7 @@ namespace KExiv2Library
 
 class LibKExiv2Priv;
 
-class LibKExiv2
+class LIBKEXIV2_EXPORT LibKExiv2
 {
 
 public:
