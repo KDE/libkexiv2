@@ -1,14 +1,13 @@
 Begin4
-Title: libkexif
-Version: 0.2.5
+Title: libkexiv2
+Version: 0.1.0
 Entered-date: 2006-10-21
-Description: A library to manipulate EXIF information
-Keywords: kde image jpeg exif
-Author: renchi at pooh.tam.uiuc.edu (Renchi Raju)
- caulier dot gilles at free.fr (Gilles Caulier)
- kde at ralfhoelzer.com (Ralf Hoelzer)
+Description: An library to manipulate EXIF/IPTC information using Exiv2 library
+Keywords: kde image jpeg raw tiff exif iptc
+Author: caulier dot gilles at kdemail dot net (Gilles Caulier)
+ marcel dot wiesweg at gmx dot de (Marcel Wiesweg)
 Maintained-by:
-Primary-site: http://extragear.kde.org/apps/kipi
+Primary-site: http://www.kipi-plugins.org
 Alternate-site:
 Original-site:
 Platforms:
