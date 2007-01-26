@@ -1,0 +1,6 @@
+Libkexif is a wrapper around Exiv2 library for manipulating metadata
+informations embedded in images.
+
+For more informations about Exiv2 library, please look at project page:
+
+http://www.exiv2.org
