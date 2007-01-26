@@ -4,7 +4,7 @@
  * Date   : 2006-09-15
  * Description : Exiv2 library interface
  *
- * Copyright 2006 by Gilles Caulier and Marcel Wiesweg
+ * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
  *
  * NOTE: This class is a simplified version of Digikam::DMetadata
  *       class from digiKam core. Please contact digiKam team 
