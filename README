@@ -1,8 +1,25 @@
+LIBKEXIV2 PROJECT
+
+
+-- AUTHORS -----------------------------------------------------------
+
+See AUTHORS file for details.
+
+
+
+-- ABOUT -------------------------------------------------------------
+
 Libkexif is a wrapper around Exiv2 library for manipulating metadata
 informations embedded in images. 
 
-This library is used by kipi-plugins and digiKam
+This library is used by kipi-plugins and digiKam.
 
-For more informations about Exiv2 library, please look at project page:
 
-http://www.exiv2.org
+-- DEPENDENCIES -------------------------------------------------------
+
+AutoConf   >= 2.5.x                        http://www.gnu.org/software/autoconf
+AutoMake   >= 1.7.x                        http://www.gnu.org/software/automake
+libqt      >= 3.x                          http://www.trooltech.com
+libkde     >= 3.4.x (>=3.5.x recommended)  http://www.kde.org
+libexiv2   >= 0.12                         http://www.exiv2.org
+
