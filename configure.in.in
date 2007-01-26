@@ -1,50 +1,3 @@
-AM_INIT_AUTOMAKE(libkexiv2,0.1.0)
-AC_OUTPUT([ libkexiv2/libkexiv2.pc ])
-
-# -----------------------------------------------------------------
-# enable hidden visibility only if kde >= 3.3.2 and kdelibs has
-# been compiled with visibility enabled
-# -----------------------------------------------------------------
-
-AC_LANG_PUSH(C++)
-libkexiv2_save_cppflags=$CPPFLAGS
-CPPFLAGS="$CPPFLAGS $all_includes"  
-AC_MSG_CHECKING([if hidden visibility should be enabled])
-AC_COMPILE_IFELSE(
- [
-   #include <kdeversion.h>
-   #include <kdemacros.h>
-   int other_func( void )
-   { 
-      #if KDE_IS_VERSION(3,3,2)
-      #else
-        iam dying;
-      #endif
-      #ifdef __KDE_HAVE_GCC_VISIBILITY
-      #else
-        no, iam really dead;
-      #endif      
-      return 0;
-   }
- ], 
- [ AC_MSG_RESULT([yes])
-   libkexiv2_enable_hidden_visibility="yes" ],
- [ AC_MSG_RESULT([no]) ] 
-)
-CPPFLAGS=$libkexiv2
-AC_LANG_POP(C++)
-
-if test "x$libkexiv2_enable_hidden_visibility" = "xyes"; then
-   KDE_ENABLE_HIDDEN_VISIBILITY 
-fi
-
-# -----------------------------------------------------------------
-# pkg config check
-# -----------------------------------------------------------------
-
-AC_ARG_VAR(PKGCONFIGFOUND, [Path to pkg-config])
-AC_CHECK_PROG(PKGCONFIGFOUND, pkg-config,[yes])
-
 #------------------------------------------------------------------
 # Check for Exiv2 library
 #------------------------------------------------------------------
@@ -58,6 +11,39 @@ if test "x$have_exiv2" != "xyes"; then
   AC_MSG_WARN([Exiv2 library not found, libkexiv2 will not be compiled.])
   DO_NOT_COMPILE="libkexiv2 $DO_NOT_COMPILE"
 fi
+
+AM_CONDITIONAL(compile_LIBKEXIV2, [test x$have_exiv2 != xyes])
+
+AC_OUTPUT([ libkexiv2/libkexiv2.pc ])
+
+# -----------------------------------------------------------------
+# enable hidden visibility only if kde >= 3.3.2 and kdelibs has
+# been compiled with visibility enabled
+# -----------------------------------------------------------------
+
+AC_LANG_PUSH(C++)
+libkexiv2_kdemacros_cppflags=$CPPFLAGS
+CPPFLAGS="$CPPFLAGS $all_includes"  
+AC_MSG_CHECKING([if kdemacros.h is usable])
+AC_COMPILE_IFELSE(
+ [
+   #include <kdemacros.h>
+   #include <string>
+   int other_func( void ) KDE_EXPORT;
+   int other_func( void )
+   { 
+      std::string s("KDE_EXPORT");
+      return 0;
+   }
+ ], 
+ [ AC_MSG_RESULT([yes])
+   AC_DEFINE(KDEMACROS_USABLE, 1, [kdemacros.h usable]) ], 
+ [ AC_MSG_RESULT([no]) ] 
+)
+CPPFLAGS=$libkexiv2_kdemacros_cppflags
+AC_LANG_POP(C++)
+
+
 
 
 
