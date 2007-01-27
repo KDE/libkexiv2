@@ -6,6 +6,10 @@
  *
  * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
  *
+ * NOTE: Do not use kdDebug() in this library because it will
+ *       be used in multithreaded implementations. Use qDebug()
+ *       instead. See B.K.O #133026 for details.
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -41,7 +45,6 @@
 
 #include <ktempfile.h>
 #include <kstringhandler.h>
-#include <kdebug.h>
 #include <kdeversion.h>
 
 // Exiv2 includes.
@@ -92,9 +95,7 @@ bool LibKExiv2::clearExif()
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot clear Exif data using Exiv2 (" 
-                  << QString::fromLocal8Bit(e.what().c_str())
-                  << ")" << endl;
+        qDebug("Cannot clear Exif data using Exiv2 (%s)", e.what().c_str());
     }    
 
     return false;       
@@ -109,9 +110,7 @@ bool LibKExiv2::clearIptc()
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot clear Iptc data using Exiv2 (" 
-                  << QString::fromLocal8Bit(e.what().c_str())
-                  << ")" << endl;
+        qDebug("Cannot clear Iptc data using Exiv2 (%s)", e.what().c_str());
     }    
 
     return false;       
@@ -148,9 +147,7 @@ QByteArray LibKExiv2::getExif() const
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot get Exif data using Exiv2 (" 
-                  << QString::fromLocal8Bit(e.what().c_str())
-                  << ")" << endl;
+        qDebug("Cannot get Exif data using Exiv2 (%s", e.what().c_str());
     }       
     
     return QByteArray();
@@ -172,7 +169,7 @@ QByteArray LibKExiv2::getIptc(bool addIrbHeader) const
                     c2 = Exiv2::Photoshop::setIptcIrb(0, 0, iptc);
                 else
                 {
-                    kdDebug() << "Exiv2 version is to old. Cannot add Irb header to IPTC metadata" << endl;
+                    qDebug("Exiv2 version is to old. Cannot add Irb header to IPTC metadata");
                     return QByteArray();
                 }
 #endif
@@ -187,9 +184,7 @@ QByteArray LibKExiv2::getIptc(bool addIrbHeader) const
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot get Iptc data using Exiv2 (" 
-                  << QString::fromLocal8Bit(e.what().c_str())
-                  << ")" << endl;
+        qDebug("Cannot get Iptc data using Exiv2 (%s)",e.what().c_str());
     }       
     
     return QByteArray();
@@ -209,9 +204,7 @@ bool LibKExiv2::setExif(const QByteArray& data)
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot set Exif data using Exiv2 (" 
-                  << QString::fromLocal8Bit(e.what().c_str())
-                  << ")" << endl;
+        qDebug("Cannot set Exif data using Exiv2 (%s)", e.what().c_str());
     }        
 
     return false;
@@ -231,9 +224,7 @@ bool LibKExiv2::setIptc(const QByteArray& data)
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot set Iptc data using Exiv2 (" 
-                  << QString::fromLocal8Bit(e.what().c_str())
-                  << ")" << endl;
+        qDebug("Cannot set Iptc data using Exiv2 (%s)",e.what().c_str());
     }    
 
     return false;    
@@ -266,9 +257,7 @@ bool LibKExiv2::load(const QString& filePath)
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot load metadata using Exiv2 (" 
-                  << QString::fromLocal8Bit(e.what().c_str())
-                  << ")" << endl;
+        qDebug("Cannot load metadata using Exiv2 (%s)", e.what().c_str());
         return false;
     }
 }
@@ -283,12 +272,12 @@ bool LibKExiv2::save(const QString& filePath)
     QFileInfo dinfo(finfo.dirPath()); 
     if (!finfo.isWritable())
     {
-        kdDebug() << "File '" << finfo.fileName() << "' is read-only. Metadata not saved." << endl;
+        qDebug("File '%s' is read-only. Metadata not saved.", finfo.fileName().ascii());
         return false;
     }
     if (!dinfo.isWritable())
     {
-        kdDebug() << "Dir '" << dinfo.filePath() << "' is read-only. Metadata not saved." << endl;
+        qDebug("Dir '%s' is read-only. Metadata not saved.", dinfo.filePath().ascii());
         return false;
     }
 
@@ -324,9 +313,7 @@ bool LibKExiv2::save(const QString& filePath)
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot save metadata using Exiv2 ("
-                  << QString::fromLocal8Bit(e.what().c_str())
-                  << ")" << endl;
+        qDebug("Cannot save metadata using Exiv2 (%s)", e.what().c_str());
         return false;
     }
 }
@@ -357,9 +344,7 @@ bool LibKExiv2::setImageProgramId(const QString& program, const QString& version
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot set Program identity into image using Exiv2 (" 
-                  << QString::fromLocal8Bit(e.what().c_str())
-                  << ")" << endl;
+        qDebug("Cannot set Program identity into image using Exiv2 (%s)", e.what().c_str());
     }
 
     return false;
@@ -377,9 +362,7 @@ bool LibKExiv2::setImageDimensions(const QSize& size)
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot set image dimensions using Exiv2 (" 
-                  << QString::fromLocal8Bit(e.what().c_str())
-                  << ")" << endl;
+        qDebug("Cannot set image dimensions using Exiv2 (%s)",e.what().c_str());
     }        
     
     return false;
@@ -399,9 +382,7 @@ bool LibKExiv2::setExifThumbnail(const QImage& thumb)
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot set Exif Thumbnail using Exiv2 (" 
-                  << QString::fromLocal8Bit(e.what().c_str())
-                  << ")" << endl;
+        qDebug("Cannot set Exif Thumbnail using Exiv2 (%s)", e.what().c_str());
     }        
     
     return false;
@@ -428,10 +409,8 @@ QString LibKExiv2::getExifTagString(const char* exifTagName, bool escapeCR) cons
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot find Exif key '"
-                  << exifTagName << "' into image using Exiv2 (" 
-                  << QString::fromLocal8Bit(e.what().c_str())
-                  << ")" << endl;
+        qDebug("Cannot find Exif key '%s' into image using Exiv2 (%s)",
+               exifTagName, e.what().c_str());
     }
 
     return QString();
@@ -446,9 +425,7 @@ bool LibKExiv2::setExifTagString(const char *exifTagName, const QString& value)
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot set Exif tag string into image using Exiv2 (" 
-                  << QString::fromLocal8Bit(e.what().c_str())
-                  << ")" << endl;
+        qDebug("Cannot set Exif tag string into image using Exiv2 (%s)", e.what().c_str());
     }
 
     return false;
@@ -475,10 +452,8 @@ QString LibKExiv2::getIptcTagString(const char* iptcTagName, bool escapeCR) cons
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot find Iptc key '"
-                  << iptcTagName << "' into image using Exiv2 (" 
-                  << QString::fromLocal8Bit(e.what().c_str())
-                  << ")" << endl;
+        qDebug("Cannot find Iptc key '%s' into image using Exiv2 (%s)",
+               iptcTagName, e.what().c_str());
     }
 
     return QString();
@@ -493,9 +468,7 @@ bool LibKExiv2::setIptcTagString(const char *iptcTagName, const QString& value)
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot set Iptc tag string into image using Exiv2 (" 
-                  << QString::fromLocal8Bit(e.what().c_str())
-                  << ")" << endl;
+        qDebug("Cannot set Iptc tag string into image using Exiv2 (%s)", e.what().c_str());
     }
 
     return false;
@@ -516,10 +489,8 @@ bool LibKExiv2::getExifTagLong(const char* exifTagName, long &val)
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot find Exif key '"
-                  << exifTagName << "' into image using Exiv2 (" 
-                  << QString::fromLocal8Bit(e.what().c_str())
-                  << ")" << endl;
+        qDebug("Cannot find Exif key '%s' into image using Exiv2 (%s)", 
+               exifTagName, e.what().c_str());
     }        
     
     return false;    
@@ -541,10 +512,8 @@ QByteArray LibKExiv2::getExifTagData(const char* exifTagName) const
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot find Exif key '"
-                  << exifTagName << "' into image using Exiv2 (" 
-                  << QString::fromLocal8Bit(e.what().c_str())
-                  << ")" << endl;
+        qDebug("Cannot find Exif key '%s' into image using Exiv2 (%s)",
+               exifTagName, e.what().c_str());
     }
 
     return QByteArray();
@@ -566,10 +535,8 @@ QByteArray LibKExiv2::getIptcTagData(const char *iptcTagName) const
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot find Iptc key '"
-                  << iptcTagName << "' into image using Exiv2 (" 
-                  << QString::fromLocal8Bit(e.what().c_str())
-                  << ")" << endl;
+        qDebug("Cannot find Iptc key '%s' into image using Exiv2 (%s)", 
+                iptcTagName, e.what().c_str());
     }
 
     return QByteArray();
@@ -591,10 +558,8 @@ bool LibKExiv2::getExifTagRational(const char *exifTagName, long int &num, long 
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot find Exif Rational value from key '"
-                  << exifTagName << "' into image using Exiv2 (" 
-                  << QString::fromLocal8Bit(e.what().c_str())
-                  << ")" << endl;
+        qDebug("Cannot find Exif Rational value from key '%s' into image using Exiv2 (%s)",
+               exifTagName, e.what().c_str());
     }
 
     return false;
@@ -609,9 +574,7 @@ bool LibKExiv2::setExifTagLong(const char *exifTagName, long val)
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot set Exif tag long value into image using Exiv2 (" 
-                  << QString::fromLocal8Bit(e.what().c_str())
-                  << ")" << endl;
+        qDebug("Cannot set Exif tag long value into image using Exiv2 (%s)", e.what().c_str());
     }
 
     return false;
@@ -626,9 +589,7 @@ bool LibKExiv2::setExifTagRational(const char *exifTagName, long int num, long i
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot set Exif tag rational value into image using Exiv2 (" 
-                  << QString::fromLocal8Bit(e.what().c_str())
-                  << ")" << endl;
+        qDebug("Cannot set Exif tag rational value into image using Exiv2 (%s)", e.what().c_str());
     }
 
     return false;
@@ -648,9 +609,7 @@ bool LibKExiv2::removeExifTag(const char *exifTagName)
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot remove Exif tag using Exiv2 (" 
-                  << QString::fromLocal8Bit(e.what().c_str())
-                  << ")" << endl;
+        qDebug("Cannot remove Exif tag using Exiv2 (%s)", e.what().c_str());
     }        
     
     return false;
@@ -670,9 +629,7 @@ bool LibKExiv2::removeIptcTag(const char *iptcTagName)
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot remove Iptc tag using Exiv2 (" 
-                  << QString::fromLocal8Bit(e.what().c_str())
-                  << ")" << endl;
+        qDebug("Cannot remove Iptc tag using Exiv2 (%s)", e.what().c_str());
     }        
     
     return false;
@@ -682,7 +639,7 @@ bool LibKExiv2::setImagePreview(const QImage& preview)
 {
     try
     {
-        KTempFile previewFile(QString::null, "DigikamDMetadataPreview");
+        KTempFile previewFile(QString::null, "LibKExiv2ImagePreview");
         previewFile.setAutoDelete(true);
         // A little bit compressed preview jpeg image to limit IPTC size.
         preview.save(previewFile.name(), "JPEG");
@@ -691,9 +648,8 @@ bool LibKExiv2::setImagePreview(const QImage& preview)
         if ( !file.open(IO_ReadOnly) ) 
             return false;
 
-        kdDebug() << "(" << preview.width() << "x" << preview.height() 
-                  << ") JPEG image preview size: " << file.size() 
-                  << " bytes" << endl;
+        qDebug("(%i x %i) JPEG image preview size: %i bytes", 
+               preview.width(), preview.height(), (int)file.size());
         
         QByteArray data(file.size());
         QDataStream stream( &file );
@@ -712,9 +668,7 @@ bool LibKExiv2::setImagePreview(const QImage& preview)
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot get image preview using Exiv2 (" 
-                  << QString::fromLocal8Bit(e.what().c_str())
-                  << ")" << endl;
+        qDebug("Cannot get image preview using Exiv2 (%s)", e.what().c_str());
     }
 
     return false;
@@ -834,7 +788,7 @@ QDateTime LibKExiv2::getImageDateTime() const
                     
                     if (dateTime.isValid())
                     {
-                        // kdDebug() << "Date (IPTC digitalized): " << dateTime << endl;
+                        //qDebug("Date (IPTC digitalized): %s", dateTime.toString().ascii());
                         return dateTime;
                     }                    
                 }
@@ -843,9 +797,7 @@ QDateTime LibKExiv2::getImageDateTime() const
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot parse Exif date & time tag using Exiv2 (" 
-                  << QString::fromLocal8Bit(e.what().c_str())
-                  << ")" << endl;
+        qDebug("Cannot parse Exif date & time tag using Exiv2 (%s)", e.what().c_str());
     }        
     
     return QDateTime();
@@ -889,7 +841,7 @@ LibKExiv2::ImageOrientation LibKExiv2::getImageOrientation()
             if (it != exifData.end())
             {
                 orientation = it->toLong();
-                kdDebug() << "Minolta Makernote Orientation: " << orientation << endl;
+                qDebug("Minolta Makernote Orientation: %i", (int)orientation);
                 switch(orientation)
                 {
                     case 76:
@@ -908,7 +860,7 @@ LibKExiv2::ImageOrientation LibKExiv2::getImageOrientation()
             if (it != exifData.end())
             {
                 orientation = it->toLong();
-                kdDebug() << "Minolta Makernote Orientation: " << orientation << endl;
+                qDebug("Minolta Makernote Orientation: %i", (int)orientation);
                 switch(orientation)
                 {
                     case 76:
@@ -930,15 +882,13 @@ LibKExiv2::ImageOrientation LibKExiv2::getImageOrientation()
         if (it != exifData.end())
         {
             orientation = it->toLong();
-            kdDebug() << "Exif Orientation: " << orientation << endl;
+            qDebug("Exif Orientation: %i", (int)orientation);
             return (ImageOrientation)orientation;
         }
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot parse Exif Orientation tag using Exiv2 (" 
-                  << QString::fromLocal8Bit(e.what().c_str())
-                  << ")" << endl;
+        qDebug("Cannot parse Exif Orientation tag using Exiv2 (%s)", e.what().c_str());
     }
 
     return ORIENTATION_UNSPECIFIED;
@@ -966,12 +916,12 @@ bool LibKExiv2::setImageOrientation(ImageOrientation orientation)
     {    
         if (orientation < ORIENTATION_UNSPECIFIED || orientation > ORIENTATION_ROT_270)
         {
-            kdDebug() << k_funcinfo << "Exif orientation tag value is not correct!" << endl;
+            qDebug("Exif orientation tag value is not correct!");
             return false;
         }
         
         d->exifMetadata["Exif.Image.Orientation"] = (uint16_t)orientation;
-        kdDebug() << "Exif orientation tag set to: " << orientation << endl;
+        qDebug("Exif orientation tag set to: %i", (int)orientation);
 
         // -- Minolta Cameras ----------------------------------
 
@@ -987,7 +937,7 @@ bool LibKExiv2::setImageOrientation(ImageOrientation orientation)
             if (it != d->exifMetadata.end())
             {
                 d->exifMetadata.erase(it);
-                kdDebug() << "Removing Exif.MinoltaCs7D.Rotation tag" << endl;
+                qDebug("Removing Exif.MinoltaCs7D.Rotation tag");
             }
         
             Exiv2::ExifKey minoltaKey2("Exif.MinoltaCs5D.Rotation");
@@ -995,7 +945,7 @@ bool LibKExiv2::setImageOrientation(ImageOrientation orientation)
             if (it != d->exifMetadata.end())
             {
                 d->exifMetadata.erase(it);
-                kdDebug() << "Removing Exif.MinoltaCs5D.Rotation tag" << endl;
+                qDebug("Removing Exif.MinoltaCs5D.Rotation tag");
             }
         }
 
@@ -1003,9 +953,7 @@ bool LibKExiv2::setImageOrientation(ImageOrientation orientation)
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot set Exif Orientation tag using Exiv2 (" 
-                  << QString::fromLocal8Bit(e.what().c_str())
-                  << ")" << endl;
+        qDebug("Cannot set Exif Orientation tag using Exiv2 (%s)", e.what().c_str());
     }        
     
     return false;
@@ -1103,9 +1051,7 @@ bool LibKExiv2::getGPSInfo(double& altitude, double& latitude, double& longitude
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot get Exif GPS tag using Exiv2 (" 
-                  << QString::fromLocal8Bit(e.what().c_str())
-                  << ")" << endl;
+        qDebug("Cannot get Exif GPS tag using Exiv2 (%s)", e.what().c_str());
     }        
     
     return false;
@@ -1225,9 +1171,7 @@ bool LibKExiv2::setGPSInfo(double altitude, double latitude, double longitude)
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot set Exif GPS tag using Exiv2 (" 
-                  << QString::fromLocal8Bit(e.what().c_str())
-                  << ")" << endl;
+        qDebug("Cannot set Exif GPS tag using Exiv2 (%s)", e.what().c_str());
     }        
     
     return false;
@@ -1260,9 +1204,7 @@ bool LibKExiv2::removeGPSInfo()
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot remove Exif GPS tag using Exiv2 (" 
-                  << QString::fromLocal8Bit(e.what().c_str())
-                  << ")" << endl;
+        qDebug("Cannot remove Exif GPS tag using Exiv2 (%s)",e.what().c_str());
     }        
     
     return false;
@@ -1353,9 +1295,7 @@ QStringList LibKExiv2::getImageKeywords() const
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot get IPTC Keywords from image using Exiv2 (" 
-                  << QString::fromLocal8Bit(e.what().c_str())
-                  << ")" << endl;
+        qDebug("Cannot get IPTC Keywords from image using Exiv2 (%s)", e.what().c_str());
     }        
     
     return QStringList();
@@ -1403,9 +1343,7 @@ bool LibKExiv2::setImageKeywords(const QStringList& oldKeywords, const QStringLi
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot set IPTC Keywords into image using Exiv2 (" 
-                  << QString::fromLocal8Bit(e.what().c_str())
-                  << ")" << endl;
+        qDebug("Cannot set IPTC Keywords into image using Exiv2 (%s)", e.what().c_str());
     }        
     
     return false;
@@ -1436,9 +1374,7 @@ QStringList LibKExiv2::getImageSubjects() const
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot get IPTC Subjects from image using Exiv2 (" 
-                  << QString::fromLocal8Bit(e.what().c_str())
-                  << ")" << endl;
+        qDebug("Cannot get IPTC Subjects from image using Exiv2 (%s)", e.what().c_str());
     }        
     
     return QStringList();
@@ -1486,9 +1422,7 @@ bool LibKExiv2::setImageSubjects(const QStringList& oldSubjects, const QStringLi
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot set IPTC Subjects into image using Exiv2 (" 
-                  << QString::fromLocal8Bit(e.what().c_str())
-                  << ")" << endl;
+        qDebug("Cannot set IPTC Subjects into image using Exiv2 (%s)", e.what().c_str());
     }        
     
     return false;
@@ -1519,9 +1453,7 @@ QStringList LibKExiv2::getImageSubCategories() const
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot get IPTC Sub Categories from image using Exiv2 (" 
-                  << QString::fromLocal8Bit(e.what().c_str())
-                  << ")" << endl;
+        qDebug("Cannot get IPTC Sub Categories from image using Exiv2 (%s)", e.what().c_str());
     }        
     
     return QStringList();
@@ -1569,9 +1501,7 @@ bool LibKExiv2::setImageSubCategories(const QStringList& oldSubCategories, const
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot set IPTC Sub Categories into image using Exiv2 (" 
-                  << QString::fromLocal8Bit(e.what().c_str())
-                  << ")" << endl;
+        qDebug("Cannot set IPTC Sub Categories into image using Exiv2 (%s)",e.what().c_str());
     }        
     
     return false;
@@ -1599,9 +1529,7 @@ QString LibKExiv2::getExifComment() const
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot find Exif User Comment using Exiv2 (" 
-                  << QString::fromLocal8Bit(e.what().c_str())
-                  << ")" << endl;
+        qDebug("Cannot find Exif User Comment using Exiv2 (%s)",e.what().c_str());
     }
 
     return QString();
@@ -1641,9 +1569,7 @@ bool LibKExiv2::setExifComment(const QString& comment)
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot set Exif Comment using Exiv2 (" 
-                  << QString::fromLocal8Bit(e.what().c_str())
-                  << ")" << endl;
+        qDebug("Cannot set Exif Comment using Exiv2 (%s)", e.what().c_str());
     }
 
     return false;
@@ -1714,9 +1640,7 @@ QString LibKExiv2::convertCommentValue(const Exiv2::Exifdatum &exifDatum)
     }
     catch( Exiv2::Error &e )
     {
-        kdDebug() << "Cannot convert Comment using Exiv2 (" 
-                  << QString::fromLocal8Bit(e.what().c_str())
-                  << ")" << endl;
+        qDebug("Cannot convert Comment using Exiv2 (%s)", e.what().c_str());
     }
 
     return QString();
