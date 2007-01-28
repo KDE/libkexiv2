@@ -3,9 +3,9 @@ exec_prefix=@exec_prefix@
 libdir=@libdir@
 includedir=@includedir@
 
-Name: libkexif
-Description: KDE wrapper library for libexif with some extras
+Name: libkexiv2
+Description: KDE wrapper library for libexiv2 with some extras
 Requires:
-Version: 0.2.5
-Libs: -L${libdir} -lkexif
+Version: 0.0
+Libs: -L${libdir} -lkexiv2
 Cflags: -I${includedir}
