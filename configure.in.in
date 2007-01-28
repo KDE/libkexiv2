@@ -1,3 +1,6 @@
+AC_ARG_VAR(PKGCONFIGFOUND, [Path to pkg-config])
+AC_CHECK_PROG(PKGCONFIGFOUND, pkg-config,[yes])
+
 #------------------------------------------------------------------
 # Check for Exiv2 library
 #------------------------------------------------------------------
@@ -5,6 +8,8 @@
 have_exiv2='no'
 if test "$PKGCONFIGFOUND" = "yes" ; then
  KDE_PKG_CHECK_MODULES(EXIV2, exiv2 >= 0.12, have_exiv2=yes,have_exiv2=no)
+else
+ AC_MSG_WARN([pkg-config not found. You have to install pkg-config first. libkexiv2 depends on it.])
 fi
 
 if test "x$have_exiv2" != "xyes"; then
