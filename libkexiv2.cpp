@@ -86,6 +86,21 @@ LibKExiv2::~LibKExiv2()
     delete d;
 }
 
+std::string& LibKExiv2::comments()
+{
+    return d->imageComments;
+}
+
+Exiv2::ExifData& LibKExiv2::exif()
+{
+    return d->exifMetadata;
+}
+
+Exiv2::IptcData& LibKExiv2::iptc()
+{
+    return d->iptcMetadata;
+}
+
 bool LibKExiv2::clearExif()
 {
     try

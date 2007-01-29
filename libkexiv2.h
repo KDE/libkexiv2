@@ -40,6 +40,8 @@
 namespace Exiv2
 {
     class Exifdatum;
+    class ExifData;
+    class IptcData;
 }
 
 namespace KExiv2Library
@@ -129,6 +131,12 @@ public:
     static QString detectEncodingAndDecode(const std::string &value);
     static void convertToRational(double number, long int* numerator, 
                                   long int* denominator, int rounding);
+
+protected:
+
+    std::string&     comments();
+    Exiv2::ExifData& exif();
+    Exiv2::IptcData& iptc();
 
 private:
 
