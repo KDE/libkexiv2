@@ -39,6 +39,7 @@
 
 namespace Exiv2
 {
+    class DataBuf;
     class Exifdatum;
     class ExifData;
     class IptcData;
@@ -69,28 +70,57 @@ public:
 
 public:
 
+    /** Standard constructor */
     LibKExiv2();
-    ~LibKExiv2();
-    
-    bool load(const QString& filePath);
-    bool save(const QString& filePath);
 
-    QByteArray getComments() const;
-    QByteArray getExif() const;
-    QByteArray getIptc(bool addIrbHeader=false) const;
+    /** Contructor to Load Metadata from image file */
+    LibKExiv2(const QString& filePath);
+
+    ~LibKExiv2();
+
+    /** Metadata manipulation methods */
+
+    bool clearExif();
+    bool clearIptc();
+
+    QString     getFilePath() const;
+    QByteArray  getComments() const;
+    std::string getCommentsString() const;
+    QByteArray  getExif() const;
+    QByteArray  getIptc(bool addIrbHeader=false) const;
 
     bool setComments(const QByteArray& data);
     bool setExif(const QByteArray& data);
     bool setIptc(const QByteArray& data);
 
-    bool clearExif();
-    bool clearIptc();
+    bool setExif(Exiv2::DataBuf const data);
+    bool setIptc(Exiv2::DataBuf const data);
+
+    /** File access method */
+
+    bool load(const QString& filePath);
+    bool save(const QString& filePath);
+    bool applyChanges();
+    static bool isReadOnly(const QString& filePath);
+
+    /** Metadata Image Informations manipulation methods */
 
     bool setImageProgramId(const QString& program, const QString& version);
-    bool setImageDimensions(const QSize& size);
-    bool setExifThumbnail(const QImage& thumb);
-    bool setImagePreview(const QImage& preview);
+
+    QSize getImageDimensions();
+    bool  setImageDimensions(const QSize& size);
+
+    QImage getExifThumbnail(bool fixOrientation) const;
+    bool   setExifThumbnail(const QImage& thumb);
+
+    LibKExiv2::ImageOrientation getImageOrientation();
     bool setImageOrientation(ImageOrientation orientation);
+
+    QDateTime getImageDateTime() const;
+    bool setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitized = false);
+
+    bool getImagePreview(QImage& preview);
+    bool setImagePreview(const QImage& preview);
 
     QStringList getImageKeywords() const;
     bool setImageKeywords(const QStringList& oldKeywords, const QStringList& newKeywords);
@@ -101,32 +131,36 @@ public:
     QStringList getImageSubCategories() const;
     bool setImageSubCategories(const QStringList& oldSubCategories, const QStringList& newSubCategories);
 
-    bool setGPSInfo(double altitude, double latitude, double longitude);
-    bool getGPSInfo(double& altitude, double& latitude, double& longitude);
-    bool removeGPSInfo();
-
     QString getExifComment() const;
     bool    setExifComment(const QString& comment);
 
-    QString    getExifTagString(const char *exifTagName, bool escapeCR=true) const;
-    QByteArray getExifTagData(const char *exifTagName) const;
-    bool       getExifTagLong(const char* exifTagName, long &val);
-    bool       getExifTagRational(const char *exifTagName, long int &num, long int &den, int component=0);
-    QString    getIptcTagString(const char* iptcTagName, bool escapeCR=true) const;
-    QByteArray getIptcTagData(const char *iptcTagName) const;
+    bool getGPSInfo(double& altitude, double& latitude, double& longitude);
+    bool setGPSInfo(double altitude, double latitude, double longitude);
+    bool removeGPSInfo();
 
-    bool setExifTagString(const char *exifTagName, const QString& value);
+    /** Metadata Tags manipulation methods */
+
+    QString getExifTagString(const char *exifTagName, bool escapeCR=true) const;
+    bool    setExifTagString(const char *exifTagName, const QString& value);
+
+    bool getExifTagLong(const char* exifTagName, long &val);
     bool setExifTagLong(const char *exifTagName, long val);
+
+    bool getExifTagRational(const char *exifTagName, long int &num, long int &den, int component=0);
     bool setExifTagRational(const char *exifTagName, long int num, long int den);
-    bool setIptcTagString(const char *iptcTagName, const QString& value);
+
+    QByteArray getExifTagData(const char *exifTagName) const;
+    
+    QString getIptcTagString(const char* iptcTagName, bool escapeCR=true) const;
+    bool    setIptcTagString(const char *iptcTagName, const QString& value);
+
+    QByteArray getIptcTagData(const char *iptcTagName) const;
 
     bool removeExifTag(const char *exifTagName);
     bool removeIptcTag(const char *iptcTagName);
 
-    LibKExiv2::ImageOrientation getImageOrientation();
-    QDateTime getImageDateTime() const;
+    /** Advanced methods to convert data */
 
-    static bool isReadOnly(const QString& filePath);
     static QString convertCommentValue(const Exiv2::Exifdatum &comment);
     static QString detectEncodingAndDecode(const std::string &value);
     static void convertToRational(double number, long int* numerator, 
@@ -134,9 +168,9 @@ public:
 
 protected:
 
-    std::string&     comments();
-    Exiv2::ExifData& exif();
-    Exiv2::IptcData& iptc();
+    std::string&     commentsMetaData();
+    Exiv2::ExifData& exifMetaData();
+    Exiv2::IptcData& iptcMetaData();
 
 private:
 

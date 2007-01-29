@@ -39,6 +39,7 @@
 #include <qimage.h>
 #include <qsize.h>
 #include <qtextcodec.h>
+#include <qwmatrix.h>
 #include <qfileinfo.h>
 
 // KDE includes.
@@ -69,6 +70,8 @@ public:
 
     LibKExiv2Priv(){}
 
+    QString         filePath;
+
     std::string     imageComments;  
 
     Exiv2::ExifData exifMetadata;
@@ -81,25 +84,35 @@ LibKExiv2::LibKExiv2()
     d = new LibKExiv2Priv;
 }
 
+LibKExiv2::LibKExiv2(const QString& filePath)
+{
+    d = new LibKExiv2Priv;
+    load(filePath);
+}
+
 LibKExiv2::~LibKExiv2()
 {
     delete d;
 }
 
-std::string& LibKExiv2::comments()
+// -- Protected Methods -------------------------------------
+
+std::string& LibKExiv2::commentsMetaData()
 {
     return d->imageComments;
 }
 
-Exiv2::ExifData& LibKExiv2::exif()
+Exiv2::ExifData& LibKExiv2::exifMetaData()
 {
     return d->exifMetadata;
 }
 
-Exiv2::IptcData& LibKExiv2::iptc()
+Exiv2::IptcData& LibKExiv2::iptcMetaData()
 {
     return d->iptcMetadata;
 }
+
+// -- Public Methods --------------------------------
 
 bool LibKExiv2::clearExif()
 {
@@ -131,19 +144,19 @@ bool LibKExiv2::clearIptc()
     return false;       
 }
 
-QByteArray LibKExiv2::getComments() const
+QString LibKExiv2::getFilePath() const
 {
-    QByteArray data(d->imageComments.size());
-    memcpy(data.data(), d->imageComments.c_str(), d->imageComments.size());
-    return data;
+    return d->filePath;
 }
 
-bool LibKExiv2::setComments(const QByteArray& data)
+QByteArray LibKExiv2::getComments() const
 {
-    QString string(data);
-    const std::string str(string.utf8());
-    d->imageComments = str;
-    return true;
+    return QByteArray().duplicate(d->imageComments.data(), d->imageComments.size());
+}
+
+std::string LibKExiv2::getCommentsString() const
+{
+    return d->imageComments;
 }
 
 QByteArray LibKExiv2::getExif() const
@@ -162,6 +175,9 @@ QByteArray LibKExiv2::getExif() const
     }
     catch( Exiv2::Error &e )
     {
+        if (!d->filePath.isEmpty())
+            qDebug ("From file %s", d->filePath.ascii());
+
         qDebug("Cannot get Exif data using Exiv2 (%s", e.what().c_str());
     }       
     
@@ -199,10 +215,19 @@ QByteArray LibKExiv2::getIptc(bool addIrbHeader) const
     }
     catch( Exiv2::Error &e )
     {
+        if (!d->filePath.isEmpty())
+            qDebug ("From file %s", d->filePath.ascii());
+
         qDebug("Cannot get Iptc data using Exiv2 (%s)",e.what().c_str());
     }       
     
     return QByteArray();
+}
+
+bool LibKExiv2::setComments(const QByteArray& data)
+{
+    d->imageComments = std::string(data.data(), data.size());
+    return true;
 }
 
 bool LibKExiv2::setExif(const QByteArray& data)
@@ -219,6 +244,9 @@ bool LibKExiv2::setExif(const QByteArray& data)
     }
     catch( Exiv2::Error &e )
     {
+        if (!d->filePath.isEmpty())
+            qDebug ("From file %s", d->filePath.ascii());
+
         qDebug("Cannot set Exif data using Exiv2 (%s)", e.what().c_str());
     }        
 
@@ -239,16 +267,67 @@ bool LibKExiv2::setIptc(const QByteArray& data)
     }
     catch( Exiv2::Error &e )
     {
+        if (!d->filePath.isEmpty())
+            qDebug ("From file %s", d->filePath.ascii());
+
         qDebug("Cannot set Iptc data using Exiv2 (%s)",e.what().c_str());
     }    
 
     return false;    
 }
 
-bool LibKExiv2::load(const QString& filePath)
+bool LibKExiv2::setExif(Exiv2::DataBuf const data)
 {
     try
     {    
+        if (data.size_ != 0)
+        {
+            if (d->exifMetadata.load(data.pData_, data.size_) != 0)
+                return false;
+            else
+                return true;
+        }
+    }
+    catch( Exiv2::Error &e )
+    {
+        if (!d->filePath.isEmpty())
+            qDebug ("From file %s", d->filePath.ascii());
+
+        qDebug("Cannot set Exif data using Exiv2 (%s)", e.what().c_str());
+    }    
+
+    return false;    
+}
+
+bool LibKExiv2::setIptc(Exiv2::DataBuf const data)
+{
+    try
+    {    
+        if (data.size_ != 0)
+        {
+            if (d->iptcMetadata.load(data.pData_, data.size_) != 0)
+                return false;
+            else
+                return true;
+        }
+    }
+    catch( Exiv2::Error &e )
+    {
+        if (!d->filePath.isEmpty())
+            qDebug ("From file %s", d->filePath.ascii());
+
+        qDebug("Cannot set Iptc data using Exiv2 (%s)",e.what().c_str());
+    }        
+
+    return false;
+}
+
+bool LibKExiv2::load(const QString& filePath)
+{
+    try
+    {   
+        d->filePath = filePath;
+ 
         if (filePath.isEmpty())
             return false;
 
@@ -333,6 +412,11 @@ bool LibKExiv2::save(const QString& filePath)
     }
 }
 
+bool LibKExiv2::applyChanges()
+{
+    return save(d->filePath);
+}
+
 bool LibKExiv2::isReadOnly(const QString& filePath)
 {
     QFileInfo fi(filePath);
@@ -365,6 +449,61 @@ bool LibKExiv2::setImageProgramId(const QString& program, const QString& version
     return false;
 }
 
+QSize LibKExiv2::getImageDimensions()
+{
+    if (d->exifMetadata.empty())
+        return QSize();
+
+    try
+    {    
+        long width=-1, height=-1;
+
+        // Try to get Exif.Photo tags
+        
+        Exiv2::ExifData exifData(d->exifMetadata);
+        Exiv2::ExifKey key("Exif.Photo.PixelXDimension");
+        Exiv2::ExifData::iterator it = exifData.findKey(key);
+       
+        if (it != exifData.end())
+            width = it->toLong();
+
+        Exiv2::ExifKey key2("Exif.Photo.PixelYDimension");
+        Exiv2::ExifData::iterator it2 = exifData.findKey(key2);
+        
+        if (it2 != exifData.end())
+            height = it2->toLong();
+
+        if (width != -1 && height != -1)
+            return QSize(width, height);
+
+        // Try to get Exif.Image tags
+                
+        width=-1;
+        height=-1;
+
+        Exiv2::ExifKey key3("Exif.Image.ImageWidth");
+        Exiv2::ExifData::iterator it3 = exifData.findKey(key3);
+       
+        if (it3 != exifData.end())
+            width = it3->toLong();
+
+        Exiv2::ExifKey key4("Exif.Image.ImageLength");
+        Exiv2::ExifData::iterator it4 = exifData.findKey(key4);
+        
+        if (it4 != exifData.end())
+            height = it4->toLong();
+        
+        if (width != -1 && height != -1)
+            return QSize(width, height);
+    }
+    catch( Exiv2::Error &e )
+    {
+        qDebug("Cannot parse image dimensions tag using Exiv2 (%s)", e.what().c_str());
+    }        
+    
+    return QSize();
+}
+
 bool LibKExiv2::setImageDimensions(const QSize& size)
 {
     try
@@ -377,17 +516,94 @@ bool LibKExiv2::setImageDimensions(const QSize& size)
     }
     catch( Exiv2::Error &e )
     {
-        qDebug("Cannot set image dimensions using Exiv2 (%s)",e.what().c_str());
+        qDebug("Cannot set image dimensions using Exiv2 (%s)", e.what().c_str());
     }        
     
     return false;
+}
+
+QImage LibKExiv2::getExifThumbnail(bool fixOrientation) const
+{
+    QImage thumbnail;
+    
+    if (d->exifMetadata.empty())
+       return thumbnail;
+    
+    try
+    {    
+        Exiv2::DataBuf const c1(d->exifMetadata.copyThumbnail());
+        thumbnail.loadFromData(c1.pData_, c1.size_);
+        
+        if (!thumbnail.isNull())
+        {
+            if (fixOrientation)
+            {
+                Exiv2::ExifKey key("Exif.Thumbnail.Orientation");
+                Exiv2::ExifData exifData(d->exifMetadata);
+                Exiv2::ExifData::iterator it = exifData.findKey(key);
+                if (it != exifData.end())
+                {
+                    QWMatrix matrix;
+                    long orientation = it->toLong();
+                    qDebug("Exif Thumbnail Orientation: %i", (int)orientation);
+                    
+                    switch (orientation) 
+                    {
+                        case ORIENTATION_HFLIP:
+                            matrix.scale(-1, 1);
+                            break;
+                    
+                        case ORIENTATION_ROT_180:
+                            matrix.rotate(180);
+                            break;
+                    
+                        case ORIENTATION_VFLIP:
+                            matrix.scale(1, -1);
+                            break;
+                    
+                        case ORIENTATION_ROT_90_HFLIP:
+                            matrix.scale(-1, 1);
+                            matrix.rotate(90);
+                            break;
+                    
+                        case ORIENTATION_ROT_90:
+                            matrix.rotate(90);
+                            break;
+                    
+                        case ORIENTATION_ROT_90_VFLIP:
+                            matrix.scale(1, -1);
+                            matrix.rotate(90);
+                            break;
+                    
+                        case ORIENTATION_ROT_270:
+                            matrix.rotate(270);
+                            break;
+                            
+                        default:
+                            break;
+                    }
+        
+                    if ( orientation != ORIENTATION_NORMAL )
+                        thumbnail = thumbnail.xForm( matrix );
+                }
+                    
+                return thumbnail;
+            }
+        }
+    }
+    catch( Exiv2::Error &e )
+    {
+        qDebug("Cannot get Exif Thumbnail using Exiv2 (%s)", e.what().c_str());
+    }        
+    
+    return thumbnail;
 }
 
 bool LibKExiv2::setExifThumbnail(const QImage& thumb)
 {
     try
     {   
-        KTempFile thumbFile(QString::null, "DigikamDMetadataThumb");
+        KTempFile thumbFile(QString::null, "LibKExiv2ExifThumbnail");
         thumbFile.setAutoDelete(true);
         thumb.save(thumbFile.name(), "JPEG");
 
@@ -400,6 +616,390 @@ bool LibKExiv2::setExifThumbnail(const QImage& thumb)
         qDebug("Cannot set Exif Thumbnail using Exiv2 (%s)", e.what().c_str());
     }        
     
+    return false;
+}
+
+LibKExiv2::ImageOrientation LibKExiv2::getImageOrientation()
+{
+    if (d->exifMetadata.empty())
+       return ORIENTATION_UNSPECIFIED;
+
+    // Workaround for older Exiv2 versions which do not support
+    // Minolta Makernotes and throw an error for such keys.
+    bool supportMinolta = true;
+    try
+    {
+        Exiv2::ExifKey minoltaKey1("Exif.MinoltaCs7D.Rotation");
+        Exiv2::ExifKey minoltaKey2("Exif.MinoltaCs5D.Rotation");
+    }
+    catch( Exiv2::Error &e )
+    {
+        supportMinolta = false;
+    }
+
+    try
+    {
+        Exiv2::ExifData exifData(d->exifMetadata);
+        Exiv2::ExifData::iterator it;
+        long orientation;
+        ImageOrientation imageOrient = ORIENTATION_NORMAL;
+
+        // Because some camera set a wrong standard exif orientation tag, 
+        // We need to check makernote tags in first!
+
+        // -- Minolta Cameras ----------------------------------
+
+        if (supportMinolta)
+        {
+            Exiv2::ExifKey minoltaKey1("Exif.MinoltaCs7D.Rotation");
+            it = exifData.findKey(minoltaKey1);
+
+            if (it != exifData.end())
+            {
+                orientation = it->toLong();
+                qDebug("Minolta Makernote Orientation: %i", (int)orientation);
+                switch(orientation)
+                {
+                    case 76:
+                        imageOrient = ORIENTATION_ROT_90;
+                        break;
+                    case 82:
+                        imageOrient = ORIENTATION_ROT_270;
+                        break;
+                }
+                return imageOrient;
+            }
+
+            Exiv2::ExifKey minoltaKey2("Exif.MinoltaCs5D.Rotation");
+            it = exifData.findKey(minoltaKey2);
+
+            if (it != exifData.end())
+            {
+                orientation = it->toLong();
+                qDebug("Minolta Makernote Orientation: %i", (int)orientation);
+                switch(orientation)
+                {
+                    case 76:
+                        imageOrient = ORIENTATION_ROT_90;
+                        break;
+                    case 82:
+                        imageOrient = ORIENTATION_ROT_270;
+                        break;
+                }
+                return imageOrient;
+            }
+        }
+
+        // -- Standard Exif tag --------------------------------
+
+        Exiv2::ExifKey keyStd("Exif.Image.Orientation");
+        it = exifData.findKey(keyStd);
+
+        if (it != exifData.end())
+        {
+            orientation = it->toLong();
+            qDebug("Exif Orientation: %i", (int)orientation);
+            return (ImageOrientation)orientation;
+        }
+    }
+    catch( Exiv2::Error &e )
+    {
+        qDebug("Cannot parse Exif Orientation tag using Exiv2 (%s)", e.what().c_str());
+    }
+
+    return ORIENTATION_UNSPECIFIED;
+}
+
+bool LibKExiv2::setImageOrientation(ImageOrientation orientation)
+{
+    if (d->exifMetadata.empty())
+       return false;
+
+    // Workaround for older Exiv2 versions which do not support
+    // Minolta Makernotes and throw an error for such keys.
+    bool supportMinolta = true;
+    try
+    {
+        Exiv2::ExifKey minoltaKey1("Exif.MinoltaCs7D.Rotation");
+        Exiv2::ExifKey minoltaKey2("Exif.MinoltaCs5D.Rotation");
+    }
+    catch( Exiv2::Error &e )
+    {
+        supportMinolta = false;
+    }
+
+    try
+    {    
+        if (orientation < ORIENTATION_UNSPECIFIED || orientation > ORIENTATION_ROT_270)
+        {
+            qDebug("Exif orientation tag value is not correct!");
+            return false;
+        }
+        
+        d->exifMetadata["Exif.Image.Orientation"] = (uint16_t)orientation;
+        qDebug("Exif orientation tag set to: %i", (int)orientation);
+
+        // -- Minolta Cameras ----------------------------------
+
+        if (supportMinolta)
+        {
+            // Minolta camera store image rotation in Makernote.
+            // We remove these informations to prevent duplicate values. 
+    
+            Exiv2::ExifData::iterator it;
+
+            Exiv2::ExifKey minoltaKey1("Exif.MinoltaCs7D.Rotation");
+            it = d->exifMetadata.findKey(minoltaKey1);
+            if (it != d->exifMetadata.end())
+            {
+                d->exifMetadata.erase(it);
+                qDebug("Removing Exif.MinoltaCs7D.Rotation tag");
+            }
+        
+            Exiv2::ExifKey minoltaKey2("Exif.MinoltaCs5D.Rotation");
+            it = d->exifMetadata.findKey(minoltaKey2);
+            if (it != d->exifMetadata.end())
+            {
+                d->exifMetadata.erase(it);
+                qDebug("Removing Exif.MinoltaCs5D.Rotation tag");
+            }
+        }
+
+        return true;
+    }
+    catch( Exiv2::Error &e )
+    {
+        qDebug("Cannot set Exif Orientation tag using Exiv2 (%s)", e.what().c_str());
+    }        
+    
+    return false;
+}
+
+QDateTime LibKExiv2::getImageDateTime() const
+{
+    try
+    {    
+        // In first, trying to get Date & time from Exif tags.
+        
+        if (!d->exifMetadata.empty())
+        {        
+            // Try Exif date time original.
+    
+            Exiv2::ExifData exifData(d->exifMetadata);
+            Exiv2::ExifKey key2("Exif.Photo.DateTimeOriginal");
+            Exiv2::ExifData::iterator it2 = exifData.findKey(key2);
+            
+            if (it2 != exifData.end())
+            {
+                QDateTime dateTime = QDateTime::fromString(it2->toString().c_str(), Qt::ISODate);
+    
+                if (dateTime.isValid())
+                {
+                    // qDebug("DateTime (Exif original): %s", dateTime.toString().ascii());
+                    return dateTime;
+                }
+            }
+    
+            // Bogus Exif date time original entry. Try Exif date time digitized.
+    
+            Exiv2::ExifKey key3("Exif.Photo.DateTimeDigitized");
+            Exiv2::ExifData::iterator it3 = exifData.findKey(key3);
+            
+            if (it3 != exifData.end())
+            {
+                QDateTime dateTime = QDateTime::fromString(it3->toString().c_str(), Qt::ISODate);
+    
+                if (dateTime.isValid())
+                {
+                    // qDebug("DateTime (Exif digitalized): %s", dateTime.toString().ascii());
+                    return dateTime;
+                }
+            }
+
+            // Bogus Exif date time digitized. Try standard Exif date time entry.
+    
+            Exiv2::ExifKey key("Exif.Image.DateTime");
+            Exiv2::ExifData::iterator it = exifData.findKey(key);
+            
+            if (it != exifData.end())
+            {
+                QDateTime dateTime = QDateTime::fromString(it->toString().c_str(), Qt::ISODate);
+    
+                if (dateTime.isValid())
+                {
+                    // qDebug("DateTime (Exif standard): %s", dateTime.toString().ascii());
+                    return dateTime;
+                }
+            }
+    
+        }
+        
+        // In second, trying to get Date & time from Iptc tags.
+            
+        if (!d->iptcMetadata.empty())
+        {        
+            // Try creation Iptc date time entries.
+
+            Exiv2::IptcKey keyDateCreated("Iptc.Application2.DateCreated");
+            Exiv2::IptcData iptcData(d->iptcMetadata);
+            Exiv2::IptcData::iterator it = iptcData.findKey(keyDateCreated);
+                        
+            if (it != iptcData.end())
+            {
+                QString IptcDateCreated(it->toString().c_str());
+    
+                Exiv2::IptcKey keyTimeCreated("Iptc.Application2.TimeCreated");
+                Exiv2::IptcData::iterator it2 = iptcData.findKey(keyTimeCreated);
+                
+                if (it2 != iptcData.end())
+                {
+                    QString IptcTimeCreated(it2->toString().c_str());
+                    
+                    QDate date = QDate::fromString(IptcDateCreated, Qt::ISODate);
+                    QTime time = QTime::fromString(IptcTimeCreated, Qt::ISODate);
+                    QDateTime dateTime = QDateTime(date, time);
+                    
+                    if (dateTime.isValid())
+                    {
+                        // qDebug("Date (IPTC created): %s", dateTime.toString().ascii());
+                        return dateTime;
+                    }                    
+                }
+            }                        
+            
+            // Try digitization Iptc date time entries.
+    
+            Exiv2::IptcKey keyDigitizationDate("Iptc.Application2.DigitizationDate");
+            Exiv2::IptcData::iterator it3 = iptcData.findKey(keyDigitizationDate);
+                        
+            if (it3 != iptcData.end())
+            {
+                QString IptcDateDigitization(it3->toString().c_str());
+    
+                Exiv2::IptcKey keyDigitizationTime("Iptc.Application2.DigitizationTime");
+                Exiv2::IptcData::iterator it4 = iptcData.findKey(keyDigitizationTime);
+                
+                if (it4 != iptcData.end())
+                {
+                    QString IptcTimeDigitization(it4->toString().c_str());
+                    
+                    QDate date = QDate::fromString(IptcDateDigitization, Qt::ISODate);
+                    QTime time = QTime::fromString(IptcTimeDigitization, Qt::ISODate);
+                    QDateTime dateTime = QDateTime(date, time);
+                    
+                    if (dateTime.isValid())
+                    {
+                        //qDebug("Date (IPTC digitalized): %s", dateTime.toString().ascii());
+                        return dateTime;
+                    }                    
+                }
+            }                       
+        }
+    }
+    catch( Exiv2::Error &e )
+    {
+        qDebug("Cannot parse Exif date & time tag using Exiv2 (%s)", e.what().c_str());
+    }        
+    
+    return QDateTime();
+}
+
+bool LibKExiv2::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitized)
+{
+    if(!dateTime.isValid())
+        return false;
+    
+    try
+    {    
+        // In first we write date & time into Exif.
+        
+        // DateTimeDigitized is set by slide scanners etc. when a picture is digitized.
+        // DateTimeOriginal specifies the date/time when the picture was taken.
+        // For digital cameras, these dates should be both set, and identical.
+        // Reference: http://www.exif.org/Exif2-2.PDF, chapter 4.6.5, table 4, section F.
+
+        const std::string &exifdatetime(dateTime.toString(QString("yyyy:MM:dd hh:mm:ss")).ascii());
+        d->exifMetadata["Exif.Image.DateTime"] = exifdatetime;
+        d->exifMetadata["Exif.Photo.DateTimeOriginal"] = exifdatetime;
+        if(setDateTimeDigitized)
+            d->exifMetadata["Exif.Photo.DateTimeDigitized"] = exifdatetime;
+        
+        // In Second we write date & time into Iptc.
+
+        const std::string &iptcdate(dateTime.date().toString(Qt::ISODate).ascii());
+        const std::string &iptctime(dateTime.time().toString(Qt::ISODate).ascii());
+        d->iptcMetadata["Iptc.Application2.DateCreated"] = iptcdate;
+        d->iptcMetadata["Iptc.Application2.TimeCreated"] = iptctime;
+        if(setDateTimeDigitized)
+        {
+            d->iptcMetadata["Iptc.Application2.DigitizationDate"] = iptcdate;
+            d->iptcMetadata["Iptc.Application2.DigitizationTime"] = iptctime;
+        }
+        
+        return true;
+    }
+    catch( Exiv2::Error &e )
+    {
+        qDebug("Cannot set Date & Time into image using Exiv2 (%s)", e.what().c_str());
+    }        
+    
+    return false;
+}
+
+bool LibKExiv2::getImagePreview(QImage& preview)
+{
+    try
+    {
+        // In first we trying to get from Iptc preview tag.
+        if (preview.loadFromData(getIptcTagData("Iptc.Application2.Preview")) )
+            return true;
+
+        // TODO : Added here Makernotes preview extraction when Exiv2 will be fixed for that.
+    }
+    catch( Exiv2::Error &e )
+    {
+        qDebug("Cannot get image preview using Exiv2 (%s)", e.what().c_str());
+    }
+
+    return false;
+}
+
+bool LibKExiv2::setImagePreview(const QImage& preview)
+{
+    try
+    {
+        KTempFile previewFile(QString::null, "LibKExiv2ImagePreview");
+        previewFile.setAutoDelete(true);
+        // A little bit compressed preview jpeg image to limit IPTC size.
+        preview.save(previewFile.name(), "JPEG");
+
+        QFile file(previewFile.name());
+        if ( !file.open(IO_ReadOnly) ) 
+            return false;
+
+        qDebug("(%i x %i) JPEG image preview size: %i bytes", 
+               preview.width(), preview.height(), (int)file.size());
+        
+        QByteArray data(file.size());
+        QDataStream stream( &file );
+        stream.readRawBytes(data.data(), data.size());
+        file.close();
+        
+        Exiv2::DataValue val;
+        val.read((Exiv2::byte *)data.data(), data.size());
+        d->iptcMetadata["Iptc.Application2.Preview"] = val;
+        
+        // See http://www.iptc.org/std/IIM/4.1/specification/IIMV4.1.pdf Appendix A for details.
+        d->iptcMetadata["Iptc.Application2.PreviewFormat"]  = 11;  // JPEG 
+        d->iptcMetadata["Iptc.Application2.PreviewVersion"] = 1;
+        
+        return true;
+    }
+    catch( Exiv2::Error &e )
+    {
+        qDebug("Cannot get image preview using Exiv2 (%s)", e.what().c_str());
+    }
+
     return false;
 }
 
@@ -645,330 +1245,6 @@ bool LibKExiv2::removeIptcTag(const char *iptcTagName)
     catch( Exiv2::Error &e )
     {
         qDebug("Cannot remove Iptc tag using Exiv2 (%s)", e.what().c_str());
-    }        
-    
-    return false;
-}
-
-bool LibKExiv2::setImagePreview(const QImage& preview)
-{
-    try
-    {
-        KTempFile previewFile(QString::null, "LibKExiv2ImagePreview");
-        previewFile.setAutoDelete(true);
-        // A little bit compressed preview jpeg image to limit IPTC size.
-        preview.save(previewFile.name(), "JPEG");
-
-        QFile file(previewFile.name());
-        if ( !file.open(IO_ReadOnly) ) 
-            return false;
-
-        qDebug("(%i x %i) JPEG image preview size: %i bytes", 
-               preview.width(), preview.height(), (int)file.size());
-        
-        QByteArray data(file.size());
-        QDataStream stream( &file );
-        stream.readRawBytes(data.data(), data.size());
-        file.close();
-        
-        Exiv2::DataValue val;
-        val.read((Exiv2::byte *)data.data(), data.size());
-        d->iptcMetadata["Iptc.Application2.Preview"] = val;
-        
-        // See http://www.iptc.org/std/IIM/4.1/specification/IIMV4.1.pdf Appendix A for details.
-        d->iptcMetadata["Iptc.Application2.PreviewFormat"]  = 11;  // JPEG 
-        d->iptcMetadata["Iptc.Application2.PreviewVersion"] = 1;
-        
-        return true;
-    }
-    catch( Exiv2::Error &e )
-    {
-        qDebug("Cannot get image preview using Exiv2 (%s)", e.what().c_str());
-    }
-
-    return false;
-}
-
-QDateTime LibKExiv2::getImageDateTime() const
-{
-    try
-    {    
-        // In first, trying to get Date & time from Exif tags.
-        
-        if (!d->exifMetadata.empty())
-        {        
-            // Try Exif date time original.
-    
-            Exiv2::ExifData exifData(d->exifMetadata);
-            Exiv2::ExifKey key2("Exif.Photo.DateTimeOriginal");
-            Exiv2::ExifData::iterator it2 = exifData.findKey(key2);
-            
-            if (it2 != exifData.end())
-            {
-                QDateTime dateTime = QDateTime::fromString(it2->toString().c_str(), Qt::ISODate);
-    
-                if (dateTime.isValid())
-                {
-                    // kdDebug() << "DateTime (Exif original): " << dateTime << endl;
-                    return dateTime;
-                }
-            }
-    
-            // Bogus Exif date time original entry. Try Exif date time digitized.
-    
-            Exiv2::ExifKey key3("Exif.Photo.DateTimeDigitized");
-            Exiv2::ExifData::iterator it3 = exifData.findKey(key3);
-            
-            if (it3 != exifData.end())
-            {
-                QDateTime dateTime = QDateTime::fromString(it3->toString().c_str(), Qt::ISODate);
-    
-                if (dateTime.isValid())
-                {
-                    // kdDebug() << "DateTime (Exif digitalized): " << dateTime << endl;
-                    return dateTime;
-                }
-            }
-
-            // Bogus Exif date time digitized. Try standard Exif date time entry.
-    
-            Exiv2::ExifKey key("Exif.Image.DateTime");
-            Exiv2::ExifData::iterator it = exifData.findKey(key);
-            
-            if (it != exifData.end())
-            {
-                QDateTime dateTime = QDateTime::fromString(it->toString().c_str(), Qt::ISODate);
-    
-                if (dateTime.isValid())
-                {
-                    // kdDebug() << "DateTime (Exif standard): " << dateTime << endl;
-                    return dateTime;
-                }
-            }
-    
-        }
-        
-        // In second, trying to get Date & time from Iptc tags.
-            
-        if (!d->iptcMetadata.empty())
-        {        
-            // Try creation Iptc date time entries.
-
-            Exiv2::IptcKey keyDateCreated("Iptc.Application2.DateCreated");
-            Exiv2::IptcData iptcData(d->iptcMetadata);
-            Exiv2::IptcData::iterator it = iptcData.findKey(keyDateCreated);
-                        
-            if (it != iptcData.end())
-            {
-                QString IptcDateCreated(it->toString().c_str());
-    
-                Exiv2::IptcKey keyTimeCreated("Iptc.Application2.TimeCreated");
-                Exiv2::IptcData::iterator it2 = iptcData.findKey(keyTimeCreated);
-                
-                if (it2 != iptcData.end())
-                {
-                    QString IptcTimeCreated(it2->toString().c_str());
-                    
-                    QDate date = QDate::fromString(IptcDateCreated, Qt::ISODate);
-                    QTime time = QTime::fromString(IptcTimeCreated, Qt::ISODate);
-                    QDateTime dateTime = QDateTime(date, time);
-                    
-                    if (dateTime.isValid())
-                    {
-                        // kdDebug() << "Date (IPTC created): " << dateTime << endl;
-                        return dateTime;
-                    }                    
-                }
-            }                        
-            
-            // Try digitization Iptc date time entries.
-    
-            Exiv2::IptcKey keyDigitizationDate("Iptc.Application2.DigitizationDate");
-            Exiv2::IptcData::iterator it3 = iptcData.findKey(keyDigitizationDate);
-                        
-            if (it3 != iptcData.end())
-            {
-                QString IptcDateDigitization(it3->toString().c_str());
-    
-                Exiv2::IptcKey keyDigitizationTime("Iptc.Application2.DigitizationTime");
-                Exiv2::IptcData::iterator it4 = iptcData.findKey(keyDigitizationTime);
-                
-                if (it4 != iptcData.end())
-                {
-                    QString IptcTimeDigitization(it4->toString().c_str());
-                    
-                    QDate date = QDate::fromString(IptcDateDigitization, Qt::ISODate);
-                    QTime time = QTime::fromString(IptcTimeDigitization, Qt::ISODate);
-                    QDateTime dateTime = QDateTime(date, time);
-                    
-                    if (dateTime.isValid())
-                    {
-                        //qDebug("Date (IPTC digitalized): %s", dateTime.toString().ascii());
-                        return dateTime;
-                    }                    
-                }
-            }                       
-        }
-    }
-    catch( Exiv2::Error &e )
-    {
-        qDebug("Cannot parse Exif date & time tag using Exiv2 (%s)", e.what().c_str());
-    }        
-    
-    return QDateTime();
-}
-
-LibKExiv2::ImageOrientation LibKExiv2::getImageOrientation()
-{
-    if (d->exifMetadata.empty())
-       return ORIENTATION_UNSPECIFIED;
-
-    // Workaround for older Exiv2 versions which do not support
-    // Minolta Makernotes and throw an error for such keys.
-    bool supportMinolta = true;
-    try
-    {
-        Exiv2::ExifKey minoltaKey1("Exif.MinoltaCs7D.Rotation");
-        Exiv2::ExifKey minoltaKey2("Exif.MinoltaCs5D.Rotation");
-    }
-    catch( Exiv2::Error &e )
-    {
-        supportMinolta = false;
-    }
-
-    try
-    {
-        Exiv2::ExifData exifData(d->exifMetadata);
-        Exiv2::ExifData::iterator it;
-        long orientation;
-        ImageOrientation imageOrient = ORIENTATION_NORMAL;
-
-        // Because some camera set a wrong standard exif orientation tag, 
-        // We need to check makernote tags in first!
-
-        // -- Minolta Cameras ----------------------------------
-
-        if (supportMinolta)
-        {
-            Exiv2::ExifKey minoltaKey1("Exif.MinoltaCs7D.Rotation");
-            it = exifData.findKey(minoltaKey1);
-
-            if (it != exifData.end())
-            {
-                orientation = it->toLong();
-                qDebug("Minolta Makernote Orientation: %i", (int)orientation);
-                switch(orientation)
-                {
-                    case 76:
-                        imageOrient = ORIENTATION_ROT_90;
-                        break;
-                    case 82:
-                        imageOrient = ORIENTATION_ROT_270;
-                        break;
-                }
-                return imageOrient;
-            }
-
-            Exiv2::ExifKey minoltaKey2("Exif.MinoltaCs5D.Rotation");
-            it = exifData.findKey(minoltaKey2);
-
-            if (it != exifData.end())
-            {
-                orientation = it->toLong();
-                qDebug("Minolta Makernote Orientation: %i", (int)orientation);
-                switch(orientation)
-                {
-                    case 76:
-                        imageOrient = ORIENTATION_ROT_90;
-                        break;
-                    case 82:
-                        imageOrient = ORIENTATION_ROT_270;
-                        break;
-                }
-                return imageOrient;
-            }
-        }
-
-        // -- Standard Exif tag --------------------------------
-
-        Exiv2::ExifKey keyStd("Exif.Image.Orientation");
-        it = exifData.findKey(keyStd);
-
-        if (it != exifData.end())
-        {
-            orientation = it->toLong();
-            qDebug("Exif Orientation: %i", (int)orientation);
-            return (ImageOrientation)orientation;
-        }
-    }
-    catch( Exiv2::Error &e )
-    {
-        qDebug("Cannot parse Exif Orientation tag using Exiv2 (%s)", e.what().c_str());
-    }
-
-    return ORIENTATION_UNSPECIFIED;
-}
-
-bool LibKExiv2::setImageOrientation(ImageOrientation orientation)
-{
-    if (d->exifMetadata.empty())
-       return false;
-
-    // Workaround for older Exiv2 versions which do not support
-    // Minolta Makernotes and throw an error for such keys.
-    bool supportMinolta = true;
-    try
-    {
-        Exiv2::ExifKey minoltaKey1("Exif.MinoltaCs7D.Rotation");
-        Exiv2::ExifKey minoltaKey2("Exif.MinoltaCs5D.Rotation");
-    }
-    catch( Exiv2::Error &e )
-    {
-        supportMinolta = false;
-    }
-
-    try
-    {    
-        if (orientation < ORIENTATION_UNSPECIFIED || orientation > ORIENTATION_ROT_270)
-        {
-            qDebug("Exif orientation tag value is not correct!");
-            return false;
-        }
-        
-        d->exifMetadata["Exif.Image.Orientation"] = (uint16_t)orientation;
-        qDebug("Exif orientation tag set to: %i", (int)orientation);
-
-        // -- Minolta Cameras ----------------------------------
-
-        if (supportMinolta)
-        {
-            // Minolta camera store image rotation in Makernote.
-            // We remove these informations to prevent duplicate values. 
-    
-            Exiv2::ExifData::iterator it;
-
-            Exiv2::ExifKey minoltaKey1("Exif.MinoltaCs7D.Rotation");
-            it = d->exifMetadata.findKey(minoltaKey1);
-            if (it != d->exifMetadata.end())
-            {
-                d->exifMetadata.erase(it);
-                qDebug("Removing Exif.MinoltaCs7D.Rotation tag");
-            }
-        
-            Exiv2::ExifKey minoltaKey2("Exif.MinoltaCs5D.Rotation");
-            it = d->exifMetadata.findKey(minoltaKey2);
-            if (it != d->exifMetadata.end())
-            {
-                d->exifMetadata.erase(it);
-                qDebug("Removing Exif.MinoltaCs5D.Rotation tag");
-            }
-        }
-
-        return true;
-    }
-    catch( Exiv2::Error &e )
-    {
-        qDebug("Cannot set Exif Orientation tag using Exiv2 (%s)", e.what().c_str());
     }        
     
     return false;
@@ -1226,7 +1502,7 @@ bool LibKExiv2::removeGPSInfo()
 }
 
 void LibKExiv2::convertToRational(double number, long int* numerator, 
-                                   long int* denominator, int rounding)
+                                  long int* denominator, int rounding)
 {
     // This function converts the given decimal number
     // to a rational (fractional) number.
@@ -1323,6 +1599,8 @@ bool LibKExiv2::setImageKeywords(const QStringList& oldKeywords, const QStringLi
         QStringList oldkeys = oldKeywords;
         QStringList newkeys = newKeywords;
         
+        qDebug("%s ==> Keywords: %s", d->filePath.ascii(), newkeys.join(",").ascii());
+        
         // Remove all old keywords.
         Exiv2::IptcData iptcData(d->iptcMetadata);
         Exiv2::IptcData::iterator it = iptcData.begin();
@@ -1331,8 +1609,11 @@ bool LibKExiv2::setImageKeywords(const QStringList& oldKeywords, const QStringLi
         {
             QString key = QString::fromLocal8Bit(it->key().c_str());
             QString val(it->toString().c_str());
-            
-            if (key == QString("Iptc.Application2.Keywords") && oldKeywords.contains(val))
+
+            // Also remove new keywords to avoid duplicates. They will be added again below.
+            if ( key == QString("Iptc.Application2.Keywords") &&
+                 (oldKeywords.contains(val) || newKeywords.contains(val))
+               )
                 it = iptcData.erase(it);
             else 
                 ++it;
@@ -1557,28 +1838,28 @@ bool LibKExiv2::setExifComment(const QString& comment)
         if (comment.isEmpty())
             return false;
 
-        // Write as Unicode only when necessary.
-        QTextCodec *latin1Codec = QTextCodec::codecForName("iso8859-1");
-        if (latin1Codec->canEncode(comment))
-        {
-            // write as ASCII
-            std::string exifComment("charset=\"Ascii\" ");
-            exifComment += comment.latin1();
-            d->exifMetadata["Exif.Photo.UserComment"] = exifComment;
-        }
-        else
-        {
-            // write as Unicode (UCS-2)
+    // Write as Unicode only when necessary.
+    QTextCodec *latin1Codec = QTextCodec::codecForName("iso8859-1");
+    if (latin1Codec->canEncode(comment))
+    {
+        // write as ASCII
+        std::string exifComment("charset=\"Ascii\" ");
+        exifComment += comment.latin1();
+        d->exifMetadata["Exif.Photo.UserComment"] = exifComment;
+    }
+    else
+    {
+        // write as Unicode (UCS-2)
 
-            // Be aware that we are dealing with a UCS-2 string.
-            // Null termination means \0\0, strlen does not work,
-            // do not use any const-char*-only methods,
-            // pass a std::string and not a const char * to ExifDatum::operator=().
-            const unsigned short *ucs2 = comment.ucs2();
-            std::string exifComment("charset=\"Unicode\" ");
-            exifComment.append((const char*)ucs2, sizeof(unsigned short) * comment.length());
-            d->exifMetadata["Exif.Photo.UserComment"] = exifComment;
-        }
+        // Be aware that we are dealing with a UCS-2 string.
+        // Null termination means \0\0, strlen does not work,
+        // do not use any const-char*-only methods,
+        // pass a std::string and not a const char * to ExifDatum::operator=().
+        const unsigned short *ucs2 = comment.ucs2();
+        std::string exifComment("charset=\"Unicode\" ");
+        exifComment.append((const char*)ucs2, sizeof(unsigned short) * comment.length());
+        d->exifMetadata["Exif.Photo.UserComment"] = exifComment;
+    }
 
         return true;
     }
@@ -1635,8 +1916,8 @@ QString LibKExiv2::convertCommentValue(const Exiv2::Exifdatum &exifDatum)
         if (charset == "\"Unicode\"")
         {
             // QString expects a null-terminated UCS-2 string.
-            // Is it already null terminated? In any case, add termination for safety.
-            comment += "\0\0";
+            // Is it already null terminated? In any case, add termination "\0\0" for safety.
+            comment.resize(comment.length() + 2, '\0');
             return QString::fromUcs2((unsigned short *)comment.data());
         }
         else if (charset == "\"Jis\"")
@@ -1700,7 +1981,14 @@ QString LibKExiv2::detectEncodingAndDecode(const std::string &value)
     // convert string:
     // Use whatever has the larger score, local or ASCII
     if (localScore >= 0 && localScore >= latin1Score)
-        return localCodec->toUnicode(value.c_str(), value.length());
+    {
+        // workaround for bug #134999:
+        // The QLatin15Codec may crash if strlen < value.length()
+        int length = value.length();
+        if (localCodec->name() == QString::fromLatin1("ISO 8859-15"))
+            length = strlen(value.c_str());
+        return localCodec->toUnicode(value.c_str(), length);
+    }
     else
         return QString::fromLatin1(value.c_str());
 }
