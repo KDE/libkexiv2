@@ -92,7 +92,7 @@ public:
     QString     getFilePath() const;
 
     /** Return a Qt byte array copy of Comments container get from current image. 
-        Comments are JFIF section of JPEG images. Look Exiv2 API for more informations.
+        Comments are JFIF section of JPEG images. Look Exiv2 API for more information.
         Return a null Qt byte array if there is no Comments metadata in memory */ 
     QByteArray  getComments() const;
 
@@ -146,9 +146,9 @@ public:
     /** return true is the file metadata cannot be written by Exiv2 */
     static bool isReadOnly(const QString& filePath);
 
-    //-- Metadata Image Informations manipulation methods ----------------
+    //-- Metadata Image Information manipulation methods ----------------
 
-    /** Set Program mane and program version in Exif and Iptc Metadata. Return true if informations
+    /** Set Program mane and program version in Exif and Iptc Metadata. Return true if information
         have been changed in metadata */
     bool setImageProgramId(const QString& program, const QString& version);
 
@@ -162,7 +162,7 @@ public:
 
     /** Return a QImage copy of Exif thumbnail image. Return a null image if thumbnail cannot 
         be found. The 'fixOrientation' parameter will rotate automaticly the thumbnail if Exif 
-        orientation tags informations are attached with thumbnail */
+        orientation tags information are attached with thumbnail */
     QImage getExifThumbnail(bool fixOrientation) const;
 
     /** Set the Exif Thumbnail image. The thumbnail image must have the right dimensions before. 
@@ -176,7 +176,7 @@ public:
         Return true if orientation have been changed in metadata */
     bool setImageOrientation(ImageOrientation orientation);
 
-    /** Return the time stamp of image. Exif informations are check in first, IPTC in second 
+    /** Return the time stamp of image. Exif information are check in first, IPTC in second 
         if image don't have Exif information. If no time stamp is found, a null date is returned */
     QDateTime getImageDateTime() const;
 
