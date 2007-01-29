@@ -97,11 +97,11 @@ public:
     QByteArray  getComments() const;
 
     /** Return a standard C++ string copy of Comments container get from current image.
-        Return a null standard string if there is no Comments metadata in memory */ */
+        Return a null standard string if there is no Comments metadata in memory */
     std::string getCommentsString() const;
 
     /** Return a Qt byte array copy of Exif container get from current image. 
-        Return a null Qt byte array if there is no Exif metadata in memory */ */
+        Return a null Qt byte array if there is no Exif metadata in memory */
     QByteArray  getExif() const;
 
     /** Return a Qt byte array copy of Iptc container get from current image. 
