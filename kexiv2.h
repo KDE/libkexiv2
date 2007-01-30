@@ -2,7 +2,7 @@
  * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
  *          Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Date   : 2006-09-15
- * Description : Exiv2 library interface
+ * Description : Exiv2 library interface for KDE
  *
  * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
  *
@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef LIB_KEXIV2_H
-#define LIB_KEXIV2_H
+#ifndef KEXIV2_H
+#define KEXIV2_H
 
 // C++ includes.
 
@@ -313,4 +313,4 @@ private:
 
 }  // NameSpace KExiv2Iface
 
-#endif /* LIB_KEXIV2_H */
+#endif /* KEXIV2_H */
