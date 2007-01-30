@@ -255,43 +255,79 @@ public:
     bool setGPSInfo(double altitude, double latitude, double longitude);
 
     /** Remove all Exif tags relevant of GPS location informations. Return true if all tags have been 
-        removed sucessufy in metadata. */
+        removed sucessfully in metadata. */
     bool removeGPSInfo();
 
     //-- Metadata Tags manipulation methods ----------------------------------------
 
+    /** Get an Exif tags content like a string. If 'escapeCR' parameter is true, the CR characters
+        will be removed. If Exif tag cannot be found a null string is returned. */
     QString getExifTagString(const char *exifTagName, bool escapeCR=true) const;
+
+    /** Set an Exif tag content using a string. Return true if tag is set sucessfully. */
     bool    setExifTagString(const char *exifTagName, const QString& value);
 
+    /** Get an Exif tags content like a long value. Return true if Exif tag be found. */
     bool getExifTagLong(const char* exifTagName, long &val);
+
+    /** Set an Exif tag content using a long value. Return true if tag is set sucessfully. */
     bool setExifTagLong(const char *exifTagName, long val);
 
+    /** Get the 'component' index of an Exif tags content like a rational value. 
+        'num' and 'den' are the numerator and the denominator of the rational value. 
+        Return true if Exif tag be found. */
     bool getExifTagRational(const char *exifTagName, long int &num, long int &den, int component=0);
+
+    /** Set an Exif tags content using a rational value. 
+        'num' and 'den' are the numerator and the denominator of the rational value. 
+        Return true if tag is set sucessfully. */
     bool setExifTagRational(const char *exifTagName, long int num, long int den);
 
+    /** Get an Exif tags content like a bytes array. Return an empty bytes array if Exif 
+        tag cannot be found. */
     QByteArray getExifTagData(const char *exifTagName) const;
     
+    /** Get an Iptc tags content like a string. If 'escapeCR' parameter is true, the CR characters
+        will be removed. If Iptc tag cannot be found a null string is returned. */
     QString getIptcTagString(const char* iptcTagName, bool escapeCR=true) const;
+
+    /** Set an Iptc tag content using a string. Return true if tag is set sucessfully. */
     bool    setIptcTagString(const char *iptcTagName, const QString& value);
 
+    /** Get an Iptc tags content like a bytes array. Return an empty bytes array if Iptc 
+        tag cannot be found. */
     QByteArray getIptcTagData(const char *iptcTagName) const;
 
+    /** Remove the Exif tag 'exifTagName' from Exif metadata. Return true if tag is 
+        removed sucessfully. */
     bool removeExifTag(const char *exifTagName);
+
+    /** Remove the Iptc tag 'iptcTagName' from Iptc metadata. Return true if tag is 
+        removed sucessfully. */
     bool removeIptcTag(const char *iptcTagName);
 
     //-- Advanced methods to convert and decode data -------------------------
 
+    /** This method convert 'number' like a rational value, returned in 'numerator' and 
+        'denominator' parameters. Set the precision using 'rounding' parameter. */
     static void convertToRational(double number, long int* numerator, 
                                   long int* denominator, int rounding);
 
+    /** Wrapper method to convert a Comments content to a QString. */ 
     static QString convertCommentValue(const Exiv2::Exifdatum &comment);
 
+    /** Charset autodetection to convert a string to a QString. */ 
     static QString detectEncodingAndDecode(const std::string &value);
 
 protected:
 
+    /** Return a reference to comments string object in memory. */
     std::string&     commentsMetaData();
+
+    /** Return a reference to Exif metadata object in memory. */
     Exiv2::ExifData& exifMetaData();
+
+    /** Return a reference to Iptc metadata object in memory. */
     Exiv2::IptcData& iptcMetaData();
 
     /** Set the Exif data using an Exiv2 byte array. Return true if Exif metadata
