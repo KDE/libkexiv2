@@ -6,6 +6,10 @@
  *
  * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
  *
+ * Exiv2: http://www.exiv2.org
+ * Exif : http://www.exif.org/Exif2-2.PDF 
+ * Iptc : http://www.iptc.org/std/IIM/4.1/specification/IIMV4.1.pdf
+ *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -55,7 +59,16 @@ class LIBKEXIV2_EXPORT LibKExiv2
 
 public:
 
-    /** The image orientation value given by Exif Orientaion tag */
+    /** The image color workspace values given by Exif metadata. */
+    enum ImageColorWorkSpace
+    {
+        WORKSPACE_UNSPECIFIED  = 0,    
+        WORKSPACE_SRGB         = 1,    
+        WORKSPACE_ADOBERGB     = 2,    
+        WORKSPACE_UNCALIBRATED = 65535 
+    };
+
+    /** The image orientation values given by Exif metadata. */
     enum ImageOrientation
     {
         ORIENTATION_UNSPECIFIED  = 0, 
@@ -71,10 +84,10 @@ public:
 
 public:
 
-    /** Standard constructor */
+    /** Standard constructor. */
     LibKExiv2();
 
-    /** Contructor to Load Metadata from image file */
+    /** Contructor to Load Metadata from image file. */
     LibKExiv2(const QString& filePath);
 
     /** Standard destructor */
@@ -82,74 +95,70 @@ public:
 
     //-- Metadata manipulation methods ----------------------------------------------
 
-    /** Clear the Exif metadata container in memory */
+    /** Clear the Comments metadata container in memory. */
+    bool clearComments();
+
+    /** Clear the Exif metadata container in memory. */
     bool clearExif();
 
-    /** Clear the Iptc metadata container in memory */
+    /** Clear the Iptc metadata container in memory. */
     bool clearIptc();
 
-    /** Return the file path open with the current instance of interface */
+    /** Return the file path open with the current instance of interface. */
     QString     getFilePath() const;
 
     /** Return a Qt byte array copy of Comments container get from current image. 
         Comments are JFIF section of JPEG images. Look Exiv2 API for more information.
-        Return a null Qt byte array if there is no Comments metadata in memory */ 
+        Return a null Qt byte array if there is no Comments metadata in memory. */ 
     QByteArray  getComments() const;
 
-    /** Return a standard C++ string copy of Comments container get from current image.
-        Return a null standard string if there is no Comments metadata in memory */
-    std::string getCommentsString() const;
+    /** Return a Qt string object of Comments from current image decoded using 
+        the 'detectEncodingAndDecode()' method. Return a null string if there is no 
+        Comments metadata available. */ 
+    QString     getCommentsDecoded() const;
 
     /** Return a Qt byte array copy of Exif container get from current image. 
-        Return a null Qt byte array if there is no Exif metadata in memory */
+        Return a null Qt byte array if there is no Exif metadata in memory. */
     QByteArray  getExif() const;
 
     /** Return a Qt byte array copy of Iptc container get from current image. 
         Set true 'addIrbHeader' parameter to add an Irb header to IPTC metadata. 
-        Return a null Qt byte array if there is no Iptc metadata in memory */
+        Return a null Qt byte array if there is no Iptc metadata in memory. */
     QByteArray  getIptc(bool addIrbHeader=false) const;
 
     /** Set the Comments data using a Qt byte array. Return true if Comments metadata
-        have been changed in memory */
+        have been changed in memory. */
     bool setComments(const QByteArray& data);
 
     /** Set the Exif data using a Qt byte array. Return true if Exif metadata
-        have been changed in memory */
+        have been changed in memory. */
     bool setExif(const QByteArray& data);
 
     /** Set the Iptc data using a Qt byte array. Return true if Iptc metadata
-        have been changed in memory */
+        have been changed in memory. */
     bool setIptc(const QByteArray& data);
 
-    /** Set the Exif data using an Exiv2 byte array. Return true if Exif metadata
-        have been changed in memory */
-    bool setExif(Exiv2::DataBuf const data);
-
-    /** Set the Iptc data using an Exiv2 byte array. Return true if Iptc metadata
-        have been changed in memory */
-    bool setIptc(Exiv2::DataBuf const data);
-
-    //-- File access method ----------------------------------------------
+    //-- File access methods ----------------------------------------------
 
     /** Load all metadata (EXIF, IPTC and JFIF Comments) from a picture (JPEG, RAW, TIFF, PNG, 
-        DNG, etc...). Return true if metadata have been loaded sucessfuly from file */
+        DNG, etc...). Return true if metadata have been loaded sucessfuly from file. */
     bool load(const QString& filePath);
 
     /** Save all metadata to a file. This one can be different than original picture to perform 
-        transfert operation Return true if metadata have been saved into file */
+        transfert operation Return true if metadata have been saved into file. */
     bool save(const QString& filePath);
 
     /** The same than save() method, but it apply on current image. Return true if metadata 
-        have been saved into file */
+        have been saved into file. */
     bool applyChanges();
 
-    /** return true is the file metadata cannot be written by Exiv2 */
+    /** return true is the file metadata cannot be written by Exiv2. */
     static bool isReadOnly(const QString& filePath);
 
     //-- Metadata Image Information manipulation methods ----------------
 
     /** Set Program mane and program version in Exif and Iptc Metadata. Return true if information
-        have been changed in metadata */
+        have been changed in metadata. */
     bool setImageProgramId(const QString& program, const QString& version);
 
     /** Return the size of image in pixels using Exif tags. Return a null dimmension if size cannot 
@@ -157,27 +166,36 @@ public:
     QSize getImageDimensions();
 
     /** Set the size of image in pixels in Exif tags. Return true if size have been changed 
-        in metadata */
+        in metadata. */
     bool  setImageDimensions(const QSize& size);
 
     /** Return a QImage copy of Exif thumbnail image. Return a null image if thumbnail cannot 
         be found. The 'fixOrientation' parameter will rotate automaticly the thumbnail if Exif 
-        orientation tags information are attached with thumbnail */
+        orientation tags information are attached with thumbnail. */
     QImage getExifThumbnail(bool fixOrientation) const;
 
     /** Set the Exif Thumbnail image. The thumbnail image must have the right dimensions before. 
-        Look Exif specification for details. Return true if thumbnail have been changed in metadata */
+        Look Exif specification for details. Return true if thumbnail have been changed in metadata. */
     bool   setExifThumbnail(const QImage& thumb);
 
-    /** Return the image orientation set in Exif metadata. See ImageOrientation values for details */
+    /** Return the image orientation set in Exif metadata. The makernotes of image are also parsed to 
+        get this information. See ImageOrientation values for details. */
     LibKExiv2::ImageOrientation getImageOrientation();
 
     /** Set the Exif orientation tag of image. See ImageOrientation values for details 
-        Return true if orientation have been changed in metadata */
+        Return true if orientation have been changed in metadata. */
     bool setImageOrientation(ImageOrientation orientation);
 
+    /** Return the image color-space set in Exif metadata. The makernotes of image are also parsed to 
+        get this information. See ImageColorWorkSpace values for details. */
+    LibKExiv2::ImageColorWorkSpace getImageColorWorkSpace();
+
+    /** Set the Exif color-space tag of image. See ImageColorWorkSpace values for details 
+        Return true if work-space have been changed in metadata. */
+    bool setImageColorWorkSpace(ImageColorWorkSpace workspace);
+
     /** Return the time stamp of image. Exif information are check in first, IPTC in second 
-        if image don't have Exif information. If no time stamp is found, a null date is returned */
+        if image don't have Exif information. If no time stamp is found, a null date is returned. */
     QDateTime getImageDateTime() const;
 
     /** Set the Exif and Iptc time stamp. If 'setDateTimeDigitized' parameter is true, the 'Digitalized'
@@ -190,23 +208,54 @@ public:
 
     /** Set the Iptc preview image. The thumbnail image must have the right size before (64Kb max 
         with JPEG file, else 256Kb). Look Iptc specification for details. Return true if preview 
-        have been changed in metadata */
+        have been changed in metadata. */
     bool setImagePreview(const QImage& preview);
 
+    /** Return a strings list of Iptc keywords from image. Return an empty list if no keyword are set. */
     QStringList getImageKeywords() const;
+
+    /** Set Iptc keywords using a list of strings defined by 'newKeywords' parameter. Use 'getImageKeywords()' 
+        method to set 'oldKeywords' parameter with existing keywords from image. The method will compare 
+        all new keywords with all old keywords to prevent duplicate entries in image. Return true if keywords
+        have been changed in metadata. */
     bool setImageKeywords(const QStringList& oldKeywords, const QStringList& newKeywords);
 
+    /** Return a strings list of Iptc subjects from image. Return an empty list if no subject are set. */
     QStringList getImageSubjects() const;
+
+    /** Set Iptc subjects using a list of strings defined by 'newSubjects' parameter. Use 'getImageSubjects()' 
+        method to set 'oldSubjects' parameter with existing subjects from image. The method will compare 
+        all new subjects with all old subjects to prevent duplicate entries in image. Return true if subjects
+        have been changed in metadata. */
     bool setImageSubjects(const QStringList& oldSubjects, const QStringList& newSubjects);
 
+    /** Return a strings list of Iptc sub-categories from image. Return an empty list if no sub-category 
+        are set. */
     QStringList getImageSubCategories() const;
-    bool setImageSubCategories(const QStringList& oldSubCategories, const QStringList& newSubCategories);
 
+    /** Set Iptc sub-categories using a list of strings defined by 'newSubCategories' parameter. Use
+        'getImageSubCategories()' method to set 'oldSubCategories' parameter with existing sub-categories
+        from image. The method will compare all new sub-categories with all old sub-categories to prevent
+        duplicate entries in image. Return true if sub-categories have been changed in metadata. */
+    bool setImageSubCategories(const QStringList& oldSubCategories, const QStringList& newSubCategories);
+    
+    /** Return a QString copy of Exif user comments. Return a null string if user comments cannot 
+        be found. */
     QString getExifComment() const;
+
+    /** Set the Exif user comments from image. Look Exif specification for more details about this tag. 
+        Return true if Exif user comments have been changed in metadata. */
     bool    setExifComment(const QString& comment);
 
+    /** Get all GPS location informations set in image. Return true if all informations can be found. */
     bool getGPSInfo(double& altitude, double& latitude, double& longitude);
+
+    /** Set all GPS location informations into image. Return true if all informations have been 
+        changed in metadata. */
     bool setGPSInfo(double altitude, double latitude, double longitude);
+
+    /** Remove all Exif tags relevant of GPS location informations. Return true if all tags have been 
+        removed sucessufy in metadata. */
     bool removeGPSInfo();
 
     //-- Metadata Tags manipulation methods ----------------------------------------
@@ -232,16 +281,30 @@ public:
 
     //-- Advanced methods to convert and decode data -------------------------
 
-    static QString convertCommentValue(const Exiv2::Exifdatum &comment);
-    static QString detectEncodingAndDecode(const std::string &value);
     static void convertToRational(double number, long int* numerator, 
                                   long int* denominator, int rounding);
+
+    static QString convertCommentValue(const Exiv2::Exifdatum &comment);
+
+    static QString detectEncodingAndDecode(const std::string &value);
 
 protected:
 
     std::string&     commentsMetaData();
     Exiv2::ExifData& exifMetaData();
     Exiv2::IptcData& iptcMetaData();
+
+    /** Set the Exif data using an Exiv2 byte array. Return true if Exif metadata
+        have been changed in memory */
+    bool setExif(Exiv2::DataBuf const data);
+
+    /** Set the Iptc data using an Exiv2 byte array. Return true if Iptc metadata
+        have been changed in memory */
+    bool setIptc(Exiv2::DataBuf const data);
+
+    /** Return a standard C++ string copy of Comments container get from current image.
+        Return a null standard string if there is no Comments metadata in memory */
+    std::string getCommentsString() const;
 
 private:
 

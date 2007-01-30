@@ -114,6 +114,11 @@ Exiv2::IptcData& LibKExiv2::iptcMetaData()
 
 // -- Public Methods --------------------------------
 
+bool LibKExiv2::clearComments()
+{
+    return setComments(QByteArray());
+}
+
 bool LibKExiv2::clearExif()
 {
     try
@@ -152,6 +157,11 @@ QString LibKExiv2::getFilePath() const
 QByteArray LibKExiv2::getComments() const
 {
     return QByteArray().duplicate(d->imageComments.data(), d->imageComments.size());
+}
+
+QString LibKExiv2::getCommentsDecoded() const
+{
+    return detectEncodingAndDecode(getCommentsString());
 }
 
 std::string LibKExiv2::getCommentsString() const
@@ -770,6 +780,66 @@ bool LibKExiv2::setImageOrientation(ImageOrientation orientation)
     catch( Exiv2::Error &e )
     {
         qDebug("Cannot set Exif Orientation tag using Exiv2 (%s)", e.what().c_str());
+    }        
+    
+    return false;
+}
+
+LibKExiv2::ImageColorWorkSpace LibKExiv2::getImageColorWorkSpace()
+{
+    if (d->exifMetadata.empty())
+        return WORKSPACE_UNSPECIFIED;
+
+    try
+    {    
+        // Try to get Exif.Image tags
+        Exiv2::ExifData exifData(d->exifMetadata);
+        Exiv2::ExifKey key("Exif.Photo.ColorSpace");
+        Exiv2::ExifData::iterator it = exifData.findKey(key);
+       
+        if (it != exifData.end())
+        {
+            switch (it->toLong())
+            {
+                case 1:
+                    return WORKSPACE_SRGB;
+                    break;
+                case 2:
+                    return WORKSPACE_ADOBERGB;
+                    break;
+                case 65535:
+                    return WORKSPACE_UNCALIBRATED;
+                    break;
+                default:
+                    return WORKSPACE_UNSPECIFIED;
+                    break;
+            }
+        }
+        
+        // TODO : add here Makernote parsing if necessary.
+    }
+    catch( Exiv2::Error &e )
+    {
+        qDebug("Cannot parse image color workspace tag using Exiv2 (%s)", e.what().c_str());
+    }        
+    
+    return WORKSPACE_UNSPECIFIED;    
+}
+
+bool LibKExiv2::setImageColorWorkSpace(ImageColorWorkSpace workspace)
+{
+    if (d->exifMetadata.empty())
+       return false;
+
+    try
+    {    
+        d->exifMetadata["Exif.Photo.ColorSpace"] = (uint16_t)workspace;
+        qDebug("Exif color workspace tag set to: %i",  (int)workspace);
+        return true;
+    }
+    catch( Exiv2::Error &e )
+    {
+        qDebug("Cannot set Exif color workspace tag using Exiv2 (%s)", e.what().c_str());
     }        
     
     return false;
