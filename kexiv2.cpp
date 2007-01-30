@@ -516,6 +516,9 @@ QSize KExiv2::getImageDimensions()
 
 bool KExiv2::setImageDimensions(const QSize& size)
 {
+    if (!setProgramId())
+        return false;
+
     try
     {    
         d->exifMetadata["Exif.Image.ImageWidth"]      = size.width();
@@ -611,6 +614,9 @@ QImage KExiv2::getExifThumbnail(bool fixOrientation) const
 
 bool KExiv2::setExifThumbnail(const QImage& thumb)
 {
+    if (!setProgramId())
+        return false;
+
     try
     {   
         KTempFile thumbFile(QString::null, "KExiv2ExifThumbnail");
@@ -725,6 +731,9 @@ bool KExiv2::setImageOrientation(ImageOrientation orientation)
     if (d->exifMetadata.empty())
        return false;
 
+    if (!setProgramId())
+        return false;
+
     // Workaround for older Exiv2 versions which do not support
     // Minolta Makernotes and throw an error for such keys.
     bool supportMinolta = true;
@@ -830,6 +839,9 @@ bool KExiv2::setImageColorWorkSpace(ImageColorWorkSpace workspace)
 {
     if (d->exifMetadata.empty())
        return false;
+
+    if (!setProgramId())
+        return false;
 
     try
     {    
@@ -978,7 +990,10 @@ bool KExiv2::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitiz
 {
     if(!dateTime.isValid())
         return false;
-    
+ 
+    if (!setProgramId())
+        return false;
+   
     try
     {    
         // In first we write date & time into Exif.
@@ -1036,6 +1051,9 @@ bool KExiv2::getImagePreview(QImage& preview)
 
 bool KExiv2::setImagePreview(const QImage& preview)
 {
+    if (!setProgramId())
+        return false;
+
     try
     {
         KTempFile previewFile(QString::null, "KExiv2ImagePreview");
@@ -1103,6 +1121,9 @@ QString KExiv2::getExifTagString(const char* exifTagName, bool escapeCR) const
 
 bool KExiv2::setExifTagString(const char *exifTagName, const QString& value)
 {
+    if (!setProgramId())
+        return false;
+
     try
     {
         d->exifMetadata[exifTagName] = value.ascii();
@@ -1146,6 +1167,9 @@ QString KExiv2::getIptcTagString(const char* iptcTagName, bool escapeCR) const
 
 bool KExiv2::setIptcTagString(const char *iptcTagName, const QString& value)
 {
+    if (!setProgramId())
+        return false;
+
     try
     {
         d->iptcMetadata[iptcTagName] = value.ascii();
@@ -1252,6 +1276,9 @@ bool KExiv2::getExifTagRational(const char *exifTagName, long int &num, long int
 
 bool KExiv2::setExifTagLong(const char *exifTagName, long val)
 {
+    if (!setProgramId())
+        return false;
+
     try
     {
         d->exifMetadata[exifTagName] = int32_t(val);
@@ -1267,6 +1294,9 @@ bool KExiv2::setExifTagLong(const char *exifTagName, long val)
 
 bool KExiv2::setExifTagRational(const char *exifTagName, long int num, long int den)
 {
+    if (!setProgramId())
+        return false;
+
     try
     {
         d->exifMetadata[exifTagName] = Exiv2::Rational(num, den);
@@ -1282,6 +1312,9 @@ bool KExiv2::setExifTagRational(const char *exifTagName, long int num, long int 
 
 bool KExiv2::removeExifTag(const char *exifTagName)
 {
+    if (!setProgramId())
+        return false;
+
     try
     {  
         Exiv2::ExifKey exifKey(exifTagName);
@@ -1302,6 +1335,9 @@ bool KExiv2::removeExifTag(const char *exifTagName)
 
 bool KExiv2::removeIptcTag(const char *iptcTagName)
 {
+    if (!setProgramId())
+        return false;
+
     try
     {  
         Exiv2::IptcKey iptcKey(iptcTagName);
@@ -1420,6 +1456,9 @@ bool KExiv2::getGPSInfo(double& altitude, double& latitude, double& longitude)
 
 bool KExiv2::setGPSInfo(double altitude, double latitude, double longitude)
 {
+    if (!setProgramId())
+        return false;
+
     try
     {    
         // In first, we need to clean up all existing GPS info.
@@ -1540,6 +1579,9 @@ bool KExiv2::setGPSInfo(double altitude, double latitude, double longitude)
 
 bool KExiv2::removeGPSInfo()
 {
+    if (!setProgramId())
+        return false;
+
     try
     {  
         QStringList gpsTagsKeys;
@@ -1664,6 +1706,9 @@ QStringList KExiv2::getImageKeywords() const
 
 bool KExiv2::setImageKeywords(const QStringList& oldKeywords, const QStringList& newKeywords)
 {
+    if (!setProgramId())
+        return false;
+
     try
     {    
         QStringList oldkeys = oldKeywords;
@@ -1748,6 +1793,9 @@ QStringList KExiv2::getImageSubjects() const
 
 bool KExiv2::setImageSubjects(const QStringList& oldSubjects, const QStringList& newSubjects)
 {
+    if (!setProgramId())
+        return false;
+
     try
     {    
         QStringList oldDef = oldSubjects;
@@ -1827,6 +1875,9 @@ QStringList KExiv2::getImageSubCategories() const
 
 bool KExiv2::setImageSubCategories(const QStringList& oldSubCategories, const QStringList& newSubCategories)
 {
+    if (!setProgramId())
+        return false;
+
     try
     {    
         QStringList oldkeys = oldSubCategories;
@@ -1903,6 +1954,9 @@ QString KExiv2::getExifComment() const
 
 bool KExiv2::setExifComment(const QString& comment)
 {
+    if (!setProgramId())
+        return false;
+
     try
     {
         if (comment.isEmpty())
@@ -2061,6 +2115,11 @@ QString KExiv2::detectEncodingAndDecode(const std::string &value)
     }
     else
         return QString::fromLatin1(value.c_str());
+}
+
+bool KExiv2::setProgramId()
+{
+    return true; 
 }
 
 }  // NameSpace KExiv2Iface

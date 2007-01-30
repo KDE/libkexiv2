@@ -208,8 +208,11 @@ public:
 
     /** Set the Iptc preview image. The thumbnail image must have the right size before (64Kb max 
         with JPEG file, else 256Kb). Look Iptc specification for details. Return true if preview 
-        have been changed in metadata. */
-    bool setImagePreview(const QImage& preview);
+        have been changed in metadata. 
+        Re-implemente this method if you want to use another image file format than JPEG to 
+        save preview.
+    */
+    virtual bool setImagePreview(const QImage& preview);
 
     /** Return a strings list of Iptc keywords from image. Return an empty list if no keyword are set. */
     QStringList getImageKeywords() const;
@@ -320,6 +323,21 @@ public:
     static QString detectEncodingAndDecode(const std::string &value);
 
 protected:
+    
+    /** Re-implemente this method to set automaticly the Program Name and Program Version 
+        informations in Exif and Iptc metadata. This method is called by all methods witch
+        change tags in metadata. By default this method do nothing and return true.
+ 
+        In digiKam this method is re-implementated like this:
+
+        bool DMetadata::setProgramId()
+        {
+            QString version(digikam_version);
+            QString software("digiKam");
+            return setImageProgramId(software, version);
+        }
+    */      
+    virtual bool setProgramId();
 
     /** Return a reference to comments string object in memory. */
     std::string&     commentsMetaData();
