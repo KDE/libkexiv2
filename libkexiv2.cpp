@@ -61,14 +61,14 @@
 
 #include "libkexiv2.h"
 
-namespace KExiv2Library
+namespace KExiv2Iface
 {
 
-class LibKExiv2Priv
+class KExiv2Priv
 {
 public:
 
-    LibKExiv2Priv(){}
+    KExiv2Priv(){}
 
     QString         filePath;
 
@@ -79,47 +79,47 @@ public:
     Exiv2::IptcData iptcMetadata;
 };
 
-LibKExiv2::LibKExiv2()
+KExiv2::KExiv2()
 {
-    d = new LibKExiv2Priv;
+    d = new KExiv2Priv;
 }
 
-LibKExiv2::LibKExiv2(const QString& filePath)
+KExiv2::KExiv2(const QString& filePath)
 {
-    d = new LibKExiv2Priv;
+    d = new KExiv2Priv;
     load(filePath);
 }
 
-LibKExiv2::~LibKExiv2()
+KExiv2::~KExiv2()
 {
     delete d;
 }
 
 // -- Protected Methods -------------------------------------
 
-std::string& LibKExiv2::commentsMetaData()
+std::string& KExiv2::commentsMetaData()
 {
     return d->imageComments;
 }
 
-Exiv2::ExifData& LibKExiv2::exifMetaData()
+Exiv2::ExifData& KExiv2::exifMetaData()
 {
     return d->exifMetadata;
 }
 
-Exiv2::IptcData& LibKExiv2::iptcMetaData()
+Exiv2::IptcData& KExiv2::iptcMetaData()
 {
     return d->iptcMetadata;
 }
 
 // -- Public Methods --------------------------------
 
-bool LibKExiv2::clearComments()
+bool KExiv2::clearComments()
 {
     return setComments(QByteArray());
 }
 
-bool LibKExiv2::clearExif()
+bool KExiv2::clearExif()
 {
     try
     {    
@@ -134,7 +134,7 @@ bool LibKExiv2::clearExif()
     return false;       
 }
 
-bool LibKExiv2::clearIptc()
+bool KExiv2::clearIptc()
 {
     try
     {    
@@ -149,27 +149,27 @@ bool LibKExiv2::clearIptc()
     return false;       
 }
 
-QString LibKExiv2::getFilePath() const
+QString KExiv2::getFilePath() const
 {
     return d->filePath;
 }
 
-QByteArray LibKExiv2::getComments() const
+QByteArray KExiv2::getComments() const
 {
     return QByteArray().duplicate(d->imageComments.data(), d->imageComments.size());
 }
 
-QString LibKExiv2::getCommentsDecoded() const
+QString KExiv2::getCommentsDecoded() const
 {
     return detectEncodingAndDecode(getCommentsString());
 }
 
-std::string LibKExiv2::getCommentsString() const
+std::string KExiv2::getCommentsString() const
 {
     return d->imageComments;
 }
 
-QByteArray LibKExiv2::getExif() const
+QByteArray KExiv2::getExif() const
 {
     try
     {    
@@ -194,7 +194,7 @@ QByteArray LibKExiv2::getExif() const
     return QByteArray();
 }
 
-QByteArray LibKExiv2::getIptc(bool addIrbHeader) const
+QByteArray KExiv2::getIptc(bool addIrbHeader) const
 {
     try
     {    
@@ -234,13 +234,13 @@ QByteArray LibKExiv2::getIptc(bool addIrbHeader) const
     return QByteArray();
 }
 
-bool LibKExiv2::setComments(const QByteArray& data)
+bool KExiv2::setComments(const QByteArray& data)
 {
     d->imageComments = std::string(data.data(), data.size());
     return true;
 }
 
-bool LibKExiv2::setExif(const QByteArray& data)
+bool KExiv2::setExif(const QByteArray& data)
 {
     try
     {    
@@ -263,7 +263,7 @@ bool LibKExiv2::setExif(const QByteArray& data)
     return false;
 }
 
-bool LibKExiv2::setIptc(const QByteArray& data)
+bool KExiv2::setIptc(const QByteArray& data)
 {
     try
     {    
@@ -286,7 +286,7 @@ bool LibKExiv2::setIptc(const QByteArray& data)
     return false;    
 }
 
-bool LibKExiv2::setExif(Exiv2::DataBuf const data)
+bool KExiv2::setExif(Exiv2::DataBuf const data)
 {
     try
     {    
@@ -309,7 +309,7 @@ bool LibKExiv2::setExif(Exiv2::DataBuf const data)
     return false;    
 }
 
-bool LibKExiv2::setIptc(Exiv2::DataBuf const data)
+bool KExiv2::setIptc(Exiv2::DataBuf const data)
 {
     try
     {    
@@ -332,7 +332,7 @@ bool LibKExiv2::setIptc(Exiv2::DataBuf const data)
     return false;
 }
 
-bool LibKExiv2::load(const QString& filePath)
+bool KExiv2::load(const QString& filePath)
 {
     try
     {   
@@ -366,7 +366,7 @@ bool LibKExiv2::load(const QString& filePath)
     }
 }
 
-bool LibKExiv2::save(const QString& filePath)
+bool KExiv2::save(const QString& filePath)
 {
     if (filePath.isEmpty())
         return false;
@@ -422,12 +422,12 @@ bool LibKExiv2::save(const QString& filePath)
     }
 }
 
-bool LibKExiv2::applyChanges()
+bool KExiv2::applyChanges()
 {
     return save(d->filePath);
 }
 
-bool LibKExiv2::isReadOnly(const QString& filePath)
+bool KExiv2::isReadOnly(const QString& filePath)
 {
     QFileInfo fi(filePath);
     QString ext = fi.extension(false).upper();
@@ -438,7 +438,7 @@ bool LibKExiv2::isReadOnly(const QString& filePath)
     return false;
 }
 
-bool LibKExiv2::setImageProgramId(const QString& program, const QString& version)
+bool KExiv2::setImageProgramId(const QString& program, const QString& version)
 {
     try
     {
@@ -459,7 +459,7 @@ bool LibKExiv2::setImageProgramId(const QString& program, const QString& version
     return false;
 }
 
-QSize LibKExiv2::getImageDimensions()
+QSize KExiv2::getImageDimensions()
 {
     if (d->exifMetadata.empty())
         return QSize();
@@ -514,7 +514,7 @@ QSize LibKExiv2::getImageDimensions()
     return QSize();
 }
 
-bool LibKExiv2::setImageDimensions(const QSize& size)
+bool KExiv2::setImageDimensions(const QSize& size)
 {
     try
     {    
@@ -532,7 +532,7 @@ bool LibKExiv2::setImageDimensions(const QSize& size)
     return false;
 }
 
-QImage LibKExiv2::getExifThumbnail(bool fixOrientation) const
+QImage KExiv2::getExifThumbnail(bool fixOrientation) const
 {
     QImage thumbnail;
     
@@ -609,11 +609,11 @@ QImage LibKExiv2::getExifThumbnail(bool fixOrientation) const
     return thumbnail;
 }
 
-bool LibKExiv2::setExifThumbnail(const QImage& thumb)
+bool KExiv2::setExifThumbnail(const QImage& thumb)
 {
     try
     {   
-        KTempFile thumbFile(QString::null, "LibKExiv2ExifThumbnail");
+        KTempFile thumbFile(QString::null, "KExiv2ExifThumbnail");
         thumbFile.setAutoDelete(true);
         thumb.save(thumbFile.name(), "JPEG");
 
@@ -629,7 +629,7 @@ bool LibKExiv2::setExifThumbnail(const QImage& thumb)
     return false;
 }
 
-LibKExiv2::ImageOrientation LibKExiv2::getImageOrientation()
+KExiv2::ImageOrientation KExiv2::getImageOrientation()
 {
     if (d->exifMetadata.empty())
        return ORIENTATION_UNSPECIFIED;
@@ -720,7 +720,7 @@ LibKExiv2::ImageOrientation LibKExiv2::getImageOrientation()
     return ORIENTATION_UNSPECIFIED;
 }
 
-bool LibKExiv2::setImageOrientation(ImageOrientation orientation)
+bool KExiv2::setImageOrientation(ImageOrientation orientation)
 {
     if (d->exifMetadata.empty())
        return false;
@@ -785,7 +785,7 @@ bool LibKExiv2::setImageOrientation(ImageOrientation orientation)
     return false;
 }
 
-LibKExiv2::ImageColorWorkSpace LibKExiv2::getImageColorWorkSpace()
+KExiv2::ImageColorWorkSpace KExiv2::getImageColorWorkSpace()
 {
     if (d->exifMetadata.empty())
         return WORKSPACE_UNSPECIFIED;
@@ -826,7 +826,7 @@ LibKExiv2::ImageColorWorkSpace LibKExiv2::getImageColorWorkSpace()
     return WORKSPACE_UNSPECIFIED;    
 }
 
-bool LibKExiv2::setImageColorWorkSpace(ImageColorWorkSpace workspace)
+bool KExiv2::setImageColorWorkSpace(ImageColorWorkSpace workspace)
 {
     if (d->exifMetadata.empty())
        return false;
@@ -845,7 +845,7 @@ bool LibKExiv2::setImageColorWorkSpace(ImageColorWorkSpace workspace)
     return false;
 }
 
-QDateTime LibKExiv2::getImageDateTime() const
+QDateTime KExiv2::getImageDateTime() const
 {
     try
     {    
@@ -974,7 +974,7 @@ QDateTime LibKExiv2::getImageDateTime() const
     return QDateTime();
 }
 
-bool LibKExiv2::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitized)
+bool KExiv2::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitized)
 {
     if(!dateTime.isValid())
         return false;
@@ -1016,7 +1016,7 @@ bool LibKExiv2::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigi
     return false;
 }
 
-bool LibKExiv2::getImagePreview(QImage& preview)
+bool KExiv2::getImagePreview(QImage& preview)
 {
     try
     {
@@ -1034,11 +1034,11 @@ bool LibKExiv2::getImagePreview(QImage& preview)
     return false;
 }
 
-bool LibKExiv2::setImagePreview(const QImage& preview)
+bool KExiv2::setImagePreview(const QImage& preview)
 {
     try
     {
-        KTempFile previewFile(QString::null, "LibKExiv2ImagePreview");
+        KTempFile previewFile(QString::null, "KExiv2ImagePreview");
         previewFile.setAutoDelete(true);
         // A little bit compressed preview jpeg image to limit IPTC size.
         preview.save(previewFile.name(), "JPEG");
@@ -1073,7 +1073,7 @@ bool LibKExiv2::setImagePreview(const QImage& preview)
     return false;
 }
 
-QString LibKExiv2::getExifTagString(const char* exifTagName, bool escapeCR) const
+QString KExiv2::getExifTagString(const char* exifTagName, bool escapeCR) const
 {
     try
     {
@@ -1101,7 +1101,7 @@ QString LibKExiv2::getExifTagString(const char* exifTagName, bool escapeCR) cons
     return QString();
 }
 
-bool LibKExiv2::setExifTagString(const char *exifTagName, const QString& value)
+bool KExiv2::setExifTagString(const char *exifTagName, const QString& value)
 {
     try
     {
@@ -1116,7 +1116,7 @@ bool LibKExiv2::setExifTagString(const char *exifTagName, const QString& value)
     return false;
 }
 
-QString LibKExiv2::getIptcTagString(const char* iptcTagName, bool escapeCR) const
+QString KExiv2::getIptcTagString(const char* iptcTagName, bool escapeCR) const
 {
     try
     {
@@ -1144,7 +1144,7 @@ QString LibKExiv2::getIptcTagString(const char* iptcTagName, bool escapeCR) cons
     return QString();
 }
 
-bool LibKExiv2::setIptcTagString(const char *iptcTagName, const QString& value)
+bool KExiv2::setIptcTagString(const char *iptcTagName, const QString& value)
 {
     try
     {
@@ -1159,7 +1159,7 @@ bool LibKExiv2::setIptcTagString(const char *iptcTagName, const QString& value)
     return false;
 }
 
-bool LibKExiv2::getExifTagLong(const char* exifTagName, long &val)
+bool KExiv2::getExifTagLong(const char* exifTagName, long &val)
 {
     try
     {    
@@ -1181,7 +1181,7 @@ bool LibKExiv2::getExifTagLong(const char* exifTagName, long &val)
     return false;    
 }
 
-QByteArray LibKExiv2::getExifTagData(const char* exifTagName) const
+QByteArray KExiv2::getExifTagData(const char* exifTagName) const
 {
     try
     {
@@ -1204,7 +1204,7 @@ QByteArray LibKExiv2::getExifTagData(const char* exifTagName) const
     return QByteArray();
 }
 
-QByteArray LibKExiv2::getIptcTagData(const char *iptcTagName) const
+QByteArray KExiv2::getIptcTagData(const char *iptcTagName) const
 {
     try
     {
@@ -1227,7 +1227,7 @@ QByteArray LibKExiv2::getIptcTagData(const char *iptcTagName) const
     return QByteArray();
 }
 
-bool LibKExiv2::getExifTagRational(const char *exifTagName, long int &num, long int &den, int component)
+bool KExiv2::getExifTagRational(const char *exifTagName, long int &num, long int &den, int component)
 {
     try
     {
@@ -1250,7 +1250,7 @@ bool LibKExiv2::getExifTagRational(const char *exifTagName, long int &num, long 
     return false;
 }
 
-bool LibKExiv2::setExifTagLong(const char *exifTagName, long val)
+bool KExiv2::setExifTagLong(const char *exifTagName, long val)
 {
     try
     {
@@ -1265,7 +1265,7 @@ bool LibKExiv2::setExifTagLong(const char *exifTagName, long val)
     return false;
 }
 
-bool LibKExiv2::setExifTagRational(const char *exifTagName, long int num, long int den)
+bool KExiv2::setExifTagRational(const char *exifTagName, long int num, long int den)
 {
     try
     {
@@ -1280,7 +1280,7 @@ bool LibKExiv2::setExifTagRational(const char *exifTagName, long int num, long i
     return false;
 }
 
-bool LibKExiv2::removeExifTag(const char *exifTagName)
+bool KExiv2::removeExifTag(const char *exifTagName)
 {
     try
     {  
@@ -1300,7 +1300,7 @@ bool LibKExiv2::removeExifTag(const char *exifTagName)
     return false;
 }
 
-bool LibKExiv2::removeIptcTag(const char *iptcTagName)
+bool KExiv2::removeIptcTag(const char *iptcTagName)
 {
     try
     {  
@@ -1320,7 +1320,7 @@ bool LibKExiv2::removeIptcTag(const char *iptcTagName)
     return false;
 }
 
-bool LibKExiv2::getGPSInfo(double& altitude, double& latitude, double& longitude)
+bool KExiv2::getGPSInfo(double& altitude, double& latitude, double& longitude)
 {
     try
     {    
@@ -1418,7 +1418,7 @@ bool LibKExiv2::getGPSInfo(double& altitude, double& latitude, double& longitude
     return false;
 }
 
-bool LibKExiv2::setGPSInfo(double altitude, double latitude, double longitude)
+bool KExiv2::setGPSInfo(double altitude, double latitude, double longitude)
 {
     try
     {    
@@ -1538,7 +1538,7 @@ bool LibKExiv2::setGPSInfo(double altitude, double latitude, double longitude)
     return false;
 }
 
-bool LibKExiv2::removeGPSInfo()
+bool KExiv2::removeGPSInfo()
 {
     try
     {  
@@ -1571,7 +1571,7 @@ bool LibKExiv2::removeGPSInfo()
     return false;
 }
 
-void LibKExiv2::convertToRational(double number, long int* numerator, 
+void KExiv2::convertToRational(double number, long int* numerator, 
                                   long int* denominator, int rounding)
 {
     // This function converts the given decimal number
@@ -1631,7 +1631,7 @@ void LibKExiv2::convertToRational(double number, long int* numerator,
     *denominator = (int)denTemp;
 }
 
-QStringList LibKExiv2::getImageKeywords() const
+QStringList KExiv2::getImageKeywords() const
 {
     try
     {    
@@ -1662,7 +1662,7 @@ QStringList LibKExiv2::getImageKeywords() const
     return QStringList();
 }
 
-bool LibKExiv2::setImageKeywords(const QStringList& oldKeywords, const QStringList& newKeywords)
+bool KExiv2::setImageKeywords(const QStringList& oldKeywords, const QStringList& newKeywords)
 {
     try
     {    
@@ -1715,7 +1715,7 @@ bool LibKExiv2::setImageKeywords(const QStringList& oldKeywords, const QStringLi
     return false;
 }
 
-QStringList LibKExiv2::getImageSubjects() const
+QStringList KExiv2::getImageSubjects() const
 {
     try
     {    
@@ -1746,7 +1746,7 @@ QStringList LibKExiv2::getImageSubjects() const
     return QStringList();
 }
 
-bool LibKExiv2::setImageSubjects(const QStringList& oldSubjects, const QStringList& newSubjects)
+bool KExiv2::setImageSubjects(const QStringList& oldSubjects, const QStringList& newSubjects)
 {
     try
     {    
@@ -1794,7 +1794,7 @@ bool LibKExiv2::setImageSubjects(const QStringList& oldSubjects, const QStringLi
     return false;
 }
 
-QStringList LibKExiv2::getImageSubCategories() const
+QStringList KExiv2::getImageSubCategories() const
 {
     try
     {    
@@ -1825,7 +1825,7 @@ QStringList LibKExiv2::getImageSubCategories() const
     return QStringList();
 }
 
-bool LibKExiv2::setImageSubCategories(const QStringList& oldSubCategories, const QStringList& newSubCategories)
+bool KExiv2::setImageSubCategories(const QStringList& oldSubCategories, const QStringList& newSubCategories)
 {
     try
     {    
@@ -1873,7 +1873,7 @@ bool LibKExiv2::setImageSubCategories(const QStringList& oldSubCategories, const
     return false;
 }
 
-QString LibKExiv2::getExifComment() const
+QString KExiv2::getExifComment() const
 {
     try
     {
@@ -1901,7 +1901,7 @@ QString LibKExiv2::getExifComment() const
     return QString();
 }
 
-bool LibKExiv2::setExifComment(const QString& comment)
+bool KExiv2::setExifComment(const QString& comment)
 {
     try
     {
@@ -1941,7 +1941,7 @@ bool LibKExiv2::setExifComment(const QString& comment)
     return false;
 }
 
-QString LibKExiv2::convertCommentValue(const Exiv2::Exifdatum &exifDatum)
+QString KExiv2::convertCommentValue(const Exiv2::Exifdatum &exifDatum)
 {
     try
     {
@@ -2012,7 +2012,7 @@ QString LibKExiv2::convertCommentValue(const Exiv2::Exifdatum &exifDatum)
     return QString();
 }
 
-QString LibKExiv2::detectEncodingAndDecode(const std::string &value)
+QString KExiv2::detectEncodingAndDecode(const std::string &value)
 {
     // For charset autodetection, we could use sophisticated code
     // (Mozilla chardet, KHTML's autodetection, QTextCodec::codecForContent),
@@ -2063,4 +2063,4 @@ QString LibKExiv2::detectEncodingAndDecode(const std::string &value)
         return QString::fromLatin1(value.c_str());
 }
 
-}  // NameSpace KExiv2Library
+}  // NameSpace KExiv2Iface

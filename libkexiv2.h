@@ -49,12 +49,12 @@ namespace Exiv2
     class IptcData;
 }
 
-namespace KExiv2Library
+namespace KExiv2Iface
 {
 
-class LibKExiv2Priv;
+class KExiv2Priv;
 
-class LIBKEXIV2_EXPORT LibKExiv2
+class LIBKEXIV2_EXPORT KExiv2
 {
 
 public:
@@ -85,13 +85,13 @@ public:
 public:
 
     /** Standard constructor. */
-    LibKExiv2();
+    KExiv2();
 
     /** Contructor to Load Metadata from image file. */
-    LibKExiv2(const QString& filePath);
+    KExiv2(const QString& filePath);
 
     /** Standard destructor */
-    ~LibKExiv2();
+    ~KExiv2();
 
     //-- Metadata manipulation methods ----------------------------------------------
 
@@ -180,7 +180,7 @@ public:
 
     /** Return the image orientation set in Exif metadata. The makernotes of image are also parsed to 
         get this information. See ImageOrientation values for details. */
-    LibKExiv2::ImageOrientation getImageOrientation();
+    KExiv2::ImageOrientation getImageOrientation();
 
     /** Set the Exif orientation tag of image. See ImageOrientation values for details 
         Return true if orientation have been changed in metadata. */
@@ -188,7 +188,7 @@ public:
 
     /** Return the image color-space set in Exif metadata. The makernotes of image are also parsed to 
         get this information. See ImageColorWorkSpace values for details. */
-    LibKExiv2::ImageColorWorkSpace getImageColorWorkSpace();
+    KExiv2::ImageColorWorkSpace getImageColorWorkSpace();
 
     /** Set the Exif color-space tag of image. See ImageColorWorkSpace values for details 
         Return true if work-space have been changed in metadata. */
@@ -308,9 +308,9 @@ protected:
 
 private:
 
-    LibKExiv2Priv *d;
+    KExiv2Priv *d;
 };
 
-}  // NameSpace KExiv2Library
+}  // NameSpace KExiv2Iface
 
 #endif /* LIB_KEXIV2_H */
