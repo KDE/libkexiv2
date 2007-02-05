@@ -329,19 +329,21 @@ public:
 protected:
     
     /** Re-implemente this method to set automaticly the Program Name and Program Version 
-        informations in Exif and Iptc metadata. This method is called by all methods witch
+        informations in Exif and Iptc metadata if 'on' argument is true. This method is called by all methods witch
         change tags in metadata. By default this method do nothing and return true.
  
         In digiKam this method is re-implementated like this:
 
-        bool DMetadata::setProgramId()
+        if (on)
         {
             QString version(digikam_version);
             QString software("digiKam");
             return setImageProgramId(software, version);
         }
+        
+        return true;
     */      
-    virtual bool setProgramId();
+    virtual bool setProgramId(bool on=true);
 
     /** Return a reference to comments string object in memory. */
     std::string&     commentsMetaData();

@@ -7,8 +7,8 @@
  * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
  *
  * NOTE: Do not use kdDebug() in this library because it will
- *       be used in multithreaded implementations. Use qDebug()
- *       instead. See B.K.O #133026 for details.
+ *        be used in multithreaded implementations. Use qDebug()
+ *        instead. See B.K.O #133026 for details.
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -516,9 +516,8 @@ QSize KExiv2::getImageDimensions()
 
 bool KExiv2::setImageDimensions(const QSize& size, bool setProgramName)
 {
-    if (setProgramName)
-        if (!setProgramId())
-            return false;
+    if (!setProgramId(setProgramName))
+        return false;
 
     try
     {    
@@ -615,9 +614,8 @@ QImage KExiv2::getExifThumbnail(bool fixOrientation) const
 
 bool KExiv2::setExifThumbnail(const QImage& thumb, bool setProgramName)
 {
-    if (setProgramName)
-        if (!setProgramId())
-            return false;
+    if (!setProgramId(setProgramName))
+        return false;
 
     try
     {   
@@ -733,9 +731,8 @@ bool KExiv2::setImageOrientation(ImageOrientation orientation, bool setProgramNa
     if (d->exifMetadata.empty())
        return false;
 
-    if (setProgramName)
-        if (!setProgramId())
-            return false;
+    if (!setProgramId(setProgramName))
+        return false;
 
     // Workaround for older Exiv2 versions which do not support
     // Minolta Makernotes and throw an error for such keys.
@@ -843,9 +840,8 @@ bool KExiv2::setImageColorWorkSpace(ImageColorWorkSpace workspace, bool setProgr
     if (d->exifMetadata.empty())
        return false;
 
-    if (setProgramName)
-        if (!setProgramId())
-            return false;
+    if (!setProgramId(setProgramName))
+        return false;
 
     try
     {    
@@ -995,9 +991,8 @@ bool KExiv2::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitiz
     if(!dateTime.isValid())
         return false;
  
-    if (setProgramName)
-        if (!setProgramId())
-            return false;
+    if (!setProgramId(setProgramName))
+        return false;
    
     try
     {    
@@ -1056,9 +1051,8 @@ bool KExiv2::getImagePreview(QImage& preview)
 
 bool KExiv2::setImagePreview(const QImage& preview, bool setProgramName)
 {
-    if (setProgramName)
-        if (!setProgramId())
-            return false;
+    if (!setProgramId(setProgramName))
+        return false;
 
     try
     {
@@ -1127,9 +1121,8 @@ QString KExiv2::getExifTagString(const char* exifTagName, bool escapeCR) const
 
 bool KExiv2::setExifTagString(const char *exifTagName, const QString& value, bool setProgramName)
 {
-    if (setProgramName)
-        if (!setProgramId())
-            return false;
+    if (!setProgramId(setProgramName))
+        return false;
 
     try
     {
@@ -1174,9 +1167,8 @@ QString KExiv2::getIptcTagString(const char* iptcTagName, bool escapeCR) const
 
 bool KExiv2::setIptcTagString(const char *iptcTagName, const QString& value, bool setProgramName)
 {
-    if (setProgramName)
-        if (!setProgramId())
-            return false;
+    if (!setProgramId(setProgramName))
+        return false;
 
     try
     {
@@ -1284,9 +1276,8 @@ bool KExiv2::getExifTagRational(const char *exifTagName, long int &num, long int
 
 bool KExiv2::setExifTagLong(const char *exifTagName, long val, bool setProgramName)
 {
-    if (setProgramName)
-        if (!setProgramId())
-            return false;
+    if (!setProgramId(setProgramName))
+        return false;
 
     try
     {
@@ -1303,9 +1294,8 @@ bool KExiv2::setExifTagLong(const char *exifTagName, long val, bool setProgramNa
 
 bool KExiv2::setExifTagRational(const char *exifTagName, long int num, long int den, bool setProgramName)
 {
-    if (setProgramName)
-        if (!setProgramId())
-            return false;
+    if (!setProgramId(setProgramName))
+        return false;
 
     try
     {
@@ -1322,9 +1312,8 @@ bool KExiv2::setExifTagRational(const char *exifTagName, long int num, long int 
 
 bool KExiv2::removeExifTag(const char *exifTagName, bool setProgramName)
 {
-    if (setProgramName)
-        if (!setProgramId())
-            return false;
+    if (!setProgramId(setProgramName))
+        return false;
 
     try
     {  
@@ -1346,9 +1335,8 @@ bool KExiv2::removeExifTag(const char *exifTagName, bool setProgramName)
 
 bool KExiv2::removeIptcTag(const char *iptcTagName, bool setProgramName)
 {
-    if (setProgramName)
-        if (!setProgramId())
-            return false;
+    if (!setProgramId(setProgramName))
+        return false;
 
     try
     {  
@@ -1468,9 +1456,8 @@ bool KExiv2::getGPSInfo(double& altitude, double& latitude, double& longitude)
 
 bool KExiv2::setGPSInfo(double altitude, double latitude, double longitude, bool setProgramName)
 {
-    if (setProgramName)
-        if (!setProgramId())
-            return false;
+    if (!setProgramId(setProgramName))
+        return false;
 
     try
     {    
@@ -1592,9 +1579,8 @@ bool KExiv2::setGPSInfo(double altitude, double latitude, double longitude, bool
 
 bool KExiv2::removeGPSInfo(bool setProgramName)
 {
-    if (setProgramName)
-        if (!setProgramId())
-            return false;
+    if (!setProgramId(setProgramName))
+        return false;
 
     try
     {  
@@ -1721,9 +1707,8 @@ QStringList KExiv2::getImageKeywords() const
 bool KExiv2::setImageKeywords(const QStringList& oldKeywords, const QStringList& newKeywords, 
                               bool setProgramName)
 {
-    if (setProgramName)
-        if (!setProgramId())
-            return false;
+    if (!setProgramId(setProgramName))
+        return false;
 
     try
     {    
@@ -1810,9 +1795,8 @@ QStringList KExiv2::getImageSubjects() const
 bool KExiv2::setImageSubjects(const QStringList& oldSubjects, const QStringList& newSubjects, 
                               bool setProgramName)
 {
-    if (setProgramName)
-        if (!setProgramId())
-            return false;
+    if (!setProgramId(setProgramName))
+        return false;
 
     try
     {    
@@ -1894,9 +1878,8 @@ QStringList KExiv2::getImageSubCategories() const
 bool KExiv2::setImageSubCategories(const QStringList& oldSubCategories, const QStringList& newSubCategories, 
                                    bool setProgramName)
 {
-    if (setProgramName)
-        if (!setProgramId())
-            return false;
+    if (!setProgramId(setProgramName))
+        return false;
 
     try
     {    
@@ -1974,9 +1957,8 @@ QString KExiv2::getExifComment() const
 
 bool KExiv2::setExifComment(const QString& comment, bool setProgramName)
 {
-    if (setProgramName)
-        if (!setProgramId())
-            return false;
+    if (!setProgramId(setProgramName))
+        return false;
 
     try
     {
@@ -2138,7 +2120,7 @@ QString KExiv2::detectEncodingAndDecode(const std::string &value)
         return QString::fromLatin1(value.c_str());
 }
 
-bool KExiv2::setProgramId()
+bool KExiv2::setProgramId(bool /*on*/)
 {
     return true; 
 }
