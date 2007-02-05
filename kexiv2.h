@@ -142,7 +142,7 @@ public:
 
     /** Load all metadata (EXIF, IPTC and JFIF Comments) from a picture (JPEG, RAW, TIFF, PNG, 
         DNG, etc...). Return true if metadata have been loaded sucessfuly from file. */
-    bool load(const QString& filePath);
+    virtual bool load(const QString& filePath);
 
     /** Save all metadata to a file. This one can be different than original picture to perform 
         transfert operation Return true if metadata have been saved into file. */
