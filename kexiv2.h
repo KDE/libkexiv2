@@ -157,7 +157,7 @@ public:
 
     //-- Metadata Image Information manipulation methods ----------------
 
-    /** Set Program mane and program version in Exif and Iptc Metadata. Return true if information
+    /** Set Program name and program version in Exif and Iptc Metadata. Return true if information
         have been changed in metadata. */
     bool setImageProgramId(const QString& program, const QString& version);
 
@@ -167,7 +167,7 @@ public:
 
     /** Set the size of image in pixels in Exif tags. Return true if size have been changed 
         in metadata. */
-    bool  setImageDimensions(const QSize& size);
+    bool  setImageDimensions(const QSize& size, bool setProgramName=true);
 
     /** Return a QImage copy of Exif thumbnail image. Return a null image if thumbnail cannot 
         be found. The 'fixOrientation' parameter will rotate automaticly the thumbnail if Exif 
@@ -176,7 +176,7 @@ public:
 
     /** Set the Exif Thumbnail image. The thumbnail image must have the right dimensions before. 
         Look Exif specification for details. Return true if thumbnail have been changed in metadata. */
-    bool   setExifThumbnail(const QImage& thumb);
+    bool   setExifThumbnail(const QImage& thumb, bool setProgramName=true);
 
     /** Return the image orientation set in Exif metadata. The makernotes of image are also parsed to 
         get this information. See ImageOrientation values for details. */
@@ -184,7 +184,7 @@ public:
 
     /** Set the Exif orientation tag of image. See ImageOrientation values for details 
         Return true if orientation have been changed in metadata. */
-    bool setImageOrientation(ImageOrientation orientation);
+    bool setImageOrientation(ImageOrientation orientation, bool setProgramName=true);
 
     /** Return the image color-space set in Exif metadata. The makernotes of image are also parsed to 
         get this information. See ImageColorWorkSpace values for details. */
@@ -192,7 +192,7 @@ public:
 
     /** Set the Exif color-space tag of image. See ImageColorWorkSpace values for details 
         Return true if work-space have been changed in metadata. */
-    bool setImageColorWorkSpace(ImageColorWorkSpace workspace);
+    bool setImageColorWorkSpace(ImageColorWorkSpace workspace, bool setProgramName=true);
 
     /** Return the time stamp of image. Exif information are check in first, IPTC in second 
         if image don't have Exif information. If no time stamp is found, a null date is returned. */
@@ -200,7 +200,8 @@ public:
 
     /** Set the Exif and Iptc time stamp. If 'setDateTimeDigitized' parameter is true, the 'Digitalized'
         time stamp is set, else only 'Created' time stamp is set. */
-    bool setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitized = false);
+    bool setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitized = false, 
+                          bool setProgramName=true);
 
     /** Return a QImage copy of Iptc preview image. Return a null image if preview cannot 
         be found. */
@@ -212,7 +213,7 @@ public:
         Re-implemente this method if you want to use another image file format than JPEG to 
         save preview.
     */
-    virtual bool setImagePreview(const QImage& preview);
+    virtual bool setImagePreview(const QImage& preview, bool setProgramName=true);
 
     /** Return a strings list of Iptc keywords from image. Return an empty list if no keyword are set. */
     QStringList getImageKeywords() const;
@@ -221,7 +222,8 @@ public:
         method to set 'oldKeywords' parameter with existing keywords from image. The method will compare 
         all new keywords with all old keywords to prevent duplicate entries in image. Return true if keywords
         have been changed in metadata. */
-    bool setImageKeywords(const QStringList& oldKeywords, const QStringList& newKeywords);
+    bool setImageKeywords(const QStringList& oldKeywords, const QStringList& newKeywords, 
+                          bool setProgramName=true);
 
     /** Return a strings list of Iptc subjects from image. Return an empty list if no subject are set. */
     QStringList getImageSubjects() const;
@@ -230,7 +232,8 @@ public:
         method to set 'oldSubjects' parameter with existing subjects from image. The method will compare 
         all new subjects with all old subjects to prevent duplicate entries in image. Return true if subjects
         have been changed in metadata. */
-    bool setImageSubjects(const QStringList& oldSubjects, const QStringList& newSubjects);
+    bool setImageSubjects(const QStringList& oldSubjects, const QStringList& newSubjects, 
+                          bool setProgramName=true);
 
     /** Return a strings list of Iptc sub-categories from image. Return an empty list if no sub-category 
         are set. */
@@ -240,7 +243,8 @@ public:
         'getImageSubCategories()' method to set 'oldSubCategories' parameter with existing sub-categories
         from image. The method will compare all new sub-categories with all old sub-categories to prevent
         duplicate entries in image. Return true if sub-categories have been changed in metadata. */
-    bool setImageSubCategories(const QStringList& oldSubCategories, const QStringList& newSubCategories);
+    bool setImageSubCategories(const QStringList& oldSubCategories, const QStringList& newSubCategories, 
+                               bool setProgramName=true);
     
     /** Return a QString copy of Exif user comments. Return a null string if user comments cannot 
         be found. */
@@ -248,18 +252,18 @@ public:
 
     /** Set the Exif user comments from image. Look Exif specification for more details about this tag. 
         Return true if Exif user comments have been changed in metadata. */
-    bool    setExifComment(const QString& comment);
+    bool    setExifComment(const QString& comment, bool setProgramName=true);
 
     /** Get all GPS location informations set in image. Return true if all informations can be found. */
     bool getGPSInfo(double& altitude, double& latitude, double& longitude);
 
     /** Set all GPS location informations into image. Return true if all informations have been 
         changed in metadata. */
-    bool setGPSInfo(double altitude, double latitude, double longitude);
+    bool setGPSInfo(double altitude, double latitude, double longitude, bool setProgramName=true);
 
     /** Remove all Exif tags relevant of GPS location informations. Return true if all tags have been 
         removed sucessfully in metadata. */
-    bool removeGPSInfo();
+    bool removeGPSInfo(bool setProgramName=true);
 
     //-- Metadata Tags manipulation methods ----------------------------------------
 
@@ -268,13 +272,13 @@ public:
     QString getExifTagString(const char *exifTagName, bool escapeCR=true) const;
 
     /** Set an Exif tag content using a string. Return true if tag is set sucessfully. */
-    bool    setExifTagString(const char *exifTagName, const QString& value);
+    bool    setExifTagString(const char *exifTagName, const QString& value, bool setProgramName=true);
 
     /** Get an Exif tags content like a long value. Return true if Exif tag be found. */
     bool getExifTagLong(const char* exifTagName, long &val);
 
     /** Set an Exif tag content using a long value. Return true if tag is set sucessfully. */
-    bool setExifTagLong(const char *exifTagName, long val);
+    bool setExifTagLong(const char *exifTagName, long val, bool setProgramName=true);
 
     /** Get the 'component' index of an Exif tags content like a rational value. 
         'num' and 'den' are the numerator and the denominator of the rational value. 
@@ -284,7 +288,7 @@ public:
     /** Set an Exif tags content using a rational value. 
         'num' and 'den' are the numerator and the denominator of the rational value. 
         Return true if tag is set sucessfully. */
-    bool setExifTagRational(const char *exifTagName, long int num, long int den);
+    bool setExifTagRational(const char *exifTagName, long int num, long int den, bool setProgramName=true);
 
     /** Get an Exif tags content like a bytes array. Return an empty bytes array if Exif 
         tag cannot be found. */
@@ -295,7 +299,7 @@ public:
     QString getIptcTagString(const char* iptcTagName, bool escapeCR=true) const;
 
     /** Set an Iptc tag content using a string. Return true if tag is set sucessfully. */
-    bool    setIptcTagString(const char *iptcTagName, const QString& value);
+    bool    setIptcTagString(const char *iptcTagName, const QString& value, bool setProgramName=true);
 
     /** Get an Iptc tags content like a bytes array. Return an empty bytes array if Iptc 
         tag cannot be found. */
@@ -303,11 +307,11 @@ public:
 
     /** Remove the Exif tag 'exifTagName' from Exif metadata. Return true if tag is 
         removed sucessfully. */
-    bool removeExifTag(const char *exifTagName);
+    bool removeExifTag(const char *exifTagName, bool setProgramName=true);
 
     /** Remove the Iptc tag 'iptcTagName' from Iptc metadata. Return true if tag is 
         removed sucessfully. */
-    bool removeIptcTag(const char *iptcTagName);
+    bool removeIptcTag(const char *iptcTagName, bool setProgramName=true);
 
     //-- Advanced methods to convert and decode data -------------------------
 
