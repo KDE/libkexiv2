@@ -1310,6 +1310,46 @@ bool KExiv2::setExifTagRational(const char *exifTagName, long int num, long int 
     return false;
 }
 
+bool KExiv2::setExifTagData(const char *exifTagName, const QByteArray& data, bool setProgramName)
+{
+    if (!setProgramId(setProgramName))
+        return false;
+
+    try
+    {
+        Exiv2::DataValue val;
+        val.read((Exiv2::byte *)data.data(), data.size());
+        d->exifMetadata[exifTagName] = val;
+        return true;
+    }
+    catch( Exiv2::Error &e )
+    {
+        qDebug("Cannot set Exif tag data into image using Exiv2 (%s)", e.what().c_str());
+    }
+
+    return false;
+}
+
+bool KExiv2::setIptcTagData(const char *iptcTagName, const QByteArray& data, bool setProgramName)
+{
+    if (!setProgramId(setProgramName))
+        return false;
+
+    try
+    {
+        Exiv2::DataValue val;
+        val.read((Exiv2::byte *)data.data(), data.size());
+        d->iptcMetadata[iptcTagName] = val;
+        return true;
+    }
+    catch( Exiv2::Error &e )
+    {
+        qDebug("Cannot set Iptc tag data into image using Exiv2 (%s)", e.what().c_str());
+    }
+
+    return false;
+}
+
 bool KExiv2::removeExifTag(const char *exifTagName, bool setProgramName)
 {
     if (!setProgramId(setProgramName))

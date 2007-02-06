@@ -293,6 +293,9 @@ public:
     /** Get an Exif tags content like a bytes array. Return an empty bytes array if Exif 
         tag cannot be found. */
     QByteArray getExifTagData(const char *exifTagName) const;
+
+    /** Set an Exif tag content using a bytes array. Return true if tag is set sucessfully. */
+    bool    setExifTagData(const char *exifTagName, const QByteArray& data, bool setProgramName=true);
     
     /** Get an Iptc tags content like a string. If 'escapeCR' parameter is true, the CR characters
         will be removed. If Iptc tag cannot be found a null string is returned. */
@@ -304,6 +307,9 @@ public:
     /** Get an Iptc tags content like a bytes array. Return an empty bytes array if Iptc 
         tag cannot be found. */
     QByteArray getIptcTagData(const char *iptcTagName) const;
+
+    /** Set an Iptc tag content using a bytes array. Return true if tag is set sucessfully. */
+    bool    setIptcTagData(const char *iptcTagName, const QByteArray& data, bool setProgramName=true);
 
     /** Remove the Exif tag 'exifTagName' from Exif metadata. Return true if tag is 
         removed sucessfully. */
