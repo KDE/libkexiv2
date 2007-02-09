@@ -93,6 +93,9 @@ public:
     /** Standard destructor */
     ~KExiv2();
 
+    /** Return a string version of Exiv2 release in format "major.minor.patch" */ 
+    static QString Exiv2Version();
+
     //-- Metadata manipulation methods ----------------------------------------------
 
     /** Clear the Comments metadata container in memory. */
@@ -105,21 +108,21 @@ public:
     bool clearIptc();
 
     /** Return the file path open with the current instance of interface. */
-    QString     getFilePath() const;
+    QString getFilePath() const;
 
     /** Return a Qt byte array copy of Comments container get from current image. 
         Comments are JFIF section of JPEG images. Look Exiv2 API for more information.
         Return a null Qt byte array if there is no Comments metadata in memory. */ 
-    QByteArray  getComments() const;
+    QByteArray getComments() const;
 
     /** Return a Qt string object of Comments from current image decoded using 
         the 'detectEncodingAndDecode()' method. Return a null string if there is no 
         Comments metadata available. */ 
-    QString     getCommentsDecoded() const;
+    QString getCommentsDecoded() const;
 
     /** Return a Qt byte array copy of Exif container get from current image. 
         Return a null Qt byte array if there is no Exif metadata in memory. */
-    QByteArray  getExif() const;
+    QByteArray getExif() const;
 
     /** Return a Qt byte array copy of Iptc container get from current image. 
         Set true 'addIrbHeader' parameter to add an Irb header to IPTC metadata. 
@@ -167,7 +170,7 @@ public:
 
     /** Set the size of image in pixels in Exif tags. Return true if size have been changed 
         in metadata. */
-    bool  setImageDimensions(const QSize& size, bool setProgramName=true);
+    bool setImageDimensions(const QSize& size, bool setProgramName=true);
 
     /** Return a QImage copy of Exif thumbnail image. Return a null image if thumbnail cannot 
         be found. The 'fixOrientation' parameter will rotate automaticly the thumbnail if Exif 
@@ -176,7 +179,7 @@ public:
 
     /** Set the Exif Thumbnail image. The thumbnail image must have the right dimensions before. 
         Look Exif specification for details. Return true if thumbnail have been changed in metadata. */
-    bool   setExifThumbnail(const QImage& thumb, bool setProgramName=true);
+    bool setExifThumbnail(const QImage& thumb, bool setProgramName=true);
 
     /** Return the image orientation set in Exif metadata. The makernotes of image are also parsed to 
         get this information. See ImageOrientation values for details. */
@@ -252,7 +255,7 @@ public:
 
     /** Set the Exif user comments from image. Look Exif specification for more details about this tag. 
         Return true if Exif user comments have been changed in metadata. */
-    bool    setExifComment(const QString& comment, bool setProgramName=true);
+    bool setExifComment(const QString& comment, bool setProgramName=true);
 
     /** Get all GPS location informations set in image. Return true if all informations can be found. */
     bool getGPSInfo(double& altitude, double& latitude, double& longitude);
@@ -272,7 +275,7 @@ public:
     QString getExifTagString(const char *exifTagName, bool escapeCR=true) const;
 
     /** Set an Exif tag content using a string. Return true if tag is set sucessfully. */
-    bool    setExifTagString(const char *exifTagName, const QString& value, bool setProgramName=true);
+    bool setExifTagString(const char *exifTagName, const QString& value, bool setProgramName=true);
 
     /** Get an Exif tags content like a long value. Return true if Exif tag be found. */
     bool getExifTagLong(const char* exifTagName, long &val);
@@ -295,21 +298,21 @@ public:
     QByteArray getExifTagData(const char *exifTagName) const;
 
     /** Set an Exif tag content using a bytes array. Return true if tag is set sucessfully. */
-    bool    setExifTagData(const char *exifTagName, const QByteArray& data, bool setProgramName=true);
+    bool setExifTagData(const char *exifTagName, const QByteArray& data, bool setProgramName=true);
     
     /** Get an Iptc tags content like a string. If 'escapeCR' parameter is true, the CR characters
         will be removed. If Iptc tag cannot be found a null string is returned. */
     QString getIptcTagString(const char* iptcTagName, bool escapeCR=true) const;
 
     /** Set an Iptc tag content using a string. Return true if tag is set sucessfully. */
-    bool    setIptcTagString(const char *iptcTagName, const QString& value, bool setProgramName=true);
+    bool setIptcTagString(const char *iptcTagName, const QString& value, bool setProgramName=true);
 
     /** Get an Iptc tags content like a bytes array. Return an empty bytes array if Iptc 
         tag cannot be found. */
     QByteArray getIptcTagData(const char *iptcTagName) const;
 
     /** Set an Iptc tag content using a bytes array. Return true if tag is set sucessfully. */
-    bool    setIptcTagData(const char *iptcTagName, const QByteArray& data, bool setProgramName=true);
+    bool setIptcTagData(const char *iptcTagName, const QByteArray& data, bool setProgramName=true);
 
     /** Remove the Exif tag 'exifTagName' from Exif metadata. Return true if tag is 
         removed sucessfully. */
@@ -351,29 +354,42 @@ protected:
     */      
     virtual bool setProgramId(bool on=true);
 
-    /** Return a reference to comments string object in memory. */
-    std::string&     commentsMetaData();
-
-    /** Return a reference to Exif metadata object in memory. */
+    /** Return a reference to Exif metadata object in memory. 
+        (Depreciate: used internaly by digiKam core.) 
+    */
     Exiv2::ExifData& exifMetaData();
 
-    /** Return a reference to Iptc metadata object in memory. */
+    /** Return a reference to Iptc metadata object in memory. 
+        (Depreciate: used internaly by digiKam core.) 
+    */
     Exiv2::IptcData& iptcMetaData();
 
     /** Set the Exif data using an Exiv2 byte array. Return true if Exif metadata
-        have been changed in memory */
+        have been changed in memory. 
+        (Depreciate: used internaly by digiKam core.) 
+    */
     bool setExif(Exiv2::DataBuf const data);
 
     /** Set the Iptc data using an Exiv2 byte array. Return true if Iptc metadata
-        have been changed in memory */
+        have been changed in memory. 
+        (Depreciate: used internaly by digiKam core.) 
+    */
     bool setIptc(Exiv2::DataBuf const data);
 
+    /** Return a reference to comments string object in memory. 
+        (Depreciate: used internaly by digiKam core.) 
+    */
+    std::string& commentsMetaData();
+
     /** Return a standard C++ string copy of Comments container get from current image.
-        Return a null standard string if there is no Comments metadata in memory */
+        Return a null standard string if there is no Comments metadata in memory. 
+        (Depreciate: used internaly by digiKam core.)
+    */
     std::string getCommentsString() const;
 
 private:
 
+    /** Internal class to store private members. Used to improve binary compatibility */ 
     KExiv2Priv *d;
 };
 

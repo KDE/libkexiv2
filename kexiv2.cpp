@@ -95,6 +95,13 @@ KExiv2::~KExiv2()
     delete d;
 }
 
+QString KExiv2::Exiv2Version()
+{
+    return QString("%1.%2.%3").arg(EXIV2_MAJOR_VERSION)
+                              .arg(EXIV2_MINOR_VERSION)
+                              .arg(EXIV2_PATCH_VERSION);
+}
+
 // -- Protected Methods -------------------------------------
 
 std::string& KExiv2::commentsMetaData()
