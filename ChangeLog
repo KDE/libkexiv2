@@ -1,0 +1,324 @@
+V 0.1.0 - 2007-02-11
+----------------------------------------------------------------------------
+2007-02-09 06:50  cgilles
+
+	* [r631791] libkexiv2/kexiv2.cpp, libkexiv2/kexiv2.h:
+	  libkexiv2 from trunk : new method to extract Exiv2 library
+	  release numbers
+
+2007-02-06 22:12  cgilles
+
+	* [r630973] libkexiv2/version.h:
+	  compile
+
+2007-02-06 22:04  cgilles
+
+	* [r630967] libkexiv2/Makefile.am, libkexiv2/version.h:
+	  libkexiv2 from trunk : add version header file for this library
+	  CCMAIL: Achim Bohnet <ach@mpe.mpg.de>
+
+2007-02-06 21:39  cgilles
+
+	* [r630957] libkexiv2/kexiv2.cpp, libkexiv2/kexiv2.h:
+	  2 new methods to set IPTC or Exif tag using a bytes array
+
+2007-02-05 20:16  cgilles
+
+	* [r630585] libkexiv2/kexiv2.cpp, libkexiv2/kexiv2.h:
+	  factorize source code
+
+2007-02-05 14:38  cgilles
+
+	* [r630488] libkexiv2/kexiv2.cpp, libkexiv2/kexiv2.h:
+	  add boolean flag to add or not program name when a tag is
+	  changed/added
+
+2007-02-05 14:00  cgilles
+
+	* [r630471] libkexiv2/kexiv2.h:
+	  set load() like virtual method. Re-implemented in digiKam core
+
+2007-01-30 12:18  cgilles
+
+	* [r628573] libkexiv2/README:
+	  update
+
+2007-01-30 12:16  cgilles
+
+	* [r628572] libkexiv2/README:
+	  update
+
+2007-01-30 12:12  cgilles
+
+	* [r628569] libkexiv2/README:
+	  update
+
+2007-01-30 11:57  cgilles
+
+	* [r628566] libkexiv2/kexiv2.cpp, libkexiv2/kexiv2.h:
+	  libkexiv2 from trunk : polish implementation. Fix API doc
+
+2007-01-30 11:18  cgilles
+
+	* [r628554] libkexiv2/kexiv2.h:
+	  libkexiv2 from trunk : Finamize API doc.
+
+2007-01-30 10:23  cgilles
+
+	* [r628541] libkexiv2/kexiv2_export.h:
+	  wrong file name
+
+2007-01-30 10:22  cgilles
+
+	* [r628540] kipi-plugins/galleryexport/gallerytalker.cpp,
+	  kipi-plugins/gpssync/gpslistviewitem.cpp,
+	  kipi-plugins/gpssync/plugin_gpssync.cpp,
+	  kipi-plugins/jpeglossless/jpegtransform.h,
+	  kipi-plugins/metadataedit/exifadjust.cpp,
+	  kipi-plugins/metadataedit/exifcaption.cpp,
+	  kipi-plugins/metadataedit/exifdatetime.cpp,
+	  kipi-plugins/metadataedit/exifdevice.cpp,
+	  kipi-plugins/metadataedit/exifeditdialog.cpp,
+	  kipi-plugins/metadataedit/exiflens.cpp,
+	  kipi-plugins/metadataedit/exiflight.cpp,
+	  kipi-plugins/metadataedit/iptccaption.cpp,
+	  kipi-plugins/metadataedit/iptccategories.cpp,
+	  kipi-plugins/metadataedit/iptccredits.cpp,
+	  kipi-plugins/metadataedit/iptcdatetime.cpp,
+	  kipi-plugins/metadataedit/iptceditdialog.cpp,
+	  kipi-plugins/metadataedit/iptckeywords.cpp,
+	  kipi-plugins/metadataedit/iptcorigin.cpp,
+	  kipi-plugins/metadataedit/iptcstatus.cpp,
+	  kipi-plugins/metadataedit/iptcsubjects.cpp,
+	  kipi-plugins/metadataedit/plugin_metadataedit.cpp,
+	  kipi-plugins/rawconverter/dcrawiface.cpp,
+	  kipi-plugins/sendimages/sendimages.cpp,
+	  kipi-plugins/timeadjust/timeadjustdialog.cpp,
+	  libkexiv2/Makefile.am, libkexiv2/kexiv2.cpp, libkexiv2/kexiv2.h,
+	  libkexiv2/kexiv2_export.h, libkexiv2/libkexiv2.cpp,
+	  libkexiv2/libkexiv2.h:
+	  kipi-plugins from trunk : fix libkexiv2 header file name
+
+2007-01-30 09:45  cgilles
+
+	* [r628536] kipi-plugins/galleryexport/gallerytalker.cpp,
+	  kipi-plugins/gpssync/gpslistviewitem.cpp,
+	  kipi-plugins/gpssync/plugin_gpssync.cpp,
+	  kipi-plugins/jpeglossless/jpegtransform.cpp,
+	  kipi-plugins/jpeglossless/jpegtransform.h,
+	  kipi-plugins/metadataedit/exifadjust.cpp,
+	  kipi-plugins/metadataedit/exifcaption.cpp,
+	  kipi-plugins/metadataedit/exifdatetime.cpp,
+	  kipi-plugins/metadataedit/exifdevice.cpp,
+	  kipi-plugins/metadataedit/exifeditdialog.cpp,
+	  kipi-plugins/metadataedit/exiflens.cpp,
+	  kipi-plugins/metadataedit/exiflight.cpp,
+	  kipi-plugins/metadataedit/iptccaption.cpp,
+	  kipi-plugins/metadataedit/iptccategories.cpp,
+	  kipi-plugins/metadataedit/iptccredits.cpp,
+	  kipi-plugins/metadataedit/iptcdatetime.cpp,
+	  kipi-plugins/metadataedit/iptceditdialog.cpp,
+	  kipi-plugins/metadataedit/iptckeywords.cpp,
+	  kipi-plugins/metadataedit/iptcorigin.cpp,
+	  kipi-plugins/metadataedit/iptcstatus.cpp,
+	  kipi-plugins/metadataedit/iptcsubjects.cpp,
+	  kipi-plugins/metadataedit/plugin_metadataedit.cpp,
+	  kipi-plugins/rawconverter/dcrawiface.cpp,
+	  kipi-plugins/sendimages/sendimages.cpp,
+	  kipi-plugins/timeadjust/timeadjustdialog.cpp,
+	  libkexiv2/libkexiv2.cpp, libkexiv2/libkexiv2.h:
+	  kipi-plugins from trunk : fix libkexiv2 namespace and interface
+	  class name
+
+2007-01-30 09:02  cgilles
+
+	* [r628532] libkexiv2/libkexiv2.cpp, libkexiv2/libkexiv2.h:
+	  libkexiv2 from trunk : backport new method to handle color
+	  work-space of image. update API doc.
+
+2007-01-29 23:36  ach
+
+	* [r628396] libkexiv2/libkexiv2.h:
+	  libkexiv2: s/informations/information/
+
+2007-01-29 21:19  lure
+
+	* [r628356] libkexiv2/libkexiv2.h:
+	  Fix broken comment - did not compile on Kubuntu Feisty
+
+2007-01-29 19:57  cgilles
+
+	* [r628333] libkexiv2/libkexiv2.h:
+	  libkexiv2 from trunk : Doxygen API (uncomplete)
+
+2007-01-29 16:49  cgilles
+
+	* [r628263] libkexiv2/libkexiv2.pc.in:
+	  update
+
+2007-01-29 14:18  cgilles
+
+	* [r628206] libkexiv2/libkexiv2.cpp, libkexiv2/libkexiv2.h:
+	  libkexiv2 from trunk : backport all common methods from
+	  Digikam::DMetadata class. Backport all fix about comments
+	  encoding from Marcel. The implementation is clean now and ready
+	  to use with digiKam core.
+	  
+	  CCMAIL : marcel.wiesweg@gmx.de, digikam-devel@kde.org,
+	  kde-imaging@kde.org
+
+2007-01-29 09:50  cgilles
+
+	* [r628140] libkexiv2/libkexiv2.cpp, libkexiv2/libkexiv2.h:
+	  new protected methods to use with derivated class
+
+2007-01-28 10:32  ach
+
+	* [r627809] libkexiv2/libkexiv2.lsm, libkexiv2/libkexiv2.pc.in,
+	  prepare_libkexiv2.rb:
+	  libkexiv2: use same version everywhere
+
+2007-01-28 09:54  ach
+
+	* [r627801] libkexiv2/libkexiv2.pc.in:
+	  libkexiv2: fix libkexiv2.pc pkg-config file
+
+2007-01-28 09:47  ach
+
+	* [r627799] libkexiv2/configure.in.in:
+	  libkexiv2: Fix configure. PKGCONFIGFOUND was not set.
+	  
+	  CCMAIL: kde-imaging@kde.org
+
+2007-01-27 12:40  cgilles
+
+	* [r627622] libkexiv2/libkexiv2.cpp, libkexiv2/libkexiv2_export.h:
+	  kipi-plugins from trunk : libkexiv2 : do not use kdDebug() here
+	  because it's not thread-safe. Use qDebug() instead...
+	  
+	  CCBUGS: 133026
+
+2007-01-27 10:57  cgilles
+
+	* [r627593] libkexiv2/README:
+	  update
+
+2007-01-26 20:59  cgilles
+
+	* [r627509] libkexiv2/libkexiv2.lsm:
+	  update
+
+2007-01-26 20:40  cgilles
+
+	* [r627501] kipi-plugins/NEWS, kipi-plugins/README,
+	  kipi-plugins/common/Makefile.am, kipi-plugins/common/exiv2iface,
+	  kipi-plugins/configure.in.bot, kipi-plugins/configure.in.in,
+	  kipi-plugins/galleryexport/Makefile.am,
+	  kipi-plugins/galleryexport/gallerytalker.cpp,
+	  kipi-plugins/gpssync/Makefile.am,
+	  kipi-plugins/gpssync/gpslistviewitem.cpp,
+	  kipi-plugins/gpssync/gpslistviewitem.h,
+	  kipi-plugins/gpssync/plugin_gpssync.cpp,
+	  kipi-plugins/gpssync/plugin_gpssync.h,
+	  kipi-plugins/jpeglossless/Makefile.am,
+	  kipi-plugins/jpeglossless/jpegtransform.cpp,
+	  kipi-plugins/jpeglossless/jpegtransform.h,
+	  kipi-plugins/metadataedit/Makefile.am,
+	  kipi-plugins/metadataedit/exifadjust.cpp,
+	  kipi-plugins/metadataedit/exifcaption.cpp,
+	  kipi-plugins/metadataedit/exifdatetime.cpp,
+	  kipi-plugins/metadataedit/exifdevice.cpp,
+	  kipi-plugins/metadataedit/exifeditdialog.cpp,
+	  kipi-plugins/metadataedit/exiflens.cpp,
+	  kipi-plugins/metadataedit/exiflight.cpp,
+	  kipi-plugins/metadataedit/iptccaption.cpp,
+	  kipi-plugins/metadataedit/iptccategories.cpp,
+	  kipi-plugins/metadataedit/iptccredits.cpp,
+	  kipi-plugins/metadataedit/iptcdatetime.cpp,
+	  kipi-plugins/metadataedit/iptceditdialog.cpp,
+	  kipi-plugins/metadataedit/iptckeywords.cpp,
+	  kipi-plugins/metadataedit/iptcorigin.cpp,
+	  kipi-plugins/metadataedit/iptcstatus.cpp,
+	  kipi-plugins/metadataedit/iptcsubjects.cpp,
+	  kipi-plugins/metadataedit/plugin_metadataedit.cpp,
+	  kipi-plugins/rawconverter/Makefile.am,
+	  kipi-plugins/rawconverter/dcrawiface.cpp,
+	  kipi-plugins/rawconverter/dcrawiface.h,
+	  kipi-plugins/sendimages/Makefile.am,
+	  kipi-plugins/sendimages/sendimages.cpp,
+	  kipi-plugins/sendimages/sendimages.h,
+	  kipi-plugins/sync/Makefile.am,
+	  kipi-plugins/sync/gallerytalker.cpp,
+	  kipi-plugins/timeadjust/Makefile.am,
+	  kipi-plugins/timeadjust/timeadjustdialog.cpp,
+	  kipi-plugins/timeadjust/timeadjustdialog.h,
+	  libkexiv2/libkexiv2.cpp, libkexiv2/libkexiv2.h:
+	  kipi-plugins from trunk : all plugins use the new shared library
+	  libkexiv2 instead KipiPlugins::EXiv2Iface class.
+	  
+	  Marcel, next stage is to derivate the DigiKam::DMetadata class
+	  from LibKExiv2. Let's me hear when you whant to do it...
+	  
+	  CCMAIL: digikam-devel@kde.org, kde-imaging@kde.org,
+	  marcel.wiesweg@gmx.de
+
+2007-01-26 15:51  cgilles
+
+	* [r627439] libkexiv2/configure.in.bot, libkexiv2/configure.in.in:
+	  compile
+
+2007-01-26 15:38  cgilles
+
+	* [r627433] libkexiv2/libkexiv2.h:
+	  using Export rules
+
+2007-01-26 13:14  cgilles
+
+	* [r627401] libkexiv2/README:
+	  update
+
+2007-01-26 13:10  cgilles
+
+	* [r627400] libkexiv2/README:
+	  update
+
+2007-01-26 13:09  cgilles
+
+	* [r627399] libkexiv2/Makefile.am, libkexiv2/exiv2iface.cpp,
+	  libkexiv2/exiv2iface.h, libkexiv2/libkexiv2.cpp,
+	  libkexiv2/libkexiv2.h:
+	  exiv2iface ==> libkexiv2
+	  new namespace
+
+2007-01-26 12:58  cgilles
+
+	* [r627393] libkexiv2/exiv2iface.cpp, libkexiv2/exiv2iface.h,
+	  libkexiv2/libkexiv2_export.h:
+	  fix header
+
+2007-01-26 12:55  cgilles
+
+	* [r627390] libkexiv2, libkexiv2/AUTHORS, libkexiv2/COPYING,
+	  libkexiv2/ChangeLog, libkexiv2/INSTALL, libkexiv2/Makefile.am,
+	  libkexiv2/NEWS, libkexiv2/README, libkexiv2/configure.in.in,
+	  libkexiv2/exiv2iface.cpp, libkexiv2/exiv2iface.h,
+	  libkexiv2/libkexiv2.lsm, libkexiv2/libkexiv2.pc.in,
+	  libkexiv2/libkexiv2_export.h:
+	  New common library witch will be used by digiKam and kipi-plugins
+	  to handle Pictures metadata (Exif/Iptc).
+	  
+	  This shared library is a wrapper around Exiv2 library. It give a
+	  Qt like interface to control
+	  Exiv2 actions on pictures. Using this library will remove all
+	  duplicate code on kipi-plugins::exiv2iface and
+	  digikam::dmetadata.
+	  
+	  The current implementation is the same than
+	  kipi-plugins/exiv2iface. This library is not yet used in
+	  digiKam/kipi-plugins.
+	  We will added a new depency to this library in kipi-plugins in
+	  first and later to digiKam.
+	  
+	  CCMAIL: digikam-devel@kde.org, kde-imaging@kde.org,
+	  marcel.wiesweg@gmx.de
+

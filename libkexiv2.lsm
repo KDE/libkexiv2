@@ -1,7 +1,7 @@
 Begin4
 Title: libkexiv2
-Version: 0.1.0-svn
-Entered-date: 2006-10-21
+Version: 0.1.0
+Entered-date: 2007-02-11
 Description: An library to manipulate EXIF/IPTC information using Exiv2 library
 Keywords: kde image jpeg raw tiff exif iptc
 Author: caulier dot gilles at kdemail dot net (Gilles Caulier)
