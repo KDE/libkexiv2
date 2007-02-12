@@ -1,6 +1,5 @@
 AC_ARG_VAR(PKGCONFIGFOUND, [Path to pkg-config])
 AC_CHECK_PROG(PKGCONFIGFOUND, pkg-config,[yes])
-AC_OUTPUT([ libkexiv2/libkexiv2.pc ])
 
 #------------------------------------------------------------------
 # Check for Exiv2 library
@@ -19,6 +18,8 @@ if test "x$have_exiv2" != "xyes"; then
 fi
 
 AM_CONDITIONAL(compile_LIBKEXIV2, [test x$have_exiv2 != xyes])
+
+AC_OUTPUT([ libkexiv2/libkexiv2.pc ])
 
 # -----------------------------------------------------------------
 # enable hidden visibility only if kde >= 3.3.2 and kdelibs has
