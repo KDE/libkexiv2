@@ -8,7 +8,7 @@ See AUTHORS file for details.
 
 -- ABOUT -------------------------------------------------------------
 
-Libkexif is a wrapper around Exiv2 library to manipulate pictures metadata.
+Libkexiv2 is a wrapper around Exiv2 library to manipulate pictures metadata.
 
 This library is used by kipi-plugins, digiKam and others kipi host programs.
 
