@@ -6,9 +6,9 @@
  *
  * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
  *
- * NOTE: Do not use kdDebug() in this library because it will
- *       be used in multithreaded implementations. Use qDebug()
- *       instead. See B.K.O #133026 for details.
+ * NOTE: Do not use kdDebug() in this implementation because 
+ *       it will be multithreaded. Use qDebug() instead. 
+ *       See B.K.O #133026 for details.
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
