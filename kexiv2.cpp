@@ -186,7 +186,8 @@ QByteArray KExiv2::getExif() const
             Exiv2::ExifData& exif = d->exifMetadata;
             Exiv2::DataBuf c2 = exif.copy();
             QByteArray data(c2.size_);
-            memcpy(data.data(), c2.pData_, c2.size_);
+            if (data.size())
+                memcpy(data.data(), c2.pData_, c2.size_);
             return data;
         }
     }
@@ -226,7 +227,8 @@ QByteArray KExiv2::getIptc(bool addIrbHeader) const
                 c2 = iptc.copy();
 
             QByteArray data(c2.size_);
-            memcpy(data.data(), c2.pData_, c2.size_);
+            if (data.size())
+                memcpy(data.data(), c2.pData_, c2.size_);
             return data;
         }
     }
@@ -1222,7 +1224,8 @@ QByteArray KExiv2::getExifTagData(const char* exifTagName) const
         if (it != exifData.end())
         {
             QByteArray data((*it).size());
-            (*it).copy((Exiv2::byte*)data.data(), exifData.byteOrder());
+            if (data.size())
+                (*it).copy((Exiv2::byte*)data.data(), exifData.byteOrder());
             return data;
         }
     }
@@ -1245,7 +1248,8 @@ QByteArray KExiv2::getIptcTagData(const char *iptcTagName) const
         if (it != iptcData.end())
         {
             QByteArray data((*it).size());
-            (*it).copy((Exiv2::byte*)data.data(), Exiv2::bigEndian);
+            if (data.size())
+                (*it).copy((Exiv2::byte*)data.data(), Exiv2::bigEndian);
             return data;
         }
     }
