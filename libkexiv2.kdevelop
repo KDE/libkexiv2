@@ -1,26 +1,32 @@
-<?xml version="1.0"?>
+<?xml version = '1.0'?>
 <kdevelop>
- <general>
-  <author>Caulier Gilles</author>
-  <email>caulier dot gilles at gmail dot com</email>
-  <version>$VERSION$</version>
-  <projectmanagement>KDevKDEAutoProject</projectmanagement>
-  <primarylanguage>C++</primarylanguage>
-  <keywords>
-   <keyword>Qt</keyword>
-   <keyword>KDE</keyword>
-  </keywords>
- </general>
- <kdevfileview>
-  <groups>
-   <group pattern="*.cpp;*.cxx;*.h" name="Sources" />
-   <group pattern="*.ui" name="User Interface" />
-   <group pattern="*.png" name="Icons" />
-   <group pattern="*.po;*.ts" name="Translations" />
-   <group pattern="*" name="Others" />
-  </groups>
- </kdevfileview>
- <kdevdoctreeview>
+  <general>
+    <author>Caulier Gilles</author>
+    <email>caulier dot gilles at gmail dot com</email>
+    <version>$VERSION$</version>
+    <projectmanagement>KDevKDEAutoProject</projectmanagement>
+    <primarylanguage>C++</primarylanguage>
+    <keywords>
+      <keyword>Qt</keyword>
+      <keyword>KDE</keyword>
+    </keywords>
+  </general>
+  <kdevfileview>
+    <groups>
+      <group pattern="*.cpp;*.cxx;*.h" name="Sources" />
+      <group pattern="*.ui" name="User Interface" />
+      <group pattern="*.png" name="Icons" />
+      <group pattern="*.po;*.ts" name="Translations" />
+      <group pattern="*" name="Others" />
+      <hidenonprojectfiles>false</hidenonprojectfiles>
+      <hidenonlocation>false</hidenonlocation>
+    </groups>
+    <tree>
+      <hidepatterns>*.o,*.lo,CVS</hidepatterns>
+      <hidenonprojectfiles>false</hidenonprojectfiles>
+    </tree>
+  </kdevfileview>
+  <kdevdoctreeview>
     <ignoretocs>
       <toc>ada</toc>
       <toc>ada_bugs_gcc</toc>
@@ -57,12 +63,12 @@
     <ignoreqt_xml>
       <toc>qmake User Guide</toc>
     </ignoreqt_xml>
- </kdevdoctreeview>
- <kdevdebugger>
-  <general>
-   <dbgshell>libtool</dbgshell>
-  </general>
- </kdevdebugger>
+  </kdevdoctreeview>
+  <kdevdebugger>
+    <general>
+      <dbgshell>libtool</dbgshell>
+    </general>
+  </kdevdebugger>
   <kdevfilecreate>
     <useglobaltypes>
       <type ext="ui" />
@@ -70,4 +76,30 @@
       <type ext="h" />
     </useglobaltypes>
   </kdevfilecreate>
+  <kdevautoproject>
+    <make>
+      <envvars>
+        <envvar value="1" name="WANT_AUTOCONF_2_5" />
+        <envvar value="1" name="WANT_AUTOMAKE_1_6" />
+      </envvars>
+    </make>
+    <run>
+      <directoryradio>executable</directoryradio>
+    </run>
+  </kdevautoproject>
+  <kdevcppsupport>
+    <references/>
+    <codecompletion>
+      <includeGlobalFunctions>true</includeGlobalFunctions>
+      <includeTypes>true</includeTypes>
+      <includeEnums>true</includeEnums>
+      <includeTypedefs>false</includeTypedefs>
+      <automaticCodeCompletion>true</automaticCodeCompletion>
+      <automaticArgumentsHint>true</automaticArgumentsHint>
+      <automaticHeaderCompletion>true</automaticHeaderCompletion>
+      <codeCompletionDelay>250</codeCompletionDelay>
+      <argumentsHintDelay>400</argumentsHintDelay>
+      <headerCompletionDelay>250</headerCompletionDelay>
+    </codecompletion>
+  </kdevcppsupport>
 </kdevelop>
