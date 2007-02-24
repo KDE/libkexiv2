@@ -21,9 +21,9 @@
 #ifndef KEXIV2_VERSION_H
 #define KEXIV2_VERSION_H
 
-static const char kexiv2_version[] = "0.1.0";
+static const char kexiv2_version[] = "0.1.1";
 
-#define KEXIV2_VERSION 0x000100
+#define KEXIV2_VERSION 0x000101
 
 #endif // KEXIV2_VERSION_H
 

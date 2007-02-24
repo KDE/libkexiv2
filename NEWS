@@ -1,1 +1,10 @@
+0.1.1
+------------------------------------------------------------------------
+Bugs fixed from B.K.O (http://bugs.kde.org):
+001 ==>141980: digikam crash when rescan certain files exiv2
+
+0.1.0
+------------------------------------------------------------------------
+First implementation
+
 For details and info about previous versions, see ChangeLog.

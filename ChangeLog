@@ -1,5 +1,96 @@
+V 0.1.1 - 2007-02-24
+----------------------------------------------------------------------------
+
+2007-02-22 12:01  cgilles
+
+	* [r636211] kipi-plugins/kipiplugins.kdevelop,
+	  kipi-plugins/rawconverter/batchdialog.cpp,
+	  kipi-plugins/rawconverter/singledialog.cpp,
+	  libkdcraw/dcraw/dcraw.c, libkdcraw/dcraw/kdcraw.1,
+	  libkdcraw/dcrawbinary.cpp, libkdcraw/dcrawsettingswidget.cpp,
+	  libkdcraw/dcrawsettingswidget.h, libkdcraw/kdcraw.cpp,
+	  libkdcraw/libkdcraw.kdevelop, libkdcraw/rawdecodingsettings.h,
+	  libkexiv2/libkexiv2.kdevelop:
+	  libkdcraw from trunk : backport last dcraw implementation "8.60"
+	  : the old noise reduction algorithm used with 8.54 version have
+	  been remplaced by a wavelet algorithm witch is more intuitive,
+	  more easy to use (just one threshold setting) and very powerfull.
+	  
+	  Kipi-plugins RAWConverter from svn trunk is fixed.
+	  The patch to use libkdcraw with current implementation of digiKam
+	  have been updated :
+	  
+	  http://digikam3rdparty.free.fr/misc.tarballs/libkdcrawdigikamport.patch
+	  
+	  CCMAIL: digikam-users@kde.org
+	  CCMAIL: digikam-devel@kde.org
+	  CCMAIL: kde-imaging@kde.org
+
+2007-02-20 17:22  cgilles
+
+	* [r635684] libkexiv2/kexiv2.cpp:
+	  libkexiv2 from trunk : sanity check if QByteArray are null size
+	  everywhere
+	  Feedback welcome...
+	  
+	  CCBUGS:141980
+
+2007-02-16 22:01  cgilles
+
+	* [r634334] kipi-plugins/rawconverter/actionthread.cpp,
+	  kipi-plugins/rawconverter/rawdecodingiface.cpp,
+	  libkdcraw/kdcraw.cpp, libkexiv2/kexiv2.cpp:
+	  fix comments
+
+2007-02-16 15:44  cgilles
+
+	* [r634186] libkexiv2/libkexiv2.kdevelop:
+	  kdevelop project
+
+2007-02-16 15:44  cgilles
+
+	* [r634184] libkexiv2/AUTHORS, libkexiv2/kexiv2.cpp,
+	  libkexiv2/kexiv2.h, libkexiv2/libkexiv2.lsm:
+	  fix email
+
+2007-02-15 13:15  cgilles
+
+	* [r633835] libkexiv2/kexiv2.cpp:
+	  indent
+
+2007-02-13 22:41  ach
+
+	* [r633377] libkexiv2/README:
+	  fix library name in README
+
+2007-02-12 15:26  cgilles
+
+	* [r632868] libkexiv2/configure.in.in:
+	  this condition is unused everywhere. removed
+
+2007-02-12 09:24  cgilles
+
+	* [r632763] libkexiv2/configure.in.in:
+	  revert
+
+2007-02-12 08:32  cgilles
+
+	* [r632755] libkexiv2/configure.in.in:
+	  polish
+
+----------------------------------------------------------------------------
 V 0.1.0 - 2007-02-11
 ----------------------------------------------------------------------------
+
+2007-02-11 20:44  anaselli
+
+	* [r632646] libkexiv2/ChangeLog, libkexiv2/libkexiv2.lsm,
+	  libkexiv2/libkexiv2.pc.in:
+	  libkexiv2 0.1.0
+	  
+	  CCMAIL:kde-imaging@kde.org
+
+
 2007-02-09 06:50  cgilles
 
 	* [r631791] libkexiv2/kexiv2.cpp, libkexiv2/kexiv2.h:
