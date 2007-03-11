@@ -450,6 +450,18 @@ bool KExiv2::setImageProgramId(const QString& program, const QString& version)
 {
     try
     {
+	// Record program info in Exif.Image.ProcessingSoftware tag (only available with Exiv2 >= 0.14.0).
+    
+#ifdef EXIV2_CHECK_VERSION 
+        if (EXIV2_CHECK_VERSION(0,14,0))
+        {
+            QString software(program);
+            software.append("-");
+            software.append(version);
+            d->exifMetadata["Exif.Image.ProcessingSoftware"] = software.ascii();
+        }
+#endif
+
         // See B.K.O #142564: Check if Exif.Image.Software already exist. If yes, do not touch this tag.
             
         if (!d->exifMetadata.empty())
@@ -466,6 +478,8 @@ bool KExiv2::setImageProgramId(const QString& program, const QString& version)
                 d->exifMetadata["Exif.Image.Software"]      = software.ascii();
 	    }
 	}
+
+	// Record program info in IPTC tags.
 
         d->iptcMetadata["Iptc.Application2.Program"]        = program.ascii();
         d->iptcMetadata["Iptc.Application2.ProgramVersion"] = version.ascii();
