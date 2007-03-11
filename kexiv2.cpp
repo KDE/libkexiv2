@@ -450,7 +450,7 @@ bool KExiv2::setImageProgramId(const QString& program, const QString& version)
 {
     try
     {
-        // Check if Exif.Image.Software already exist. If yes, do not touch this tag.
+        // See B.K.O #142564: Check if Exif.Image.Software already exist. If yes, do not touch this tag.
             
         if (!d->exifMetadata.empty())
 	{
