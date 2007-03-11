@@ -450,10 +450,22 @@ bool KExiv2::setImageProgramId(const QString& program, const QString& version)
 {
     try
     {
-        QString software(program);
-        software.append("-");
-        software.append(version);
-        d->exifMetadata["Exif.Image.Software"]              = software.ascii();
+        // Check if Exif.Image.Software already exist. If yes, do not touch this tag.
+            
+        if (!d->exifMetadata.empty())
+	{
+            Exiv2::ExifData exifData(d->exifMetadata);
+            Exiv2::ExifKey key("Exif.Image.Software");
+            Exiv2::ExifData::iterator it = exifData.findKey(key);
+       
+            if (it == exifData.end())
+	    {
+                QString software(program);
+                software.append("-");
+                software.append(version);
+                d->exifMetadata["Exif.Image.Software"]      = software.ascii();
+	    }
+	}
 
         d->iptcMetadata["Iptc.Application2.Program"]        = program.ascii();
         d->iptcMetadata["Iptc.Application2.ProgramVersion"] = version.ascii();
