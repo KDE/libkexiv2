@@ -1348,13 +1348,15 @@ bool KExiv2::setExifTagRational(const char *exifTagName, long int num, long int 
 
 bool KExiv2::setExifTagData(const char *exifTagName, const QByteArray& data, bool setProgramName)
 {
+    if (data.isEmpty())
+	return false;
+
     if (!setProgramId(setProgramName))
         return false;
 
     try
     {
-        Exiv2::DataValue val;
-        val.read((Exiv2::byte *)data.data(), data.size());
+        Exiv2::DataValue val((Exiv2::byte *)data.data(), data.size());
         d->exifMetadata[exifTagName] = val;
         return true;
     }
@@ -1368,13 +1370,15 @@ bool KExiv2::setExifTagData(const char *exifTagName, const QByteArray& data, boo
 
 bool KExiv2::setIptcTagData(const char *iptcTagName, const QByteArray& data, bool setProgramName)
 {
+    if (data.isEmpty())
+	return false;
+	
     if (!setProgramId(setProgramName))
         return false;
 
     try
-    {
-        Exiv2::DataValue val;
-        val.read((Exiv2::byte *)data.data(), data.size());
+    {	
+        Exiv2::DataValue val((Exiv2::byte *)data.data(), data.size());
         d->iptcMetadata[iptcTagName] = val;
         return true;
     }
