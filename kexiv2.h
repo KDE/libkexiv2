@@ -46,6 +46,7 @@ namespace Exiv2
     class Exifdatum;
     class ExifData;
     class IptcData;
+    class Error;
 }
 
 namespace KExiv2Iface
@@ -94,6 +95,11 @@ public:
 
     /** Return a string version of Exiv2 release in format "major.minor.patch" */ 
     static QString Exiv2Version();
+
+    /** Generic method to print the Exiv2 C++ Exception error message from 'e'.
+        'msg' string is printed just before like debug header.
+    */
+    static void printExiv2ExceptionError(const QString& msg, Exiv2::Error& e);
 
     //-- Metadata manipulation methods ----------------------------------------------
 

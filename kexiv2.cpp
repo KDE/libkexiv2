@@ -27,7 +27,6 @@
 #include <cstdlib>
 #include <cstdio>
 #include <cassert>
-#include <string>
 #include <cmath>
 #include <iostream>
 #include <iomanip>
@@ -101,7 +100,11 @@ QString KExiv2::Exiv2Version()
                               .arg(EXIV2_PATCH_VERSION);
 }
 
-// -- Protected Methods -------------------------------------
+void KExiv2::printExiv2ExceptionError(const QString& msg, Exiv2::Error& e)
+{
+    std::string s(e.what());
+    qDebug("%s (%s)", msg.ascii(), s.c_str());
+}
 
 std::string& KExiv2::commentsMetaData()
 {
@@ -118,8 +121,6 @@ Exiv2::IptcData& KExiv2::iptcMetaData()
     return d->iptcMetadata;
 }
 
-// -- Public Methods --------------------------------
-
 bool KExiv2::clearComments()
 {
     return setComments(QByteArray());
@@ -134,7 +135,7 @@ bool KExiv2::clearExif()
     }
     catch( Exiv2::Error &e )
     {
-        qDebug("Cannot clear Exif data using Exiv2 (%s)", e.what().c_str());
+        printExiv2ExceptionError("Cannot clear Exif data using Exiv2 ", e);
     }    
 
     return false;       
@@ -149,7 +150,7 @@ bool KExiv2::clearIptc()
     }
     catch( Exiv2::Error &e )
     {
-        qDebug("Cannot clear Iptc data using Exiv2 (%s)", e.what().c_str());
+        printExiv2ExceptionError("Cannot clear Iptc data using Exiv2 ", e);
     }    
 
     return false;       
@@ -195,7 +196,7 @@ QByteArray KExiv2::getExif() const
         if (!d->filePath.isEmpty())
             qDebug ("From file %s", d->filePath.ascii());
 
-        qDebug("Cannot get Exif data using Exiv2 (%s", e.what().c_str());
+        printExiv2ExceptionError("Cannot get Exif data using Exiv2 ", e);
     }       
     
     return QByteArray();
@@ -236,7 +237,7 @@ QByteArray KExiv2::getIptc(bool addIrbHeader) const
         if (!d->filePath.isEmpty())
             qDebug ("From file %s", d->filePath.ascii());
 
-        qDebug("Cannot get Iptc data using Exiv2 (%s)",e.what().c_str());
+        printExiv2ExceptionError("Cannot get Iptc data using Exiv2 ",e);
     }       
     
     return QByteArray();
@@ -265,7 +266,7 @@ bool KExiv2::setExif(const QByteArray& data)
         if (!d->filePath.isEmpty())
             qDebug ("From file %s", d->filePath.ascii());
 
-        qDebug("Cannot set Exif data using Exiv2 (%s)", e.what().c_str());
+        printExiv2ExceptionError("Cannot set Exif data using Exiv2 ", e);
     }        
 
     return false;
@@ -288,7 +289,7 @@ bool KExiv2::setIptc(const QByteArray& data)
         if (!d->filePath.isEmpty())
             qDebug ("From file %s", d->filePath.ascii());
 
-        qDebug("Cannot set Iptc data using Exiv2 (%s)",e.what().c_str());
+        printExiv2ExceptionError("Cannot set Iptc data using Exiv2 ", e);
     }    
 
     return false;    
@@ -311,7 +312,7 @@ bool KExiv2::setExif(Exiv2::DataBuf const data)
         if (!d->filePath.isEmpty())
             qDebug ("From file %s", d->filePath.ascii());
 
-        qDebug("Cannot set Exif data using Exiv2 (%s)", e.what().c_str());
+        printExiv2ExceptionError("Cannot set Exif data using Exiv2 ", e);
     }    
 
     return false;    
@@ -334,7 +335,7 @@ bool KExiv2::setIptc(Exiv2::DataBuf const data)
         if (!d->filePath.isEmpty())
             qDebug ("From file %s", d->filePath.ascii());
 
-        qDebug("Cannot set Iptc data using Exiv2 (%s)",e.what().c_str());
+        printExiv2ExceptionError("Cannot set Iptc data using Exiv2 ", e);
     }        
 
     return false;
@@ -369,9 +370,10 @@ bool KExiv2::load(const QString& filePath)
     }
     catch( Exiv2::Error &e )
     {
-        qDebug("Cannot load metadata using Exiv2 (%s)", e.what().c_str());
-        return false;
+        printExiv2ExceptionError("Cannot load metadata using Exiv2 ", e);
     }
+    
+    return false;
 }
 
 bool KExiv2::save(const QString& filePath)
@@ -425,9 +427,10 @@ bool KExiv2::save(const QString& filePath)
     }
     catch( Exiv2::Error &e )
     {
-        qDebug("Cannot save metadata using Exiv2 (%s)", e.what().c_str());
-        return false;
+        printExiv2ExceptionError("Cannot save metadata using Exiv2 ", e);
     }
+
+    return false;
 }
 
 bool KExiv2::applyChanges()
@@ -487,7 +490,7 @@ bool KExiv2::setImageProgramId(const QString& program, const QString& version)
     }
     catch( Exiv2::Error &e )
     {
-        qDebug("Cannot set Program identity into image using Exiv2 (%s)", e.what().c_str());
+        printExiv2ExceptionError("Cannot set Program identity into image using Exiv2 ", e);
     }
 
     return false;
@@ -542,7 +545,7 @@ QSize KExiv2::getImageDimensions()
     }
     catch( Exiv2::Error &e )
     {
-        qDebug("Cannot parse image dimensions tag using Exiv2 (%s)", e.what().c_str());
+        printExiv2ExceptionError("Cannot parse image dimensions tag using Exiv2 ", e);
     }        
     
     return QSize();
@@ -563,7 +566,7 @@ bool KExiv2::setImageDimensions(const QSize& size, bool setProgramName)
     }
     catch( Exiv2::Error &e )
     {
-        qDebug("Cannot set image dimensions using Exiv2 (%s)", e.what().c_str());
+        printExiv2ExceptionError("Cannot set image dimensions using Exiv2 ", e);
     }        
     
     return false;
@@ -640,7 +643,7 @@ QImage KExiv2::getExifThumbnail(bool fixOrientation) const
     }
     catch( Exiv2::Error &e )
     {
-        qDebug("Cannot get Exif Thumbnail using Exiv2 (%s)", e.what().c_str());
+        printExiv2ExceptionError("Cannot get Exif Thumbnail using Exiv2 ", e);
     }        
     
     return thumbnail;
@@ -663,7 +666,7 @@ bool KExiv2::setExifThumbnail(const QImage& thumb, bool setProgramName)
     }
     catch( Exiv2::Error &e )
     {
-        qDebug("Cannot set Exif Thumbnail using Exiv2 (%s)", e.what().c_str());
+        printExiv2ExceptionError("Cannot set Exif Thumbnail using Exiv2 ", e);
     }        
     
     return false;
@@ -754,7 +757,7 @@ KExiv2::ImageOrientation KExiv2::getImageOrientation()
     }
     catch( Exiv2::Error &e )
     {
-        qDebug("Cannot parse Exif Orientation tag using Exiv2 (%s)", e.what().c_str());
+        printExiv2ExceptionError("Cannot parse Exif Orientation tag using Exiv2 ", e);
     }
 
     return ORIENTATION_UNSPECIFIED;
@@ -822,7 +825,7 @@ bool KExiv2::setImageOrientation(ImageOrientation orientation, bool setProgramNa
     }
     catch( Exiv2::Error &e )
     {
-        qDebug("Cannot set Exif Orientation tag using Exiv2 (%s)", e.what().c_str());
+        printExiv2ExceptionError("Cannot set Exif Orientation tag using Exiv2 ", e);
     }        
     
     return false;
@@ -863,7 +866,7 @@ KExiv2::ImageColorWorkSpace KExiv2::getImageColorWorkSpace()
     }
     catch( Exiv2::Error &e )
     {
-        qDebug("Cannot parse image color workspace tag using Exiv2 (%s)", e.what().c_str());
+        printExiv2ExceptionError("Cannot parse image color workspace tag using Exiv2 ", e);
     }        
     
     return WORKSPACE_UNSPECIFIED;    
@@ -885,7 +888,7 @@ bool KExiv2::setImageColorWorkSpace(ImageColorWorkSpace workspace, bool setProgr
     }
     catch( Exiv2::Error &e )
     {
-        qDebug("Cannot set Exif color workspace tag using Exiv2 (%s)", e.what().c_str());
+        printExiv2ExceptionError("Cannot set Exif color workspace tag using Exiv2 ", e);
     }        
     
     return false;
@@ -1014,7 +1017,7 @@ QDateTime KExiv2::getImageDateTime() const
     }
     catch( Exiv2::Error &e )
     {
-        qDebug("Cannot parse Exif date & time tag using Exiv2 (%s)", e.what().c_str());
+        printExiv2ExceptionError("Cannot parse Exif date & time tag using Exiv2 ", e);
     }        
     
     return QDateTime();
@@ -1059,7 +1062,7 @@ bool KExiv2::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitiz
     }
     catch( Exiv2::Error &e )
     {
-        qDebug("Cannot set Date & Time into image using Exiv2 (%s)", e.what().c_str());
+        printExiv2ExceptionError("Cannot set Date & Time into image using Exiv2 ", e);
     }        
     
     return false;
@@ -1077,7 +1080,7 @@ bool KExiv2::getImagePreview(QImage& preview)
     }
     catch( Exiv2::Error &e )
     {
-        qDebug("Cannot get image preview using Exiv2 (%s)", e.what().c_str());
+        printExiv2ExceptionError("Cannot get image preview using Exiv2 ", e);
     }
 
     return false;
@@ -1119,7 +1122,7 @@ bool KExiv2::setImagePreview(const QImage& preview, bool setProgramName)
     }
     catch( Exiv2::Error &e )
     {
-        qDebug("Cannot get image preview using Exiv2 (%s)", e.what().c_str());
+        printExiv2ExceptionError("Cannot get image preview using Exiv2 ", e);
     }
 
     return false;
@@ -1146,8 +1149,8 @@ QString KExiv2::getExifTagString(const char* exifTagName, bool escapeCR) const
     }
     catch( Exiv2::Error &e )
     {
-        qDebug("Cannot find Exif key '%s' into image using Exiv2 (%s)",
-               exifTagName, e.what().c_str());
+        printExiv2ExceptionError(QString("Cannot find Exif key '%1' into image using Exiv2 ")
+                                 .arg(exifTagName), e);
     }
 
     return QString();
@@ -1165,7 +1168,7 @@ bool KExiv2::setExifTagString(const char *exifTagName, const QString& value, boo
     }
     catch( Exiv2::Error &e )
     {
-        qDebug("Cannot set Exif tag string into image using Exiv2 (%s)", e.what().c_str());
+        printExiv2ExceptionError("Cannot set Exif tag string into image using Exiv2 ", e);
     }
 
     return false;
@@ -1192,8 +1195,8 @@ QString KExiv2::getIptcTagString(const char* iptcTagName, bool escapeCR) const
     }
     catch( Exiv2::Error &e )
     {
-        qDebug("Cannot find Iptc key '%s' into image using Exiv2 (%s)",
-               iptcTagName, e.what().c_str());
+        printExiv2ExceptionError(QString("Cannot find Iptc key '%1' into image using Exiv2 ")
+                                 .arg(iptcTagName), e);
     }
 
     return QString();
@@ -1211,7 +1214,7 @@ bool KExiv2::setIptcTagString(const char *iptcTagName, const QString& value, boo
     }
     catch( Exiv2::Error &e )
     {
-        qDebug("Cannot set Iptc tag string into image using Exiv2 (%s)", e.what().c_str());
+        printExiv2ExceptionError("Cannot set Iptc tag string into image using Exiv2 ", e);
     }
 
     return false;
@@ -1232,8 +1235,8 @@ bool KExiv2::getExifTagLong(const char* exifTagName, long &val)
     }
     catch( Exiv2::Error &e )
     {
-        qDebug("Cannot find Exif key '%s' into image using Exiv2 (%s)", 
-               exifTagName, e.what().c_str());
+        printExiv2ExceptionError(QString("Cannot find Exif key '%1' into image using Exiv2 ")
+                                 .arg(exifTagName), e);
     }        
     
     return false;    
@@ -1256,8 +1259,8 @@ QByteArray KExiv2::getExifTagData(const char* exifTagName) const
     }
     catch( Exiv2::Error &e )
     {
-        qDebug("Cannot find Exif key '%s' into image using Exiv2 (%s)",
-               exifTagName, e.what().c_str());
+        printExiv2ExceptionError(QString("Cannot find Exif key '%1' into image using Exiv2 ")
+                                 .arg(exifTagName), e);
     }
 
     return QByteArray();
@@ -1280,8 +1283,8 @@ QByteArray KExiv2::getIptcTagData(const char *iptcTagName) const
     }
     catch( Exiv2::Error &e )
     {
-        qDebug("Cannot find Iptc key '%s' into image using Exiv2 (%s)", 
-                iptcTagName, e.what().c_str());
+        printExiv2ExceptionError(QString("Cannot find Iptc key '%1' into image using Exiv2 ")
+                                 .arg(iptcTagName), e);
     }
 
     return QByteArray();
@@ -1303,8 +1306,8 @@ bool KExiv2::getExifTagRational(const char *exifTagName, long int &num, long int
     }
     catch( Exiv2::Error &e )
     {
-        qDebug("Cannot find Exif Rational value from key '%s' into image using Exiv2 (%s)",
-               exifTagName, e.what().c_str());
+        printExiv2ExceptionError(QString("Cannot find Exif Rational value from key '%1' " 
+                                         "into image using Exiv2 ").arg(exifTagName), e);
     }
 
     return false;
@@ -1322,7 +1325,7 @@ bool KExiv2::setExifTagLong(const char *exifTagName, long val, bool setProgramNa
     }
     catch( Exiv2::Error &e )
     {
-        qDebug("Cannot set Exif tag long value into image using Exiv2 (%s)", e.what().c_str());
+        printExiv2ExceptionError("Cannot set Exif tag long value into image using Exiv2 ", e);
     }
 
     return false;
@@ -1340,7 +1343,7 @@ bool KExiv2::setExifTagRational(const char *exifTagName, long int num, long int 
     }
     catch( Exiv2::Error &e )
     {
-        qDebug("Cannot set Exif tag rational value into image using Exiv2 (%s)", e.what().c_str());
+        printExiv2ExceptionError("Cannot set Exif tag rational value into image using Exiv2 ", e);
     }
 
     return false;
@@ -1362,7 +1365,7 @@ bool KExiv2::setExifTagData(const char *exifTagName, const QByteArray& data, boo
     }
     catch( Exiv2::Error &e )
     {
-        qDebug("Cannot set Exif tag data into image using Exiv2 (%s)", e.what().c_str());
+        printExiv2ExceptionError("Cannot set Exif tag data into image using Exiv2 ", e);
     }
 
     return false;
@@ -1384,7 +1387,7 @@ bool KExiv2::setIptcTagData(const char *iptcTagName, const QByteArray& data, boo
     }
     catch( Exiv2::Error &e )
     {
-        qDebug("Cannot set Iptc tag data into image using Exiv2 (%s)", e.what().c_str());
+        printExiv2ExceptionError("Cannot set Iptc tag data into image using Exiv2 ", e);
     }
 
     return false;
@@ -1407,7 +1410,7 @@ bool KExiv2::removeExifTag(const char *exifTagName, bool setProgramName)
     }
     catch( Exiv2::Error &e )
     {
-        qDebug("Cannot remove Exif tag using Exiv2 (%s)", e.what().c_str());
+        printExiv2ExceptionError("Cannot remove Exif tag using Exiv2 ", e);
     }        
     
     return false;
@@ -1430,7 +1433,7 @@ bool KExiv2::removeIptcTag(const char *iptcTagName, bool setProgramName)
     }
     catch( Exiv2::Error &e )
     {
-        qDebug("Cannot remove Iptc tag using Exiv2 (%s)", e.what().c_str());
+        printExiv2ExceptionError("Cannot remove Iptc tag using Exiv2 ", e);
     }        
     
     return false;
@@ -1528,7 +1531,7 @@ bool KExiv2::getGPSInfo(double& altitude, double& latitude, double& longitude)
     }
     catch( Exiv2::Error &e )
     {
-        qDebug("Cannot get Exif GPS tag using Exiv2 (%s)", e.what().c_str());
+        printExiv2ExceptionError("Cannot get Exif GPS tag using Exiv2 ", e);
     }        
     
     return false;
@@ -1651,7 +1654,7 @@ bool KExiv2::setGPSInfo(double altitude, double latitude, double longitude, bool
     }
     catch( Exiv2::Error &e )
     {
-        qDebug("Cannot set Exif GPS tag using Exiv2 (%s)", e.what().c_str());
+        printExiv2ExceptionError("Cannot set Exif GPS tag using Exiv2 ", e);
     }        
     
     return false;
@@ -1687,7 +1690,7 @@ bool KExiv2::removeGPSInfo(bool setProgramName)
     }
     catch( Exiv2::Error &e )
     {
-        qDebug("Cannot remove Exif GPS tag using Exiv2 (%s)",e.what().c_str());
+        printExiv2ExceptionError("Cannot remove Exif GPS tag using Exiv2 ", e);
     }        
     
     return false;
@@ -1778,7 +1781,7 @@ QStringList KExiv2::getImageKeywords() const
     }
     catch( Exiv2::Error &e )
     {
-        qDebug("Cannot get IPTC Keywords from image using Exiv2 (%s)", e.what().c_str());
+        printExiv2ExceptionError("Cannot get IPTC Keywords from image using Exiv2 ", e);
     }        
     
     return QStringList();
@@ -1835,7 +1838,7 @@ bool KExiv2::setImageKeywords(const QStringList& oldKeywords, const QStringList&
     }
     catch( Exiv2::Error &e )
     {
-        qDebug("Cannot set IPTC Keywords into image using Exiv2 (%s)", e.what().c_str());
+        printExiv2ExceptionError("Cannot set IPTC Keywords into image using Exiv2 ", e);
     }        
     
     return false;
@@ -1866,7 +1869,7 @@ QStringList KExiv2::getImageSubjects() const
     }
     catch( Exiv2::Error &e )
     {
-        qDebug("Cannot get IPTC Subjects from image using Exiv2 (%s)", e.what().c_str());
+        printExiv2ExceptionError("Cannot get IPTC Subjects from image using Exiv2 ", e);
     }        
     
     return QStringList();
@@ -1918,7 +1921,7 @@ bool KExiv2::setImageSubjects(const QStringList& oldSubjects, const QStringList&
     }
     catch( Exiv2::Error &e )
     {
-        qDebug("Cannot set IPTC Subjects into image using Exiv2 (%s)", e.what().c_str());
+        printExiv2ExceptionError("Cannot set IPTC Subjects into image using Exiv2 ", e);
     }        
     
     return false;
@@ -1949,7 +1952,7 @@ QStringList KExiv2::getImageSubCategories() const
     }
     catch( Exiv2::Error &e )
     {
-        qDebug("Cannot get IPTC Sub Categories from image using Exiv2 (%s)", e.what().c_str());
+        printExiv2ExceptionError("Cannot get IPTC Sub Categories from image using Exiv2 ", e);
     }        
     
     return QStringList();
@@ -1981,7 +1984,8 @@ bool KExiv2::setImageSubCategories(const QStringList& oldSubCategories, const QS
                 ++it;
         };
 
-        // Add new Sub Categories. Note that SubCategories IPTC tag is limited to 32 char but can be redondant.
+        // Add new Sub Categories. Note that SubCategories IPTC tag is limited to 32 
+        // characters but can be redondant.
 
         Exiv2::IptcKey iptcTag("Iptc.Application2.SuppCategory");
 
@@ -2001,7 +2005,7 @@ bool KExiv2::setImageSubCategories(const QStringList& oldSubCategories, const QS
     }
     catch( Exiv2::Error &e )
     {
-        qDebug("Cannot set IPTC Sub Categories into image using Exiv2 (%s)",e.what().c_str());
+        printExiv2ExceptionError("Cannot set IPTC Sub Categories into image using Exiv2 ", e);
     }        
     
     return false;
@@ -2029,7 +2033,7 @@ QString KExiv2::getExifComment() const
     }
     catch( Exiv2::Error &e )
     {
-        qDebug("Cannot find Exif User Comment using Exiv2 (%s)",e.what().c_str());
+        printExiv2ExceptionError("Cannot find Exif User Comment using Exiv2 ", e);
     }
 
     return QString();
@@ -2072,7 +2076,7 @@ bool KExiv2::setExifComment(const QString& comment, bool setProgramName)
     }
     catch( Exiv2::Error &e )
     {
-        qDebug("Cannot set Exif Comment using Exiv2 (%s)", e.what().c_str());
+        printExiv2ExceptionError("Cannot set Exif Comment using Exiv2 ", e);
     }
 
     return false;
@@ -2143,7 +2147,7 @@ QString KExiv2::convertCommentValue(const Exiv2::Exifdatum &exifDatum)
     }
     catch( Exiv2::Error &e )
     {
-        qDebug("Cannot convert Comment using Exiv2 (%s)", e.what().c_str());
+        printExiv2ExceptionError("Cannot convert Comment using Exiv2 ", e);
     }
 
     return QString();
