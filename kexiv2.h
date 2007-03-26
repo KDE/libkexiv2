@@ -171,7 +171,7 @@ public:
 
     /** Return the size of image in pixels using Exif tags. Return a null dimmension if size cannot 
         be found. */
-    QSize getImageDimensions();
+    QSize getImageDimensions() const;
 
     /** Set the size of image in pixels in Exif tags. Return true if size have been changed 
         in metadata. */
@@ -188,7 +188,7 @@ public:
 
     /** Return the image orientation set in Exif metadata. The makernotes of image are also parsed to 
         get this information. See ImageOrientation values for details. */
-    KExiv2::ImageOrientation getImageOrientation();
+    KExiv2::ImageOrientation getImageOrientation() const;
 
     /** Set the Exif orientation tag of image. See ImageOrientation values for details 
         Return true if orientation have been changed in metadata. */
@@ -196,7 +196,7 @@ public:
 
     /** Return the image color-space set in Exif metadata. The makernotes of image are also parsed to 
         get this information. See ImageColorWorkSpace values for details. */
-    KExiv2::ImageColorWorkSpace getImageColorWorkSpace();
+    KExiv2::ImageColorWorkSpace getImageColorWorkSpace() const;
 
     /** Set the Exif color-space tag of image. See ImageColorWorkSpace values for details 
         Return true if work-space have been changed in metadata. */
@@ -213,7 +213,7 @@ public:
 
     /** Return a QImage copy of Iptc preview image. Return a null image if preview cannot 
         be found. */
-    bool getImagePreview(QImage& preview);
+    bool getImagePreview(QImage& preview) const;
 
     /** Set the Iptc preview image. The thumbnail image must have the right size before (64Kb max 
         with JPEG file, else 256Kb). Look Iptc specification for details. Return true if preview 
@@ -263,7 +263,7 @@ public:
     bool setExifComment(const QString& comment, bool setProgramName=true);
 
     /** Get all GPS location informations set in image. Return true if all informations can be found. */
-    bool getGPSInfo(double& altitude, double& latitude, double& longitude);
+    bool getGPSInfo(double& altitude, double& latitude, double& longitude) const;
 
     /** Set all GPS location informations into image. Return true if all informations have been 
         changed in metadata. */
@@ -283,7 +283,7 @@ public:
     bool setExifTagString(const char *exifTagName, const QString& value, bool setProgramName=true);
 
     /** Get an Exif tags content like a long value. Return true if Exif tag be found. */
-    bool getExifTagLong(const char* exifTagName, long &val);
+    bool getExifTagLong(const char* exifTagName, long &val) const;
 
     /** Set an Exif tag content using a long value. Return true if tag is set sucessfully. */
     bool setExifTagLong(const char *exifTagName, long val, bool setProgramName=true);
@@ -291,7 +291,7 @@ public:
     /** Get the 'component' index of an Exif tags content like a rational value. 
         'num' and 'den' are the numerator and the denominator of the rational value. 
         Return true if Exif tag be found. */
-    bool getExifTagRational(const char *exifTagName, long int &num, long int &den, int component=0);
+    bool getExifTagRational(const char *exifTagName, long int &num, long int &den, int component=0) const;
 
     /** Set an Exif tags content using a rational value. 
         'num' and 'den' are the numerator and the denominator of the rational value. 

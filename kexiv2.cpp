@@ -496,7 +496,7 @@ bool KExiv2::setImageProgramId(const QString& program, const QString& version)
     return false;
 }
 
-QSize KExiv2::getImageDimensions()
+QSize KExiv2::getImageDimensions() const
 {
     if (d->exifMetadata.empty())
         return QSize();
@@ -672,7 +672,7 @@ bool KExiv2::setExifThumbnail(const QImage& thumb, bool setProgramName)
     return false;
 }
 
-KExiv2::ImageOrientation KExiv2::getImageOrientation()
+KExiv2::ImageOrientation KExiv2::getImageOrientation() const
 {
     if (d->exifMetadata.empty())
        return ORIENTATION_UNSPECIFIED;
@@ -831,7 +831,7 @@ bool KExiv2::setImageOrientation(ImageOrientation orientation, bool setProgramNa
     return false;
 }
 
-KExiv2::ImageColorWorkSpace KExiv2::getImageColorWorkSpace()
+KExiv2::ImageColorWorkSpace KExiv2::getImageColorWorkSpace() const
 {
     if (d->exifMetadata.empty())
         return WORKSPACE_UNSPECIFIED;
@@ -1068,7 +1068,7 @@ bool KExiv2::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitiz
     return false;
 }
 
-bool KExiv2::getImagePreview(QImage& preview)
+bool KExiv2::getImagePreview(QImage& preview) const
 {
     try
     {
@@ -1220,7 +1220,7 @@ bool KExiv2::setIptcTagString(const char *iptcTagName, const QString& value, boo
     return false;
 }
 
-bool KExiv2::getExifTagLong(const char* exifTagName, long &val)
+bool KExiv2::getExifTagLong(const char* exifTagName, long &val) const
 {
     try
     {    
@@ -1290,7 +1290,7 @@ QByteArray KExiv2::getIptcTagData(const char *iptcTagName) const
     return QByteArray();
 }
 
-bool KExiv2::getExifTagRational(const char *exifTagName, long int &num, long int &den, int component)
+bool KExiv2::getExifTagRational(const char *exifTagName, long int &num, long int &den, int component) const
 {
     try
     {
@@ -1439,7 +1439,7 @@ bool KExiv2::removeIptcTag(const char *iptcTagName, bool setProgramName)
     return false;
 }
 
-bool KExiv2::getGPSInfo(double& altitude, double& latitude, double& longitude)
+bool KExiv2::getGPSInfo(double& altitude, double& latitude, double& longitude) const
 {
     try
     {    
