@@ -1,5 +1,119 @@
+V 0.1.2 - 2007-04-07
+----------------------------------------------------------------------------
+2007-03-26 07:54  cgilles
+
+	* [r646581] libkexiv2/kexiv2.cpp, libkexiv2/kexiv2.h:
+	  libkexiv2 from trunk : polish API : all "get...()" method must
+	  use const operator.
+
+2007-03-15 11:10  anaselli
+
+	* [r642771] libkexiv2/Makefile.am, libkexiv2/NEWS:
+	  API changed, please check if it is correct.
+	  
+	  CCMAIL: caulier.gilles@kdemail.net
+
+2007-03-15 09:09  cgilles
+
+	* [r642722] libkexiv2/kexiv2.cpp, libkexiv2/kexiv2.h:
+	  libkexiv2 from trunk : Fix broken compilation with current Exiv2
+	  implementation (next 0.14.0 release), duing a change with C++
+	  Exception rule. I recommend to cleanup and recompile this library
+	  and clients program witch use it.
+	  
+	  Note : libkexiv2 still compatible with older Exiv2 releases 0.12
+	  and 0.13
+	  
+	  CCMAIL: digikam-devel@kde.org
+
+2007-03-14 12:12  cgilles
+
+	* [r642432] libkexiv2/NEWS:
+	  --Cette ligupdatene, et les suivantes ci-dessous, seront
+	  ignorées--
+	  
+	  M NEWS
+
+2007-03-14 12:11  cgilles
+
+	* [r642431] libkexiv2/kexiv2.cpp:
+	  libkexiv2 from trunk : patch from Arnd Baecker about to avoid the
+	  GPS accuracy loss
+	  BUG: 140297
+
+2007-03-14 12:05  cgilles
+
+	* [r642427] libkexiv2/kexiv2.cpp:
+	  sanity check again about empty byte array
+
+2007-03-14 11:58  cgilles
+
+	* [r642421] libkexiv2/libkexiv2.lsm:
+	  fix version
+
+2007-03-14 11:58  cgilles
+
+	* [r642420] libkexiv2/libkexiv2.pc.in:
+	  fix version
+
+2007-03-14 11:57  cgilles
+
+	* [r642419] libkexiv2/version.h:
+	  fix version
+
+2007-03-11 10:58  cgilles
+
+	* [r641445] libkexiv2/kexiv2.cpp:
+	  libkexiv2 from trunk : when Exiv2 0.14.0 will be available, a new
+	  tag Exif.Image.ProcessingSoftware will be use to store program
+	  informations
+
+2007-03-11 10:31  cgilles
+
+	* [r641437] libkexiv2/NEWS:
+	  update
+
+2007-03-11 10:30  cgilles
+
+	* [r641436] libkexiv2/kexiv2.cpp:
+	  fix comment
+
+2007-03-11 10:29  cgilles
+
+	* [r641435] libkexiv2/kexiv2.cpp:
+	  libkexiv2 from trunk : set the Exif.Image.Software tag only if it
+	  doesn't exist.
+	  BUG: 142564
+
+2007-02-28 22:19  ach
+
+	* [r638128] libkexiv2:
+	  libkexiv2: ignore Makefile.in
+
+2007-02-28 22:14  ach
+
+	* [r638127] libkexiv2/kexiv2.cpp, libkexiv2/kexiv2.h,
+	  libkexiv2/libkexiv2_export.h, libkexiv2/version.h:
+	  libkexiv2: remove unnecessary line break in license notice
+
+2007-02-28 22:13  ach
+
+	* [r638126] libkexiv2/AUTHORS:
+	  libkexif: add final newline to AUTHORS
+
+----------------------------------------------------------------------------
 V 0.1.1 - 2007-02-24
 ----------------------------------------------------------------------------
+
+2007-02-24 20:53  anaselli
+
+	* [r636958] libkexiv2/ChangeLog, libkexiv2/Makefile.am,
+	  libkexiv2/NEWS, libkexiv2/libkexiv2.lsm,
+	  libkexiv2/libkexiv2.pc.in, libkexiv2/version.h:
+	  libkexiv2 0.1.1
+	  bug fixing release
+	  
+	  CCMAIL:kde-imaging@kde.org
 
 2007-02-22 12:01  cgilles
 

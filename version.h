@@ -20,7 +20,7 @@
 #ifndef KEXIV2_VERSION_H
 #define KEXIV2_VERSION_H
 
-static const char kexiv2_version[] = "0.1.2-svn";
+static const char kexiv2_version[] = "0.1.2";
 
 #define KEXIV2_VERSION 0x000102
 
