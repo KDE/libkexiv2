@@ -4,7 +4,8 @@
  * Date   : 2006-09-15
  * Description : Exiv2 library interface for KDE
  *
- * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
+ * Copyright 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * Exiv2: http://www.exiv2.org
  * Exif : http://www.exif.org/Exif2-2.PDF 
@@ -154,7 +155,7 @@ public:
     //-- File access methods ----------------------------------------------
 
     /** Load all metadata (EXIF, IPTC and JFIF Comments) from a picture (JPEG, RAW, TIFF, PNG, 
-        DNG, etc...). Return true if metadata have been loaded sucessfuly from file. */
+        DNG, etc...). Return true if metadata have been loaded successfully from file. */
     virtual bool load(const QString& filePath);
 
     /** Save all metadata to a file. This one can be different than original picture to perform 
@@ -183,7 +184,7 @@ public:
     bool setImageDimensions(const QSize& size, bool setProgramName=true);
 
     /** Return a QImage copy of Exif thumbnail image. Return a null image if thumbnail cannot 
-        be found. The 'fixOrientation' parameter will rotate automaticly the thumbnail if Exif 
+        be found. The 'fixOrientation' parameter will rotate automatically the thumbnail if Exif 
         orientation tags information are attached with thumbnail. */
     QImage getExifThumbnail(bool fixOrientation) const;
 
@@ -267,15 +268,15 @@ public:
         Return true if Exif user comments have been changed in metadata. */
     bool setExifComment(const QString& comment, bool setProgramName=true);
 
-    /** Get all GPS location informations set in image. Return true if all informations can be found. */
+    /** Get all GPS location information set in image. Return true if all information can be found. */
     bool getGPSInfo(double& altitude, double& latitude, double& longitude) const;
 
-    /** Set all GPS location informations into image. Return true if all informations have been 
+    /** Set all GPS location information into image. Return true if all information have been 
         changed in metadata. */
     bool setGPSInfo(double altitude, double latitude, double longitude, bool setProgramName=true);
 
-    /** Remove all Exif tags relevant of GPS location informations. Return true if all tags have been 
-        removed sucessfully in metadata. */
+    /** Remove all Exif tags relevant of GPS location information. Return true if all tags have been 
+        removed successfully in metadata. */
     bool removeGPSInfo(bool setProgramName=true);
 
     //-- Metadata Tags manipulation methods ----------------------------------------
@@ -284,13 +285,13 @@ public:
         will be removed. If Exif tag cannot be found a null string is returned. */
     QString getExifTagString(const char *exifTagName, bool escapeCR=true) const;
 
-    /** Set an Exif tag content using a string. Return true if tag is set sucessfully. */
+    /** Set an Exif tag content using a string. Return true if tag is set successfully. */
     bool setExifTagString(const char *exifTagName, const QString& value, bool setProgramName=true);
 
     /** Get an Exif tags content like a long value. Return true if Exif tag be found. */
     bool getExifTagLong(const char* exifTagName, long &val) const;
 
-    /** Set an Exif tag content using a long value. Return true if tag is set sucessfully. */
+    /** Set an Exif tag content using a long value. Return true if tag is set successfully. */
     bool setExifTagLong(const char *exifTagName, long val, bool setProgramName=true);
 
     /** Get the 'component' index of an Exif tags content like a rational value. 
@@ -300,36 +301,36 @@ public:
 
     /** Set an Exif tags content using a rational value. 
         'num' and 'den' are the numerator and the denominator of the rational value. 
-        Return true if tag is set sucessfully. */
+        Return true if tag is set successfully. */
     bool setExifTagRational(const char *exifTagName, long int num, long int den, bool setProgramName=true);
 
     /** Get an Exif tags content like a bytes array. Return an empty bytes array if Exif 
         tag cannot be found. */
     QByteArray getExifTagData(const char *exifTagName) const;
 
-    /** Set an Exif tag content using a bytes array. Return true if tag is set sucessfully. */
+    /** Set an Exif tag content using a bytes array. Return true if tag is set successfully. */
     bool setExifTagData(const char *exifTagName, const QByteArray& data, bool setProgramName=true);
     
     /** Get an Iptc tags content like a string. If 'escapeCR' parameter is true, the CR characters
         will be removed. If Iptc tag cannot be found a null string is returned. */
     QString getIptcTagString(const char* iptcTagName, bool escapeCR=true) const;
 
-    /** Set an Iptc tag content using a string. Return true if tag is set sucessfully. */
+    /** Set an Iptc tag content using a string. Return true if tag is set successfully. */
     bool setIptcTagString(const char *iptcTagName, const QString& value, bool setProgramName=true);
 
     /** Get an Iptc tags content like a bytes array. Return an empty bytes array if Iptc 
         tag cannot be found. */
     QByteArray getIptcTagData(const char *iptcTagName) const;
 
-    /** Set an Iptc tag content using a bytes array. Return true if tag is set sucessfully. */
+    /** Set an Iptc tag content using a bytes array. Return true if tag is set successfully. */
     bool setIptcTagData(const char *iptcTagName, const QByteArray& data, bool setProgramName=true);
 
     /** Remove the Exif tag 'exifTagName' from Exif metadata. Return true if tag is 
-        removed sucessfully. */
+        removed successfully. */
     bool removeExifTag(const char *exifTagName, bool setProgramName=true);
 
     /** Remove the Iptc tag 'iptcTagName' from Iptc metadata. Return true if tag is 
-        removed sucessfully. */
+        removed successfully. */
     bool removeIptcTag(const char *iptcTagName, bool setProgramName=true);
 
     /** Return the Exif Tag title or a null string. */ 
@@ -397,8 +398,8 @@ public:
 
 protected:
     
-    /** Re-implemente this method to set automaticly the Program Name and Program Version 
-        informations in Exif and Iptc metadata if 'on' argument is true. This method is called by all methods witch
+    /** Re-implemente this method to set automatically the Program Name and Program Version 
+        information in Exif and Iptc metadata if 'on' argument is true. This method is called by all methods witch
         change tags in metadata. By default this method do nothing and return true.
  
         In digiKam this method is re-implementated like this:

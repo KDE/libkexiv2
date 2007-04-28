@@ -3,7 +3,7 @@
  * Date   : 2007-02-06
  * Description : libkexiv2 release ID header.
  * 
- * Copyright 2007 by Gilles Caulier
+ * Copyright 2007 by Gilles Caulier <caulier dot gilles at free.fr>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

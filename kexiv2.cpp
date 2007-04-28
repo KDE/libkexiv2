@@ -4,7 +4,8 @@
  * Date   : 2006-09-15
  * Description : Exiv2 library interface for KDE
  *
- * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
+ * Copyright 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * NOTE: Do not use kdDebug() in this implementation because 
  *       it will be multithreaded. Use qDebug() instead. 
@@ -801,7 +802,7 @@ bool KExiv2::setImageOrientation(ImageOrientation orientation, bool setProgramNa
         if (supportMinolta)
         {
             // Minolta camera store image rotation in Makernote.
-            // We remove these informations to prevent duplicate values. 
+            // We remove these information to prevent duplicate values. 
     
             Exiv2::ExifData::iterator it;
 
