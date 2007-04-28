@@ -5,7 +5,6 @@ LIBKEXIV2 PROJECT
 
 See AUTHORS file for details.
 
-
 -- ABOUT -------------------------------------------------------------
 
 Libkexiv2 is a wrapper around Exiv2 library to manipulate pictures metadata.

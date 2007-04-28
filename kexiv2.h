@@ -35,6 +35,7 @@
 #include <qstring.h>
 #include <qimage.h>
 #include <qdatetime.h>
+#include <qmap.h>
 
 // Local includes.
 
@@ -81,6 +82,10 @@ public:
         ORIENTATION_ROT_90_VFLIP = 7, 
         ORIENTATION_ROT_270      = 8
     };
+
+    /** A map used by decodeExifMetadata() decodeIptcMetadata() methods
+        to store Tags Key and Tags Value. */
+    typedef QMap<QString, QString>  MetaDataMap;
 
 public:
 
@@ -327,6 +332,56 @@ public:
         removed sucessfully. */
     bool removeIptcTag(const char *iptcTagName, bool setProgramName=true);
 
+    /** Return the Exif Tag title or a null string. */ 
+    static QString getExifTagTitle(const char *exifTagName);
+
+    /** Return the Exif Tag description or a null string. */ 
+    static QString getExifTagDescription(const char *exifTagName);
+
+    /** Return the Iptc Tag title or a null string. */ 
+    static QString getIptcTagTitle(const char *iptcTagName);
+
+    /** Return the Iptc Tag description or a null string. */ 
+    static QString getIptcTagDescription(const char *iptcTagName);
+
+    /** Return a map of Exif tags name/value found in metadata sorted by 
+        Exif keys given by 'exifKeysFilter'. 
+        
+        'exifKeysFilter' is a QStringList of Exif keys. 
+        For example, if you use the string list given below:
+
+        "Iop"
+        "Thumbnail"
+        "Image"
+        "Photo"
+
+        ... this method will return a map of all Exif tags witch :
+
+        - include "Iop", or "Thumbnail", or "Image", or "Photo" in the Exif tag keys 
+          if 'inverSelection' is false.
+        - not include "Iop", or "Thumbnail", or "Image", or "Photo" in the Exif tag keys 
+          if 'inverSelection' is true.
+        */ 
+    KExiv2::MetaDataMap getExifTagsDataList(const QStringList exifKeysFilter, bool invertSelection=false);
+
+    /** Return a map of Iptc tags name/value found in metadata sorted by 
+        Iptc keys given by 'iptcKeysFilter'. 
+        
+        'iptcKeysFilter' is a QStringList of Iptc keys. 
+        For example, if you use the string list given below:
+
+        "Envelope"
+        "Application2"
+
+        ... this method will return a map of all Iptc tags witch :
+
+        - include "Envelope", or "Application2" in the Iptc tag keys 
+          if 'inverSelection' is false.
+        - not include "Envelope", or "Application2" in the Iptc tag keys 
+          if 'inverSelection' is true.
+        */ 
+    KExiv2::MetaDataMap getIptcTagsDataList(const QStringList iptcKeysFilter, bool invertSelection=false);
+
     //-- Advanced methods to convert and decode data -------------------------
 
     /** This method convert 'number' like a rational value, returned in 'numerator' and 
@@ -359,37 +414,27 @@ protected:
     */      
     virtual bool setProgramId(bool on=true);
 
-    /** Return a reference to Exif metadata object in memory. 
-        (Depreciate: used internaly by digiKam core.) 
-    */
+private:
+
+    /** Return a reference to Exif metadata object in memory. */
     Exiv2::ExifData& exifMetaData();
 
-    /** Return a reference to Iptc metadata object in memory. 
-        (Depreciate: used internaly by digiKam core.) 
-    */
+    /** Return a reference to Iptc metadata object in memory. */
     Exiv2::IptcData& iptcMetaData();
 
     /** Set the Exif data using an Exiv2 byte array. Return true if Exif metadata
-        have been changed in memory. 
-        (Depreciate: used internaly by digiKam core.) 
-    */
+        have been changed in memory. */
     bool setExif(Exiv2::DataBuf const data);
 
     /** Set the Iptc data using an Exiv2 byte array. Return true if Iptc metadata
-        have been changed in memory. 
-        (Depreciate: used internaly by digiKam core.) 
-    */
+        have been changed in memory. */
     bool setIptc(Exiv2::DataBuf const data);
 
-    /** Return a reference to comments string object in memory. 
-        (Depreciate: used internaly by digiKam core.) 
-    */
+    /** Return a reference to comments string object in memory. */
     std::string& commentsMetaData();
 
     /** Return a standard C++ string copy of Comments container get from current image.
-        Return a null standard string if there is no Comments metadata in memory. 
-        (Depreciate: used internaly by digiKam core.)
-    */
+        Return a null standard string if there is no Comments metadata in memory. */
     std::string getCommentsString() const;
 
 private:

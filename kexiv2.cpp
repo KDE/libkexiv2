@@ -558,10 +558,11 @@ bool KExiv2::setImageDimensions(const QSize& size, bool setProgramName)
 
     try
     {    
-        d->exifMetadata["Exif.Image.ImageWidth"]      = size.width();
-        d->exifMetadata["Exif.Image.ImageLength"]     = size.height();
-        d->exifMetadata["Exif.Photo.PixelXDimension"] = size.width();
-        d->exifMetadata["Exif.Photo.PixelYDimension"] = size.height();
+        // NOTE: see B.K.O #144604: you a cast to record an unsigned integer value.
+        d->exifMetadata["Exif.Image.ImageWidth"]      = static_cast<uint32_t>(size.width());
+        d->exifMetadata["Exif.Image.ImageLength"]     = static_cast<uint32_t>(size.height());
+        d->exifMetadata["Exif.Photo.PixelXDimension"] = static_cast<uint32_t>(size.width());
+        d->exifMetadata["Exif.Photo.PixelYDimension"] = static_cast<uint32_t>(size.height());
         return true;
     }
     catch( Exiv2::Error &e )
@@ -792,7 +793,7 @@ bool KExiv2::setImageOrientation(ImageOrientation orientation, bool setProgramNa
             return false;
         }
         
-        d->exifMetadata["Exif.Image.Orientation"] = (uint16_t)orientation;
+        d->exifMetadata["Exif.Image.Orientation"] = static_cast<uint16_t>(orientation);
         qDebug("Exif orientation tag set to: %i", (int)orientation);
 
         // -- Minolta Cameras ----------------------------------
@@ -882,7 +883,7 @@ bool KExiv2::setImageColorWorkSpace(ImageColorWorkSpace workspace, bool setProgr
 
     try
     {    
-        d->exifMetadata["Exif.Photo.ColorSpace"] = (uint16_t)workspace;
+        d->exifMetadata["Exif.Photo.ColorSpace"] = static_cast<uint16_t>(workspace);
         qDebug("Exif color workspace tag set to: %i",  (int)workspace);
         return true;
     }
@@ -1041,7 +1042,7 @@ bool KExiv2::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitiz
         // Reference: http://www.exif.org/Exif2-2.PDF, chapter 4.6.5, table 4, section F.
 
         const std::string &exifdatetime(dateTime.toString(QString("yyyy:MM:dd hh:mm:ss")).ascii());
-        d->exifMetadata["Exif.Image.DateTime"] = exifdatetime;
+        d->exifMetadata["Exif.Image.DateTime"]         = exifdatetime;
         d->exifMetadata["Exif.Photo.DateTimeOriginal"] = exifdatetime;
         if(setDateTimeDigitized)
             d->exifMetadata["Exif.Photo.DateTimeDigitized"] = exifdatetime;
@@ -1320,7 +1321,7 @@ bool KExiv2::setExifTagLong(const char *exifTagName, long val, bool setProgramNa
 
     try
     {
-        d->exifMetadata[exifTagName] = int32_t(val);
+        d->exifMetadata[exifTagName] = static_cast<int32_t>(val);
         return true;
     }
     catch( Exiv2::Error &e )
@@ -1437,6 +1438,198 @@ bool KExiv2::removeIptcTag(const char *iptcTagName, bool setProgramName)
     }        
     
     return false;
+}
+
+QString KExiv2::getExifTagTitle(const char *exifTagName)
+{
+    try 
+    {
+        std::string exifkey(exifTagName);
+        Exiv2::ExifKey ek(exifkey); 
+        return QString::fromLocal8Bit( Exiv2::ExifTags::tagTitle(ek.tag(), ek.ifdId()) );
+    }
+    catch (Exiv2::Error& e) 
+    {
+        printExiv2ExceptionError("Cannot get metadata tag title using Exiv2 ", e);
+    }
+
+    return QString();
+}
+
+QString KExiv2::getExifTagDescription(const char *exifTagName)
+{
+    try 
+    {
+        std::string exifkey(exifTagName);
+        Exiv2::ExifKey ek(exifkey); 
+        return QString::fromLocal8Bit( Exiv2::ExifTags::tagDesc(ek.tag(), ek.ifdId()) );
+    }
+    catch (Exiv2::Error& e) 
+    {
+        printExiv2ExceptionError("Cannot get metadata tag description using Exiv2 ", e);
+    }
+
+    return QString();
+}
+
+QString KExiv2::getIptcTagTitle(const char *iptcTagName)
+{
+    try 
+    {
+        std::string iptckey(iptcTagName);
+        Exiv2::IptcKey ik(iptckey); 
+        return QString::fromLocal8Bit( Exiv2::IptcDataSets::dataSetTitle(ik.tag(), ik.record()) );
+    }
+    catch (Exiv2::Error& e) 
+    {
+        printExiv2ExceptionError("Cannot get metadata tag title using Exiv2 ", e);
+    }
+
+    return QString();
+}
+
+QString KExiv2::getIptcTagDescription(const char *iptcTagName)
+{
+    try 
+    {
+        std::string iptckey(iptcTagName);
+        Exiv2::IptcKey ik(iptckey); 
+        return QString::fromLocal8Bit( Exiv2::IptcDataSets::dataSetDesc(ik.tag(), ik.record()) );
+    }
+    catch (Exiv2::Error& e) 
+    {
+        printExiv2ExceptionError("Cannot get metadata tag description using Exiv2 ", e);
+    }
+
+    return QString();
+}
+
+KExiv2::MetaDataMap KExiv2::getExifTagsDataList(const QStringList exifKeysFilter, bool invertSelection)
+{
+    if (d->exifMetadata.empty())
+       return MetaDataMap();
+
+    try
+    {
+        Exiv2::ExifData exifData = d->exifMetadata;
+        exifData.sortByKey();
+        
+        QString     ifDItemName;
+        MetaDataMap metaDataMap;
+
+        for (Exiv2::ExifData::iterator md = exifData.begin(); md != exifData.end(); ++md)
+        {
+            QString key = QString::fromAscii(md->key().c_str());
+
+            // Decode the tag value with a user friendly output.
+            QString tagValue;
+            if (key == "Exif.Photo.UserComment")
+            {
+                tagValue = convertCommentValue(*md);
+            }
+            else
+            {
+                std::ostringstream os;
+                os << *md;
+
+                // Exif tag contents can be an i18n strings, no only simple ascii.
+                tagValue = QString::fromLocal8Bit(os.str().c_str());
+            }
+            tagValue.replace("\n", " ");
+
+            // We apply a filter to get only the Exif tags that we need.
+
+            if (!invertSelection)
+            {
+                if (exifKeysFilter.contains(key.section(".", 1, 1)))
+                    metaDataMap.insert(key, tagValue);
+            }
+            else
+            {
+                if (!exifKeysFilter.contains(key.section(".", 1, 1)))
+                    metaDataMap.insert(key, tagValue);
+            }
+        }
+
+        return metaDataMap;
+    }
+    catch (Exiv2::Error& e)
+    {
+        printExiv2ExceptionError("Cannot parse EXIF metadata using Exiv2 ", e);
+    }
+
+    return MetaDataMap();
+}
+
+KExiv2::MetaDataMap KExiv2::getIptcTagsDataList(const QStringList iptcKeysFilter, bool invertSelection)
+{
+    if (d->iptcMetadata.empty())
+       return MetaDataMap();
+
+    try
+    {
+        Exiv2::IptcData iptcData = d->iptcMetadata;
+        iptcData.sortByKey();
+        
+        QString     ifDItemName;
+        MetaDataMap metaDataMap;
+
+        for (Exiv2::IptcData::iterator md = iptcData.begin(); md != iptcData.end(); ++md)
+        {
+            QString key = QString::fromAscii(md->key().c_str());
+            
+            // Decode the tag value with a user friendly output.
+            std::ostringstream os;
+            os << *md;
+            QString value = QString::fromAscii(os.str().c_str());
+            // To make a string just on one line.
+            value.replace("\n", " ");
+
+            // Some IPTC key are redondancy. check if already one exist...
+            MetaDataMap::iterator it = metaDataMap.find(key);
+
+            // We apply a filter to get only the Exif tags that we need.
+
+            if (!invertSelection)
+            {
+                if (iptcKeysFilter.contains(key.section(".", 1, 1)))
+                {
+                    if (it == metaDataMap.end())
+                        metaDataMap.insert(key, value);
+                    else
+                    {
+                        QString v = *it;
+                        v.append(", ");
+                        v.append(value);
+                        metaDataMap.replace(key, v);
+                    }                
+                }
+            }
+            else
+            {
+                if (!iptcKeysFilter.contains(key.section(".", 1, 1)))
+                {
+                    if (it == metaDataMap.end())
+                        metaDataMap.insert(key, value);
+                    else
+                    {
+                        QString v = *it;
+                        v.append(", ");
+                        v.append(value);
+                        metaDataMap.replace(key, v);
+                    }                
+                }
+            }
+        }
+
+        return metaDataMap;
+    }
+    catch (Exiv2::Error& e)
+    {
+        printExiv2ExceptionError("Cannot parse IPTC metadata using Exiv2 ", e);
+    }
+
+    return MetaDataMap();
 }
 
 bool KExiv2::getGPSInfo(double& altitude, double& latitude, double& longitude) const

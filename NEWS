@@ -1,9 +1,22 @@
+0.1.3
+------------------------------------------------------------------------
+New features
+- API changed: added 4 new static methods to get Exif/Iptc tags description/title. 
+               moved depreceate protected methods used by digiKam core to private.
+
+Bugs fixed from B.K.O (http://bugs.kde.org):
+001 ==> 144604: Rotation causes Exif data corruption.
+
+General       : Make size of icons used in album icon view more configurable using a slider 
+                in status bar. 
+General       : Removing direct Exiv2 library depency. libkexiv2 interface is used everywhere 
+                instead.  
+
 0.1.2
 ------------------------------------------------------------------------
 New features
 - added support for exiv2 from svn (next 0.14.0 release)
-- API changed:
-  - added printExiv2ExceptionError to manage Exiv2 C++ Exception error message 
+- API changed: added printExiv2ExceptionError to manage Exiv2 C++ Exception error message 
 
 Bugs fixed from B.K.O (http://bugs.kde.org):
 001 ==> 142564: digiKam-signature in iptc and exif tags.
