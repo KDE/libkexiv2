@@ -1763,11 +1763,9 @@ bool KExiv2::setGPSInfo(double altitude, double latitude, double longitude, bool
         d->exifMetadata.add(Exiv2::ExifKey("Exif.GPSInfo.GPSAltitudeRef"), value.get());
         
         // And the actual altitude.
-        value = Exiv2::Value::create(Exiv2::signedRational);
         convertToRational(altitude, &nom, &denom, 4);
         snprintf(scratchBuf, 100, "%ld/%ld", nom, denom);
-        value->read(scratchBuf);
-        d->exifMetadata.add(Exiv2::ExifKey("Exif.GPSInfo.GPSAltitude"), value.get());
+        d->exifMetadata["Exif.GPSInfo.GPSAltitude"] = scratchBuf;
 
         // LATTITUDE
         // Latitude reference: "N" or "S".
@@ -1799,12 +1797,10 @@ bool KExiv2::setGPSInfo(double altitude, double latitude, double longitude, bool
         // Further note: original code did not translate between
         //   dd.dddddd to dd mm.mm - that's why we now multiply
         //   by 6000 - x60 to get minutes, x1000000 to get to mmmm/1000000.
-        value = Exiv2::Value::create(Exiv2::signedRational);
         deg   = (int)floor(fabs(latitude)); // Slice off after decimal.
         min   = (int)floor((fabs(latitude) - floor(fabs(latitude))) * 60000000);
         snprintf(scratchBuf, 100, "%ld/1 %ld/1000000 0/1", deg, min);
-        value->read(scratchBuf);
-        d->exifMetadata.add(Exiv2::ExifKey("Exif.GPSInfo.GPSLatitude"), value.get());
+        d->exifMetadata["Exif.GPSInfo.GPSLatitude"] = scratchBuf;
         
         // LONGITUDE
         // Longitude reference: "E" or "W".
@@ -1836,12 +1832,10 @@ bool KExiv2::setGPSInfo(double altitude, double latitude, double longitude, bool
         // Further note: original code did not translate between
         //   dd.dddddd to dd mm.mm - that's why we now multiply
         //   by 6000 - x60 to get minutes, x1000000 to get to mmmm/1000000.
-        value = Exiv2::Value::create(Exiv2::signedRational);
         deg   = (int)floor(fabs(longitude)); // Slice off after decimal.
         min   = (int)floor((fabs(longitude) - floor(fabs(longitude))) * 60000000);
         snprintf(scratchBuf, 100, "%ld/1 %ld/1000000 0/1", deg, min);
-        value->read(scratchBuf);
-        d->exifMetadata.add(Exiv2::ExifKey("Exif.GPSInfo.GPSLongitude"), value.get());
+        d->exifMetadata["Exif.GPSInfo.GPSLongitude"] = scratchBuf; 
     
         return true;
     }
