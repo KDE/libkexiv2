@@ -1,6 +1,6 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
- *          Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Authors: Gilles Caulier 
+ *          Marcel Wiesweg 
  * Date   : 2006-09-15
  * Description : Exiv2 library interface for KDE
  *

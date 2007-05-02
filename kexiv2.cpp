@@ -1,6 +1,6 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
- *          Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Authors: Gilles Caulier 
+ *          Marcel Wiesweg 
  * Date   : 2006-09-15
  * Description : Exiv2 library interface for KDE
  *
@@ -344,13 +344,15 @@ bool KExiv2::setIptc(Exiv2::DataBuf const data)
 
 bool KExiv2::load(const QString& filePath)
 {
-    try
-    {   
-        d->filePath = filePath;
- 
-        if (filePath.isEmpty())
-            return false;
+    QFileInfo finfo(filePath);
+    if (filePath.isEmpty() || !finfo.isReadable())
+    {
+        qDebug("File '%s' is not readable.", finfo.fileName().ascii());
+        return false;
+    }
 
+    try
+    {
         Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
                                       (QFile::encodeName(filePath)));
         image->readMetadata();
@@ -366,6 +368,8 @@ bool KExiv2::load(const QString& filePath)
         // Iptc metadata ----------------------------------
         
         d->iptcMetadata = image->iptcData();
+
+        d->filePath = filePath;
 
         return true;
     }
