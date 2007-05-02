@@ -1,6 +1,6 @@
 /* ============================================================
- * Authors: Laurent Montel <montel@kde.org>
- * Date   : 2005-09-15
+ * Authors     : Laurent Montel <montel@kde.org>
+ * Date        : 2005-09-15
  * Description : Exiv2 library interface
  *
  * Copyright 2005 by Laurent Montel <montel@kde.org>

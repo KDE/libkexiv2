@@ -1,7 +1,7 @@
 /* ============================================================
- * Authors: Gilles Caulier 
- *          Marcel Wiesweg 
- * Date   : 2006-09-15
+ * Authors     : Gilles Caulier 
+ *               Marcel Wiesweg 
+ * Date        : 2006-09-15
  * Description : Exiv2 library interface for KDE
  *
  * Copyright 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
