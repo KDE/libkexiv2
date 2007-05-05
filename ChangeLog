@@ -1,8 +1,8 @@
 v 0.1.3 - 2007-05-05
 ----------------------------------------------------------------------------
 	* [r658899] BUG:144455
-	thanks a lot to Stéphane Pontier
-
+	thanks a lot to Stéphane Pontier, corrected a lot of spelling errors 
+	and missing mails
 	M /trunk/extragear/libs/libkexiv2/libkexiv2_export.h
 	M /trunk/extragear/libs/libkexiv2/kexiv2.cpp
 	M /trunk/extragear/libs/libkexiv2/version.h
