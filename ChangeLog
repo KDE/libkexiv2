@@ -1,3 +1,25 @@
+v 0.1.3 - 2007-05-05
+----------------------------------------------------------------------------
+	* [r658899] BUG:144455
+	thanks a lot to Stéphane Pontier
+
+	M /trunk/extragear/libs/libkexiv2/libkexiv2_export.h
+	M /trunk/extragear/libs/libkexiv2/kexiv2.cpp
+	M /trunk/extragear/libs/libkexiv2/version.h
+	M /trunk/extragear/libs/libkexiv2/kexiv2.h
+
+	* [r658847] GPS problem solved. BUG:144604
+	M /trunk/extragear/libs/libkexiv2/kexiv2.cpp
+
+Gilles patch
+	* [r658711]M /trunk/extragear/libs/libkexiv2/libkexiv2.pc.in
+	M /trunk/extragear/libs/libkexiv2/kexiv2.cpp
+	M /trunk/extragear/libs/libkexiv2/libkexiv2.lsm
+	M /trunk/extragear/libs/libkexiv2/version.h
+	M /trunk/extragear/libs/libkexiv2/NEWS
+	M /trunk/extragear/libs/libkexiv2/README
+	M /trunk/extragear/libs/libkexiv2/kexiv2.h
+
 V 0.1.2 - 2007-04-07
 ----------------------------------------------------------------------------
 2007-03-26 07:54  cgilles

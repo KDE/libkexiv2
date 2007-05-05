@@ -5,7 +5,7 @@ New features
                moved depreceate protected methods used by digiKam core to private.
 
 Bugs fixed from B.K.O (http://bugs.kde.org):
-001 ==> 144604: Rotation causes Exif data corruption.
+001 ==> 144604: Rotation causes Exif data corruption. GPS data fix
 
 General       : Make size of icons used in album icon view more configurable using a slider 
                 in status bar. 
