@@ -6,6 +6,6 @@ includedir=@includedir@
 Name: libkexiv2
 Description: KDE wrapper library for Exiv2 library with some extras
 Requires:
-Version: 0.1.3
+Version: 0.1.4
 Libs: -L${libdir} -lkexiv2
 Cflags: -I${includedir}
