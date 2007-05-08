@@ -1,6 +1,22 @@
+V 0.1.5 - 2007-05-08
+----------------------------------------------------------------------------
+Fixing: libtools version info again, we found not to be back compatible
+	with libkexiv 0.1.1, unfortunately since 0.1.2 version.
+
+----------------------------------------------------------------------------
 V 0.1.4 - 2007-05-06
 ----------------------------------------------------------------------------
 Fixing: libtools version info
+
+2007-05-06 21:23  anaselli
+
+	* [r661885] libkexiv2/ChangeLog, libkexiv2/Makefile.am,
+	  libkexiv2/libkexiv2.lsm, libkexiv2/libkexiv2.pc.in,
+	  libkexiv2/version.h:
+	  Release 0.1.4
+	  - fix libtools version-info
+	  
+	  CCMAIL: kde-imaging@kde.org, digikam-devel@kde.org
 
 2007-05-06 21:14  anaselli
 
