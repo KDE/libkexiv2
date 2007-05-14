@@ -1,11 +1,13 @@
 /* ============================================================
- * Authors     : Gilles Caulier 
- *               Marcel Wiesweg 
+ *
+ * This file is a part of kipi-plugins project
+ * http://www.kipi-plugins.org
+ *
  * Date        : 2006-09-15
  * Description : Exiv2 library interface for KDE
  *
- * Copyright 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * NOTE: Do not use kdDebug() in this implementation because 
  *       it will be multithreaded. Use qDebug() instead. 
