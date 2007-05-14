@@ -1,9 +1,12 @@
 /* ============================================================
- * Authors     : Gilles Caulier 
+ *
+ * This file is a part of kipi-plugins project
+ * http://www.kipi-plugins.org
+ *
  * Date        : 2007-02-06
- * Description : libkexiv2 release ID header.
- * 
- * Copyright 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Description : Exiv2 library interface for KDE
+ *
+ * Copyright (C) 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -14,7 +17,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifndef KEXIV2_VERSION_H
