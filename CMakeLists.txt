@@ -38,6 +38,8 @@ install(TARGETS kexiv2 DESTINATION ${LIB_INSTALL_DIR}} )
 install(FILES kexiv2.h libkexiv2_export.h version.h DESTINATION ${INCLUDES_INSTALL_DIR}/libkexiv2)
 
 
+####################################################################################################"
+
 #original Makefile.am contents follow:
 
 #METASOURCES = AUTO
