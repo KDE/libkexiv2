@@ -2379,6 +2379,10 @@ QString KExiv2::detectEncodingAndDecode(const std::string &value)
     //QTextCodec *utf8Codec   = QTextCodec::codecForName("utf8");
     QTextCodec *localCodec  = QTextCodec::codecForLocale();
 
+/*
+    FIXME: Marcel, QTextCodec::heuristicContentMatch method has disapear in Qt4.
+           I don't know how to fix it actually. Please take a look...
+
     // make heuristic match
     int latin1Score = latin1Codec->heuristicContentMatch(value.c_str(), value.length());
     int localScore  = localCodec->heuristicContentMatch(value.c_str(), value.length());
@@ -2394,7 +2398,7 @@ QString KExiv2::detectEncodingAndDecode(const std::string &value)
             length = strlen(value.c_str());
         return localCodec->toUnicode(value.c_str(), length);
     }
-    else
+    else*/
         return QString::fromLatin1(value.c_str());
 }
 
