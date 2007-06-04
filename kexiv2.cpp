@@ -385,8 +385,8 @@ bool KExiv2::save(const QString& filePath)
         return false;
 
     // NOTE: see B.K.O #137770 & #138540 : never touch the file if is read only.
-    QFileInfo finfo(filePath); 
-    QFileInfo dinfo(finfo.dirPath()); 
+    QFileInfo finfo(filePath);
+    QFileInfo dinfo(finfo.path());
     if (!finfo.isWritable())
     {
         qDebug("File '%s' is read-only. Metadata not saved.", finfo.fileName().toAscii().constData());
@@ -444,8 +444,8 @@ bool KExiv2::applyChanges()
 bool KExiv2::isReadOnly(const QString& filePath)
 {
     QFileInfo fi(filePath);
-    QString ext = fi.extension(false).upper();
-    
+    QString ext = fi.completeSuffix().toUpper();
+
     if (ext != QString("JPG") && ext != QString("JPEG") && ext != QString("JPE"))
         return true;
 
@@ -456,8 +456,8 @@ bool KExiv2::setImageProgramId(const QString& program, const QString& version)
 {
     try
     {
-	// Record program info in Exif.Image.ProcessingSoftware tag (only available with Exiv2 >= 0.14.0).
-    
+        // Record program info in Exif.Image.ProcessingSoftware tag (only available with Exiv2 >= 0.14.0).
+
 #ifdef EXIV2_CHECK_VERSION 
         if (EXIV2_CHECK_VERSION(0,14,0))
         {
@@ -469,20 +469,20 @@ bool KExiv2::setImageProgramId(const QString& program, const QString& version)
 #endif
 
         // See B.K.O #142564: Check if Exif.Image.Software already exist. If yes, do not touch this tag.
-            
+
         if (!d->exifMetadata.empty())
-	{
+        {
             Exiv2::ExifData exifData(d->exifMetadata);
             Exiv2::ExifKey key("Exif.Image.Software");
             Exiv2::ExifData::iterator it = exifData.findKey(key);
-       
+
             if (it == exifData.end())
-	    {
+            {
                 QString software(program);
                 software.append("-");
                 software.append(version);
                 d->exifMetadata["Exif.Image.Software"]      = software.toAscii().constData();
-	    }
+            }
 	}
 
 	// Record program info in IPTC tags.
@@ -505,21 +505,21 @@ QSize KExiv2::getImageDimensions() const
         return QSize();
 
     try
-    {    
+    {
         long width=-1, height=-1;
 
         // Try to get Exif.Photo tags
-        
+
         Exiv2::ExifData exifData(d->exifMetadata);
         Exiv2::ExifKey key("Exif.Photo.PixelXDimension");
         Exiv2::ExifData::iterator it = exifData.findKey(key);
-       
+
         if (it != exifData.end())
             width = it->toLong();
 
         Exiv2::ExifKey key2("Exif.Photo.PixelYDimension");
         Exiv2::ExifData::iterator it2 = exifData.findKey(key2);
-        
+
         if (it2 != exifData.end())
             height = it2->toLong();
 
@@ -527,30 +527,30 @@ QSize KExiv2::getImageDimensions() const
             return QSize(width, height);
 
         // Try to get Exif.Image tags
-                
-        width=-1;
-        height=-1;
+
+        width  = -1;
+        height = -1;
 
         Exiv2::ExifKey key3("Exif.Image.ImageWidth");
         Exiv2::ExifData::iterator it3 = exifData.findKey(key3);
-       
+
         if (it3 != exifData.end())
             width = it3->toLong();
 
         Exiv2::ExifKey key4("Exif.Image.ImageLength");
         Exiv2::ExifData::iterator it4 = exifData.findKey(key4);
-        
+
         if (it4 != exifData.end())
             height = it4->toLong();
-        
+
         if (width != -1 && height != -1)
             return QSize(width, height);
     }
     catch( Exiv2::Error &e )
     {
         printExiv2ExceptionError("Cannot parse image dimensions tag using Exiv2 ", e);
-    }        
-    
+    }
+
     return QSize();
 }
 
@@ -560,7 +560,7 @@ bool KExiv2::setImageDimensions(const QSize& size, bool setProgramName)
         return false;
 
     try
-    {    
+    {
         // NOTE: see B.K.O #144604: you a cast to record an unsigned integer value.
         d->exifMetadata["Exif.Image.ImageWidth"]      = static_cast<uint32_t>(size.width());
         d->exifMetadata["Exif.Image.ImageLength"]     = static_cast<uint32_t>(size.height());
@@ -571,23 +571,23 @@ bool KExiv2::setImageDimensions(const QSize& size, bool setProgramName)
     catch( Exiv2::Error &e )
     {
         printExiv2ExceptionError("Cannot set image dimensions using Exiv2 ", e);
-    }        
-    
+    }
+
     return false;
 }
 
 QImage KExiv2::getExifThumbnail(bool fixOrientation) const
 {
     QImage thumbnail;
-    
+
     if (d->exifMetadata.empty())
        return thumbnail;
-    
+
     try
-    {    
+    {
         Exiv2::DataBuf const c1(d->exifMetadata.copyThumbnail());
         thumbnail.loadFromData(c1.pData_, c1.size_);
-        
+
         if (!thumbnail.isNull())
         {
             if (fixOrientation)
@@ -597,50 +597,50 @@ QImage KExiv2::getExifThumbnail(bool fixOrientation) const
                 Exiv2::ExifData::iterator it = exifData.findKey(key);
                 if (it != exifData.end())
                 {
-                    QWMatrix matrix;
+                    QMatrix matrix;
                     long orientation = it->toLong();
                     qDebug("Exif Thumbnail Orientation: %i", (int)orientation);
-                    
+
                     switch (orientation) 
                     {
                         case ORIENTATION_HFLIP:
                             matrix.scale(-1, 1);
                             break;
-                    
+
                         case ORIENTATION_ROT_180:
                             matrix.rotate(180);
                             break;
-                    
+
                         case ORIENTATION_VFLIP:
                             matrix.scale(1, -1);
                             break;
-                    
+
                         case ORIENTATION_ROT_90_HFLIP:
                             matrix.scale(-1, 1);
                             matrix.rotate(90);
                             break;
-                    
+
                         case ORIENTATION_ROT_90:
                             matrix.rotate(90);
                             break;
-                    
+
                         case ORIENTATION_ROT_90_VFLIP:
                             matrix.scale(1, -1);
                             matrix.rotate(90);
                             break;
-                    
+
                         case ORIENTATION_ROT_270:
                             matrix.rotate(270);
                             break;
-                            
+
                         default:
                             break;
                     }
-        
+
                     if ( orientation != ORIENTATION_NORMAL )
-                        thumbnail = thumbnail.xForm( matrix );
+                        thumbnail = thumbnail.transformed( matrix );
                 }
-                    
+
                 return thumbnail;
             }
         }
@@ -648,8 +648,8 @@ QImage KExiv2::getExifThumbnail(bool fixOrientation) const
     catch( Exiv2::Error &e )
     {
         printExiv2ExceptionError("Cannot get Exif Thumbnail using Exiv2 ", e);
-    }        
-    
+    }
+
     return thumbnail;
 }
 
@@ -1103,7 +1103,7 @@ bool KExiv2::setImagePreview(const QImage& preview, bool setProgramName)
         preview.save(previewFile.name(), "JPEG");
 
         QFile file(previewFile.name());
-        if ( !file.open(IO_ReadOnly) ) 
+        if ( !file.open(QIODevice::ReadOnly) ) 
             return false;
 
         qDebug("(%i x %i) JPEG image preview size: %i bytes", 
