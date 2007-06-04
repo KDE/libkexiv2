@@ -2,11 +2,11 @@ project(libkexiv2)
 
 find_package(KDE4 REQUIRED)
 
-include_directories(${KDE4_INCLUDE} ${QT4_INCLUDE})
+include_directories(${KDE4_INCLUDES} ${QT4_INCLUDES})
 
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
-#set(CMAKE_VERBOSE_MAKEFILE ON)
+set(CMAKE_VERBOSE_MAKEFILE ON)
 
 #FIND_PACKAGE(Exiv2 REQUIRED)
 

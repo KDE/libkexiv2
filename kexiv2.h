@@ -34,7 +34,7 @@
 
 // QT includes.
 
-#include <QCstring>
+#include <QByteArray>
 #include <QString>
 #include <QImage>
 #include <QDateTime>

@@ -37,10 +37,10 @@
 // Qt includes.
 
 #include <QFile>
-#include <QOmage>
+#include <QImage>
 #include <QSize>
 #include <QTextCodec>
-#include <QWmatrix>
+#include <QMatrix>
 #include <QFileInfo>
 
 // KDE includes.
