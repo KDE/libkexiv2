@@ -28,9 +28,15 @@ just use something like that:
 
 # export QTDIR=/usr/lib/qt4/  
 # export PATH=$QTDIR/bin:$PATH 
-# cmake .
+# cmake ../
 # make
 
-CMake options :
+Common CMake options :
 
-cmake -DCMAKE_INSTALL_PREFIX=folder_to_install
+-DCMAKE_INSTALL_PREFIX : cmake ../ -DCMAKE_INSTALL_PREFIX=/usr/lib is the equivalent to ./configure --prefix=/usr/lib 
+-DCMAKE_BUILD_TYPE     : decide which type of build you want. You can chose between "debugfull", "debug", "profile", "relwithdebinfo" and "release". 
+The default is "relwithdebinfo" (-O2 -g). 
+
+More details can be found ata this url: http://techbase.kde.org/Development/Tutorials/CMake#Environment_Variables
+
+
