@@ -2,11 +2,11 @@ EXIV2 Library interface for KDE
 
 This library is a part of Kipi-Plugins project (http://www.kipi-plugins.org)
 
--- AUTHORS -----------------------------------------------------------
+-- AUTHORS ------------------------------------------------------------
 
 See AUTHORS file for details.
 
--- ABOUT -------------------------------------------------------------
+-- ABOUT --------------------------------------------------------------
 
 Libkexiv2 is a wrapper around Exiv2 library to manipulate pictures metadata.
 
@@ -21,3 +21,6 @@ libqt      >= 4.2.x                     http://www.trolltech.com
 libkde     >= 4.0.x                     http://www.kde.org
 libexiv2   >= 0.12  (0.14 recommended)  http://www.exiv2.org
 
+-- OPTIONS ------------------------------------------------------------
+
+cmake -DCMAKE_INSTALL_PREFIX=folder_to_install
