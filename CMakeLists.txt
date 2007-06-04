@@ -10,14 +10,13 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 
 link_directories(${KDE4_LIB_DIR})
 
+
+# FIXME: Detect Exiv2 library properlly with CMake script from 'cmake/modules'
+#
 #FIND_PACKAGE(Exiv2 REQUIRED)
-
-#ADD_DEFINITIONS(${QT_DEFINITIONS} ${KDE4_DEFINITIONS} ${EXIV2_DEFINITIONS} ${KDE4_ENABLE_EXCEPTIONS})
-#ADD_DEFINITIONS(${QT_DEFINITIONS} ${KDE4_DEFINITIONS} ${KDE4_ENABLE_EXCEPTIONS})
-
-
+#
 #SET( CMAKE_MODULE_PATH    ${CMAKE_MODULE_PATH}
- #                         ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules )
+#                          ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules )
 
 ########### next target ###############
 
@@ -27,11 +26,10 @@ kde4_automoc(${kexiv2_LIB_SRCS})
 
 kde4_add_library(kexiv2 SHARED ${kexiv2_LIB_SRCS})
 
-#TARGET_LINK_LIBRARIES(kexiv2 ${QT_AND_KDECORE_LIBS} exiv2)
 target_link_libraries(kexiv2 ${KDE4_KDECORE_LIBS} exiv2)
 
-
 set_target_properties(kexiv2 PROPERTIES VERSION 2.1.0 SOVERSION 2 )
+
 install(TARGETS kexiv2 DESTINATION ${LIB_INSTALL_DIR}} )
 
 ########### install files ###############

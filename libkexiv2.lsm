@@ -1,6 +1,6 @@
 Begin4
 Title: libkexiv2
-Version: 0.1.6
+Version: 0.2.0
 Entered-date: 2007-05-08
 Description: An library to manipulate EXIF/IPTC information using Exiv2 library
 Keywords: kde image jpeg raw tiff png exif iptc digikam kipi-plugins
