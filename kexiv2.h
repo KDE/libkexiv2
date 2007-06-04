@@ -34,11 +34,11 @@
 
 // QT includes.
 
-#include <qcstring.h>
-#include <qstring.h>
-#include <qimage.h>
-#include <qdatetime.h>
-#include <qmap.h>
+#include <QCstring>
+#include <QString>
+#include <QImage>
+#include <QDateTime>
+#include <QMap>
 
 // Local includes.
 

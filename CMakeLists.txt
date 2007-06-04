@@ -1,40 +1,41 @@
-PROJECT(libkexiv2)
+project(libkexiv2)
 
-SET(CMAKE_VERBOSE_MAKEFILE ON)
+find_package(KDE4 REQUIRED)
 
-FIND_PACKAGE(Exiv2 REQUIRED)
-FIND_PACKAGE(KDE3 REQUIRED)
+include_directories(${KDE4_INCLUDE} ${QT4_INCLUDE})
 
+add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
-ADD_DEFINITIONS(${QT_DEFINITIONS} ${KDE3_DEFINITIONS} ${EXIV2_DEFINITIONS})
+#set(CMAKE_VERBOSE_MAKEFILE ON)
 
-LINK_DIRECTORIES(${KDE3_LIB_DIR})
+#FIND_PACKAGE(Exiv2 REQUIRED)
 
-INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${KDE3_INCLUDE_DIR} ${QT_INCLUDE_DIR} ${EXIV2_INCLUDE_DIR} )
+#ADD_DEFINITIONS(${QT_DEFINITIONS} ${KDE4_DEFINITIONS} ${EXIV2_DEFINITIONS} ${KDE4_ENABLE_EXCEPTIONS})
+#ADD_DEFINITIONS(${QT_DEFINITIONS} ${KDE4_DEFINITIONS} ${KDE4_ENABLE_EXCEPTIONS})
 
-SET( CMAKE_MODULE_PATH    ${CMAKE_MODULE_PATH}
-                          ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules )
+#LINK_DIRECTORIES(${KDE4_LIB_DIR})
+
+#SET( CMAKE_MODULE_PATH    ${CMAKE_MODULE_PATH}
+ #                         ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules )
 
 ########### next target ###############
 
-SET(kexiv2_LIB_SRCS
-   kexiv2.cpp
-   )
+set(kexiv2_LIB_SRCS kexiv2.cpp)
 
-KDE3_AUTOMOC(${kexiv2_LIB_SRCS})
+kde4_automoc(${kexiv2_LIB_SRCS})
 
-ADD_LIBRARY(kexiv2 SHARED ${kexiv2_LIB_SRCS})
+kde4_add_library(kexiv2 SHARED ${kexiv2_LIB_SRCS})
 
-TARGET_LINK_LIBRARIES(kexiv2 ${QT_AND_KDECORE_LIBS} exiv2)
+#TARGET_LINK_LIBRARIES(kexiv2 ${QT_AND_KDECORE_LIBS} exiv2)
+target_link_libraries(kexiv2 ${KDE4_KDECORE_LIBS} exiv2)
 
-SET_TARGET_PROPERTIES(kexiv2 PROPERTIES VERSION 2.1.0 SOVERSION 2 )
-INSTALL(TARGETS kexiv2 DESTINATION lib} )
+
+set_target_properties(kexiv2 PROPERTIES VERSION 2.1.0 SOVERSION 2 )
+install(TARGETS kexiv2 DESTINATION ${LIB_INSTALL_DIR}} )
 
 ########### install files ###############
 
-INSTALL_FILES( FILES  libkexiv2.pc )
-INSTALL_FILES( /include/libkexiv2 FILES kexiv2.h libkexiv2_export.h version.h )
-
+install(FILES kexiv2.h libkexiv2_export.h version.h DESTINATION ${INCLUDES_INSTALL_DIR}/libkexiv2)
 
 
 #original Makefile.am contents follow:
