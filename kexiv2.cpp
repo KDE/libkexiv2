@@ -1259,9 +1259,9 @@ QByteArray KExiv2::getExifTagData(const char* exifTagName) const
         Exiv2::ExifData::iterator it = exifData.findKey(exifKey);
         if (it != exifData.end())
         {
-            QByteArray data((*it).size());
-            if (data.size())
-                (*it).copy((Exiv2::byte*)data.data(), exifData.byteOrder());
+            char *s = new char[(*it).size()];
+            (*it).copy((Exiv2::byte*)s, Exiv2::bigEndian);
+            QByteArray data = QByteArray::fromRawData(s, (*it).size());
             return data;
         }
     }
@@ -1283,9 +1283,9 @@ QByteArray KExiv2::getIptcTagData(const char *iptcTagName) const
         Exiv2::IptcData::iterator it = iptcData.findKey(iptcKey);
         if (it != iptcData.end())
         {
-            QByteArray data((*it).size());
-            if (data.size())
-                (*it).copy((Exiv2::byte*)data.data(), Exiv2::bigEndian);
+            char *s = new char[(*it).size()];
+            (*it).copy((Exiv2::byte*)s, Exiv2::bigEndian);
+            QByteArray data = QByteArray::fromRawData(s, (*it).size());
             return data;
         }
     }

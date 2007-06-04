@@ -39,6 +39,7 @@
 #include <QImage>
 #include <QDateTime>
 #include <QMap>
+#include <QStringList>
 
 // Local includes.
 
