@@ -6,15 +6,10 @@ add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
-link_directories(${KDE4_LIB_DIR})
-
-
 # FIXME: Detect Exiv2 library properlly with CMake script from 'cmake/modules'
 #
-#FIND_PACKAGE(Exiv2 REQUIRED)
-#
-#SET( CMAKE_MODULE_PATH    ${CMAKE_MODULE_PATH}
-#                          ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules )
+SET( CMAKE_MODULE_PATH    ${CMAKE_MODULE_PATH}  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules )
+FIND_PACKAGE(Exiv2 REQUIRED)
 
 ########### next target ###############
 
