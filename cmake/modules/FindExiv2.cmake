@@ -28,7 +28,7 @@ else (EXIV2_INCLUDE_DIR AND EXIV2_LIBRARIES)
     /usr/local/include
   )
   
-  FIND_LIBRARY(EXIV2_LIBRARIES NAMES libexiv2
+  FIND_LIBRARY(EXIV2_LIBRARIES NAMES exiv2
     PATHS
     ${_EXIV2LinkDir}
     /usr/lib
