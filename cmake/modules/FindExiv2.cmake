@@ -1,10 +1,10 @@
 # - Try to find the Exiv2 library
 # Once done this will define
 #
-#  NJB_FOUND - system has libnjb
-#  NJB_INCLUDE_DIR - the libnjb include directory
-#  NJB_LIBRARIES - Link these to use libnjb
-#  NJB_DEFINITIONS - Compiler switches required for using libnjb
+#  EXIV2_FOUND - system has libexiv2
+#  EXIV2_INCLUDE_DIR - the libexiv2 include directory
+#  EXIV2_LIBRARIES - Link these to use libexiv2
+#  EXIV2_DEFINITIONS - Compiler switches required for using libexiv2
 #
 
 if (EXIV2_INCLUDE_DIR AND EXIV2_LIBRARIES)
@@ -40,15 +40,16 @@ else (EXIV2_INCLUDE_DIR AND EXIV2_LIBRARIES)
   endif (EXIV2_INCLUDE_DIR AND EXIV2_LIBRARIES)
   
   if (EXIV2_FOUND)
-    if (NOT EXIV2_FIND_QUIETLY)
+    if (NOT Exiv2_FIND_QUIETLY)
       message(STATUS "Found Exiv2: ${EXIV2_LIBRARIES}")
-    endif (NOT EXIV2_FIND_QUIETLY)
+    endif (NOT Exiv2_FIND_QUIETLY)
   else (EXIV2_FOUND)
-    if (EXIV2_FIND_REQUIRED)
+    if (Exiv2_FIND_REQUIRED)
       message(FATAL_ERROR "Could NOT find Exiv2")
-    endif (EXIV2_FIND_REQUIRED)
+    endif (Exiv2_FIND_REQUIRED)
   endif (EXIV2_FOUND)
   
   MARK_AS_ADVANCED(EXIV2_INCLUDE_DIR EXIV2_LIBRARIES)
   
 endif (EXIV2_INCLUDE_DIR AND EXIV2_LIBRARIES)
+
