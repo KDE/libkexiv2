@@ -1,7 +1,5 @@
 project(libkexiv2)
 
-find_package(KDE4 REQUIRED)
-
 include_directories(${KDE4_INCLUDES} ${QT4_INCLUDES})
 
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
