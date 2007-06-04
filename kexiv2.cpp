@@ -46,7 +46,7 @@
 
 // KDE includes.
 
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kstringhandler.h>
 #include <kdeversion.h>
 
@@ -661,11 +661,12 @@ bool KExiv2::setExifThumbnail(const QImage& thumb, bool setProgramName)
 
     try
     {   
-        KTempFile thumbFile(QString::null, "KExiv2ExifThumbnail");
-        thumbFile.setAutoDelete(true);
-        thumb.save(thumbFile.name(), "JPEG");
+        KTemporaryFile thumbFile;
+        thumbFile.setSuffix("KExiv2ExifThumbnail");
+        thumbFile.setAutoRemove(true);
+        thumb.save(thumbFile.fileName(), "JPEG");
 
-        const std::string &fileName( (const char*)(QFile::encodeName(thumbFile.name())) );
+        const std::string &fileName( (const char*)(QFile::encodeName(thumbFile.fileName())) );
         d->exifMetadata.setJpegThumbnail( fileName );
         return true;
     }
@@ -1098,12 +1099,13 @@ bool KExiv2::setImagePreview(const QImage& preview, bool setProgramName)
 
     try
     {
-        KTempFile previewFile(QString::null, "KExiv2ImagePreview");
-        previewFile.setAutoDelete(true);
+        KTemporaryFile previewFile;
+        previewFile.setSuffix("KExiv2ImagePreview");
+        previewFile.setAutoRemove(true);
         // A little bit compressed preview jpeg image to limit IPTC size.
-        preview.save(previewFile.name(), "JPEG");
+        preview.save(previewFile.fileName(), "JPEG");
 
-        QFile file(previewFile.name());
+        QFile file(previewFile.fileName());
         if ( !file.open(QIODevice::ReadOnly) ) 
             return false;
 
