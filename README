@@ -28,12 +28,12 @@ just use something like that:
 
 # export QTDIR=/usr/lib/qt4/  
 # export PATH=$QTDIR/bin:$PATH 
-# cmake ../
+# cmake .
 # make
 
 Common CMake options :
 
--DCMAKE_INSTALL_PREFIX : cmake ../ -DCMAKE_INSTALL_PREFIX=/usr/lib is the equivalent to ./configure --prefix=/usr/lib 
+-DCMAKE_INSTALL_PREFIX : cmake . -DCMAKE_INSTALL_PREFIX=/usr is the equivalent to ./configure --prefix=/usr 
 -DCMAKE_BUILD_TYPE     : decide which type of build you want. You can chose between "debugfull", "debug", "profile", "relwithdebinfo" and "release". 
 The default is "relwithdebinfo" (-O2 -g). 
 
