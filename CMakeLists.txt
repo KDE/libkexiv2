@@ -19,7 +19,7 @@ kde4_automoc(${kexiv2_LIB_SRCS})
 
 kde4_add_library(kexiv2 SHARED ${kexiv2_LIB_SRCS})
 
-target_link_libraries(kexiv2 ${KDE4_KDECORE_LIBS} exiv2)
+target_link_libraries(kexiv2 ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY} exiv2)
 
 set_target_properties(kexiv2 PROPERTIES VERSION 3.0.0 SOVERSION 3 )
 
