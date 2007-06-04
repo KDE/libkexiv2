@@ -16,9 +16,8 @@ The library documentation is available on header files.
 
 -- DEPENDENCIES -------------------------------------------------------
 
-AutoConf   >= 2.5.x                        http://www.gnu.org/software/autoconf
-AutoMake   >= 1.7.x                        http://www.gnu.org/software/automake
-libqt      >= 3.3.x                        http://www.trolltech.com
-libkde     >= 3.4.x (>=3.5.x recommended)  http://www.kde.org
-libexiv2   >= 0.12  (0.14 recommended)     http://www.exiv2.org
+CMake      >= 2.4.x                     http://www.cmake.org
+libqt      >= 4.2.x                     http://www.trolltech.com
+libkde     >= 4.0.x                     http://www.kde.org
+libexiv2   >= 0.12  (0.14 recommended)  http://www.exiv2.org
 
