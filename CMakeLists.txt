@@ -21,7 +21,7 @@ kde4_add_library(kexiv2 SHARED ${kexiv2_LIB_SRCS})
 
 target_link_libraries(kexiv2 ${KDE4_KDECORE_LIBS} exiv2)
 
-set_target_properties(kexiv2 PROPERTIES VERSION 2.1.0 SOVERSION 2 )
+set_target_properties(kexiv2 PROPERTIES VERSION 3.0.0 SOVERSION 3 )
 
 install(TARGETS kexiv2 DESTINATION ${LIB_INSTALL_DIR} )
 
