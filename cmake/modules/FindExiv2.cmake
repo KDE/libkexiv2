@@ -22,7 +22,7 @@ else (EXIV2_INCLUDE_DIR AND EXIV2_LIBRARIES)
   
   set(EXIV2_DEFINITIONS ${_EXIV2Cflags})
  
-  FIND_PATH(EXIV2_INCLUDE_DIR tags.hpp
+  FIND_PATH(EXIV2_INCLUDE_DIR exiv2/exiv2_version.h
     ${_EXIV2IncDir}
     /usr/include
     /usr/local/include
