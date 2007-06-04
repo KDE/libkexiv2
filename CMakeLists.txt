@@ -1,15 +1,14 @@
 project(libkexiv2)
 
-include_directories(${KDE4_INCLUDES} ${QT4_INCLUDES})
 
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
-
-set(CMAKE_VERBOSE_MAKEFILE ON)
 
 # FIXME: Detect Exiv2 library properlly with CMake script from 'cmake/modules'
 #
 SET( CMAKE_MODULE_PATH    ${CMAKE_MODULE_PATH}  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules )
 FIND_PACKAGE(Exiv2 REQUIRED)
+
+include_directories(${KDE4_INCLUDES} ${QT4_INCLUDES})
 
 ########### next target ###############
 
@@ -27,5 +26,5 @@ install(TARGETS kexiv2 DESTINATION ${LIB_INSTALL_DIR} )
 
 ########### install files ###############
 
-install(FILES kexiv2.h libkexiv2_export.h version.h DESTINATION ${INCLUDES_INSTALL_DIR}/libkexiv2)
+install(FILES kexiv2.h libkexiv2_export.h version.h DESTINATION ${INCLUDE_INSTALL_DIR}/libkexiv2)
 
