@@ -1608,7 +1608,7 @@ KExiv2::MetaDataMap KExiv2::getIptcTagsDataList(const QStringList iptcKeysFilter
                         QString v = *it;
                         v.append(", ");
                         v.append(value);
-                        metaDataMap.replace(key, v);
+                        metaDataMap.insert(key, v);
                     }                
                 }
             }
@@ -1623,7 +1623,7 @@ KExiv2::MetaDataMap KExiv2::getIptcTagsDataList(const QStringList iptcKeysFilter
                         QString v = *it;
                         v.append(", ");
                         v.append(value);
-                        metaDataMap.replace(key, v);
+                        metaDataMap.insert(key, v);
                     }                
                 }
             }
@@ -2022,7 +2022,7 @@ bool KExiv2::setImageKeywords(const QStringList& oldKeywords, const QStringList&
             key.truncate(64);
             
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::asciiString);
-            val->read(key.latin1());
+            val->read(key.toLatin1().constData());
             iptcData.add(iptcTag, val.get());        
         }
 
@@ -2105,7 +2105,7 @@ bool KExiv2::setImageSubjects(const QStringList& oldSubjects, const QStringList&
             key.truncate(236);
             
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::asciiString);
-            val->read(key.latin1());
+            val->read(key.toLatin1().constData());
             iptcData.add(iptcTag, val.get());        
         }
 
@@ -2189,7 +2189,7 @@ bool KExiv2::setImageSubCategories(const QStringList& oldSubCategories, const QS
             key.truncate(32);
             
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::asciiString);
-            val->read(key.latin1());
+            val->read(key.toLatin1().constData());
             iptcData.add(iptcTag, val.get());        
         }
 
@@ -2220,7 +2220,7 @@ QString KExiv2::getExifComment() const
                 QString exifComment = convertCommentValue(*it);
 
                 // some cameras fill the UserComment with whitespace
-                if (!exifComment.isEmpty() && !exifComment.stripWhiteSpace().isEmpty())
+                if (!exifComment.isEmpty() && !exifComment.trimmed().isEmpty())
                     return exifComment;
             }
         }
@@ -2249,7 +2249,7 @@ bool KExiv2::setExifComment(const QString& comment, bool setProgramName)
     {
         // write as ASCII
         std::string exifComment("charset=\"Ascii\" ");
-        exifComment += comment.latin1();
+        exifComment += comment.toLatin1().constData();
         d->exifMetadata["Exif.Photo.UserComment"] = exifComment;
     }
     else
@@ -2260,7 +2260,7 @@ bool KExiv2::setExifComment(const QString& comment, bool setProgramName)
         // Null termination means \0\0, strlen does not work,
         // do not use any const-char*-only methods,
         // pass a std::string and not a const char * to ExifDatum::operator=().
-        const unsigned short *ucs2 = comment.ucs2();
+        const unsigned short *ucs2 = comment.utf16();
         std::string exifComment("charset=\"Unicode\" ");
         exifComment.append((const char*)ucs2, sizeof(unsigned short) * comment.length());
         d->exifMetadata["Exif.Photo.UserComment"] = exifComment;
@@ -2323,7 +2323,7 @@ QString KExiv2::convertCommentValue(const Exiv2::Exifdatum &exifDatum)
             // QString expects a null-terminated UCS-2 string.
             // Is it already null terminated? In any case, add termination "\0\0" for safety.
             comment.resize(comment.length() + 2, '\0');
-            return QString::fromUcs2((unsigned short *)comment.data());
+            return QString::fromUtf16((unsigned short *)comment.data());
         }
         else if (charset == "\"Jis\"")
         {
