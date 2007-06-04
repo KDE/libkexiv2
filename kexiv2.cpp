@@ -42,6 +42,7 @@
 #include <QTextCodec>
 #include <QMatrix>
 #include <QFileInfo>
+#include <QDataStream>
 
 // KDE includes.
 
@@ -1109,9 +1110,12 @@ bool KExiv2::setImagePreview(const QImage& preview, bool setProgramName)
         qDebug("(%i x %i) JPEG image preview size: %i bytes", 
                preview.width(), preview.height(), (int)file.size());
         
-        QByteArray data(file.size());
+        char *s;
+        uint  l;
         QDataStream stream( &file );
-        stream.readRawBytes(data.data(), data.size());
+        stream.readBytes(s, l);
+        QByteArray data(s, l);
+        delete [] s;
         file.close();
         
         Exiv2::DataValue val;
