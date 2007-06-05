@@ -366,7 +366,7 @@ public:
         - not include "Iop", or "Thumbnail", or "Image", or "Photo" in the Exif tag keys 
           if 'inverSelection' is true.
         */ 
-    KExiv2::MetaDataMap getExifTagsDataList(const QStringList exifKeysFilter, bool invertSelection=false);
+    KExiv2::MetaDataMap getExifTagsDataList(const QStringList &exifKeysFilter, bool invertSelection=false);
 
     /** Return a map of Iptc tags name/value found in metadata sorted by 
         Iptc keys given by 'iptcKeysFilter'. 
@@ -384,7 +384,7 @@ public:
         - not include "Envelope", or "Application2" in the Iptc tag keys 
           if 'inverSelection' is true.
         */ 
-    KExiv2::MetaDataMap getIptcTagsDataList(const QStringList iptcKeysFilter, bool invertSelection=false);
+    KExiv2::MetaDataMap getIptcTagsDataList(const QStringList &iptcKeysFilter, bool invertSelection=false);
 
     //-- Advanced methods to convert and decode data -------------------------
 

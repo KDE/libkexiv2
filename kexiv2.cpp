@@ -1513,7 +1513,7 @@ QString KExiv2::getIptcTagDescription(const char *iptcTagName)
     return QString();
 }
 
-KExiv2::MetaDataMap KExiv2::getExifTagsDataList(const QStringList exifKeysFilter, bool invertSelection)
+KExiv2::MetaDataMap KExiv2::getExifTagsDataList(const QStringList &exifKeysFilter, bool invertSelection)
 {
     if (d->exifMetadata.empty())
        return MetaDataMap();
@@ -1570,7 +1570,7 @@ KExiv2::MetaDataMap KExiv2::getExifTagsDataList(const QStringList exifKeysFilter
     return MetaDataMap();
 }
 
-KExiv2::MetaDataMap KExiv2::getIptcTagsDataList(const QStringList iptcKeysFilter, bool invertSelection)
+KExiv2::MetaDataMap KExiv2::getIptcTagsDataList(const QStringList &iptcKeysFilter, bool invertSelection)
 {
     if (d->iptcMetadata.empty())
        return MetaDataMap();
