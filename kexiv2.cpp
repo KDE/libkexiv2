@@ -664,7 +664,7 @@ bool KExiv2::setExifThumbnail(const QImage& thumb, bool setProgramName)
 
     try
     {   
-        KTempFile thumbFile(QString::null, "KExiv2ExifThumbnail");
+        KTempFile thumbFile(QString(), "KExiv2ExifThumbnail");
         thumbFile.setAutoDelete(true);
         thumb.save(thumbFile.name(), "JPEG");
 
@@ -1101,7 +1101,7 @@ bool KExiv2::setImagePreview(const QImage& preview, bool setProgramName)
 
     try
     {
-        KTempFile previewFile(QString::null, "KExiv2ImagePreview");
+        KTempFile previewFile(QString(), "KExiv2ImagePreview");
         previewFile.setAutoDelete(true);
         // A little bit compressed preview jpeg image to limit IPTC size.
         preview.save(previewFile.name(), "JPEG");
