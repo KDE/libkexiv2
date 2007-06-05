@@ -59,7 +59,7 @@ namespace KExiv2Iface
 
 class KExiv2Priv;
 
-class LIBKEXIV2_EXPORT KExiv2
+class KEXIV2_EXPORT KExiv2
 {
 
 public:

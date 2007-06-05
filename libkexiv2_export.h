@@ -6,7 +6,7 @@
  * Date        : 2005-09-15
  * Description : Exiv2 library interface for KDE
  *
- * Copyright (C) 2005 by Laurent Montel <montel@kde.org>
+ * Copyright (C) 2005,2006,2007 by Laurent Montel <montel@kde.org>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,14 +23,22 @@
 #ifndef _LIBKEXIV2_EXPORT_H
 #define _LIBKEXIV2_EXPORT_H
 
-#ifdef KDEMACROS_USABLE
 #include <kdemacros.h>
+
+#ifdef Q_WS_WIN
+
+#ifndef KEXIV2_EXPORT
+# ifdef MAKE_KEXIV2_LIB
+#  define KEXIV2_EXPORT KDE_EXPORT
+# else
+#  define KEXIV2_EXPORT KDE_IMPORT
+# endif
 #endif
 
-#ifdef KDE_EXPORT
-#define LIBKEXIV2_EXPORT KDE_EXPORT
-#else
-#define LIBKEXIV2_EXPORT
+#else // not windows
+
+#define KEXIV2_EXPORT KDE_EXPORT
+
 #endif
 
 #endif /* _LIBKEXIV2_EXPORT_H */
