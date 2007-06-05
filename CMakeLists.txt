@@ -1,10 +1,8 @@
 project(libkexiv2)
 
-
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
-# FIXME: Detect Exiv2 library properlly with CMake script from 'cmake/modules'
-#
+# Detect Exiv2 library properlly with CMake script from 'cmake/modules'
 SET( CMAKE_MODULE_PATH    ${CMAKE_MODULE_PATH}  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules )
 FIND_PACKAGE(Exiv2 REQUIRED)
 
