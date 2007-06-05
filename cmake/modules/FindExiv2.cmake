@@ -34,7 +34,7 @@ else (EXIV2_INCLUDE_DIR AND EXIV2_LIBRARIES)
   if(EXIV2_VERSION_GOOD_FOUND)
      set(EXIV2_DEFINITIONS ${_EXIV2Cflags})
  
-     FIND_PATH(EXIV2_INCLUDE_DIR exiv2/version.hpp
+     FIND_PATH(EXIV2_INCLUDE_DIR exiv2/exif.hpp
        ${_EXIV2IncDir}
        /usr/include
        /usr/local/include
