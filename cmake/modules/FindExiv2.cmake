@@ -21,13 +21,13 @@ else (EXIV2_INCLUDE_DIR AND EXIV2_LIBRARIES)
   PKGCONFIG(exiv2 _EXIV2IncDir _EXIV2LinkDir _EXIV2LinkFlags _EXIV2Cflags)
   
   if(_EXIV2LinkFlags)
-    # query pkg-config asking for a Exiv2 >= 0.12.0
-    EXEC_PROGRAM(${PKGCONFIG_EXECUTABLE} ARGS --atleast-version=0.12.0 exiv2 RETURN_VALUE _return_VALUE OUTPUT_VARIABLE _pkgconfigDevNull )
+    # query pkg-config asking for a Exiv2 >= 0.12
+    EXEC_PROGRAM(${PKGCONFIG_EXECUTABLE} ARGS --atleast-version=0.12 exiv2 RETURN_VALUE _return_VALUE OUTPUT_VARIABLE _pkgconfigDevNull )
     if(_return_VALUE STREQUAL "0")
-      message(STATUS "Found Exiv2 release >= 0.12.0")
+      message(STATUS "Found Exiv2 release >= 0.12")
     else(_return_VALUE STREQUAL "0")
         #TODO: stop script here if wrong version is found...
-      message(FATAL_ERROR "Found Exiv2 release < 0.12.0")
+      message(FATAL_ERROR "Found Exiv2 release < 0.12")
     endif(_return_VALUE STREQUAL "0")
   endif(_EXIV2LinkFlags)
 
