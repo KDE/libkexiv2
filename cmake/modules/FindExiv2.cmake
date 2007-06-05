@@ -25,46 +25,48 @@ else (EXIV2_INCLUDE_DIR AND EXIV2_LIBRARIES)
     EXEC_PROGRAM(${PKGCONFIG_EXECUTABLE} ARGS --atleast-version=0.12 exiv2 RETURN_VALUE _return_VALUE OUTPUT_VARIABLE _pkgconfigDevNull )
     if(_return_VALUE STREQUAL "0")
       message(STATUS "Found Exiv2 release >= 0.12")
+      set(EXIV2_VERSION_GOOD_FOUND TRUE)
     else(_return_VALUE STREQUAL "0")
-        #TODO: stop script here if wrong version is found...
       message(FATAL_ERROR "Found Exiv2 release < 0.12")
     endif(_return_VALUE STREQUAL "0")
   endif(_EXIV2LinkFlags)
 
-  set(EXIV2_DEFINITIONS ${_EXIV2Cflags})
+  if(EXIV2_VERSION_GOOD_FOUND)
+     set(EXIV2_DEFINITIONS ${_EXIV2Cflags})
  
-  FIND_PATH(EXIV2_INCLUDE_DIR exiv2/exiv2_version.h
-    ${_EXIV2IncDir}
-    /usr/include
-    /usr/local/include
-  )
+     FIND_PATH(EXIV2_INCLUDE_DIR exiv2/version.hpp
+       ${_EXIV2IncDir}
+       /usr/include
+       /usr/local/include
+     )
   
-  FIND_LIBRARY(EXIV2_LIBRARIES NAMES exiv2
-    PATHS
-    ${_EXIV2LinkDir}
-    /usr/lib
-    /usr/local/lib
-  )
+     FIND_LIBRARY(EXIV2_LIBRARIES NAMES exiv2
+       PATHS
+       ${_EXIV2LinkDir}
+       /usr/lib
+       /usr/local/lib
+     )
   
-  if (EXIV2_INCLUDE_DIR AND EXIV2_LIBRARIES)
-     set(EXIV2_FOUND TRUE)
-  endif (EXIV2_INCLUDE_DIR AND EXIV2_LIBRARIES)
+     if (EXIV2_INCLUDE_DIR AND EXIV2_LIBRARIES)
+        set(EXIV2_FOUND TRUE)
+     endif (EXIV2_INCLUDE_DIR AND EXIV2_LIBRARIES)
   
-  if (EXIV2_FOUND)
-    if (NOT Exiv2_FIND_QUIETLY)
-      message(STATUS "Found Exiv2: ${EXIV2_LIBRARIES}")
-    endif (NOT Exiv2_FIND_QUIETLY)
-  else (EXIV2_FOUND)
-    if (Exiv2_FIND_REQUIRED)
-      if (NOT EXIV2_INCLUDE_DIR)
-        message(FATAL_ERROR "Could NOT find Exiv2 header files")
-      endif (NOT EXIV2_INCLUDE_DIR)
-      if (NOT EXIV2_LIBRARIES)
-        message(FATAL_ERROR "Could NOT find Exiv2 library")
-      endif (NOT EXIV2_LIBRARIES)
-    endif (Exiv2_FIND_REQUIRED)
-  endif (EXIV2_FOUND)
-  
+     if (EXIV2_FOUND)
+        if (NOT Exiv2_FIND_QUIETLY)
+         message(STATUS "Found Exiv2: ${EXIV2_LIBRARIES}")
+        endif (NOT Exiv2_FIND_QUIETLY)
+     else (EXIV2_FOUND)
+       if (Exiv2_FIND_REQUIRED)
+         if (NOT EXIV2_INCLUDE_DIR)
+           message(FATAL_ERROR "Could NOT find Exiv2 header files")
+         endif (NOT EXIV2_INCLUDE_DIR)
+         if (NOT EXIV2_LIBRARIES)
+           message(FATAL_ERROR "Could NOT find Exiv2 library")
+         endif (NOT EXIV2_LIBRARIES)
+       endif (Exiv2_FIND_REQUIRED)
+     endif (EXIV2_FOUND)
+  endif(EXIV2_VERSION_GOOD_FOUND)
+
   MARK_AS_ADVANCED(EXIV2_INCLUDE_DIR EXIV2_LIBRARIES)
   
 endif (EXIV2_INCLUDE_DIR AND EXIV2_LIBRARIES)
