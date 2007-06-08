@@ -39,4 +39,19 @@ The default is "relwithdebinfo" (-O2 -g).
 
 More details can be found ata this url: http://techbase.kde.org/Development/Tutorials/CMake#Environment_Variables
 
+-- CONTACT ------------------------------------------------------------
 
+If you have questions, comments, suggestions to make do email at :
+
+kde-imaging@kde.org
+
+IMPORTANT : the bugreports and wishlist are hosted by the KDE bugs report 
+system who can be contacted by the standard Kde help menu of plugins dialog. 
+A mail will be automaticly sent to the Kipi mailing list.
+There is no need to contact directly the Kipi mailing list for a bug report 
+or a devel wish.
+
+The current Kipi bugs and devel wish reported to the Kde bugs report can be see 
+at this url :
+
+http://bugs.kde.org/buglist.cgi?product=kipiplugins&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED
