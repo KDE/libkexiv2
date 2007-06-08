@@ -26,6 +26,7 @@ libexiv2   >= 0.12  (0.14 recommended)  http://www.exiv2.org
 In order to compile, especially when QT3/Qt4 are installed at the same time, 
 just use something like that:
 
+# export VERBOSE=1
 # export QTDIR=/usr/lib/qt4/  
 # export PATH=$QTDIR/bin:$PATH 
 # cmake .
