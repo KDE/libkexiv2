@@ -1,3 +1,7 @@
+add_definitions(${KDE4_ENABLE_EXCEPTIONS})
+
+include_directories(${KDE4_INCLUDES} ${QT4_INCLUDES})
+
 set(kexiv2_LIB_SRCS kexiv2.cpp)
 
 kde4_automoc(${kexiv2_LIB_SRCS})
