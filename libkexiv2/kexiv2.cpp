@@ -445,7 +445,7 @@ bool KExiv2::applyChanges()
 bool KExiv2::isReadOnly(const QString& filePath)
 {
     QFileInfo fi(filePath);
-    QString ext = fi.completeSuffix().toUpper();
+    QString ext = fi.suffix().toUpper();
 
     if (ext != QString("JPG") && ext != QString("JPEG") && ext != QString("JPE"))
         return true;
