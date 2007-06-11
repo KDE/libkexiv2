@@ -13,13 +13,13 @@ if (EXIV2_INCLUDE_DIR AND EXIV2_LIBRARIES)
   SET(EXIV2_FOUND TRUE)
 
 else (EXIV2_INCLUDE_DIR AND EXIV2_LIBRARIES)
-
+  if (NOT WIN32)
   # use pkg-config to get the directories and then use these values
   # in the FIND_PATH() and FIND_LIBRARY() calls
   INCLUDE(UsePkgConfig)
   
   PKGCONFIG(exiv2 _EXIV2IncDir _EXIV2LinkDir _EXIV2LinkFlags _EXIV2Cflags)
-  
+
   if(_EXIV2LinkFlags)
     # query pkg-config asking for a Exiv2 >= 0.12
     EXEC_PROGRAM(${PKGCONFIG_EXECUTABLE} ARGS --atleast-version=0.12 exiv2 RETURN_VALUE _return_VALUE OUTPUT_VARIABLE _pkgconfigDevNull )
@@ -34,6 +34,11 @@ else (EXIV2_INCLUDE_DIR AND EXIV2_LIBRARIES)
       set(EXIV2_VERSION_GOOD_FOUND FALSE)
       message(FATAL_ERROR "Cannot find Exiv2 library!")
   endif(_EXIV2LinkFlags)
+  
+  else(NOT WIN32)
+     #Better check
+     set(EXIV2_VERSION_GOOD_FOUND TRUE)
+  endif (NOT WIN32)
 
   if(EXIV2_VERSION_GOOD_FOUND)
      set(EXIV2_DEFINITIONS ${_EXIV2Cflags})
@@ -44,7 +49,7 @@ else (EXIV2_INCLUDE_DIR AND EXIV2_LIBRARIES)
        /usr/local/include
      )
   
-     FIND_LIBRARY(EXIV2_LIBRARIES NAMES exiv2
+     FIND_LIBRARY(EXIV2_LIBRARIES NAMES exiv2 libexiv2
        PATHS
        ${_EXIV2LinkDir}
        /usr/lib
