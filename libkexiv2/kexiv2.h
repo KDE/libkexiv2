@@ -99,7 +99,7 @@ public:
     KExiv2(const QString& filePath);
 
     /** Standard destructor */
-    virtual ~KExiv2();
+    ~KExiv2();
 
     /** Return a string version of Exiv2 release in format "major.minor.patch" */ 
     static QString Exiv2Version();
