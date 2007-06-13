@@ -3,6 +3,9 @@
 - API Changed : Kexiv2 destructor is now virtual.
                 Krazy Code Checker fix (http://www.englishbreakfastnetwork.org/krazy)
 
+Bugs fixed from B.K.O (http://bugs.kde.org):
+001 ==> 137750: color mode2 nikon d70s not recognized as adobe rgb
+
 0.1.5
 ------------------------------------------------------------------------
 Fix release version informations.
