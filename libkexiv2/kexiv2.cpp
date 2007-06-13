@@ -839,42 +839,45 @@ bool KExiv2::setImageOrientation(ImageOrientation orientation, bool setProgramNa
 
 KExiv2::ImageColorWorkSpace KExiv2::getImageColorWorkSpace() const
 {
-    if (d->exifMetadata.empty())
-        return WORKSPACE_UNSPECIFIED;
-
-    try
-    {    
-        // Try to get Exif.Image tags
-        Exiv2::ExifData exifData(d->exifMetadata);
-        Exiv2::ExifKey key("Exif.Photo.ColorSpace");
-        Exiv2::ExifData::iterator it = exifData.findKey(key);
-       
-        if (it != exifData.end())
+    if (!d->exifMetadata.empty())
+    {        
+        long colorSpace;
+    
+        if (getExifTagLong("Exif.Photo.ColorSpace", colorSpace))
         {
-            switch (it->toLong())
+            switch (colorSpace)
             {
                 case 1:
+                {
                     return WORKSPACE_SRGB;
                     break;
+                }
                 case 2:
+                {
                     return WORKSPACE_ADOBERGB;
                     break;
+                }
                 case 65535:
+                {
+                    // Nikon camera set Exif.Photo.ColorSpace to uncalibrated and 
+                    // Exif.Nikon3.ColorMode to "MODE2" when users work in AdobRGB color space.
+                    if (getExifTagString("Exif.Nikon3.ColorMode").contains("MODE2"))
+                        return WORKSPACE_ADOBERGB;
+    
+                    // TODO : add more Makernote parsing here ...
+    
                     return WORKSPACE_UNCALIBRATED;
                     break;
+                }
                 default:
+                {
                     return WORKSPACE_UNSPECIFIED;
                     break;
+                }
             }
         }
-        
-        // TODO : add here Makernote parsing if necessary.
-    }
-    catch( Exiv2::Error &e )
-    {
-        printExiv2ExceptionError("Cannot parse image color workspace tag using Exiv2 ", e);
-    }        
-    
+    }    
+
     return WORKSPACE_UNSPECIFIED;    
 }
 
