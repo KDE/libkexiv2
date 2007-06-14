@@ -2362,49 +2362,19 @@ QString KExiv2::detectEncodingAndDecode(const std::string &value)
     if (value.empty())
         return QString();
 
-#if KDE_IS_VERSION(3,2,0)
     if (KStringHandler::isUtf8(value.c_str()))
     {
         return QString::fromUtf8(value.c_str());
     }
-#else
-    // anyone who is still running KDE 3.0 or 3.1 is missing so many features
-    // that he will have to accept this missing feature.
-    return QString::fromUtf8(value.c_str());
-#endif
 
     // Utf8 has a pretty unique byte pattern.
     // Thats not true for ASCII, it is not possible
     // to reliably autodetect different ISO-8859 charsets.
-    // We try if QTextCodec can decide here, otherwise we use Latin1.
-    // Or use local8Bit as default?
+    // So we can use either local encoding, or latin1.
 
-    // load QTextCodecs
-    QTextCodec *latin1Codec = QTextCodec::codecForName("iso8859-1");
-    //QTextCodec *utf8Codec   = QTextCodec::codecForName("utf8");
-    QTextCodec *localCodec  = QTextCodec::codecForLocale();
-
-/*
-    FIXME: Marcel, QTextCodec::heuristicContentMatch method has disapear in Qt4.
-           I don't know how to fix it actually. Please take a look...
-
-    // make heuristic match
-    int latin1Score = latin1Codec->heuristicContentMatch(value.c_str(), value.length());
-    int localScore  = localCodec->heuristicContentMatch(value.c_str(), value.length());
-
-    // convert string:
-    // Use whatever has the larger score, local or ASCII
-    if (localScore >= 0 && localScore >= latin1Score)
-    {
-        // workaround for bug #134999:
-        // The QLatin15Codec may crash if strlen < value.length()
-        int length = value.length();
-        if (localCodec->name() == QString::fromLatin1("ISO 8859-15"))
-            length = strlen(value.c_str());
-        return localCodec->toUnicode(value.c_str(), length);
-    }
-    else*/
-        return QString::fromLatin1(value.c_str());
+    //TODO: KDE4PORT: check for regression of #134999 (very probably no regression!)
+    return QString::fromLocal8Bit(value.c_str());
+    //return QString::fromLatin1(value.c_str());
 }
 
 bool KExiv2::setProgramId(bool /*on*/)
