@@ -34,12 +34,12 @@
 
 // QT includes.
 
-#include <QByteArray>
-#include <QString>
-#include <QImage>
-#include <QDateTime>
-#include <QMap>
-#include <QStringList>
+#include <QtCore/QByteArray>
+#include <QtCore/QString>
+#include <QtGui/QImage>
+#include <QtCore/QDateTime>
+#include <QtCore/QMap>
+#include <QtCore/QStringList>
 
 // Local includes.
 
