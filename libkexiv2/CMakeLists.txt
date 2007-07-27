@@ -2,10 +2,9 @@ add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
 include_directories(${KDE4_INCLUDES} ${QT4_INCLUDES})
 
-# Note: This is necessary to be able to catch Error thrown from Exiv2.
-# With visibility=hidden, the catch clause will not identify the thrown object.
-# libexiv2 comes with default visibility.
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=default")
+# This was used to enable catching of exceptions thrown by libexiv2.
+# We use now #pragma GCC visibility push(default) around the headers
+#set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=default")
 
 set(kexiv2_LIB_SRCS kexiv2.cpp)
 
