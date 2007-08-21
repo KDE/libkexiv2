@@ -65,6 +65,21 @@
 #include <exiv2/exif.hpp>
 #pragma GCC visibility pop
 
+#if (EXIV2_MAJOR_VERSION ==0 && EXIV2_MINOR_VERSION >=16 && EXIV2_PATCH_VERSION >=0) || \
+    (EXIV2_MAJOR_VERSION >0)
+#   define _XMP_SUPPORT_ 1
+#endif 
+
+#ifndef _XMP_SUPPORT_
+
+// Dummy redifinition of XmpData class to compile fine 
+// if XMP metadata support is not available from Exiv2
+namespace Exiv2
+{
+    class XmpData{};
+}
+#endif 
+
 // Local includes.
 
 #include "kexiv2.h"
@@ -76,7 +91,10 @@ class KExiv2Priv
 {
 public:
 
-    KExiv2Priv(){}
+    KExiv2Priv()
+    {
+        imageComments = std::string();
+    }
 
     QString         filePath;
 
@@ -85,11 +103,29 @@ public:
     Exiv2::ExifData exifMetadata;
 
     Exiv2::IptcData iptcMetadata;
+
+#ifdef _XMP_SUPPORT_
+    Exiv2::XmpData  xmpMetadata;
+#endif
 };
 
 KExiv2::KExiv2()
 {
     d = new KExiv2Priv;
+}
+
+KExiv2::KExiv2(const KExiv2& metadata)
+{
+    d = new KExiv2Priv;
+
+    // No need to use QT containers transormations here. We can use original objects directly. 
+    setComments(metadata.commentsMetaData());
+    setExif(metadata.exifMetaData());
+    setIptc(metadata.iptcMetaData());
+#ifdef _XMP_SUPPORT_
+    setXmp(metadata.xmpMetaData());
+#endif
+    setFilePath(metadata.getFilePath());
 }
 
 KExiv2::KExiv2(const QString& filePath)
@@ -101,6 +137,30 @@ KExiv2::KExiv2(const QString& filePath)
 KExiv2::~KExiv2()
 {
     delete d;
+}
+
+KExiv2& KExiv2::operator=(const KExiv2& metadata)
+{
+    // No need to use QT containers transormations here. We can use original objects directly. 
+    setComments(metadata.commentsMetaData());
+    setExif(metadata.exifMetaData());
+    setIptc(metadata.iptcMetaData());
+#ifdef _XMP_SUPPORT_
+    setXmp(metadata.xmpMetaData());
+#endif
+    setFilePath(metadata.getFilePath());
+    return *this;
+}
+
+//-- Statics methods ----------------------------------------------
+
+bool KExiv2::supportXmp()
+{
+#ifdef _XMP_SUPPORT_
+    return true;
+#else
+    return false;
+#endif
 }
 
 QString KExiv2::Exiv2Version()
@@ -128,24 +188,187 @@ void KExiv2::printExiv2ExceptionError(const QString& msg, Exiv2::Error& e)
     qDebug("%s (%s)", msg.toAscii().constData(), s.c_str());
 }
 
-std::string& KExiv2::commentsMetaData()
+bool KExiv2::isReadOnly(const QString& filePath)
 {
-    return d->imageComments;
+    QFileInfo fi(filePath);
+    QString ext = fi.suffix().toUpper();
+
+    if (ext != QString("JPG") && ext != QString("JPEG") && ext != QString("JPE"))
+        return true;
+
+    return false;
 }
 
-Exiv2::ExifData& KExiv2::exifMetaData()
+//-- General methods ----------------------------------------------
+
+bool KExiv2::load(const QString& filePath)
 {
-    return d->exifMetadata;
+    QFileInfo finfo(filePath);
+    if (filePath.isEmpty() || !finfo.isReadable())
+    {
+        qDebug("File '%s' is not readable.", finfo.fileName().toAscii().constData());
+        return false;
+    }
+
+    try
+    {
+        Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
+                                      (QFile::encodeName(filePath)));
+        image->readMetadata();
+
+        // Image comments ---------------------------------
+
+        d->imageComments = image->comment();
+
+        // Exif metadata ----------------------------------
+
+        d->exifMetadata = image->exifData();
+
+        // Iptc metadata ----------------------------------
+
+        d->iptcMetadata = image->iptcData();
+
+#ifdef _XMP_SUPPORT_
+        // Xmp metadata -----------------------------------
+
+        d->xmpMetadata = image->xmpData();
+#endif
+
+        d->filePath = filePath;
+
+        return true;
+    }
+    catch( Exiv2::Error &e )
+    {
+        printExiv2ExceptionError("Cannot load metadata using Exiv2 ", e);
+    }
+
+    return false;
 }
 
-Exiv2::IptcData& KExiv2::iptcMetaData()
+bool KExiv2::save(const QString& filePath)
 {
-    return d->iptcMetadata;
+    if (filePath.isEmpty())
+        return false;
+
+    // NOTE: see B.K.O #137770 & #138540 : never touch the file if is read only.
+    QFileInfo finfo(filePath);
+    QFileInfo dinfo(finfo.path());
+    if (!finfo.isWritable())
+    {
+        qDebug("File '%s' is read-only. Metadata not saved.", finfo.fileName().toAscii().constData());
+        return false;
+    }
+    if (!dinfo.isWritable())
+    {
+        qDebug("Dir '%s' is read-only. Metadata not saved.", dinfo.filePath().toAscii().constData());
+        return false;
+    }
+
+    try
+    {
+        Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
+                                      (QFile::encodeName(filePath)));
+
+        // Image Comments ---------------------------------
+
+        if (!d->imageComments.empty())
+        {
+            image->setComment(d->imageComments);
+        }
+
+        // Exif metadata ----------------------------------
+
+        if (!d->exifMetadata.empty())
+        {
+            image->setExifData(d->exifMetadata);
+        }
+
+        // Iptc metadata ----------------------------------
+
+        if (!d->iptcMetadata.empty())
+        {
+            image->setIptcData(d->iptcMetadata);
+        }
+
+#ifdef _XMP_SUPPORT_
+
+        // Xmp metadata -----------------------------------
+
+        if (!d->xmpMetadata.empty())
+        {
+            image->setXmpData(d->xmpMetadata);
+        }
+#endif
+
+        image->writeMetadata();
+
+        return true;
+    }
+    catch( Exiv2::Error &e )
+    {
+        printExiv2ExceptionError("Cannot save metadata using Exiv2 ", e);
+    }
+
+    return false;
+}
+
+bool KExiv2::applyChanges()
+{
+    return save(d->filePath);
+}
+
+bool KExiv2::isEmpty()
+{
+    if (!asComments() && !asExif() && !asIptc() && !asXmp())
+        return true;
+
+    return false;
+}
+
+void KExiv2::setFilePath(const QString& path)
+{
+    d->filePath = path;
+}
+
+QString KExiv2::getFilePath() const
+{
+    return d->filePath;
+}
+
+//-- Comments manipulation methods --------------------------------
+
+bool KExiv2::asComments()
+{
+    return !d->imageComments.empty();
 }
 
 bool KExiv2::clearComments()
 {
     return setComments(QByteArray());
+}
+
+QByteArray KExiv2::getComments() const
+{
+    return QByteArray(d->imageComments.data(), d->imageComments.size());
+}
+
+QString KExiv2::getCommentsDecoded() const
+{
+    return detectEncodingAndDecode(commentsMetaData());
+}
+
+bool KExiv2::setComments(const QByteArray& data)
+{
+    d->imageComments = std::string(data.data(), data.size());
+    return true;
+}
+
+//-- Exif manipulation methods --------------------------------
+
+bool KExiv2::asExif()
+{
+    return !d->exifMetadata.empty();
 }
 
 bool KExiv2::clearExif()
@@ -163,41 +386,6 @@ bool KExiv2::clearExif()
     return false;
 }
 
-bool KExiv2::clearIptc()
-{
-    try
-    {
-        d->iptcMetadata.clear();
-        return true;
-    }
-    catch( Exiv2::Error &e )
-    {
-        printExiv2ExceptionError("Cannot clear Iptc data using Exiv2 ", e);
-    }
-
-    return false;
-}
-
-QString KExiv2::getFilePath() const
-{
-    return d->filePath;
-}
-
-QByteArray KExiv2::getComments() const
-{
-    return QByteArray(d->imageComments.data(), d->imageComments.size());
-}
-
-QString KExiv2::getCommentsDecoded() const
-{
-    return detectEncodingAndDecode(getCommentsString());
-}
-
-std::string KExiv2::getCommentsString() const
-{
-    return d->imageComments;
-}
-
 QByteArray KExiv2::getExif() const
 {
     try
@@ -206,7 +394,7 @@ QByteArray KExiv2::getExif() const
         {
 
             Exiv2::ExifData& exif = d->exifMetadata;
-            Exiv2::DataBuf c2 = exif.copy();
+            Exiv2::DataBuf c2     = exif.copy();
             QByteArray data((const char*)c2.pData_, c2.size_);
             return data;
         }
@@ -220,6 +408,51 @@ QByteArray KExiv2::getExif() const
     }
 
     return QByteArray();
+}
+
+bool KExiv2::setExif(const QByteArray& data)
+{
+    try
+    {
+        if (!data.isEmpty())
+        {
+            if (d->exifMetadata.load((const Exiv2::byte*)data.data(), data.size()) != 0)
+                return false;
+            else
+                return true;
+        }
+    }
+    catch( Exiv2::Error &e )
+    {
+        if (!d->filePath.isEmpty())
+            qDebug ("From file %s", d->filePath.toAscii().constData());
+
+        printExiv2ExceptionError("Cannot set Exif data using Exiv2 ", e);
+    }
+
+    return false;
+}
+
+//-- Iptc manipulation methods --------------------------------
+
+bool KExiv2::asIptc()
+{
+    return !d->iptcMetadata.empty();
+}
+
+bool KExiv2::clearIptc()
+{
+    try
+    {
+        d->iptcMetadata.clear();
+        return true;
+    }
+    catch( Exiv2::Error &e )
+    {
+        printExiv2ExceptionError("Cannot clear Iptc data using Exiv2 ", e);
+    }
+
+    return false;
 }
 
 QByteArray KExiv2::getIptc(bool addIrbHeader) const
@@ -248,6 +481,7 @@ QByteArray KExiv2::getIptc(bool addIrbHeader) const
 
             QByteArray data((const char*)c2.pData_, c2.size_);
             return data;
+
         }
     }
     catch( Exiv2::Error &e )
@@ -261,88 +495,13 @@ QByteArray KExiv2::getIptc(bool addIrbHeader) const
     return QByteArray();
 }
 
-bool KExiv2::setComments(const QByteArray& data)
-{
-    d->imageComments = std::string(data.data(), data.size());
-    return true;
-}
-
-bool KExiv2::setExif(const QByteArray& data)
-{
-    try
-    {
-        if (!data.isEmpty())
-        {
-            if (d->exifMetadata.load((const Exiv2::byte*)data.data(), data.size()) != 0)
-		return false;
-	    else		
-                return true;
-        }
-    }
-    catch( Exiv2::Error &e )
-    {
-        if (!d->filePath.isEmpty())
-            qDebug ("From file %s", d->filePath.toAscii().constData());
-
-        printExiv2ExceptionError("Cannot set Exif data using Exiv2 ", e);
-    }        
-
-    return false;
-}
-
 bool KExiv2::setIptc(const QByteArray& data)
 {
     try
-    {    
+    {
         if (!data.isEmpty())
         {
             if (d->iptcMetadata.load((const Exiv2::byte*)data.data(), data.size()) != 0)
-		return false;
-	    else
-                return true;
-        }
-    }
-    catch( Exiv2::Error &e )
-    {
-        if (!d->filePath.isEmpty())
-            qDebug ("From file %s", d->filePath.toAscii().constData());
-
-        printExiv2ExceptionError("Cannot set Iptc data using Exiv2 ", e);
-    }    
-
-    return false;    
-}
-
-bool KExiv2::setExif(Exiv2::DataBuf const data)
-{
-    try
-    {    
-        if (data.size_ != 0)
-        {
-            if (d->exifMetadata.load(data.pData_, data.size_) != 0)
-                return false;
-            else
-                return true;
-        }
-    }
-    catch( Exiv2::Error &e )
-    {
-        if (!d->filePath.isEmpty())
-            qDebug ("From file %s", d->filePath.toAscii().constData());
-
-        printExiv2ExceptionError("Cannot set Exif data using Exiv2 ", e);
-    }    
-
-    return false;    
-}
-
-bool KExiv2::setIptc(Exiv2::DataBuf const data)
-{
-    try
-    {    
-        if (data.size_ != 0)
-        {
-            if (d->iptcMetadata.load(data.pData_, data.size_) != 0)
                 return false;
             else
                 return true;
@@ -354,122 +513,91 @@ bool KExiv2::setIptc(Exiv2::DataBuf const data)
             qDebug ("From file %s", d->filePath.toAscii().constData());
 
         printExiv2ExceptionError("Cannot set Iptc data using Exiv2 ", e);
-    }        
+    }
 
     return false;
 }
 
-bool KExiv2::load(const QString& filePath)
-{
-    QFileInfo finfo(filePath);
-    if (filePath.isEmpty() || !finfo.isReadable())
-    {
-        qDebug("File '%s' is not readable.", finfo.fileName().toAscii().constData());
-        return false;
-    }
+//-- Xmp manipulation methods --------------------------------
 
+bool KExiv2::asXmp()
+{
+#ifdef _XMP_SUPPORT_
+    return !d->xmpMetadata.empty();
+#else
+    return false;
+#endif
+}
+
+bool KExiv2::clearXmp()
+{
+#ifdef _XMP_SUPPORT_
     try
     {
-        Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
-                                      (QFile::encodeName(filePath)));
-        image->readMetadata();
-
-        // Image comments ---------------------------------
-
-        d->imageComments = image->comment();
-
-        // Exif metadata ----------------------------------
-        
-        d->exifMetadata = image->exifData();
-
-        // Iptc metadata ----------------------------------
-        
-        d->iptcMetadata = image->iptcData();
-
-        d->filePath = filePath;
-
+        d->xmpMetadata.clear();
         return true;
     }
     catch( Exiv2::Error &e )
     {
-        printExiv2ExceptionError("Cannot load metadata using Exiv2 ", e);
+        printExiv2ExceptionError("Cannot clear Xmp data using Exiv2 ", e);
     }
-    
+#endif
+
     return false;
 }
 
-bool KExiv2::save(const QString& filePath)
+QByteArray KExiv2::getXmp() const
 {
-    if (filePath.isEmpty())
-        return false;
-
-    // NOTE: see B.K.O #137770 & #138540 : never touch the file if is read only.
-    QFileInfo finfo(filePath);
-    QFileInfo dinfo(finfo.path());
-    if (!finfo.isWritable())
-    {
-        qDebug("File '%s' is read-only. Metadata not saved.", finfo.fileName().toAscii().constData());
-        return false;
-    }
-    if (!dinfo.isWritable())
-    {
-        qDebug("Dir '%s' is read-only. Metadata not saved.", dinfo.filePath().toAscii().constData());
-        return false;
-    }
-
+#ifdef _XMP_SUPPORT_
     try
-    {    
-        Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
-                                      (QFile::encodeName(filePath)));
-        
-        // Image Comments ---------------------------------
-        
-        if (!d->imageComments.empty())
+    {
+        if (!d->xmpMetadata.empty())
         {
-            image->setComment(d->imageComments);
-        }
 
-        // Exif metadata ----------------------------------
-        
-        if (!d->exifMetadata.empty())
-        {
-            image->setExifData(d->exifMetadata);
+            Exiv2::XmpData& xmp = d->xmpMetadata;
+            Exiv2::DataBuf c2   = xmp.copy();
+            QByteArray data((const char*)c2.pData_, c2.size_);
+            return data;
         }
-
-        // Iptc metadata ----------------------------------
-        
-        if (!d->iptcMetadata.empty())
-        {
-            image->setIptcData(d->iptcMetadata);
-        }
-    
-        image->writeMetadata();
-
-        return true;
     }
     catch( Exiv2::Error &e )
     {
-        printExiv2ExceptionError("Cannot save metadata using Exiv2 ", e);
+        if (!d->filePath.isEmpty())
+            qDebug ("From file %s", d->filePath.toAscii().constData());
+
+        printExiv2ExceptionError("Cannot get Xmp data using Exiv2 ", e);
     }
+#endif
+
+    return QByteArray();
+}
+
+bool KExiv2::setXmp(const QByteArray& data)
+{
+#ifdef _XMP_SUPPORT_
+    try
+    {
+        if (!data.isEmpty())
+        {
+            if (d->xmpMetadata.load((const Exiv2::byte*)data.data(), data.size()) != 0)
+                return false;
+            else
+                return true;
+        }
+    }
+    catch( Exiv2::Error &e )
+    {
+        if (!d->filePath.isEmpty())
+            qDebug ("From file %s", d->filePath.toAscii().constData());
+
+        printExiv2ExceptionError("Cannot set Xmp data using Exiv2 ", e);
+    }
+#endif
 
     return false;
 }
 
-bool KExiv2::applyChanges()
-{
-    return save(d->filePath);
-}
-
-bool KExiv2::isReadOnly(const QString& filePath)
-{
-    QFileInfo fi(filePath);
-    QString ext = fi.suffix().toUpper();
-
-    if (ext != QString("JPG") && ext != QString("JPEG") && ext != QString("JPE"))
-        return true;
-
-    return false;
-}
+//-- Metadata Image Information manipulation methods ----------------
 
 bool KExiv2::setImageProgramId(const QString& program, const QString& version)
 {
@@ -678,7 +806,7 @@ bool KExiv2::setExifThumbnail(const QImage& thumb, bool setProgramName)
         return false;
 
     try
-    {   
+    {
         KTemporaryFile thumbFile;
         thumbFile.setSuffix("KExiv2ExifThumbnail");
         thumbFile.setAutoRemove(true);
@@ -691,8 +819,8 @@ bool KExiv2::setExifThumbnail(const QImage& thumb, bool setProgramName)
     catch( Exiv2::Error &e )
     {
         printExiv2ExceptionError("Cannot set Exif Thumbnail using Exiv2 ", e);
-    }        
-    
+    }
+
     return false;
 }
 
@@ -809,13 +937,13 @@ bool KExiv2::setImageOrientation(ImageOrientation orientation, bool setProgramNa
     }
 
     try
-    {    
+    {
         if (orientation < ORIENTATION_UNSPECIFIED || orientation > ORIENTATION_ROT_270)
         {
             qDebug("Exif orientation tag value is not correct!");
             return false;
         }
-        
+
         d->exifMetadata["Exif.Image.Orientation"] = static_cast<uint16_t>(orientation);
         qDebug("Exif orientation tag set to: %i", (int)orientation);
 
@@ -825,7 +953,7 @@ bool KExiv2::setImageOrientation(ImageOrientation orientation, bool setProgramNa
         {
             // Minolta camera store image rotation in Makernote.
             // We remove these information to prevent duplicate values. 
-    
+
             Exiv2::ExifData::iterator it;
 
             Exiv2::ExifKey minoltaKey1("Exif.MinoltaCs7D.Rotation");
@@ -835,7 +963,7 @@ bool KExiv2::setImageOrientation(ImageOrientation orientation, bool setProgramNa
                 d->exifMetadata.erase(it);
                 qDebug("Removing Exif.MinoltaCs7D.Rotation tag");
             }
-        
+
             Exiv2::ExifKey minoltaKey2("Exif.MinoltaCs5D.Rotation");
             it = d->exifMetadata.findKey(minoltaKey2);
             if (it != d->exifMetadata.end())
@@ -850,17 +978,17 @@ bool KExiv2::setImageOrientation(ImageOrientation orientation, bool setProgramNa
     catch( Exiv2::Error &e )
     {
         printExiv2ExceptionError("Cannot set Exif Orientation tag using Exiv2 ", e);
-    }        
-    
+    }
+
     return false;
 }
 
 KExiv2::ImageColorWorkSpace KExiv2::getImageColorWorkSpace() const
 {
     if (!d->exifMetadata.empty())
-    {        
+    {
         long colorSpace;
-    
+
         if (getExifTagLong("Exif.Photo.ColorSpace", colorSpace))
         {
             switch (colorSpace)
@@ -881,9 +1009,9 @@ KExiv2::ImageColorWorkSpace KExiv2::getImageColorWorkSpace() const
                     // Exif.Nikon3.ColorMode to "MODE2" when users work in AdobRGB color space.
                     if (getExifTagString("Exif.Nikon3.ColorMode").contains("MODE2"))
                         return WORKSPACE_ADOBERGB;
-    
+
                     // TODO : add more Makernote parsing here ...
-    
+
                     return WORKSPACE_UNCALIBRATED;
                     break;
                 }
@@ -894,9 +1022,9 @@ KExiv2::ImageColorWorkSpace KExiv2::getImageColorWorkSpace() const
                 }
             }
         }
-    }    
+    }
 
-    return WORKSPACE_UNSPECIFIED;    
+    return WORKSPACE_UNSPECIFIED;
 }
 
 bool KExiv2::setImageColorWorkSpace(ImageColorWorkSpace workspace, bool setProgramName)
@@ -908,7 +1036,7 @@ bool KExiv2::setImageColorWorkSpace(ImageColorWorkSpace workspace, bool setProgr
         return false;
 
     try
-    {    
+    {
         d->exifMetadata["Exif.Photo.ColorSpace"] = static_cast<uint16_t>(workspace);
         qDebug("Exif color workspace tag set to: %i",  (int)workspace);
         return true;
@@ -916,45 +1044,45 @@ bool KExiv2::setImageColorWorkSpace(ImageColorWorkSpace workspace, bool setProgr
     catch( Exiv2::Error &e )
     {
         printExiv2ExceptionError("Cannot set Exif color workspace tag using Exiv2 ", e);
-    }        
-    
+    }
+
     return false;
 }
 
 QDateTime KExiv2::getImageDateTime() const
 {
     try
-    {    
+    {
         // In first, trying to get Date & time from Exif tags.
-        
+
         if (!d->exifMetadata.empty())
-        {        
+        {
             // Try Exif date time original.
-    
+
             Exiv2::ExifData exifData(d->exifMetadata);
             Exiv2::ExifKey key2("Exif.Photo.DateTimeOriginal");
             Exiv2::ExifData::iterator it2 = exifData.findKey(key2);
-            
+
             if (it2 != exifData.end())
             {
                 QDateTime dateTime = QDateTime::fromString(it2->toString().c_str(), Qt::ISODate);
-    
+
                 if (dateTime.isValid())
                 {
                     // qDebug("DateTime (Exif original): %s", dateTime.toString().toAscii().constData());
                     return dateTime;
                 }
             }
-    
+
             // Bogus Exif date time original entry. Try Exif date time digitized.
-    
+
             Exiv2::ExifKey key3("Exif.Photo.DateTimeDigitized");
             Exiv2::ExifData::iterator it3 = exifData.findKey(key3);
-            
+
             if (it3 != exifData.end())
             {
                 QDateTime dateTime = QDateTime::fromString(it3->toString().c_str(), Qt::ISODate);
-    
+
                 if (dateTime.isValid())
                 {
                     // qDebug("DateTime (Exif digitalized): %s", dateTime.toString().toAscii().constData());
@@ -963,90 +1091,90 @@ QDateTime KExiv2::getImageDateTime() const
             }
 
             // Bogus Exif date time digitized. Try standard Exif date time entry.
-    
+
             Exiv2::ExifKey key("Exif.Image.DateTime");
             Exiv2::ExifData::iterator it = exifData.findKey(key);
-            
+
             if (it != exifData.end())
             {
                 QDateTime dateTime = QDateTime::fromString(it->toString().c_str(), Qt::ISODate);
-    
+
                 if (dateTime.isValid())
                 {
                     // qDebug("DateTime (Exif standard): %s", dateTime.toString().toAscii().constData());
                     return dateTime;
                 }
             }
-    
+
         }
-        
+
         // In second, trying to get Date & time from Iptc tags.
-            
+
         if (!d->iptcMetadata.empty())
-        {        
+        {
             // Try creation Iptc date time entries.
 
             Exiv2::IptcKey keyDateCreated("Iptc.Application2.DateCreated");
             Exiv2::IptcData iptcData(d->iptcMetadata);
             Exiv2::IptcData::iterator it = iptcData.findKey(keyDateCreated);
-                        
+
             if (it != iptcData.end())
             {
                 QString IptcDateCreated(it->toString().c_str());
-    
+
                 Exiv2::IptcKey keyTimeCreated("Iptc.Application2.TimeCreated");
                 Exiv2::IptcData::iterator it2 = iptcData.findKey(keyTimeCreated);
-                
+
                 if (it2 != iptcData.end())
                 {
                     QString IptcTimeCreated(it2->toString().c_str());
-                    
+
                     QDate date = QDate::fromString(IptcDateCreated, Qt::ISODate);
                     QTime time = QTime::fromString(IptcTimeCreated, Qt::ISODate);
                     QDateTime dateTime = QDateTime(date, time);
-                    
+
                     if (dateTime.isValid())
                     {
                         // qDebug("Date (IPTC created): %s", dateTime.toString().toAscii().constData());
                         return dateTime;
-                    }                    
+                    }
                 }
-            }                        
-            
+            }
+
             // Try digitization Iptc date time entries.
-    
+
             Exiv2::IptcKey keyDigitizationDate("Iptc.Application2.DigitizationDate");
             Exiv2::IptcData::iterator it3 = iptcData.findKey(keyDigitizationDate);
-                        
+
             if (it3 != iptcData.end())
             {
                 QString IptcDateDigitization(it3->toString().c_str());
-    
+
                 Exiv2::IptcKey keyDigitizationTime("Iptc.Application2.DigitizationTime");
                 Exiv2::IptcData::iterator it4 = iptcData.findKey(keyDigitizationTime);
-                
+
                 if (it4 != iptcData.end())
                 {
                     QString IptcTimeDigitization(it4->toString().c_str());
-                    
+
                     QDate date = QDate::fromString(IptcDateDigitization, Qt::ISODate);
                     QTime time = QTime::fromString(IptcTimeDigitization, Qt::ISODate);
                     QDateTime dateTime = QDateTime(date, time);
-                    
+
                     if (dateTime.isValid())
                     {
                         //qDebug("Date (IPTC digitalized): %s", dateTime.toString().toAscii().constData());
                         return dateTime;
-                    }                    
+                    }
                 }
-            }                       
+            }
         }
     }
     catch( Exiv2::Error &e )
     {
         printExiv2ExceptionError("Cannot parse Exif date & time tag using Exiv2 ", e);
-    }        
-    
+    }
+
     return QDateTime();
 }
 
@@ -1054,14 +1182,14 @@ bool KExiv2::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitiz
 {
     if(!dateTime.isValid())
         return false;
- 
+
     if (!setProgramId(setProgramName))
         return false;
-   
+
     try
-    {    
+    {
         // In first we write date & time into Exif.
-        
+
         // DateTimeDigitized is set by slide scanners etc. when a picture is digitized.
         // DateTimeOriginal specifies the date/time when the picture was taken.
         // For digital cameras, these dates should be both set, and identical.
@@ -1072,7 +1200,7 @@ bool KExiv2::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitiz
         d->exifMetadata["Exif.Photo.DateTimeOriginal"] = exifdatetime;
         if(setDateTimeDigitized)
             d->exifMetadata["Exif.Photo.DateTimeDigitized"] = exifdatetime;
-        
+
         // In Second we write date & time into Iptc.
 
         const std::string &iptcdate(dateTime.date().toString(Qt::ISODate).toAscii().constData());
@@ -1084,14 +1212,14 @@ bool KExiv2::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitiz
             d->iptcMetadata["Iptc.Application2.DigitizationDate"] = iptcdate;
             d->iptcMetadata["Iptc.Application2.DigitizationTime"] = iptctime;
         }
-        
+
         return true;
     }
     catch( Exiv2::Error &e )
     {
         printExiv2ExceptionError("Cannot set Date & Time into image using Exiv2 ", e);
-    }        
-    
+    }
+
     return false;
 }
 
@@ -1534,6 +1662,42 @@ QString KExiv2::getIptcTagDescription(const char *iptcTagName)
     return QString();
 }
 
+QString KExiv2::getXmpTagTitle(const char *xmpTagName)
+{
+#ifdef _XMP_SUPPORT_
+    try 
+    {
+        std::string xmpkey(xmpTagName);
+        Exiv2::XmpKey xk(xmpkey);
+        return QString::fromLocal8Bit( Exiv2::XmpProperties::propertyTitle(xk) );
+    }
+    catch (Exiv2::Error& e) 
+    {
+        printExiv2ExceptionError("Cannot get metadata tag title using Exiv2 ", e);
+    }
+#endif
+
+    return QString();
+}
+
+QString KExiv2::getXmpTagDescription(const char *xmpTagName)
+{
+#ifdef _XMP_SUPPORT_
+    try 
+    {
+        std::string xmpkey(xmpTagName);
+        Exiv2::XmpKey xk(xmpkey);
+        return QString::fromLocal8Bit( Exiv2::XmpProperties::propertyDesc(xk) );
+    }
+    catch (Exiv2::Error& e) 
+    {
+        printExiv2ExceptionError("Cannot get metadata tag description using Exiv2 ", e);
+    }
+#endif
+
+    return QString();
+}
+
 KExiv2::MetaDataMap KExiv2::getExifTagsDataList(const QStringList &exifKeysFilter, bool invertSelection)
 {
     if (d->exifMetadata.empty())
@@ -1618,7 +1782,7 @@ KExiv2::MetaDataMap KExiv2::getIptcTagsDataList(const QStringList &iptcKeysFilte
             // Some IPTC key are redondancy. check if already one exist...
             MetaDataMap::iterator it = metaDataMap.find(key);
 
-            // We apply a filter to get only the Exif tags that we need.
+            // We apply a filter to get only the IPTC tags that we need.
 
             if (!invertSelection)
             {
@@ -1658,6 +1822,79 @@ KExiv2::MetaDataMap KExiv2::getIptcTagsDataList(const QStringList &iptcKeysFilte
     {
         printExiv2ExceptionError("Cannot parse IPTC metadata using Exiv2 ", e);
     }
+
+    return MetaDataMap();
+}
+
+KExiv2::MetaDataMap KExiv2::getXmpTagsDataList(const QStringList &xmpKeysFilter, bool invertSelection)
+{
+#ifdef _XMP_SUPPORT_
+    if (d->xmpMetadata.empty())
+       return MetaDataMap();
+
+    try
+    {
+        Exiv2::XmpData xmpData = d->xmpMetadata;
+        xmpData.sortByKey();
+
+        QString     ifDItemName;
+        MetaDataMap metaDataMap;
+
+        for (Exiv2::XmpData::iterator md = xmpData.begin(); md != xmpData.end(); ++md)
+        {
+            QString key = QString::fromAscii(md->key().c_str());
+
+            // Decode the tag value with a user friendly output.
+            std::ostringstream os;
+            os << *md;
+            QString value = QString::fromAscii(os.str().c_str());
+            // To make a string just on one line.
+            value.replace("\n", " ");
+
+            // Some XMP key are redondancy. check if already one exist...
+            MetaDataMap::iterator it = metaDataMap.find(key);
+
+            // We apply a filter to get only the XMP tags that we need.
+
+            if (!invertSelection)
+            {
+                if (xmpKeysFilter.contains(key.section(".", 1, 1)))
+                {
+                    if (it == metaDataMap.end())
+                        metaDataMap.insert(key, value);
+                    else
+                    {
+                        QString v = *it;
+                        v.append(", ");
+                        v.append(value);
+                        metaDataMap.insert(key, v);
+                    }
+                }
+            }
+            else
+            {
+                if (!xmpKeysFilter.contains(key.section(".", 1, 1)))
+                {
+                    if (it == metaDataMap.end())
+                        metaDataMap.insert(key, value);
+                    else
+                    {
+                        QString v = *it;
+                        v.append(", ");
+                        v.append(value);
+                        metaDataMap.insert(key, v);
+                    }
+                }
+            }
+        }
+
+        return metaDataMap;
+    }
+    catch (Exiv2::Error& e)
+    {
+        printExiv2ExceptionError("Cannot parse XMP metadata using Exiv2 ", e);
+    }
+#endif
 
     return MetaDataMap();
 }
@@ -2398,6 +2635,54 @@ QString KExiv2::detectEncodingAndDecode(const std::string &value)
 bool KExiv2::setProgramId(bool /*on*/)
 {
     return true; 
+}
+
+// -- Private methods ----------------------------------------
+
+std::string KExiv2::commentsMetaData() const
+{
+    return d->imageComments;
+}
+
+Exiv2::ExifData KExiv2::exifMetaData() const
+{
+    return d->exifMetadata;
+}
+
+Exiv2::IptcData KExiv2::iptcMetaData() const
+{
+    return d->iptcMetadata;
+}
+
+Exiv2::XmpData KExiv2::xmpMetaData() const
+{
+#ifdef _XMP_SUPPORT_
+    return d->xmpMetadata;
+#else
+    return Exiv2::XmpData();
+#endif
+}
+
+void KExiv2::setComments(std::string comments)
+{
+    d->imageComments = comments;
+}
+
+void KExiv2::setExif(Exiv2::ExifData data)
+{
+    d->exifMetadata = data;
+}
+
+void KExiv2::setIptc(Exiv2::IptcData data)
+{
+    d->iptcMetadata = data;
+}
+
+void KExiv2::setXmp(Exiv2::XmpData data)
+{
+#ifdef _XMP_SUPPORT_
+    d->xmpMetadata = data;
+#endif
 }
 
 }  // NameSpace KExiv2Iface

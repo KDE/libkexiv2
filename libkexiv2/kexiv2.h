@@ -10,8 +10,10 @@
  * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * Exiv2: http://www.exiv2.org
- * Exif : http://www.exif.org/Exif2-2.PDF 
+ * Exif : http://www.exif.org/Exif2-2.PDF
  * Iptc : http://www.iptc.org/std/IIM/4.1/specification/IIMV4.1.pdf
+ * Xmp  : http://www.adobe.com/devnet/xmp/pdfs/xmp_specification.pdf
+ *        http://xml.coverpages.org/XMP-MetadataFramework.pdf
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -51,6 +53,7 @@ namespace Exiv2
     class Exifdatum;
     class ExifData;
     class IptcData;
+    class XmpData;
     class Error;
 }
 
@@ -67,23 +70,23 @@ public:
     /** The image color workspace values given by Exif metadata. */
     enum ImageColorWorkSpace
     {
-        WORKSPACE_UNSPECIFIED  = 0,    
-        WORKSPACE_SRGB         = 1,    
-        WORKSPACE_ADOBERGB     = 2,    
-        WORKSPACE_UNCALIBRATED = 65535 
+        WORKSPACE_UNSPECIFIED  = 0,
+        WORKSPACE_SRGB         = 1,
+        WORKSPACE_ADOBERGB     = 2,
+        WORKSPACE_UNCALIBRATED = 65535
     };
 
     /** The image orientation values given by Exif metadata. */
     enum ImageOrientation
     {
-        ORIENTATION_UNSPECIFIED  = 0, 
-        ORIENTATION_NORMAL       = 1, 
-        ORIENTATION_HFLIP        = 2, 
-        ORIENTATION_ROT_180      = 3, 
-        ORIENTATION_VFLIP        = 4, 
-        ORIENTATION_ROT_90_HFLIP = 5, 
-        ORIENTATION_ROT_90       = 6, 
-        ORIENTATION_ROT_90_VFLIP = 7, 
+        ORIENTATION_UNSPECIFIED  = 0,
+        ORIENTATION_NORMAL       = 1,
+        ORIENTATION_HFLIP        = 2,
+        ORIENTATION_ROT_180      = 3,
+        ORIENTATION_VFLIP        = 4,
+        ORIENTATION_ROT_90_HFLIP = 5,
+        ORIENTATION_ROT_90       = 6,
+        ORIENTATION_ROT_90_VFLIP = 7,
         ORIENTATION_ROT_270      = 8
     };
 
@@ -95,12 +98,25 @@ public:
 
     /** Standard constructor. */
     KExiv2();
+    
+    /** Copy constructor. */
+    KExiv2(const KExiv2& metadata);
 
     /** Contructor to Load Metadata from image file. */
     KExiv2(const QString& filePath);
 
     /** Standard destructor */
     virtual ~KExiv2();
+
+    /** Create a deep copy of container */
+    KExiv2& operator=(const KExiv2& metadata);
+
+public:
+
+    //-- Statics methods ----------------------------------------------
+
+    /** Return true if library can handle XMP metadata */
+    static bool supportXmp();
 
     /** Return a string version of Exiv2 release in format "major.minor.patch" */ 
     static QString Exiv2Version();
@@ -110,52 +126,10 @@ public:
     */
     static void printExiv2ExceptionError(const QString& msg, Exiv2::Error& e);
 
-    //-- Metadata manipulation methods ----------------------------------------------
+    /** return true if metadata from file cannot be written by Exiv2. */
+    static bool isReadOnly(const QString& filePath);
 
-    /** Clear the Comments metadata container in memory. */
-    bool clearComments();
-
-    /** Clear the Exif metadata container in memory. */
-    bool clearExif();
-
-    /** Clear the Iptc metadata container in memory. */
-    bool clearIptc();
-
-    /** Return the file path open with the current instance of interface. */
-    QString getFilePath() const;
-
-    /** Return a Qt byte array copy of Comments container get from current image. 
-        Comments are JFIF section of JPEG images. Look Exiv2 API for more information.
-        Return a null Qt byte array if there is no Comments metadata in memory. */ 
-    QByteArray getComments() const;
-
-    /** Return a Qt string object of Comments from current image decoded using 
-        the 'detectEncodingAndDecode()' method. Return a null string if there is no 
-        Comments metadata available. */ 
-    QString getCommentsDecoded() const;
-
-    /** Return a Qt byte array copy of Exif container get from current image. 
-        Return a null Qt byte array if there is no Exif metadata in memory. */
-    QByteArray getExif() const;
-
-    /** Return a Qt byte array copy of Iptc container get from current image. 
-        Set true 'addIrbHeader' parameter to add an Irb header to IPTC metadata. 
-        Return a null Qt byte array if there is no Iptc metadata in memory. */
-    QByteArray  getIptc(bool addIrbHeader=false) const;
-
-    /** Set the Comments data using a Qt byte array. Return true if Comments metadata
-        have been changed in memory. */
-    bool setComments(const QByteArray& data);
-
-    /** Set the Exif data using a Qt byte array. Return true if Exif metadata
-        have been changed in memory. */
-    bool setExif(const QByteArray& data);
-
-    /** Set the Iptc data using a Qt byte array. Return true if Iptc metadata
-        have been changed in memory. */
-    bool setIptc(const QByteArray& data);
-
-    //-- File access methods ----------------------------------------------
+    //-- General methods ----------------------------------------------
 
     /** Load all metadata (EXIF, IPTC and JFIF Comments) from a picture (JPEG, RAW, TIFF, PNG, 
         DNG, etc...). Return true if metadata have been loaded successfully from file. */
@@ -169,8 +143,85 @@ public:
         have been saved into file. */
     bool applyChanges();
 
-    /** return true is the file metadata cannot be written by Exiv2. */
-    static bool isReadOnly(const QString& filePath);
+    /** Return 'true' if metadata container in memory as no Comments, Exif, Iptc, and Xmp. */
+    bool isEmpty();
+
+    /** Set the file path of current image. */
+    void setFilePath(const QString& path);
+
+    /** Return the file path of current image. */
+    QString getFilePath() const;
+
+    //-- Comments manipulation methods --------------------------------
+
+    /** Return 'true' if metadata container in memory as Comments. */
+    bool asComments();
+
+    /** Clear the Comments metadata container in memory. */
+    bool clearComments();
+
+    /** Return a Qt byte array copy of Comments container get from current image. 
+        Comments are JFIF section of JPEG images. Look Exiv2 API for more information.
+        Return a null Qt byte array if there is no Comments metadata in memory. */ 
+    QByteArray getComments() const;
+
+    /** Return a Qt string object of Comments from current image decoded using 
+        the 'detectEncodingAndDecode()' method. Return a null string if there is no 
+        Comments metadata available. */ 
+    QString getCommentsDecoded() const;
+
+    /** Set the Comments data using a Qt byte array. Return true if Comments metadata
+        have been changed in memory. */
+    bool setComments(const QByteArray& data);
+
+    //-- Exif manipulation methods --------------------------------
+
+    /** Return 'true' if metadata container in memory as Exif. */
+    bool asExif();
+
+    /** Clear the Exif metadata container in memory. */
+    bool clearExif();
+
+    /** Return a Qt byte array copy of Exif container get from current image. 
+        Return a null Qt byte array if there is no Exif metadata in memory. */
+    QByteArray getExif() const;
+
+    /** Set the Exif data using a Qt byte array. Return true if Exif metadata
+        have been changed in memory. */
+    bool setExif(const QByteArray& data);
+
+    //-- Iptc manipulation methods --------------------------------
+
+    /** Return 'true' if metadata container in memory as Iptc. */
+    bool asIptc();
+
+    /** Clear the Iptc metadata container in memory. */
+    bool clearIptc();
+
+    /** Return a Qt byte array copy of Iptc container get from current image. 
+        Set true 'addIrbHeader' parameter to add an Irb header to IPTC metadata. 
+        Return a null Qt byte array if there is no Iptc metadata in memory. */
+    QByteArray  getIptc(bool addIrbHeader=false) const;
+
+    /** Set the Iptc data using a Qt byte array. Return true if Iptc metadata
+        have been changed in memory. */
+    bool setIptc(const QByteArray& data);
+
+    //-- Xmp manipulation methods --------------------------------
+
+    /** Return 'true' if metadata container in memory as Xmp. */
+    bool asXmp();
+
+    /** Clear the Xmp metadata container in memory. */
+    bool clearXmp();
+
+    /** Return a Qt byte array copy of XMp container get from current image. 
+        Return a null Qt byte array if there is no Xmp metadata in memory. */
+    QByteArray getXmp() const;
+
+    /** Set the Xmp data using a Qt byte array. Return true if Xmp metadata
+        have been changed in memory. */
+    bool setXmp(const QByteArray& data);
 
     //-- Metadata Image Information manipulation methods ----------------
 
@@ -348,6 +399,12 @@ public:
     /** Return the Iptc Tag description or a null string. */ 
     static QString getIptcTagDescription(const char *iptcTagName);
 
+    /** Return the Xmp Tag title or a null string. */ 
+    static QString getXmpTagTitle(const char *xmpTagName);
+
+    /** Return the Xmp Tag description or a null string. */ 
+    static QString getXmpTagDescription(const char *xmpTagName);
+
     /** Return a map of Exif tags name/value found in metadata sorted by 
         Exif keys given by 'exifKeysFilter'. 
         
@@ -386,6 +443,24 @@ public:
         */ 
     KExiv2::MetaDataMap getIptcTagsDataList(const QStringList &iptcKeysFilter, bool invertSelection=false);
 
+    /** Return a map of Xmp tags name/value found in metadata sorted by 
+        Xmp keys given by 'xmpKeysFilter'.
+
+        'xmpKeysFilter' is a QStringList of Xmp keys.
+        For example, if you use the string list given below:
+
+        "dc"           // Dubling Core schema.
+        "xmp"          // Standard Xmp schema.
+
+        ... this method will return a map of all Xmp tags witch :
+
+        - include "dc", or "xmp" in the Xmp tag keys 
+          if 'inverSelection' is false.
+        - not include "dc", or "xmp" in the Xmp tag keys 
+          if 'inverSelection' is true.
+        */ 
+    KExiv2::MetaDataMap getXmpTagsDataList(const QStringList &xmpKeysFilter, bool invertSelection=false);
+
     //-- Advanced methods to convert and decode data -------------------------
 
     /** This method convert 'number' like a rational value, returned in 'numerator' and 
@@ -413,33 +488,41 @@ protected:
             QString software("digiKam");
             return setImageProgramId(software, version);
         }
-        
+
         return true;
-    */      
+    */
     virtual bool setProgramId(bool on=true);
 
 private:
 
-    /** Return a reference to Exif metadata object in memory. */
-    Exiv2::ExifData& exifMetaData();
+    /** Return a standard C++ string copy of Comments container get from current image.
+        Return a null standard string if there is no Comments metadata in memory. */
+    std::string commentsMetaData() const;
 
-    /** Return a reference to Iptc metadata object in memory. */
-    Exiv2::IptcData& iptcMetaData();
+    /** Return a reference to Exif metadata object from memory. */
+    Exiv2::ExifData exifMetaData() const;
+
+    /** Return a reference to Iptc metadata object from memory. */
+    Exiv2::IptcData iptcMetaData() const;
+
+    /** Return a reference to Xmp metadata object from memory. */
+    Exiv2::XmpData xmpMetaData() const;
+
+    /** Set the Comments data using an string object. Return true if comments metadata
+        have been changed in memory. */
+    void setComments(std::string comments);
 
     /** Set the Exif data using an Exiv2 byte array. Return true if Exif metadata
         have been changed in memory. */
-    bool setExif(Exiv2::DataBuf const data);
+    void setExif(Exiv2::ExifData data);
 
     /** Set the Iptc data using an Exiv2 byte array. Return true if Iptc metadata
         have been changed in memory. */
-    bool setIptc(Exiv2::DataBuf const data);
+    void setIptc(Exiv2::IptcData data);
 
-    /** Return a reference to comments string object in memory. */
-    std::string& commentsMetaData();
-
-    /** Return a standard C++ string copy of Comments container get from current image.
-        Return a null standard string if there is no Comments metadata in memory. */
-    std::string getCommentsString() const;
+    /** Set the Xmp data using an Exiv2 byte array. Return true if Xmp metadata
+        have been changed in memory. */
+    void setXmp(Exiv2::XmpData data);
 
 private:
 

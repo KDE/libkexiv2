@@ -21,6 +21,8 @@ libqt      >= 4.2.x                     http://www.trolltech.com
 libkde     >= 4.0.x                     http://www.kde.org
 libexiv2   >= 0.12  (0.15 recommended)  http://www.exiv2.org
 
+Note: Exiv2 >= 0.16 is require to handle XMP metadata.
+
 -- INSTALL ------------------------------------------------------------
 
 In order to compile, especially when QT3/Qt4 are installed at the same time, 
