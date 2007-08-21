@@ -98,9 +98,21 @@ KExiv2::~KExiv2()
 
 QString KExiv2::Exiv2Version()
 {
-    return QString("%1.%2.%3").arg(EXIV2_MAJOR_VERSION)
-                              .arg(EXIV2_MINOR_VERSION)
-                              .arg(EXIV2_PATCH_VERSION);
+   // Since 0.14.0 release, we can extract run-time version of Exiv2.
+   // else we return make version.
+
+   #ifdef EXIV2_CHECK_VERSION
+       if (EXIV2_CHECK_VERSION(0,14,0))
+           return QString(Exiv2::version());
+       else
+           return QString("%1.%2.%3").arg(EXIV2_MAJOR_VERSION)
+                                     .arg(EXIV2_MINOR_VERSION)
+                                     .arg(EXIV2_PATCH_VERSION);
+   #else
+       return QString("%1.%2.%3").arg(EXIV2_MAJOR_VERSION)
+                                 .arg(EXIV2_MINOR_VERSION)
+                                 .arg(EXIV2_PATCH_VERSION);
+   #endif
 }
 
 void KExiv2::printExiv2ExceptionError(const QString& msg, Exiv2::Error& e)
