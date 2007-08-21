@@ -579,7 +579,10 @@ bool KExiv2::setXmp(const QByteArray& data)
     {
         if (!data.isEmpty())
         {
-            if (d->xmpMetadata.load((const Exiv2::byte*)data.data(), data.size()) != 0)
+
+            std::string xmpPacket;
+            xmpPacket.assign(data.data(), data.size());
+            if (Exiv2::XmpParser::decode(d->xmpMetadata, xmpPacket) != 0)
                 return false;
             else
                 return true;
