@@ -223,14 +223,11 @@ QByteArray KExiv2::getIptc(bool addIrbHeader) const
 
             if (addIrbHeader) 
             {
-#ifdef EXIV2_CHECK_VERSION 
-                if (EXIV2_CHECK_VERSION(0,10,0))
-                    c2 = Exiv2::Photoshop::setIptcIrb(0, 0, iptc);
-                else
-                {
-                    qDebug("Exiv2 version is to old. Cannot add Irb header to IPTC metadata");
-                    return QByteArray();
-                }
+#if (EXIV2_CHECK_VERSION(0,10,0))
+                c2 = Exiv2::Photoshop::setIptcIrb(0, 0, iptc);
+#else
+                qDebug("Exiv2 version is to old. Cannot add Irb header to IPTC metadata");
+                return QByteArray();
 #endif
             }
             else 
@@ -469,14 +466,11 @@ bool KExiv2::setImageProgramId(const QString& program, const QString& version)
     {
 	// Record program info in Exif.Image.ProcessingSoftware tag (only available with Exiv2 >= 0.14.0).
     
-#ifdef EXIV2_CHECK_VERSION 
-        if (EXIV2_CHECK_VERSION(0,14,0))
-        {
-            QString software(program);
-            software.append("-");
-            software.append(version);
-            d->exifMetadata["Exif.Image.ProcessingSoftware"] = software.ascii();
-        }
+#if (EXIV2_CHECK_VERSION(0,14,0))
+        QString software(program);
+        software.append("-");
+        software.append(version);
+        d->exifMetadata["Exif.Image.ProcessingSoftware"] = software.ascii();
 #endif
 
         // See B.K.O #142564: Check if Exif.Image.Software already exist. If yes, do not touch this tag.
@@ -2292,25 +2286,19 @@ QString KExiv2::convertCommentValue(const Exiv2::Exifdatum &exifDatum)
     {
         std::string comment;
         std::string charset;
-#ifdef EXIV2_CHECK_VERSION
-        if (EXIV2_CHECK_VERSION(0,11,0))
-        {
-            comment = exifDatum.toString();
-        }
-        else
-        {
-            // workaround for bug in TIFF parser: CommentValue is loaded as DataValue
-            const Exiv2::Value &value = exifDatum.value();
-            Exiv2::byte *data = new Exiv2::byte[value.size()];
-            value.copy(data, Exiv2::invalidByteOrder);
-            Exiv2::CommentValue commentValue;
-            // this read method is hidden in CommentValue
-            static_cast<Exiv2::Value &>(commentValue).read(data, value.size(), Exiv2::invalidByteOrder);
-            comment = commentValue.toString();
-            delete [] data;
-        }
-#else
+
+#if (EXIV2_CHECK_VERSION(0,11,0))
         comment = exifDatum.toString();
+#else
+        // workaround for bug in TIFF parser: CommentValue is loaded as DataValue
+        const Exiv2::Value &value = exifDatum.value();
+        Exiv2::byte *data = new Exiv2::byte[value.size()];
+        value.copy(data, Exiv2::invalidByteOrder);
+        Exiv2::CommentValue commentValue;
+        // this read method is hidden in CommentValue
+        static_cast<Exiv2::Value &>(commentValue).read(data, value.size(), Exiv2::invalidByteOrder);
+        comment = commentValue.toString();
+        delete [] data;
 #endif
 
         // libexiv2 will prepend "charset=\"SomeCharset\" " if charset is specified
