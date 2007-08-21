@@ -58,6 +58,17 @@
 #include <exiv2/types.hpp>
 #include <exiv2/exif.hpp>
 
+// Make sure an EXIV2_TEST_VERSION macro exists:
+
+#ifdef EXIV2_VERSION
+#    ifndef EXIV2_TEST_VERSION
+#        define EXIV2_TEST_VERSION(major,minor,patch) \
+         ( EXIV2_VERSION >= EXIV2_MAKE_VERSION(major,minor,patch) )
+#    endif
+#else
+#    define EXIV2_TEST_VERSION(major,minor,patch) (false)
+#endif
+
 // Local includes.
 
 #include "kexiv2.h"
@@ -101,7 +112,7 @@ QString KExiv2::Exiv2Version()
     // Since 0.14.0 release, we can extract run-time version of Exiv2.
     // else we return make version.
 
-#if (EXIV2_CHECK_VERSION(0,14,0))
+#if (EXIV2_TEST_VERSION(0,14,0))
     return QString(Exiv2::version());
 #else	   
     return QString("%1.%2.%3").arg(EXIV2_MAJOR_VERSION)
@@ -223,7 +234,7 @@ QByteArray KExiv2::getIptc(bool addIrbHeader) const
 
             if (addIrbHeader) 
             {
-#if (EXIV2_CHECK_VERSION(0,10,0))
+#if (EXIV2_TEST_VERSION(0,10,0))
                 c2 = Exiv2::Photoshop::setIptcIrb(0, 0, iptc);
 #else
                 qDebug("Exiv2 version is to old. Cannot add Irb header to IPTC metadata");
@@ -466,7 +477,7 @@ bool KExiv2::setImageProgramId(const QString& program, const QString& version)
     {
 	// Record program info in Exif.Image.ProcessingSoftware tag (only available with Exiv2 >= 0.14.0).
     
-#if (EXIV2_CHECK_VERSION(0,14,0))
+#if (EXIV2_TEST_VERSION(0,14,0))
         QString software(program);
         software.append("-");
         software.append(version);
@@ -2287,7 +2298,7 @@ QString KExiv2::convertCommentValue(const Exiv2::Exifdatum &exifDatum)
         std::string comment;
         std::string charset;
 
-#if (EXIV2_CHECK_VERSION(0,11,0))
+#if (EXIV2_TEST_VERSION(0,11,0))
         comment = exifDatum.toString();
 #else
         // workaround for bug in TIFF parser: CommentValue is loaded as DataValue
