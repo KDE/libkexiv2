@@ -554,9 +554,9 @@ QByteArray KExiv2::getXmp() const
         if (!d->xmpMetadata.empty())
         {
 
-            Exiv2::XmpData& xmp = d->xmpMetadata;
-            Exiv2::DataBuf c2   = xmp.copy();
-            QByteArray data((const char*)c2.pData_, c2.size_);
+            std::string xmpPacket;
+            Exiv2::XmpParser::encode(xmpPacket, d->xmpMetadata);
+            QByteArray data(xmpPacket.data(), xmpPacket.size());
             return data;
         }
     }
