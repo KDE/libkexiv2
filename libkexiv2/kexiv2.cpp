@@ -1852,7 +1852,7 @@ KExiv2::MetaDataMap KExiv2::getXmpTagsDataList(const QStringList &xmpKeysFilter,
             // Decode the tag value with a user friendly output.
             std::ostringstream os;
             os << *md;
-            QString value = QString::fromAscii(os.str().c_str());
+            QString value = QString::fromUtf8(os.str().c_str());
             // To make a string just on one line.
             value.replace("\n", " ");
 
