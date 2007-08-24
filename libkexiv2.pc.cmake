@@ -6,6 +6,6 @@ includedir=${INCLUDE_INSTALL_DIR}
 Name: libkexiv2
 Description: KDE wrapper library for Exiv2 library with some extras
 Requires:
-Version: 0.2.0
+Version: ${KEXIV2_LIB_VERSION_STRING}
 Libs: -L${LIB_INSTALL_DIR} -lkexiv2
 Cflags: -I${INCLUDE_INSTALL_DIR}
