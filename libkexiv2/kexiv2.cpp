@@ -51,12 +51,18 @@
 
 // Exiv2 includes.
 
+// The pragmas are required to be able to catch exceptions thrown by libexiv2:
+// See http://gcc.gnu.org/wiki/Visibility, the section about c++ exceptions.
+// They are needed for all libexiv2 versions that do not care about visibility.
+#pragma GCC visibility push(default)
+#include <exiv2/error.hpp>
 #include <exiv2/image.hpp>
 #include <exiv2/jpgimage.hpp>
 #include <exiv2/datasets.hpp>
 #include <exiv2/tags.hpp>
 #include <exiv2/types.hpp>
 #include <exiv2/exif.hpp>
+#pragma GCC visibility pop
 
 // Make sure an EXIV2_TEST_VERSION macro exists:
 
