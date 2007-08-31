@@ -42,6 +42,7 @@
 #include <QtCore/QDateTime>
 #include <QtCore/QMap>
 #include <QtCore/QStringList>
+#include <QtCore/QVariant>
 
 // Local includes.
 
@@ -364,7 +365,24 @@ public:
 
     /** Set an Exif tag content using a bytes array. Return true if tag is set successfully. */
     bool setExifTagData(const char *exifTagName, const QByteArray& data, bool setProgramName=true);
-    
+
+    /** Get an Exif tags content as a QVariant. Returns a null QVariant if the Exif
+        tag cannot be found.
+        For string and integer values the matching QVariant types will be used,
+        for date and time values QVariant::DateTime.
+        Rationals will be returned as QVariant::List with two integer QVariants (numerator, denominator)
+        if rationalAsListOfInts is true, as double if rationalAsListOfInts is false.
+     */
+    QVariant getExifTagVariant(const char *exifTagName, bool rationalAsListOfInts = true, bool escapeCR=true) const;
+
+    /** Set an Exif tag content using a QVariant. Returns true if tag is set successfully.
+        All types described for the above method are supported.
+        Calling with a QVariant of type ByteArray is equivalent to calling setExifTagData.
+        For the meaning of rationalWantSmallDenominator, see the documentation of the convertToRational methods.
+     */
+    bool setExifTagVariant(const char *exifTagName, const QVariant& data,
+                           bool rationalWantSmallDenominator=true, bool setProgramName=true);
+
     /** Get an Iptc tags content like a string. If 'escapeCR' parameter is true, the CR characters
         will be removed. If Iptc tag cannot be found a null string is returned. */
     QString getIptcTagString(const char* iptcTagName, bool escapeCR=true) const;
@@ -463,10 +481,24 @@ public:
 
     //-- Advanced methods to convert and decode data -------------------------
 
-    /** This method convert 'number' like a rational value, returned in 'numerator' and 
-        'denominator' parameters. Set the precision using 'rounding' parameter. */
-    static void convertToRational(double number, long int* numerator, 
+    static QString createExifTagStringFromValue(const char *exifTagName, const QVariant &val, bool escapeCR=true);
+
+    /** This method converts 'number' to a rational value, returned in the 'numerator' and
+        'denominator' parameters. Set the precision using 'rounding' parameter.
+        Use this method if you want to retrieve a most exact rational for a number
+        without further properties, without any requirements to the denominator.
+     */
+    static void convertToRational(double number, long int* numerator,
                                   long int* denominator, int rounding);
+    /** This method convert a'number' to a rational value, returned in 'numerator' and
+        'denominator' parameters.
+        This method will be able to retrieve a rational number from a double - if you
+        constructed your double with 1.0 / 4786.0, this method will retrieve 1 / 4786.
+        If your number is not expected to be rational, use the method above which is just as
+        exact with rounding = 4 and more exact with rounding > 4.
+     */
+    static void convertToRationalSmallDenominator(double number, long int* numerator,
+                                  long int* denominator);
 
     /** Wrapper method to convert a Comments content to a QString. */ 
     static QString convertCommentValue(const Exiv2::Exifdatum &comment);

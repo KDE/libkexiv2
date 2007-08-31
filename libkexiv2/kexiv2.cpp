@@ -31,6 +31,7 @@
 #include <cstdio>
 #include <cassert>
 #include <cmath>
+#include <cfloat>
 #include <iostream>
 #include <iomanip>
 
@@ -1384,6 +1385,87 @@ bool KExiv2::setIptcTagString(const char *iptcTagName, const QString& value, boo
     return false;
 }
 
+QString KExiv2::createExifTagStringFromValue(const char *exifTagName, const QVariant &val, bool escapeCR)
+{
+    try
+    {
+        Exiv2::ExifKey key(exifTagName);
+        Exiv2::Exifdatum datum(key);
+        switch (val.type())
+        {
+            case QVariant::Int:
+            case QVariant::Bool:
+            case QVariant::LongLong:
+            case QVariant::ULongLong:
+                datum = (int32_t)val.toInt();
+                break;
+            case QVariant::UInt:
+                datum = (uint32_t)val.toUInt();
+                break;
+
+            case QVariant::Double:
+            {
+                long num, den;
+                convertToRationalSmallDenominator(val.toDouble(), &num, &den);
+                Exiv2::Rational rational;
+                rational.first  = num;
+                rational.second = den;
+                datum = rational;
+                break;
+            }
+            case QVariant::List:
+            {
+                long num = 0, den = 1;
+                QList<QVariant> list = val.toList();
+                if (list.size() >= 1)
+                    num = list[0].toInt();
+                if (list.size() >= 2)
+                    den = list[1].toInt();
+                Exiv2::Rational rational;
+                rational.first  = num;
+                rational.second = den;
+                datum = rational;
+                break;
+            }
+
+            case QVariant::Date:
+            case QVariant::DateTime:
+            {
+                QDateTime dateTime = val.toDateTime();
+                if(!dateTime.isValid())
+                    break;
+
+                const std::string &exifdatetime(dateTime.toString(QString("yyyy:MM:dd hh:mm:ss")).toAscii().constData());
+                datum = exifdatetime;
+                break;
+            }
+
+            case QVariant::String:
+            case QVariant::Char:
+                datum = (std::string)val.toString().toAscii().constData();
+                break;
+            default:
+                break;
+        }
+
+        std::ostringstream os;
+        os << datum;
+        QString tagValue = QString::fromLocal8Bit(os.str().c_str());
+
+        if (escapeCR)
+            tagValue.replace("\n", " ");
+
+        return tagValue;
+    }
+    catch( Exiv2::Error &e )
+    {
+        printExiv2ExceptionError("Cannot set Iptc tag string into image using Exiv2 ", e);
+    }
+
+    return QString();
+}
+
+
 bool KExiv2::getExifTagLong(const char* exifTagName, long &val) const
 {
     try
@@ -1428,6 +1510,74 @@ QByteArray KExiv2::getExifTagData(const char* exifTagName) const
     }
 
     return QByteArray();
+}
+
+QVariant KExiv2::getExifTagVariant(const char *exifTagName, bool rationalAsListOfInts, bool stringEscapeCR) const
+{
+    try
+    {
+        Exiv2::ExifKey exifKey(exifTagName);
+        Exiv2::ExifData exifData(d->exifMetadata);
+        Exiv2::ExifData::iterator it = exifData.findKey(exifKey);
+        if (it != exifData.end())
+        {
+            switch (it->typeId())
+            {
+                case Exiv2::unsignedByte:
+                case Exiv2::unsignedShort:
+                case Exiv2::unsignedLong:
+                case Exiv2::signedShort:
+                case Exiv2::signedLong:
+                    return QVariant((int)it->toLong());
+                case Exiv2::unsignedRational:
+                case Exiv2::signedRational:
+                    if (rationalAsListOfInts)
+                    {
+                        QList<QVariant> list;
+                        list << (*it).toRational(0).first;
+                        list << (*it).toRational(0).second;
+                        return QVariant(list);
+                    }
+                    else
+                    {
+                        // prefer double precision
+                        double num = (*it).toRational(0).first;
+                        double den = (*it).toRational(0).second;
+                        if (den == 0.0)
+                            return QVariant();
+                        return QVariant(num / den);
+                    }
+                case Exiv2::date:
+                case Exiv2::time:
+                {
+                    QDateTime dateTime = QDateTime::fromString(it->toString().c_str(), Qt::ISODate);
+                    return QVariant(dateTime);
+                }
+                case Exiv2::asciiString:
+                case Exiv2::comment:
+                case Exiv2::string:
+                {
+                    std::ostringstream os;
+                    os << *it;
+                    QString tagValue = QString::fromLocal8Bit(os.str().c_str());
+
+                    if (stringEscapeCR)
+                        tagValue.replace("\n", " ");
+
+                    return QVariant(tagValue);
+                }
+                default:
+                    return QVariant();
+            }
+        }
+    }
+    catch( Exiv2::Error &e )
+    {
+        printExiv2ExceptionError(QString("Cannot find Exif key '%1' in the image using Exiv2 ")
+                                 .arg(exifTagName), e);
+    }
+
+    return false;
 }
 
 QByteArray KExiv2::getIptcTagData(const char *iptcTagName) const
@@ -1532,6 +1682,71 @@ bool KExiv2::setExifTagData(const char *exifTagName, const QByteArray& data, boo
         printExiv2ExceptionError("Cannot set Exif tag data into image using Exiv2 ", e);
     }
 
+    return false;
+}
+
+bool KExiv2::setExifTagVariant(const char *exifTagName, const QVariant& val, bool rationalWantSmallDenominator, bool setProgramName)
+{
+    switch (val.type())
+    {
+        case QVariant::Int:
+        case QVariant::UInt:
+        case QVariant::Bool:
+        case QVariant::LongLong:
+        case QVariant::ULongLong:
+            return setExifTagLong(exifTagName, val.toInt(), setProgramName);
+
+        case QVariant::Double:
+        {
+            long num, den;
+            if (rationalWantSmallDenominator)
+                convertToRationalSmallDenominator(val.toDouble(), &num, &den);
+            else
+                convertToRational(val.toDouble(), &num, &den, 4);
+            return setExifTagRational(exifTagName, num, den, setProgramName);
+        }
+        case QVariant::List:
+        {
+            long num = 0, den = 1;
+            QList<QVariant> list = val.toList();
+            if (list.size() >= 1)
+                num = list[0].toInt();
+            if (list.size() >= 2)
+                den = list[1].toInt();
+            return setExifTagRational(exifTagName, num, den, setProgramName);
+        }
+
+        case QVariant::Date:
+        case QVariant::DateTime:
+        {
+            QDateTime dateTime = val.toDateTime();
+            if(!dateTime.isValid())
+                return false;
+
+            if (!setProgramId(setProgramName))
+                return false;
+
+            try
+            {
+                const std::string &exifdatetime(dateTime.toString(QString("yyyy:MM:dd hh:mm:ss")).toAscii().constData());
+                d->exifMetadata[exifTagName] = exifdatetime;
+            }
+            catch( Exiv2::Error &e )
+            {
+                printExiv2ExceptionError("Cannot set Date & Time in image using Exiv2 ", e);
+            }
+            return false;
+        }
+
+        case QVariant::String:
+        case QVariant::Char:
+            return setExifTagString(exifTagName, val.toString(), setProgramName);
+
+        case QVariant::ByteArray:
+            return setExifTagData(exifTagName, val.toByteArray(), setProgramName);
+        default:
+            break;
+    }
     return false;
 }
 
@@ -2214,6 +2429,70 @@ void KExiv2::convertToRational(double number, long int* numerator,
     *numerator   = (int)numTemp;
     *denominator = (int)denTemp;
 }
+
+void KExiv2::convertToRationalSmallDenominator(double number, long int* numerator, long int* denominator)
+{
+    // This function converts the given decimal number
+    // to a rational (fractional) number.
+    //
+    // This method, in contrast to the method above, will retrieve the smallest possible
+    // denominator. It is tested to retrieve the correct value for 1/x, with 0 < x <= 1000000.
+    // Note: This requires double precision, storing in float breaks some numbers (49, 59, 86,...)
+
+    // Split up the number.
+    double whole      = trunc(number);
+    double fractional = number - whole;
+
+    /*
+     * Find best rational approximation to a double
+     * by C.B. Falconer, 2006-09-07. Released to public domain.
+     *
+     * Newsgroups: comp.lang.c, comp.programming
+     * From: CBFalconer <cbfalconer@yahoo.com>
+     * Date: Thu, 07 Sep 2006 17:35:30 -0400
+     * Subject: Rational approximations
+     */
+    int lastnum = 500; // this is _not_ the largest possible denominator
+    long int num, approx, bestnum=0, bestdenom=1;
+    double   value, error, leasterr, criterion;
+
+    value = fractional;
+
+    if (value == 0.0)
+    {
+        *numerator   = (long int)whole;
+        *denominator = 1;
+        return;
+    }
+
+    criterion = 2 * value * DBL_EPSILON;
+    for (leasterr = value, num = 1; num < lastnum; num++) {
+        approx = (int)(num / value + 0.5);
+        error  = fabs((double)num / approx - value);
+        if (error < leasterr) {
+            bestnum = num;
+            bestdenom = approx;
+            leasterr = error;
+            if (leasterr <= criterion) break;
+        }
+    }
+
+    // add whole number part
+    if (bestdenom * whole > (double)INT_MAX)
+    {
+        // In some cases, we would generate an integer overflow.
+        // Fall back to Gilles's code which is better suited for such numbers.
+        convertToRational(number, numerator, denominator, 5);
+    }
+    else
+    {
+        bestnum += bestdenom * (long int)whole;
+
+        *numerator   = bestnum;
+        *denominator = bestdenom;
+    }
+}
+
 
 QStringList KExiv2::getImageKeywords() const
 {
