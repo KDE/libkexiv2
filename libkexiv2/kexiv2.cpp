@@ -2565,7 +2565,7 @@ bool KExiv2::setImageKeywords(const QStringList& oldKeywords, const QStringList&
             QString key = *it;
             key.truncate(64);
             
-            Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::asciiString);
+            Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::string);
             val->read(key.toLatin1().constData());
             iptcData.add(iptcTag, val.get());        
         }
@@ -2648,7 +2648,7 @@ bool KExiv2::setImageSubjects(const QStringList& oldSubjects, const QStringList&
             QString key = *it;
             key.truncate(236);
             
-            Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::asciiString);
+            Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::string);
             val->read(key.toLatin1().constData());
             iptcData.add(iptcTag, val.get());        
         }
@@ -2732,7 +2732,7 @@ bool KExiv2::setImageSubCategories(const QStringList& oldSubCategories, const QS
             QString key = *it;
             key.truncate(32);
             
-            Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::asciiString);
+            Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::string);
             val->read(key.toLatin1().constData());
             iptcData.add(iptcTag, val.get());        
         }
