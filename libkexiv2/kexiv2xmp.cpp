@@ -115,4 +115,113 @@ bool KExiv2::setXmp(const QByteArray& data)
     return false;
 }
 
+KExiv2::MetaDataMap KExiv2::getXmpTagsDataList(const QStringList &xmpKeysFilter, bool invertSelection)
+{
+#ifdef _XMP_SUPPORT_
+    if (d->xmpMetadata.empty())
+       return MetaDataMap();
+
+    try
+    {
+        Exiv2::XmpData xmpData = d->xmpMetadata;
+        xmpData.sortByKey();
+
+        QString     ifDItemName;
+        MetaDataMap metaDataMap;
+
+        for (Exiv2::XmpData::iterator md = xmpData.begin(); md != xmpData.end(); ++md)
+        {
+            QString key = QString::fromAscii(md->key().c_str());
+
+            // Decode the tag value with a user friendly output.
+            std::ostringstream os;
+            os << *md;
+            QString value = QString::fromUtf8(os.str().c_str());
+            // To make a string just on one line.
+            value.replace("\n", " ");
+
+            // Some XMP key are redondancy. check if already one exist...
+            MetaDataMap::iterator it = metaDataMap.find(key);
+
+            // We apply a filter to get only the XMP tags that we need.
+
+            if (!invertSelection)
+            {
+                if (xmpKeysFilter.contains(key.section(".", 1, 1)))
+                {
+                    if (it == metaDataMap.end())
+                        metaDataMap.insert(key, value);
+                    else
+                    {
+                        QString v = *it;
+                        v.append(", ");
+                        v.append(value);
+                        metaDataMap.insert(key, v);
+                    }
+                }
+            }
+            else
+            {
+                if (!xmpKeysFilter.contains(key.section(".", 1, 1)))
+                {
+                    if (it == metaDataMap.end())
+                        metaDataMap.insert(key, value);
+                    else
+                    {
+                        QString v = *it;
+                        v.append(", ");
+                        v.append(value);
+                        metaDataMap.insert(key, v);
+                    }
+                }
+            }
+        }
+
+        return metaDataMap;
+    }
+    catch (Exiv2::Error& e)
+    {
+        printExiv2ExceptionError("Cannot parse XMP metadata using Exiv2 ", e);
+    }
+#endif
+
+    return MetaDataMap();
+}
+
+QString KExiv2::getXmpTagTitle(const char *xmpTagName)
+{
+#ifdef _XMP_SUPPORT_
+    try 
+    {
+        std::string xmpkey(xmpTagName);
+        Exiv2::XmpKey xk(xmpkey);
+        return QString::fromLocal8Bit( Exiv2::XmpProperties::propertyTitle(xk) );
+    }
+    catch (Exiv2::Error& e) 
+    {
+        printExiv2ExceptionError("Cannot get metadata tag title using Exiv2 ", e);
+    }
+#endif
+
+    return QString();
+}
+
+QString KExiv2::getXmpTagDescription(const char *xmpTagName)
+{
+#ifdef _XMP_SUPPORT_
+    try 
+    {
+        std::string xmpkey(xmpTagName);
+        Exiv2::XmpKey xk(xmpkey);
+        return QString::fromLocal8Bit( Exiv2::XmpProperties::propertyDesc(xk) );
+    }
+    catch (Exiv2::Error& e) 
+    {
+        printExiv2ExceptionError("Cannot get metadata tag description using Exiv2 ", e);
+    }
+#endif
+
+    return QString();
+}
+
 }  // NameSpace KExiv2Iface

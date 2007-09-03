@@ -115,4 +115,222 @@ bool KExiv2::setIptc(const QByteArray& data)
     return false;
 }
 
+KExiv2::MetaDataMap KExiv2::getIptcTagsDataList(const QStringList &iptcKeysFilter, bool invertSelection)
+{
+    if (d->iptcMetadata.empty())
+       return MetaDataMap();
+
+    try
+    {
+        Exiv2::IptcData iptcData = d->iptcMetadata;
+        iptcData.sortByKey();
+        
+        QString     ifDItemName;
+        MetaDataMap metaDataMap;
+
+        for (Exiv2::IptcData::iterator md = iptcData.begin(); md != iptcData.end(); ++md)
+        {
+            QString key = QString::fromAscii(md->key().c_str());
+            
+            // Decode the tag value with a user friendly output.
+            std::ostringstream os;
+            os << *md;
+            QString value = QString::fromAscii(os.str().c_str());
+            // To make a string just on one line.
+            value.replace("\n", " ");
+
+            // Some IPTC key are redondancy. check if already one exist...
+            MetaDataMap::iterator it = metaDataMap.find(key);
+
+            // We apply a filter to get only the IPTC tags that we need.
+
+            if (!invertSelection)
+            {
+                if (iptcKeysFilter.contains(key.section(".", 1, 1)))
+                {
+                    if (it == metaDataMap.end())
+                        metaDataMap.insert(key, value);
+                    else
+                    {
+                        QString v = *it;
+                        v.append(", ");
+                        v.append(value);
+                        metaDataMap.insert(key, v);
+                    }                
+                }
+            }
+            else
+            {
+                if (!iptcKeysFilter.contains(key.section(".", 1, 1)))
+                {
+                    if (it == metaDataMap.end())
+                        metaDataMap.insert(key, value);
+                    else
+                    {
+                        QString v = *it;
+                        v.append(", ");
+                        v.append(value);
+                        metaDataMap.insert(key, v);
+                    }                
+                }
+            }
+        }
+
+        return metaDataMap;
+    }
+    catch (Exiv2::Error& e)
+    {
+        printExiv2ExceptionError("Cannot parse IPTC metadata using Exiv2 ", e);
+    }
+
+    return MetaDataMap();
+}
+
+QString KExiv2::getIptcTagTitle(const char *iptcTagName)
+{
+    try 
+    {
+        std::string iptckey(iptcTagName);
+        Exiv2::IptcKey ik(iptckey); 
+        return QString::fromLocal8Bit( Exiv2::IptcDataSets::dataSetTitle(ik.tag(), ik.record()) );
+    }
+    catch (Exiv2::Error& e) 
+    {
+        printExiv2ExceptionError("Cannot get metadata tag title using Exiv2 ", e);
+    }
+
+    return QString();
+}
+
+QString KExiv2::getIptcTagDescription(const char *iptcTagName)
+{
+    try 
+    {
+        std::string iptckey(iptcTagName);
+        Exiv2::IptcKey ik(iptckey); 
+        return QString::fromLocal8Bit( Exiv2::IptcDataSets::dataSetDesc(ik.tag(), ik.record()) );
+    }
+    catch (Exiv2::Error& e) 
+    {
+        printExiv2ExceptionError("Cannot get metadata tag description using Exiv2 ", e);
+    }
+
+    return QString();
+}
+
+bool KExiv2::removeIptcTag(const char *iptcTagName, bool setProgramName)
+{
+    if (!setProgramId(setProgramName))
+        return false;
+
+    try
+    {  
+        Exiv2::IptcKey iptcKey(iptcTagName);
+        Exiv2::IptcData::iterator it = d->iptcMetadata.findKey(iptcKey);
+        if (it != d->iptcMetadata.end())
+        {
+            d->iptcMetadata.erase(it);
+            return true;
+        }
+    }
+    catch( Exiv2::Error &e )
+    {
+        printExiv2ExceptionError("Cannot remove Iptc tag using Exiv2 ", e);
+    }        
+    
+    return false;
+}
+
+bool KExiv2::setIptcTagData(const char *iptcTagName, const QByteArray& data, bool setProgramName)
+{
+    if (data.isEmpty())
+        return false;
+        
+    if (!setProgramId(setProgramName))
+        return false;
+
+    try
+    {   
+        Exiv2::DataValue val((Exiv2::byte *)data.data(), data.size());
+        d->iptcMetadata[iptcTagName] = val;
+        return true;
+    }
+    catch( Exiv2::Error &e )
+    {
+        printExiv2ExceptionError("Cannot set Iptc tag data into image using Exiv2 ", e);
+    }
+
+    return false;
+}
+
+QByteArray KExiv2::getIptcTagData(const char *iptcTagName) const
+{
+    try
+    {
+        Exiv2::IptcKey iptcKey(iptcTagName);
+        Exiv2::IptcData iptcData(d->iptcMetadata);
+        Exiv2::IptcData::iterator it = iptcData.findKey(iptcKey);
+        if (it != iptcData.end())
+        {
+            char *s = new char[(*it).size()];
+            (*it).copy((Exiv2::byte*)s, Exiv2::bigEndian);
+            QByteArray data = QByteArray::fromRawData(s, (*it).size());
+            return data;
+        }
+    }
+    catch( Exiv2::Error &e )
+    {
+        printExiv2ExceptionError(QString("Cannot find Iptc key '%1' into image using Exiv2 ")
+                                 .arg(iptcTagName), e);
+    }
+
+    return QByteArray();
+}
+
+QString KExiv2::getIptcTagString(const char* iptcTagName, bool escapeCR) const
+{
+    try
+    {
+        Exiv2::IptcKey iptcKey(iptcTagName);
+        Exiv2::IptcData iptcData(d->iptcMetadata);
+        Exiv2::IptcData::iterator it = iptcData.findKey(iptcKey);
+        if (it != iptcData.end())
+        {
+            std::ostringstream os;
+            os << *it;
+            QString tagValue = QString::fromLocal8Bit(os.str().c_str());
+
+            if (escapeCR)
+                tagValue.replace("\n", " ");
+
+            return tagValue;
+        }
+    }
+    catch( Exiv2::Error &e )
+    {
+        printExiv2ExceptionError(QString("Cannot find Iptc key '%1' into image using Exiv2 ")
+                                 .arg(iptcTagName), e);
+    }
+
+    return QString();
+}
+
+bool KExiv2::setIptcTagString(const char *iptcTagName, const QString& value, bool setProgramName)
+{
+    if (!setProgramId(setProgramName))
+        return false;
+
+    try
+    {
+        d->iptcMetadata[iptcTagName] = value.toAscii().constData();
+        return true;
+    }
+    catch( Exiv2::Error &e )
+    {
+        printExiv2ExceptionError("Cannot set Iptc tag string into image using Exiv2 ", e);
+    }
+
+    return false;
+}
+
 }  // NameSpace KExiv2Iface
