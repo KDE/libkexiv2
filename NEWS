@@ -2,6 +2,7 @@
 ------------------------------------------------------------------------
 Port to CMake/KDE4/QT4
 Support of XMP metadata (require Exiv2 0.16)
+Split methods to separate file to provide a more readable implementation.
 
 Bugs fixed from B.K.O (http://bugs.kde.org):
 001 ==> 146864: Lesser XMP support in digiKam.
