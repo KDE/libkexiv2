@@ -8,7 +8,7 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake ${CMAKE_CURRENT_BINAR
 # We use now #pragma GCC visibility push(default) around the headers
 #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=default")
 
-SET(kexiv2_LIB_SRCS kexiv2.cpp)
+SET(kexiv2_LIB_SRCS kexiv2.cpp kexiv2xmp.cpp)
 
 KDE4_ADD_LIBRARY(kexiv2 SHARED ${kexiv2_LIB_SRCS})
 
