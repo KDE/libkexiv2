@@ -7,7 +7,6 @@ Bugs fixed from B.K.O (http://bugs.kde.org):
 001 ==> 137750: color mode2 nikon d70s not recognized as adobe rgb
 002 ==> 149267: digiKam crashes after finding gif,avi,txt and so on.
 003 ==> 148182: Iptc.Application2.Keywords appends always the 0-byte.
-004 ==> 
 
 0.1.5
 ------------------------------------------------------------------------
