@@ -1,3 +1,78 @@
+V 0.1.6 - 2007-09-08
+----------------------------------------------------------------------------
+2007-09-01 10:46  cgilles
+
+	* [r707242] libkexiv2/libkexiv2/kexiv2.cpp:
+	  libkexiv2 from KDE3 branch : fix IPTC strings creation with
+	  non-zero value at end
+	  CCBUGS: 148182
+
+2007-08-25 08:03  cgilles
+
+	* [r704515] libkexiv2/libkexiv2/kexiv2.cpp:
+	  libkexiv2 from KDE3 branch : backport Marcel commit #693337 from
+	  trunk (KDE4) about to handle properly Exiv2 exceptions, depending
+	  of GCC visility option use to compile.
+	  CCBUGS: 148014
+	  --This l from KDEine, and those below, will be ignored--
+	  
+	  M kexiv2.cpp
+
+2007-08-21 20:48  cgilles
+
+	* [r703058] libkexiv2/libkexiv2/kexiv2.cpp:
+	  use EXIV2_TEST_VERSION instead EXIV2_CHECK_VERSION witch is
+	  depreciate now
+
+2007-08-21 18:54  cgilles
+
+	* [r703007] libkexiv2/libkexiv2/kexiv2.cpp:
+	  fix EXIV2_CHECK_VERSION macro handling
+
+2007-08-21 09:16  cgilles
+
+	* [r702839] libkexiv2/libkexiv2/kexiv2.cpp:
+	  libkexiv2 from KDE3 branch : return run-time version if Exiv2 if
+	  possible
+
+2007-06-13 08:12  cgilles
+
+	* [r674817] libkexiv2/libkexiv2/kexiv2.cpp:
+	  libkexiv2 from KDE3 branch : With Nikon camera, the AdobeRgb user
+	  color space is defined to set Exif.Photo.ColorSpace to
+	  Uncalibrated and Exif.Nikon3.ColorMode to MODE2.
+	  BUG: 137750
+
+2007-06-08 19:16  cgilles
+
+	* [r673015] libkexiv2/Makefile.am, libkexiv2/kexiv2.cpp,
+	  libkexiv2/kexiv2.h, libkexiv2/libkexiv2,
+	  libkexiv2/libkexiv2/Makefile.am, libkexiv2/libkexiv2/kexiv2.cpp,
+	  libkexiv2/libkexiv2/kexiv2.h,
+	  libkexiv2/libkexiv2/libkexiv2_export.h,
+	  libkexiv2/libkexiv2/version.h, libkexiv2/libkexiv2_export.h,
+	  libkexiv2/version.h:
+	  to be homogenous with trunk (KDE4), move all source code in
+	  libkexiv2 sub-folder
+
+2007-06-05 06:56  cgilles
+
+	* [r671625] libkexiv2/kexiv2.cpp, libkexiv2/kexiv2.h:
+	  libkexiv2 from branches : Krazy Code Checker fix
+	  (http://www.englishbreakfastnetwork.org/krazy)
+
+2007-06-05 06:29  cgilles
+
+	* [r671618] libkexiv2/kexiv2.cpp:
+	  libkexiv2 from branches : Krazy Code Checker fix
+	  (http://www.englishbreakfastnetwork.org/krazy)
+
+2007-06-04 11:35  cgilles
+
+	* [r671273] libkexiv2/CMakeLists.txt, libkexiv2/cmake:
+	  remove obsolete file
+
+----------------------------------------------------------------------------
 V 0.1.5 - 2007-05-08
 ----------------------------------------------------------------------------
 Fixing: libtools version info again, we found not to be back compatible
