@@ -116,7 +116,7 @@ public:
 
     //-- Statics methods ----------------------------------------------
 
-    /** Return true if library can handle XMP metadata */
+    /** Return true if library can handle Xmp metadata */
     static bool supportXmp();
 
     /** Return a string version of Exiv2 release in format "major.minor.patch" */ 
@@ -132,7 +132,7 @@ public:
 
     //-- General methods ----------------------------------------------
 
-    /** Load all metadata (EXIF, IPTC and JFIF Comments) from a picture (JPEG, RAW, TIFF, PNG, 
+    /** Load all metadata (Exif, Iptc, Xmp, and JFIF Comments) from a picture (JPEG, RAW, TIFF, PNG, 
         DNG, etc...). Return true if metadata have been loaded successfully from file. */
     virtual bool load(const QString& filePath);
 
@@ -385,7 +385,7 @@ public:
     bool clearIptc();
 
     /** Return a Qt byte array copy of Iptc container get from current image. 
-        Set true 'addIrbHeader' parameter to add an Irb header to IPTC metadata. 
+        Set true 'addIrbHeader' parameter to add an Irb header to Iptc metadata. 
         Return a null Qt byte array if there is no Iptc metadata in memory. */
     QByteArray  getIptc(bool addIrbHeader=false) const;
 
