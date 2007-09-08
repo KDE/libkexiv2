@@ -511,7 +511,6 @@ QString KExiv2::createExifTagStringFromValue(const char *exifTagName, const QVar
     return QString();
 }
 
-
 bool KExiv2::getExifTagLong(const char* exifTagName, long &val) const
 {
     try
