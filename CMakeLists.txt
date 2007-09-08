@@ -11,7 +11,9 @@ PROJECT(libkexiv2)
 # 0.1.3 => 1.0.1
 # 0.1.4 => 2.0.2
 # 0.1.5 => 2.1.1
-# 0.2.0 => 3.0.0
+# 0.1.6 => 3.0.0
+# ... here we can have new releases from KDE3 branch
+# 0.2.0 => 6.0.0
 
 # Library API version
 SET(KEXIV2_LIB_MAJOR_VERSION "0")
@@ -29,7 +31,7 @@ SET(KEXIV2_LIB_SUFFIX_VERSION "-svn")
 
 # Library ABI version used by linker.
 # For details : http://www.gnu.org/software/libtool/manual.html#Updating-version-info
-SET(KEXIV2_LIB_SO_CUR_VERSION "3")
+SET(KEXIV2_LIB_SO_CUR_VERSION "6")
 SET(KEXIV2_LIB_SO_REV_VERSION "0")
 SET(KEXIV2_LIB_SO_AGE_VERSION "0")
 
