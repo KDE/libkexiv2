@@ -35,7 +35,7 @@ namespace KExiv2Iface
 
 //-- Exif manipulation methods --------------------------------
 
-bool KExiv2::asExif()
+bool KExiv2::hasExif()
 {
     return !d->exifMetadata.empty();
 }

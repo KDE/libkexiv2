@@ -35,7 +35,7 @@ namespace KExiv2Iface
 
 //-- Iptc manipulation methods --------------------------------
 
-bool KExiv2::asIptc()
+bool KExiv2::hasIptc()
 {
     return !d->iptcMetadata.empty();
 }

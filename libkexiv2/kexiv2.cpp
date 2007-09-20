@@ -239,7 +239,7 @@ bool KExiv2::applyChanges()
 
 bool KExiv2::isEmpty()
 {
-    if (!asComments() && !asExif() && !asIptc() && !asXmp())
+    if (!hasComments() && !hasExif() && !hasIptc() && !hasXmp())
         return true;
 
     return false;

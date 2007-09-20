@@ -35,7 +35,7 @@ namespace KExiv2Iface
 
 //-- Comments manipulation methods --------------------------------
 
-bool KExiv2::asComments()
+bool KExiv2::hasComments()
 {
     return !d->imageComments.empty();
 }

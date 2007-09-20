@@ -238,7 +238,7 @@ public:
     //-- Comments manipulation methods --------------------------------
 
     /** Return 'true' if metadata container in memory as Comments. */
-    bool asComments();
+    bool hasComments();
 
     /** Clear the Comments metadata container in memory. */
     bool clearComments();
@@ -266,7 +266,7 @@ public:
     //-- Exif manipulation methods --------------------------------
 
     /** Return 'true' if metadata container in memory as Exif. */
-    bool asExif();
+    bool hasExif();
 
     /** Clear the Exif metadata container in memory. */
     bool clearExif();
@@ -380,7 +380,7 @@ public:
     //-- Iptc manipulation methods --------------------------------
 
     /** Return 'true' if metadata container in memory as Iptc. */
-    bool asIptc();
+    bool hasIptc();
 
     /** Clear the Iptc metadata container in memory. */
     bool clearIptc();
@@ -439,7 +439,7 @@ public:
     //-- Xmp manipulation methods --------------------------------
 
     /** Return 'true' if metadata container in memory as Xmp. */
-    bool asXmp();
+    bool hasXmp();
 
     /** Clear the Xmp metadata container in memory. */
     bool clearXmp();

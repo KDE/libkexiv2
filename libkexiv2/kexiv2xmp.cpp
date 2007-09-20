@@ -35,7 +35,7 @@ namespace KExiv2Iface
 
 //-- Xmp manipulation methods --------------------------------
 
-bool KExiv2::asXmp()
+bool KExiv2::hasXmp()
 {
 #ifdef _XMP_SUPPORT_
     return !d->xmpMetadata.empty();
