@@ -272,6 +272,7 @@ public:
     bool clearExif();
 
     /** Return a Qt byte array copy of Exif container get from current image. 
+        Set true 'addExifHeader' parameter to add an Exif header to Exif metadata. 
         Return a null Qt byte array if there is no Exif metadata in memory. */
     QByteArray getExif(bool addExifHeader=false) const;
 
