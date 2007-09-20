@@ -99,7 +99,7 @@ public:
 
     /** Standard constructor. */
     KExiv2();
-    
+
     /** Copy constructor. */
     KExiv2(const KExiv2& metadata);
 
@@ -273,7 +273,7 @@ public:
 
     /** Return a Qt byte array copy of Exif container get from current image. 
         Return a null Qt byte array if there is no Exif metadata in memory. */
-    QByteArray getExif() const;
+    QByteArray getExif(bool addExifHeader=false) const;
 
     /** Set the Exif data using a Qt byte array. Return true if Exif metadata
         have been changed in memory. */
@@ -352,13 +352,13 @@ public:
 
     /** Return the Exif Tag description or a null string. */ 
     static QString getExifTagDescription(const char *exifTagName);
-    
+
     /** TODO document me */
     static QString createExifTagStringFromValue(const char *exifTagName, const QVariant &val, bool escapeCR=true);
 
     /** Return a map of Exif tags name/value found in metadata sorted by 
         Exif keys given by 'exifKeysFilter'. 
-        
+
         'exifKeysFilter' is a QStringList of Exif keys. 
         For example, if you use the string list given below:
 

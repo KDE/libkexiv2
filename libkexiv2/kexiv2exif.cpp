@@ -55,16 +55,27 @@ bool KExiv2::clearExif()
     return false;
 }
 
-QByteArray KExiv2::getExif() const
+QByteArray KExiv2::getExif(bool addExifHeader) const
 {
     try
     {
         if (!d->exifMetadata.empty())
         {
-
+            QByteArray data;
             Exiv2::ExifData& exif = d->exifMetadata;
             Exiv2::DataBuf c2     = exif.copy();
-            QByteArray data((const char*)c2.pData_, c2.size_);
+            QByteArray ba((const char*)c2.pData_, c2.size_);
+            if (addExifHeader)
+            {
+                const uchar ExifHeader[] = {0x45, 0x78, 0x69, 0x66, 0x00, 0x00};
+                data.resize(ba.size() + sizeof(ExifHeader));
+                memcpy(data.data(), ExifHeader, sizeof(ExifHeader));
+                memcpy(data.data()+sizeof(ExifHeader), ba.data(), ba.size());
+            }
+            else
+            {
+                data = ba;
+            }
             return data;
         }
     }
