@@ -30,6 +30,8 @@
 #include "kexiv2private.h"
 #include "kexiv2.h"
 
+#include <limits.h>
+
 namespace KExiv2Iface
 {
 
