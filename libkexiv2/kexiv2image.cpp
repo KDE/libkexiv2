@@ -582,6 +582,7 @@ bool KExiv2::setImagePreview(const QImage& preview, bool setProgramName)
         KTemporaryFile previewFile;
         previewFile.setSuffix("KExiv2ImagePreview");
         previewFile.setAutoRemove(true);
+        previewFile.open();
         // A little bit compressed preview jpeg image to limit IPTC size.
         preview.save(previewFile.fileName(), "JPEG");
 
