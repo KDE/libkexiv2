@@ -47,7 +47,6 @@ SET(KEXIV2_LIB_SO_VERSION_STRING "${KEXIV2_LIB_SO_CUR_VERSION}.${KEXIV2_LIB_SO_R
 
 
 # Detect Exiv2 library properlly with CMake script from 'cmake/modules'
-SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules )
 FIND_PACKAGE(Exiv2 REQUIRED)
 
 SUBDIRS(libkexiv2)
