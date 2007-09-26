@@ -593,7 +593,7 @@ bool KExiv2::setImagePreview(const QImage& preview, bool setProgramName)
         qDebug("(%i x %i) JPEG image preview size: %i bytes", 
                preview.width(), preview.height(), (int)file.size());
         
-        char *s;
+        char *s=0;
         uint  l;
         QDataStream stream( &file );
         stream.readBytes(s, l);
