@@ -1131,7 +1131,7 @@ bool KExiv2::setImagePreview(const QImage& preview, bool setProgramName)
         if ( !file.open(IO_ReadOnly) ) 
             return false;
 
-        qDebug("(%i x %i) JPEG image preview size: %i bytes", 
+        qDebug("JPEG image preview size: (%i x %i) pixels - %i bytes", 
                preview.width(), preview.height(), (int)file.size());
         
         QByteArray data(file.size());
