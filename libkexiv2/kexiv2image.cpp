@@ -582,7 +582,6 @@ bool KExiv2::setImagePreview(const QImage& preview, bool setProgramName)
         KTemporaryFile previewFile;
         previewFile.setSuffix("KExiv2ImagePreview");
         previewFile.setAutoRemove(true);
-        previewFile.open();
         if ( !previewFile.open() )
             return false;
 
