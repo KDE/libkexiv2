@@ -583,23 +583,20 @@ bool KExiv2::setImagePreview(const QImage& preview, bool setProgramName)
         previewFile.setSuffix("KExiv2ImagePreview");
         previewFile.setAutoRemove(true);
         previewFile.open();
-        // A little bit compressed preview jpeg image to limit IPTC size.
-        preview.save(previewFile.fileName(), "JPEG");
-
-        QFile file(previewFile.fileName());
-        if ( !file.open(QIODevice::ReadOnly) ) 
+        if ( !previewFile.open() )
             return false;
 
-        qDebug("(%i x %i) JPEG image preview size: %i bytes", 
-               preview.width(), preview.height(), (int)file.size());
+        // A little bit compressed preview jpeg image to limit IPTC size.
+        preview.save(previewFile.fileName(), "JPEG");
+        qDebug("JPEG image preview size: (%i x %i) pixels - %i bytes", 
+               preview.width(), preview.height(), 
+               (int)previewFile.size());
         
-        char *s=0;
-        uint  l;
-        QDataStream stream( &file );
-        stream.readBytes(s, l);
-        QByteArray data(s, l);
-        delete [] s;
-        file.close();
+        QByteArray data;
+        data.resize(previewFile.size());
+        QDataStream stream( &previewFile );
+        stream.readRawData(data.data(), data.size());
+        previewFile.close();
         
         Exiv2::DataValue val;
         val.read((Exiv2::byte *)data.data(), data.size());
