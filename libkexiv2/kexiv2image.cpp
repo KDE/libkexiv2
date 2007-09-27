@@ -25,6 +25,10 @@
  * 
  * ============================================================ */
 
+// Qt includes.
+
+#include "QtDebug" 
+
 // Local includes.
 
 #include "kexiv2private.h"
@@ -389,84 +393,161 @@ QDateTime KExiv2::getImageDateTime() const
 
         if (!d->exifMetadata.empty())
         {
-            // Try Exif date time original.
-
             Exiv2::ExifData exifData(d->exifMetadata);
-            Exiv2::ExifKey key2("Exif.Photo.DateTimeOriginal");
-            Exiv2::ExifData::iterator it2 = exifData.findKey(key2);
-
-            if (it2 != exifData.end())
             {
-                QDateTime dateTime = QDateTime::fromString(it2->toString().c_str(), Qt::ISODate);
-
-                if (dateTime.isValid())
+                Exiv2::ExifKey key("Exif.Photo.DateTimeOriginal");
+                Exiv2::ExifData::iterator it = exifData.findKey(key);
+                if (it != exifData.end())
                 {
-                    // qDebug("DateTime (Exif original): %s", dateTime.toString().toAscii().constData());
-                    return dateTime;
+                    QDateTime dateTime = QDateTime::fromString(it->toString().c_str(), Qt::ISODate);
+                    if (dateTime.isValid())
+                    {
+                        qDebug() << "DateTime => Exif.Photo.DateTimeOriginal => " << dateTime << endl;
+                        return dateTime;
+                    }
                 }
             }
-
-            // Bogus Exif date time original entry. Try Exif date time digitized.
-
-            Exiv2::ExifKey key3("Exif.Photo.DateTimeDigitized");
-            Exiv2::ExifData::iterator it3 = exifData.findKey(key3);
-
-            if (it3 != exifData.end())
             {
-                QDateTime dateTime = QDateTime::fromString(it3->toString().c_str(), Qt::ISODate);
-
-                if (dateTime.isValid())
+                Exiv2::ExifKey key("Exif.Photo.DateTimeDigitized");
+                Exiv2::ExifData::iterator it = exifData.findKey(key);
+                if (it != exifData.end())
                 {
-                    // qDebug("DateTime (Exif digitalized): %s", dateTime.toString().toAscii().constData());
-                    return dateTime;
+                    QDateTime dateTime = QDateTime::fromString(it->toString().c_str(), Qt::ISODate);
+                    if (dateTime.isValid())
+                    {
+                        qDebug() << "DateTime => Exif.Photo.DateTimeDigitized => " << dateTime << endl;
+                        return dateTime;
+                    }
                 }
             }
-
-            // Bogus Exif date time digitized. Try standard Exif date time entry.
-
-            Exiv2::ExifKey key("Exif.Image.DateTime");
-            Exiv2::ExifData::iterator it = exifData.findKey(key);
-
-            if (it != exifData.end())
             {
-                QDateTime dateTime = QDateTime::fromString(it->toString().c_str(), Qt::ISODate);
-
-                if (dateTime.isValid())
+                Exiv2::ExifKey key("Exif.Image.DateTime");
+                Exiv2::ExifData::iterator it = exifData.findKey(key);
+                if (it != exifData.end())
                 {
-                    // qDebug("DateTime (Exif standard): %s", dateTime.toString().toAscii().constData());
-                    return dateTime;
+                    QDateTime dateTime = QDateTime::fromString(it->toString().c_str(), Qt::ISODate);
+                    if (dateTime.isValid())
+                    {
+                        qDebug() << "DateTime => Exif.Image.DateTime => " << dateTime << endl;
+                        return dateTime;
+                    }
                 }
             }
         }
 
-        // In second, trying to get Date & time from Iptc tags.
+        // In second, trying to get Date & time from Xmp tags.
+
+#ifdef _XMP_SUPPORT_
+
+        if (!d->xmpMetadata.empty())
+        {
+            Exiv2::XmpData xmpData(d->xmpMetadata);
+            {
+                Exiv2::XmpKey key("Xmp.exif.DateTimeOriginal");
+                Exiv2::XmpData::iterator it = xmpData.findKey(key);
+                if (it != xmpData.end())
+                {
+                    QDateTime dateTime = QDateTime::fromString(it->toString().c_str(), Qt::ISODate);
+                    if (dateTime.isValid())
+                    {
+                        qDebug() << "DateTime => Xmp.exif.DateTimeOriginal => " << dateTime << endl;
+                        return dateTime;
+                    }
+                }
+            }
+            {
+                Exiv2::XmpKey key("Xmp.exif.DateTimeDigitized");
+                Exiv2::XmpData::iterator it = xmpData.findKey(key);
+                if (it != xmpData.end())
+                {
+                    QDateTime dateTime = QDateTime::fromString(it->toString().c_str(), Qt::ISODate);
+                    if (dateTime.isValid())
+                    {
+                        qDebug() << "DateTime => Xmp.exif.DateTimeDigitized => " << dateTime << endl;
+                        return dateTime;
+                    }
+                }
+            }
+            {
+                Exiv2::XmpKey key("Xmp.photoshop.DateCreated");
+                Exiv2::XmpData::iterator it = xmpData.findKey(key);
+                if (it != xmpData.end())
+                {
+                    QDateTime dateTime = QDateTime::fromString(it->toString().c_str(), Qt::ISODate);
+                    if (dateTime.isValid())
+                    {
+                        qDebug() << "DateTime => Xmp.photoshop.DateCreated => " << dateTime << endl;
+                        return dateTime;
+                    }
+                }
+            }
+            {
+                Exiv2::XmpKey key("Xmp.xmp.CreateDate");
+                Exiv2::XmpData::iterator it = xmpData.findKey(key);
+                if (it != xmpData.end())
+                {
+                    QDateTime dateTime = QDateTime::fromString(it->toString().c_str(), Qt::ISODate);
+                    if (dateTime.isValid())
+                    {
+                        qDebug() << "DateTime => Xmp.xmp.CreateDate => " << dateTime << endl;
+                        return dateTime;
+                    }
+                }  
+            }
+            {
+                Exiv2::XmpKey key("Xmp.xmp.ModifyDate");
+                Exiv2::XmpData::iterator it = xmpData.findKey(key);
+                if (it != xmpData.end())
+                {
+                    QDateTime dateTime = QDateTime::fromString(it->toString().c_str(), Qt::ISODate);
+                    if (dateTime.isValid())
+                    {
+                        qDebug() << "DateTime => Xmp.xmp.ModifyDate => " << dateTime << endl;
+                        return dateTime;
+                    }
+                }  
+            }
+            {
+                Exiv2::XmpKey key("Xmp.xmp.MetadataDate");
+                Exiv2::XmpData::iterator it = xmpData.findKey(key);
+                if (it != xmpData.end())
+                {
+                    QDateTime dateTime = QDateTime::fromString(it->toString().c_str(), Qt::ISODate);
+                    if (dateTime.isValid())
+                    {
+                        qDebug() << "DateTime => Xmp.xmp.MetadataDate => " << dateTime << endl;
+                        return dateTime;
+                    }
+                }  
+            }
+        }
+
+#endif // _XMP_SUPPORT_
+
+        // In third, trying to get Date & time from Iptc tags.
 
         if (!d->iptcMetadata.empty())
         {
+            Exiv2::IptcData iptcData(d->iptcMetadata);
+
             // Try creation Iptc date time entries.
 
             Exiv2::IptcKey keyDateCreated("Iptc.Application2.DateCreated");
-            Exiv2::IptcData iptcData(d->iptcMetadata);
             Exiv2::IptcData::iterator it = iptcData.findKey(keyDateCreated);
-
             if (it != iptcData.end())
             {
                 QString IptcDateCreated(it->toString().c_str());
-
                 Exiv2::IptcKey keyTimeCreated("Iptc.Application2.TimeCreated");
                 Exiv2::IptcData::iterator it2 = iptcData.findKey(keyTimeCreated);
-
                 if (it2 != iptcData.end())
                 {
                     QString IptcTimeCreated(it2->toString().c_str());
-
                     QDate date = QDate::fromString(IptcDateCreated, Qt::ISODate);
                     QTime time = QTime::fromString(IptcTimeCreated, Qt::ISODate);
                     QDateTime dateTime = QDateTime(date, time);
-
                     if (dateTime.isValid())
                     {
-                        // qDebug("Date (IPTC created): %s", dateTime.toString().toAscii().constData());
+                        qDebug() << "DateTime => Iptc.Application2.DateCreated => " << dateTime << endl;
                         return dateTime;
                     }
                 }
@@ -476,25 +557,20 @@ QDateTime KExiv2::getImageDateTime() const
 
             Exiv2::IptcKey keyDigitizationDate("Iptc.Application2.DigitizationDate");
             Exiv2::IptcData::iterator it3 = iptcData.findKey(keyDigitizationDate);
-
             if (it3 != iptcData.end())
             {
                 QString IptcDateDigitization(it3->toString().c_str());
-
                 Exiv2::IptcKey keyDigitizationTime("Iptc.Application2.DigitizationTime");
                 Exiv2::IptcData::iterator it4 = iptcData.findKey(keyDigitizationTime);
-
                 if (it4 != iptcData.end())
                 {
                     QString IptcTimeDigitization(it4->toString().c_str());
-
                     QDate date = QDate::fromString(IptcDateDigitization, Qt::ISODate);
                     QTime time = QTime::fromString(IptcTimeDigitization, Qt::ISODate);
                     QDateTime dateTime = QDateTime(date, time);
-
                     if (dateTime.isValid())
                     {
-                        //qDebug("Date (IPTC digitalized): %s", dateTime.toString().toAscii().constData());
+                        qDebug() << "DateTime => Iptc.Application2.DigitizationDate => " << dateTime << endl;
                         return dateTime;
                     }
                 }
@@ -532,7 +608,29 @@ bool KExiv2::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitiz
         if(setDateTimeDigitized)
             d->exifMetadata["Exif.Photo.DateTimeDigitized"] = exifdatetime;
 
-        // In Second we write date & time into Iptc.
+#ifdef _XMP_SUPPORT_
+
+        // In second we write date & time into Xmp.
+
+        const std::string &xmpdatetime(dateTime.toString(QString("yyyy:MM:dd hh:mm:ss")).toAscii().constData());
+
+        Exiv2::Value::AutoPtr xmpTxtVal = Exiv2::Value::create(Exiv2::xmpText);
+        xmpTxtVal->read(xmpdatetime);
+        d->xmpMetadata.add(Exiv2::XmpKey("Xmp.exif.DateTimeOriginal"), xmpTxtVal.get());
+        d->xmpMetadata.add(Exiv2::XmpKey("Xmp.photoshop.DateCreated"), xmpTxtVal.get());
+        d->xmpMetadata.add(Exiv2::XmpKey("Xmp.xmp.CreateDate"),        xmpTxtVal.get());
+        d->xmpMetadata.add(Exiv2::XmpKey("Xmp.xmp.MetadataDate"),      xmpTxtVal.get());
+        d->xmpMetadata.add(Exiv2::XmpKey("Xmp.xmp.ModifyDate"),        xmpTxtVal.get());        if(setDateTimeDigitized)
+            d->xmpMetadata.add(Exiv2::XmpKey("Xmp.exif.DateTimeDigitized"), xmpTxtVal.get());
+
+        // Tag not updated:
+        // "Xmp.dc.DateTime" is a sequence of date relevant of dublin core change. 
+        //                   This is not the picture date as well
+        // "Xmp.tiff.DateTime" is encoded as "Xmp.xmp:ModifyDate" by Exiv2. Not need to touch it.
+
+#endif // _XMP_SUPPORT_
+
+        // In third we write date & time into Iptc.
 
         const std::string &iptcdate(dateTime.date().toString(Qt::ISODate).toAscii().constData());
         const std::string &iptctime(dateTime.time().toString(Qt::ISODate).toAscii().constData());

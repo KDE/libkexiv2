@@ -46,9 +46,11 @@ KExiv2::KExiv2(const KExiv2& metadata)
     setComments(metadata.commentsMetaData());
     setExif(metadata.exifMetaData());
     setIptc(metadata.iptcMetaData());
+
 #ifdef _XMP_SUPPORT_
     setXmp(metadata.xmpMetaData());
-#endif
+#endif // _XMP_SUPPORT_
+
     setFilePath(metadata.getFilePath());
 }
 
@@ -69,9 +71,11 @@ KExiv2& KExiv2::operator=(const KExiv2& metadata)
     setComments(metadata.commentsMetaData());
     setExif(metadata.exifMetaData());
     setIptc(metadata.iptcMetaData());
+
 #ifdef _XMP_SUPPORT_
     setXmp(metadata.xmpMetaData());
-#endif
+#endif // _XMP_SUPPORT_
+
     setFilePath(metadata.getFilePath());
     return *this;
 }
@@ -84,7 +88,7 @@ bool KExiv2::supportXmp()
     return true;
 #else
     return false;
-#endif
+#endif // _XMP_SUPPORT_
 }
 
 QString KExiv2::Exiv2Version()
@@ -148,10 +152,12 @@ bool KExiv2::load(const QString& filePath)
         d->iptcMetadata = image->iptcData();
 
 #ifdef _XMP_SUPPORT_
+
         // Xmp metadata -----------------------------------
 
         d->xmpMetadata = image->xmpData();
-#endif
+
+#endif // _XMP_SUPPORT_
 
         d->filePath = filePath;
 
@@ -218,7 +224,9 @@ bool KExiv2::save(const QString& filePath)
         {
             image->setXmpData(d->xmpMetadata);
         }
-#endif
+
+
+#endif // _XMP_SUPPORT_
 
         image->writeMetadata();
 

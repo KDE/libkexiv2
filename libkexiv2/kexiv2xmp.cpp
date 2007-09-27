@@ -41,7 +41,7 @@ bool KExiv2::hasXmp()
     return !d->xmpMetadata.empty();
 #else
     return false;
-#endif
+#endif // _XMP_SUPPORT_
 }
 
 bool KExiv2::clearXmp()
@@ -56,7 +56,7 @@ bool KExiv2::clearXmp()
     {
         printExiv2ExceptionError("Cannot clear Xmp data using Exiv2 ", e);
     }
-#endif
+#endif // _XMP_SUPPORT_
 
     return false;
 }
@@ -82,7 +82,7 @@ QByteArray KExiv2::getXmp() const
 
         printExiv2ExceptionError("Cannot get Xmp data using Exiv2 ", e);
     }
-#endif
+#endif // _XMP_SUPPORT_
 
     return QByteArray();
 }
@@ -110,7 +110,7 @@ bool KExiv2::setXmp(const QByteArray& data)
 
         printExiv2ExceptionError("Cannot set Xmp data using Exiv2 ", e);
     }
-#endif
+#endif // _XMP_SUPPORT_
 
     return false;
 }
@@ -183,7 +183,7 @@ KExiv2::MetaDataMap KExiv2::getXmpTagsDataList(const QStringList &xmpKeysFilter,
     {
         printExiv2ExceptionError("Cannot parse XMP metadata using Exiv2 ", e);
     }
-#endif
+#endif // _XMP_SUPPORT_
 
     return MetaDataMap();
 }
@@ -201,7 +201,7 @@ QString KExiv2::getXmpTagTitle(const char *xmpTagName)
     {
         printExiv2ExceptionError("Cannot get metadata tag title using Exiv2 ", e);
     }
-#endif
+#endif // _XMP_SUPPORT_
 
     return QString();
 }
@@ -219,7 +219,7 @@ QString KExiv2::getXmpTagDescription(const char *xmpTagName)
     {
         printExiv2ExceptionError("Cannot get metadata tag description using Exiv2 ", e);
     }
-#endif
+#endif // _XMP_SUPPORT_
 
     return QString();
 }
