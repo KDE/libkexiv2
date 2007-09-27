@@ -43,7 +43,7 @@ bool KExiv2::setImageProgramId(const QString& program, const QString& version)
         software.append("-");
         software.append(version);
 
-        // Record program info into Exif.Image.ProcessingSoftware tag (only available with Exiv2 >= 0.14.0).
+        // Set program info into Exif.Image.ProcessingSoftware tag (only available with Exiv2 >= 0.14.0).
 
 #if (EXIV2_TEST_VERSION(0,14,0))
         d->exifMetadata["Exif.Image.ProcessingSoftware"] = software.toAscii().constData();
@@ -60,7 +60,7 @@ bool KExiv2::setImageProgramId(const QString& program, const QString& version)
                 d->exifMetadata["Exif.Image.Software"] = software.toAscii().constData();
         }
 
-        // Record program info into XMP tags.
+        // set program info into XMP tags.
 
 #ifdef _XMP_SUPPORT_
         
@@ -78,7 +78,7 @@ bool KExiv2::setImageProgramId(const QString& program, const QString& version)
 
 #endif // _XMP_SUPPORT_
 
-        // Record program info into IPTC tags.
+        // Set program info into IPTC tags.
 
         d->iptcMetadata["Iptc.Application2.Program"]        = program.toAscii().constData();
         d->iptcMetadata["Iptc.Application2.ProgramVersion"] = version.toAscii().constData();
@@ -106,13 +106,11 @@ QSize KExiv2::getImageDimensions() const
         Exiv2::ExifData exifData(d->exifMetadata);
         Exiv2::ExifKey key("Exif.Photo.PixelXDimension");
         Exiv2::ExifData::iterator it = exifData.findKey(key);
-
         if (it != exifData.end())
             width = it->toLong();
 
         Exiv2::ExifKey key2("Exif.Photo.PixelYDimension");
         Exiv2::ExifData::iterator it2 = exifData.findKey(key2);
-
         if (it2 != exifData.end())
             height = it2->toLong();
 
@@ -126,18 +124,57 @@ QSize KExiv2::getImageDimensions() const
 
         Exiv2::ExifKey key3("Exif.Image.ImageWidth");
         Exiv2::ExifData::iterator it3 = exifData.findKey(key3);
-
         if (it3 != exifData.end())
             width = it3->toLong();
 
         Exiv2::ExifKey key4("Exif.Image.ImageLength");
         Exiv2::ExifData::iterator it4 = exifData.findKey(key4);
-
         if (it4 != exifData.end())
             height = it4->toLong();
 
         if (width != -1 && height != -1)
             return QSize(width, height);
+
+#ifdef _XMP_SUPPORT_
+
+        // Try to get Xmp.tiff tags
+
+        width    = -1;
+        height   = -1;
+        bool wOk = false;
+        bool hOk = false;
+
+        QString str = getXmpTagString("Xmp.tiff.ImageWidth");
+        if (!str.isEmpty())
+            width = str.toInt(&wOk);
+
+        str = getXmpTagString("Xmp.tiff.ImageLength");
+        if (!str.isEmpty())
+            height = str.toInt(&hOk);
+
+        if (wOk && hOk)
+            return QSize(width, height);
+
+        // Try to get Xmp.exif tags
+
+        width  = -1;
+        height = -1;
+        wOk    = false;
+        hOk    = false;
+
+        str = getXmpTagString("Xmp.exif.PixelXDimension");
+        if (!str.isEmpty())
+            width = str.toInt(&wOk);
+
+        str = getXmpTagString("Xmp.exif.PixelYDimension");
+        if (!str.isEmpty())
+            height = str.toInt(&hOk);
+
+        if (wOk && hOk)
+            return QSize(width, height);
+
+#endif // _XMP_SUPPORT_
+
     }
     catch( Exiv2::Error &e )
     {
@@ -154,11 +191,25 @@ bool KExiv2::setImageDimensions(const QSize& size, bool setProgramName)
 
     try
     {
+        // Set Exif values.
+
         // NOTE: see B.K.O #144604: need to cast to record an unsigned integer value.
         d->exifMetadata["Exif.Image.ImageWidth"]      = static_cast<uint32_t>(size.width());
         d->exifMetadata["Exif.Image.ImageLength"]     = static_cast<uint32_t>(size.height());
         d->exifMetadata["Exif.Photo.PixelXDimension"] = static_cast<uint32_t>(size.width());
         d->exifMetadata["Exif.Photo.PixelYDimension"] = static_cast<uint32_t>(size.height());
+
+        // Set Xmp values.
+
+#ifdef _XMP_SUPPORT_
+
+        setXmpTagString("Xmp.tiff.ImageWidth",      QString::number(size.width()),  true);
+        setXmpTagString("Xmp.tiff.ImageLength",     QString::number(size.height()), true);
+        setXmpTagString("Xmp.exif.PixelXDimension", QString::number(size.width()),  true);
+        setXmpTagString("Xmp.exif.PixelYDimension", QString::number(size.height()), true);
+
+#endif // _XMP_SUPPORT_
+
         return true;
     }
     catch( Exiv2::Error &e )
