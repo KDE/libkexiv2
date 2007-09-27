@@ -25,10 +25,6 @@
  * 
  * ============================================================ */
 
-// Qt includes.
-
-#include "QtDebug" 
-
 // Local includes.
 
 #include "kexiv2private.h"
