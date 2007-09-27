@@ -64,10 +64,6 @@ bool KExiv2::setImageProgramId(const QString& program, const QString& version)
 
 #ifdef _XMP_SUPPORT_
         
-        const std::string &softTxt(software.toAscii().constData());
-        Exiv2::Value::AutoPtr xmpTxtVal = Exiv2::Value::create(Exiv2::xmpText);
-        xmpTxtVal->read(softTxt);
-
         if (!d->xmpMetadata.empty())
         {
             // Only create Xmp.xmp.CreatorTool if it do not exist.
@@ -75,12 +71,10 @@ bool KExiv2::setImageProgramId(const QString& program, const QString& version)
             Exiv2::XmpKey key("Xmp.xmp.CreatorTool");
             Exiv2::XmpData::iterator it = xmpData.findKey(key);
             if (it == xmpData.end())
-            {
-                d->xmpMetadata.add(Exiv2::XmpKey("Xmp.xmp.CreatorTool"), xmpTxtVal.get());
-            }
+                setXmpTagString("Xmp.xmp.CreatorTool", software, false);
         }
 
-        d->xmpMetadata.add(Exiv2::XmpKey("Xmp.tiff.Software"), xmpTxtVal.get());
+        setXmpTagString("Xmp.tiff.Software", software, false);
 
 #endif // _XMP_SUPPORT_
 

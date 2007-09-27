@@ -453,6 +453,13 @@ public:
         have been changed in memory. */
     bool setXmp(const QByteArray& data);
 
+    /** Get a Xmp tags content like a string. If 'escapeCR' parameter is true, the CR characters
+        will be removed. If Xmp tag cannot be found a null string is returned. */
+    QString getXmpTagString(const char* xmpTagName, bool escapeCR=true) const;
+
+    /** Set a Xmp tag content using a string. Return true if tag is set successfully. */
+    bool setXmpTagString(const char *xmpTagName, const QString& value, bool setProgramName=true);
+
     /** Return the Xmp Tag title or a null string. */ 
     static QString getXmpTagTitle(const char *xmpTagName);
 

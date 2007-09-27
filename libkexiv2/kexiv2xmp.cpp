@@ -224,4 +224,58 @@ QString KExiv2::getXmpTagDescription(const char *xmpTagName)
     return QString();
 }
 
+QString KExiv2::getXmpTagString(const char* xmpTagName, bool escapeCR) const
+{
+#ifdef _XMP_SUPPORT_
+    try
+    {
+        Exiv2::XmpData xmpData(d->xmpMetadata);
+        Exiv2::XmpKey key(xmpTagName);
+        Exiv2::XmpData::iterator it = xmpData.findKey(key);
+        if (it != xmpData.end())
+        {
+            std::ostringstream os;
+            os << *it;
+            QString tagValue = QString::fromLocal8Bit(os.str().c_str());
+
+            if (escapeCR)
+                tagValue.replace("\n", " ");
+
+            return tagValue;
+        }
+    }
+    catch( Exiv2::Error &e )
+    {
+        printExiv2ExceptionError(QString("Cannot find XMp key '%1' into image using Exiv2 ")
+                                 .arg(xmpTagName), e);
+    }
+#endif // _XMP_SUPPORT_
+
+    return QString();
+}
+
+bool KExiv2::setXmpTagString(const char *xmpTagName, const QString& value, bool setProgramName)
+{
+#ifdef _XMP_SUPPORT_
+    if (!setProgramId(setProgramName))
+        return false;
+
+    try
+    {
+        const std::string &txt(value.toAscii().constData());
+        Exiv2::Value::AutoPtr xmpTxtVal = Exiv2::Value::create(Exiv2::xmpText);
+        xmpTxtVal->read(txt);
+
+        d->xmpMetadata.add(Exiv2::XmpKey(xmpTagName), xmpTxtVal.get());
+        return true;
+    }
+    catch( Exiv2::Error &e )
+    {
+        printExiv2ExceptionError("Cannot set Xmp tag string into image using Exiv2 ", e);
+    }
+#endif // _XMP_SUPPORT_
+
+    return false;
+}
+
 }  // NameSpace KExiv2Iface
