@@ -530,7 +530,7 @@ QDateTime KExiv2::getImageDateTime() const
         {
             Exiv2::IptcData iptcData(d->iptcMetadata);
 
-            // Try creation Iptc date time entries.
+            // Try creation Iptc date & time entries.
 
             Exiv2::IptcKey keyDateCreated("Iptc.Application2.DateCreated");
             Exiv2::IptcData::iterator it = iptcData.findKey(keyDateCreated);
@@ -553,7 +553,7 @@ QDateTime KExiv2::getImageDateTime() const
                 }
             }
 
-            // Try digitization Iptc date time entries.
+            // Try digitization Iptc date & time entries.
 
             Exiv2::IptcKey keyDigitizationDate("Iptc.Application2.DigitizationDate");
             Exiv2::IptcData::iterator it3 = iptcData.findKey(keyDigitizationDate);
