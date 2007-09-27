@@ -154,7 +154,7 @@ bool KExiv2::setImageDimensions(const QSize& size, bool setProgramName)
 
     try
     {
-        // NOTE: see B.K.O #144604: you a cast to record an unsigned integer value.
+        // NOTE: see B.K.O #144604: need to cast to record an unsigned integer value.
         d->exifMetadata["Exif.Image.ImageWidth"]      = static_cast<uint32_t>(size.width());
         d->exifMetadata["Exif.Image.ImageLength"]     = static_cast<uint32_t>(size.height());
         d->exifMetadata["Exif.Photo.PixelXDimension"] = static_cast<uint32_t>(size.width());
