@@ -39,12 +39,13 @@ bool KExiv2::setImageProgramId(const QString& program, const QString& version)
 {
     try
     {
-        // Record program info in Exif.Image.ProcessingSoftware tag (only available with Exiv2 >= 0.14.0).
-
-#if (EXIV2_TEST_VERSION(0,14,0))
         QString software(program);
         software.append("-");
         software.append(version);
+
+        // Record program info into Exif.Image.ProcessingSoftware tag (only available with Exiv2 >= 0.14.0).
+
+#if (EXIV2_TEST_VERSION(0,14,0))
         d->exifMetadata["Exif.Image.ProcessingSoftware"] = software.toAscii().constData();
 #endif
 
@@ -55,17 +56,35 @@ bool KExiv2::setImageProgramId(const QString& program, const QString& version)
             Exiv2::ExifData exifData(d->exifMetadata);
             Exiv2::ExifKey key("Exif.Image.Software");
             Exiv2::ExifData::iterator it = exifData.findKey(key);
-
             if (it == exifData.end())
-            {
-                QString software(program);
-                software.append("-");
-                software.append(version);
-                d->exifMetadata["Exif.Image.Software"]      = software.toAscii().constData();
-            }
-	}
+                d->exifMetadata["Exif.Image.Software"] = software.toAscii().constData();
+        }
 
-	// Record program info in IPTC tags.
+        // Record program info into XMP tags.
+
+#ifdef _XMP_SUPPORT_
+        
+        const std::string &softTxt(software.toAscii().constData());
+        Exiv2::Value::AutoPtr xmpTxtVal = Exiv2::Value::create(Exiv2::xmpText);
+        xmpTxtVal->read(softTxt);
+
+        if (!d->xmpMetadata.empty())
+        {
+            // Only create Xmp.xmp.CreatorTool if it do not exist.
+            Exiv2::XmpData xmpData(d->xmpMetadata);
+            Exiv2::XmpKey key("Xmp.xmp.CreatorTool");
+            Exiv2::XmpData::iterator it = xmpData.findKey(key);
+            if (it == xmpData.end())
+            {
+                d->xmpMetadata.add(Exiv2::XmpKey("Xmp.xmp.CreatorTool"), xmpTxtVal.get());
+            }
+        }
+
+        d->xmpMetadata.add(Exiv2::XmpKey("Xmp.tiff.Software"), xmpTxtVal.get());
+
+#endif // _XMP_SUPPORT_
+
+        // Record program info into IPTC tags.
 
         d->iptcMetadata["Iptc.Application2.Program"]        = program.toAscii().constData();
         d->iptcMetadata["Iptc.Application2.ProgramVersion"] = version.toAscii().constData();
@@ -614,15 +633,16 @@ bool KExiv2::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitiz
         xmpTxtVal->read(xmpdatetime);
         d->xmpMetadata.add(Exiv2::XmpKey("Xmp.exif.DateTimeOriginal"), xmpTxtVal.get());
         d->xmpMetadata.add(Exiv2::XmpKey("Xmp.photoshop.DateCreated"), xmpTxtVal.get());
+        d->xmpMetadata.add(Exiv2::XmpKey("Xmp.tiff.DateTime"),         xmpTxtVal.get());
         d->xmpMetadata.add(Exiv2::XmpKey("Xmp.xmp.CreateDate"),        xmpTxtVal.get());
         d->xmpMetadata.add(Exiv2::XmpKey("Xmp.xmp.MetadataDate"),      xmpTxtVal.get());
-        d->xmpMetadata.add(Exiv2::XmpKey("Xmp.xmp.ModifyDate"),        xmpTxtVal.get());        if(setDateTimeDigitized)
+        d->xmpMetadata.add(Exiv2::XmpKey("Xmp.xmp.ModifyDate"),        xmpTxtVal.get());        
+        if(setDateTimeDigitized)
             d->xmpMetadata.add(Exiv2::XmpKey("Xmp.exif.DateTimeDigitized"), xmpTxtVal.get());
 
         // Tag not updated:
         // "Xmp.dc.DateTime" is a sequence of date relevant of dublin core change. 
         //                   This is not the picture date as well
-        // "Xmp.tiff.DateTime" is encoded as "Xmp.xmp:ModifyDate" by Exiv2. Not need to touch it.
 
 #endif // _XMP_SUPPORT_
 
