@@ -247,7 +247,7 @@ QString KExiv2::getXmpTagString(const char* xmpTagName, bool escapeCR) const
         {
             std::ostringstream os;
             os << *it;
-            QString tagValue = QString::fromLocal8Bit(os.str().c_str());
+            QString tagValue = QString::fromUtf8(os.str().c_str());
 
             if (escapeCR)
                 tagValue.replace("\n", " ");
@@ -273,7 +273,7 @@ bool KExiv2::setXmpTagString(const char *xmpTagName, const QString& value, bool 
 
     try
     {
-        const std::string &txt(value.toAscii().constData());
+        const std::string &txt(value.toUtf8().constData());
         Exiv2::Value::AutoPtr xmpTxtVal = Exiv2::Value::create(Exiv2::xmpText);
         xmpTxtVal->read(txt);
 
