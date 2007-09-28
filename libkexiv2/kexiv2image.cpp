@@ -94,9 +94,6 @@ bool KExiv2::setImageProgramId(const QString& program, const QString& version)
 
 QSize KExiv2::getImageDimensions() const
 {
-    if (d->exifMetadata.empty())
-        return QSize();
-
     try
     {
         long width=-1, height=-1;
@@ -222,9 +219,6 @@ bool KExiv2::setImageDimensions(const QSize& size, bool setProgramName)
 
 KExiv2::ImageOrientation KExiv2::getImageOrientation() const
 {
-    if (d->exifMetadata.empty())
-       return ORIENTATION_UNSPECIFIED;
-
     try
     {
         Exiv2::ExifData exifData(d->exifMetadata);
@@ -316,9 +310,6 @@ KExiv2::ImageOrientation KExiv2::getImageOrientation() const
 
 bool KExiv2::setImageOrientation(ImageOrientation orientation, bool setProgramName)
 {
-    if (d->exifMetadata.empty())
-       return false;
-
     if (!setProgramId(setProgramName))
         return false;
 
@@ -378,11 +369,50 @@ bool KExiv2::setImageOrientation(ImageOrientation orientation, bool setProgramNa
 
 KExiv2::ImageColorWorkSpace KExiv2::getImageColorWorkSpace() const
 {
-    if (!d->exifMetadata.empty())
-    {
-        long colorSpace;
+    // Check Exif values.
 
-        if (getExifTagLong("Exif.Photo.ColorSpace", colorSpace))
+    long colorSpace = 0;
+
+    if (getExifTagLong("Exif.Photo.ColorSpace", colorSpace))
+    {
+        switch (colorSpace)
+        {
+            case 1:
+            {
+                return WORKSPACE_SRGB;
+                break;
+            }
+            case 2:
+            {
+                return WORKSPACE_ADOBERGB;
+                break;
+            }
+            case 65535:
+            {
+                // Nikon camera set Exif.Photo.ColorSpace to uncalibrated and 
+                // Exif.Nikon3.ColorMode to "MODE2" when users work in AdobRGB color space.
+                if (getExifTagString("Exif.Nikon3.ColorMode").contains("MODE2"))
+                    return WORKSPACE_ADOBERGB;
+
+                // TODO : add more Makernote parsing here ...
+
+                return WORKSPACE_UNCALIBRATED;
+                break;
+            }
+        }
+    }
+
+    // Check Xmp values.
+
+#ifdef _XMP_SUPPORT_
+
+    colorSpace  = 0;
+    bool ok     = false;
+    QString str = getXmpTagString("Xmp.exif.ColorSpace");
+    if (!str.isEmpty())
+    {
+        colorSpace = str.toLong(&ok);
+        if (ok)
         {
             switch (colorSpace)
             {
@@ -398,40 +428,37 @@ KExiv2::ImageColorWorkSpace KExiv2::getImageColorWorkSpace() const
                 }
                 case 65535:
                 {
-                    // Nikon camera set Exif.Photo.ColorSpace to uncalibrated and 
-                    // Exif.Nikon3.ColorMode to "MODE2" when users work in AdobRGB color space.
-                    if (getExifTagString("Exif.Nikon3.ColorMode").contains("MODE2"))
-                        return WORKSPACE_ADOBERGB;
-
-                    // TODO : add more Makernote parsing here ...
-
                     return WORKSPACE_UNCALIBRATED;
-                    break;
-                }
-                default:
-                {
-                    return WORKSPACE_UNSPECIFIED;
                     break;
                 }
             }
         }
     }
 
+#endif // _XMP_SUPPORT_
+
     return WORKSPACE_UNSPECIFIED;
 }
 
 bool KExiv2::setImageColorWorkSpace(ImageColorWorkSpace workspace, bool setProgramName)
 {
-    if (d->exifMetadata.empty())
-       return false;
-
     if (!setProgramId(setProgramName))
         return false;
 
     try
     {
+        // Set Exif value.
+
         d->exifMetadata["Exif.Photo.ColorSpace"] = static_cast<uint16_t>(workspace);
-        qDebug("Exif color workspace tag set to: %i",  (int)workspace);
+
+        // Set Xmp value.
+
+#ifdef _XMP_SUPPORT_
+
+        setXmpTagString("Xmp.exif.ColorSpace", QString::number((int)workspace), false);
+
+#endif // _XMP_SUPPORT_
+
         return true;
     }
     catch( Exiv2::Error &e )
