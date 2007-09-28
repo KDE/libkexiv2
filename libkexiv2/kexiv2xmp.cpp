@@ -141,10 +141,7 @@ KExiv2::MetaDataMap KExiv2::getXmpTagsDataList(const QStringList &xmpKeysFilter,
             if (md->typeId() == Exiv2::langAlt)
             {
                 QString lang;
-                qDebug() << "Language Alternative string to parse : " << value << endl;
                 value = detectLanguageAlt(value, lang);
-                qDebug() << "Language= " << lang << endl;
-                qDebug() << "String Extracted= " << value << endl;
             }
             else
             {
