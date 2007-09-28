@@ -203,10 +203,10 @@ bool KExiv2::setImageDimensions(const QSize& size, bool setProgramName)
 
 #ifdef _XMP_SUPPORT_
 
-        setXmpTagString("Xmp.tiff.ImageWidth",      QString::number(size.width()),  true);
-        setXmpTagString("Xmp.tiff.ImageLength",     QString::number(size.height()), true);
-        setXmpTagString("Xmp.exif.PixelXDimension", QString::number(size.width()),  true);
-        setXmpTagString("Xmp.exif.PixelYDimension", QString::number(size.height()), true);
+        setXmpTagString("Xmp.tiff.ImageWidth",      QString::number(size.width()),  false);
+        setXmpTagString("Xmp.tiff.ImageLength",     QString::number(size.height()), false);
+        setXmpTagString("Xmp.exif.PixelXDimension", QString::number(size.width()),  false);
+        setXmpTagString("Xmp.exif.PixelYDimension", QString::number(size.height()), false);
 
 #endif // _XMP_SUPPORT_
 
@@ -243,7 +243,7 @@ KExiv2::ImageOrientation KExiv2::getImageOrientation() const
         if (it != exifData.end())
         {
             orientation = it->toLong();
-            qDebug("Minolta Makernote Orientation: %i", (int)orientation);
+            qDebug() << "Orientation => Exif.MinoltaCs7D.Rotation => " << (int)orientation << endl;
             switch(orientation)
             {
                 case 76:
@@ -262,7 +262,7 @@ KExiv2::ImageOrientation KExiv2::getImageOrientation() const
         if (it != exifData.end())
         {
             orientation = it->toLong();
-            qDebug("Minolta Makernote Orientation: %i", (int)orientation);
+            qDebug() << "Orientation => Exif.MinoltaCs5D.Rotation => " << (int)orientation << endl;
             switch(orientation)
             {
                 case 76:
@@ -283,9 +283,28 @@ KExiv2::ImageOrientation KExiv2::getImageOrientation() const
         if (it != exifData.end())
         {
             orientation = it->toLong();
-            qDebug("Exif Orientation: %i", (int)orientation);
+            qDebug() << "Orientation => Exif.Image.Orientation => " << (int)orientation << endl;
             return (ImageOrientation)orientation;
         }
+
+        // -- Standard Xmp tag --------------------------------
+
+#ifdef _XMP_SUPPORT_
+        
+        bool ok = false;
+        QString str = getXmpTagString("Xmp.tiff.Orientation");
+        if (!str.isEmpty())
+        {
+            orientation = str.toLong(&ok);
+            if (ok)
+            {
+                qDebug() << "Orientation => Xmp.tiff.Orientation => " << (int)orientation << endl;
+                return (ImageOrientation)orientation;
+            }
+        }
+
+#endif // _XMP_SUPPORT_
+
     }
     catch( Exiv2::Error &e )
     {
@@ -307,12 +326,22 @@ bool KExiv2::setImageOrientation(ImageOrientation orientation, bool setProgramNa
     {
         if (orientation < ORIENTATION_UNSPECIFIED || orientation > ORIENTATION_ROT_270)
         {
-            qDebug("Exif orientation tag value is not correct!");
+            qDebug("Image orientation value is not correct!");
             return false;
         }
 
+        // Set Exif values.
+
         d->exifMetadata["Exif.Image.Orientation"] = static_cast<uint16_t>(orientation);
-        qDebug("Exif orientation tag set to: %i", (int)orientation);
+        qDebug() << "Exif.Image.Orientation tag set to: " << (int)orientation;
+
+        // Set Xmp values.
+
+#ifdef _XMP_SUPPORT_
+
+        setXmpTagString("Xmp.tiff.Orientation", QString::number((int)orientation), false);
+
+#endif // _XMP_SUPPORT_
 
         // -- Minolta Cameras ----------------------------------
 
