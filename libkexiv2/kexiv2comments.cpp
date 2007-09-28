@@ -5,6 +5,7 @@
  *
  * Date        : 2006-09-15
  * Description : Exiv2 library interface for KDE
+ *               Comments manipulation methods
  *
  * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
@@ -32,8 +33,6 @@
 
 namespace KExiv2Iface
 {
-
-//-- Comments manipulation methods --------------------------------
 
 bool KExiv2::hasComments()
 {

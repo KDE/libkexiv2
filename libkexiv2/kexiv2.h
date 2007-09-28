@@ -13,7 +13,6 @@
  * Exif : http://www.exif.org/Exif2-2.PDF
  * Iptc : http://www.iptc.org/std/IIM/4.1/specification/IIMV4.1.pdf
  * Xmp  : http://www.adobe.com/devnet/xmp/pdfs/xmp_specification.pdf
- *        http://xml.coverpages.org/XMP-MetadataFramework.pdf
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
