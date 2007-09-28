@@ -192,7 +192,7 @@ KExiv2::MetaDataMap KExiv2::getXmpTagsDataList(const QStringList &xmpKeysFilter,
     }
     catch (Exiv2::Error& e)
     {
-        printExiv2ExceptionError("Cannot parse XMP metadata using Exiv2 ", e);
+        printExiv2ExceptionError("Cannot parse Xmp metadata using Exiv2 ", e);
     }
 #endif // _XMP_SUPPORT_
 
@@ -210,7 +210,7 @@ QString KExiv2::getXmpTagTitle(const char *xmpTagName)
     }
     catch (Exiv2::Error& e) 
     {
-        printExiv2ExceptionError("Cannot get metadata tag title using Exiv2 ", e);
+        printExiv2ExceptionError("Cannot get Xmp metadata tag title using Exiv2 ", e);
     }
 #endif // _XMP_SUPPORT_
 
@@ -228,7 +228,7 @@ QString KExiv2::getXmpTagDescription(const char *xmpTagName)
     }
     catch (Exiv2::Error& e) 
     {
-        printExiv2ExceptionError("Cannot get metadata tag description using Exiv2 ", e);
+        printExiv2ExceptionError("Cannot get Xmp metadata tag description using Exiv2 ", e);
     }
 #endif // _XMP_SUPPORT_
 
@@ -257,7 +257,7 @@ QString KExiv2::getXmpTagString(const char* xmpTagName, bool escapeCR) const
     }
     catch( Exiv2::Error &e )
     {
-        printExiv2ExceptionError(QString("Cannot find XMp key '%1' into image using Exiv2 ")
+        printExiv2ExceptionError(QString("Cannot find Xmp key '%1' into image using Exiv2 ")
                                  .arg(xmpTagName), e);
     }
 #endif // _XMP_SUPPORT_
