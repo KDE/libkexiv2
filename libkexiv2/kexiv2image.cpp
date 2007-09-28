@@ -225,19 +225,6 @@ KExiv2::ImageOrientation KExiv2::getImageOrientation() const
     if (d->exifMetadata.empty())
        return ORIENTATION_UNSPECIFIED;
 
-    // Workaround for older Exiv2 versions which do not support
-    // Minolta Makernotes and throw an error for such keys.
-    bool supportMinolta = true;
-    try
-    {
-        Exiv2::ExifKey minoltaKey1("Exif.MinoltaCs7D.Rotation");
-        Exiv2::ExifKey minoltaKey2("Exif.MinoltaCs5D.Rotation");
-    }
-    catch( Exiv2::Error &e )
-    {
-        supportMinolta = false;
-    }
-
     try
     {
         Exiv2::ExifData exifData(d->exifMetadata);
@@ -250,45 +237,42 @@ KExiv2::ImageOrientation KExiv2::getImageOrientation() const
 
         // -- Minolta Cameras ----------------------------------
 
-        if (supportMinolta)
+        Exiv2::ExifKey minoltaKey1("Exif.MinoltaCs7D.Rotation");
+        it = exifData.findKey(minoltaKey1);
+
+        if (it != exifData.end())
         {
-            Exiv2::ExifKey minoltaKey1("Exif.MinoltaCs7D.Rotation");
-            it = exifData.findKey(minoltaKey1);
-
-            if (it != exifData.end())
+            orientation = it->toLong();
+            qDebug("Minolta Makernote Orientation: %i", (int)orientation);
+            switch(orientation)
             {
-                orientation = it->toLong();
-                qDebug("Minolta Makernote Orientation: %i", (int)orientation);
-                switch(orientation)
-                {
-                    case 76:
-                        imageOrient = ORIENTATION_ROT_90;
-                        break;
-                    case 82:
-                        imageOrient = ORIENTATION_ROT_270;
-                        break;
-                }
-                return imageOrient;
+                case 76:
+                    imageOrient = ORIENTATION_ROT_90;
+                    break;
+                case 82:
+                    imageOrient = ORIENTATION_ROT_270;
+                    break;
             }
+            return imageOrient;
+        }
 
-            Exiv2::ExifKey minoltaKey2("Exif.MinoltaCs5D.Rotation");
-            it = exifData.findKey(minoltaKey2);
+        Exiv2::ExifKey minoltaKey2("Exif.MinoltaCs5D.Rotation");
+        it = exifData.findKey(minoltaKey2);
 
-            if (it != exifData.end())
+        if (it != exifData.end())
+        {
+            orientation = it->toLong();
+            qDebug("Minolta Makernote Orientation: %i", (int)orientation);
+            switch(orientation)
             {
-                orientation = it->toLong();
-                qDebug("Minolta Makernote Orientation: %i", (int)orientation);
-                switch(orientation)
-                {
-                    case 76:
-                        imageOrient = ORIENTATION_ROT_90;
-                        break;
-                    case 82:
-                        imageOrient = ORIENTATION_ROT_270;
-                        break;
-                }
-                return imageOrient;
+                case 76:
+                    imageOrient = ORIENTATION_ROT_90;
+                    break;
+                case 82:
+                    imageOrient = ORIENTATION_ROT_270;
+                    break;
             }
+            return imageOrient;
         }
 
         // -- Standard Exif tag --------------------------------
@@ -319,19 +303,6 @@ bool KExiv2::setImageOrientation(ImageOrientation orientation, bool setProgramNa
     if (!setProgramId(setProgramName))
         return false;
 
-    // Workaround for older Exiv2 versions which do not support
-    // Minolta Makernotes and throw an error for such keys.
-    bool supportMinolta = true;
-    try
-    {
-        Exiv2::ExifKey minoltaKey1("Exif.MinoltaCs7D.Rotation");
-        Exiv2::ExifKey minoltaKey2("Exif.MinoltaCs5D.Rotation");
-    }
-    catch( Exiv2::Error &e )
-    {
-        supportMinolta = false;
-    }
-
     try
     {
         if (orientation < ORIENTATION_UNSPECIFIED || orientation > ORIENTATION_ROT_270)
@@ -345,28 +316,25 @@ bool KExiv2::setImageOrientation(ImageOrientation orientation, bool setProgramNa
 
         // -- Minolta Cameras ----------------------------------
 
-        if (supportMinolta)
+        // Minolta camera store image rotation in Makernote.
+        // We remove these information to prevent duplicate values. 
+
+        Exiv2::ExifData::iterator it;
+
+        Exiv2::ExifKey minoltaKey1("Exif.MinoltaCs7D.Rotation");
+        it = d->exifMetadata.findKey(minoltaKey1);
+        if (it != d->exifMetadata.end())
         {
-            // Minolta camera store image rotation in Makernote.
-            // We remove these information to prevent duplicate values. 
+            d->exifMetadata.erase(it);
+            qDebug("Removing Exif.MinoltaCs7D.Rotation tag");
+        }
 
-            Exiv2::ExifData::iterator it;
-
-            Exiv2::ExifKey minoltaKey1("Exif.MinoltaCs7D.Rotation");
-            it = d->exifMetadata.findKey(minoltaKey1);
-            if (it != d->exifMetadata.end())
-            {
-                d->exifMetadata.erase(it);
-                qDebug("Removing Exif.MinoltaCs7D.Rotation tag");
-            }
-
-            Exiv2::ExifKey minoltaKey2("Exif.MinoltaCs5D.Rotation");
-            it = d->exifMetadata.findKey(minoltaKey2);
-            if (it != d->exifMetadata.end())
-            {
-                d->exifMetadata.erase(it);
-                qDebug("Removing Exif.MinoltaCs5D.Rotation tag");
-            }
+        Exiv2::ExifKey minoltaKey2("Exif.MinoltaCs5D.Rotation");
+        it = d->exifMetadata.findKey(minoltaKey2);
+        if (it != d->exifMetadata.end())
+        {
+            d->exifMetadata.erase(it);
+            qDebug("Removing Exif.MinoltaCs5D.Rotation tag");
         }
 
         return true;
