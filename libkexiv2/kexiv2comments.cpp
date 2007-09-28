@@ -131,6 +131,7 @@ QString KExiv2::detectEncodingAndDecode(const std::string &value)
     // (Mozilla chardet, KHTML's autodetection, QTextCodec::codecForContent),
     // but that is probably too much.
     // We check for UTF8, Local encoding and ASCII.
+    // TODO: Gilles ==> Marcel : Look like KEncodingDetector class can provide a full implementation for encoding detection.
 
     if (value.empty())
         return QString();
