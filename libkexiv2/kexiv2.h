@@ -488,6 +488,19 @@ public:
         */ 
     KExiv2::MetaDataMap getXmpTagsDataList(const QStringList &xmpKeysFilter, bool invertSelection=false);
 
+    /** Get a Xmp tags content like a string set with an alternative language header. 'lang' contain the 
+        language alternative information (like fr-FR for French).
+        If 'escapeCR' parameter is true, the CR characters will be removed. 
+        If Xmp tag cannot be found a null string is returned and 'lang' is set to null. */
+    QString getXmpTagStringLangAlt(const char* xmpTagName, QString& lang, bool escapeCR) const;
+
+    /** Set a Xmp tag content using a string with an alternative language header. 'lang' contain the 
+        language alternative information (like fr-FR for French) or is null to set alternative language 
+        to default settings (x-default).
+        Return true if tag is set successfully. */
+    bool setXmpTagStringLangAlt(const char *xmpTagName, const QString& value, 
+                                const QString& lang, bool setProgramName) const;
+
     //-- GPS manipulation methods --------------------------------
 
     /** Get all GPS location information set in image. Return true if all information can be found. */

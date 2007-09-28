@@ -289,4 +289,71 @@ bool KExiv2::setXmpTagString(const char *xmpTagName, const QString& value, bool 
     return false;
 }
 
+QString KExiv2::getXmpTagStringLangAlt(const char* xmpTagName, QString& lang, bool escapeCR) const
+{
+#ifdef _XMP_SUPPORT_
+    try
+    {
+        lang = QString();
+        Exiv2::XmpData xmpData(d->xmpMetadata);
+        Exiv2::XmpKey key(xmpTagName);
+        Exiv2::XmpData::iterator it = xmpData.findKey(key);
+        if (it != xmpData.end())
+        {
+            std::ostringstream os;
+            os << *it;
+            QString tagValue = QString::fromUtf8(os.str().c_str());
+            tagValue = detectLanguageAlt(tagValue, lang);
+
+            if (escapeCR)
+                tagValue.replace("\n", " ");
+
+            return tagValue;
+        }
+    }
+    catch( Exiv2::Error &e )
+    {
+        printExiv2ExceptionError(QString("Cannot find Xmp key '%1' into image using Exiv2 ")
+                                 .arg(xmpTagName), e);
+    }
+#endif // _XMP_SUPPORT_
+
+    return QString();
+}
+
+bool KExiv2::setXmpTagStringLangAlt(const char *xmpTagName, const QString& value, 
+                                    const QString& lang, bool setProgramName) const
+{
+#ifdef _XMP_SUPPORT_
+    if (!setProgramId(setProgramName))
+        return false;
+
+    try
+    {
+        QString txtLangAlt;
+
+        if (lang.isEmpty()) // default language
+        {
+            txtLangAlt = value;
+        }
+        else
+        {
+            txtLangAlt = QString("lang=\"%1\" %2").arg(lang).arg(value);
+        }
+
+        Exiv2::Value::AutoPtr xmpTxtVal = Exiv2::Value::create(Exiv2::langAlt);
+        const std::string &txt(txtLangAlt.toUtf8().constData());
+        xmpTxtVal->read(txt);
+        d->xmpMetadata.add(Exiv2::XmpKey(xmpTagName), xmpTxtVal.get());
+        return true;
+    }
+    catch( Exiv2::Error &e )
+    {
+        printExiv2ExceptionError("Cannot set Xmp tag string lang-alt into image using Exiv2 ", e);
+    }
+#endif // _XMP_SUPPORT_
+
+    return false;
+}
+
 }  // NameSpace KExiv2Iface
