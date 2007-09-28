@@ -330,16 +330,10 @@ bool KExiv2::setXmpTagStringLangAlt(const char *xmpTagName, const QString& value
 
     try
     {
-        QString txtLangAlt;
+        QString txtLangAlt = value; // default language
 
-        if (lang.isEmpty()) // default language
-        {
-            txtLangAlt = value;
-        }
-        else
-        {
-            txtLangAlt = QString("lang=\"%1\" %2").arg(lang).arg(value);
-        }
+        if (!lang.isEmpty()) 
+            txtLangAlt = QString("lang=%1 %2").arg(lang).arg(value);
 
         Exiv2::Value::AutoPtr xmpTxtVal = Exiv2::Value::create(Exiv2::langAlt);
         const std::string &txt(txtLangAlt.toUtf8().constData());
