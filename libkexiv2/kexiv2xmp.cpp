@@ -34,7 +34,7 @@
 namespace KExiv2Iface
 {
 
-bool KExiv2::hasXmp()
+bool KExiv2::hasXmp() const
 {
 #ifdef _XMP_SUPPORT_
     return !d->xmpMetadata.empty();
@@ -43,7 +43,7 @@ bool KExiv2::hasXmp()
 #endif // _XMP_SUPPORT_
 }
 
-bool KExiv2::clearXmp()
+bool KExiv2::clearXmp() const
 {
 #ifdef _XMP_SUPPORT_
     try
@@ -86,7 +86,7 @@ QByteArray KExiv2::getXmp() const
     return QByteArray();
 }
 
-bool KExiv2::setXmp(const QByteArray& data)
+bool KExiv2::setXmp(const QByteArray& data) const
 {
 #ifdef _XMP_SUPPORT_
     try
@@ -265,7 +265,7 @@ QString KExiv2::getXmpTagString(const char* xmpTagName, bool escapeCR) const
     return QString();
 }
 
-bool KExiv2::setXmpTagString(const char *xmpTagName, const QString& value, bool setProgramName)
+bool KExiv2::setXmpTagString(const char *xmpTagName, const QString& value, bool setProgramName) const
 {
 #ifdef _XMP_SUPPORT_
     if (!setProgramId(setProgramName))

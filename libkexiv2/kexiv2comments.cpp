@@ -34,12 +34,12 @@
 namespace KExiv2Iface
 {
 
-bool KExiv2::hasComments()
+bool KExiv2::hasComments() const
 {
     return !d->imageComments.empty();
 }
 
-bool KExiv2::clearComments()
+bool KExiv2::clearComments() const
 {
     return setComments(QByteArray());
 }
@@ -54,7 +54,7 @@ QString KExiv2::getCommentsDecoded() const
     return detectEncodingAndDecode(commentsMetaData());
 }
 
-bool KExiv2::setComments(const QByteArray& data)
+bool KExiv2::setComments(const QByteArray& data) const
 {
     d->imageComments = std::string(data.data(), data.size());
     return true;

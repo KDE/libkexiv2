@@ -124,7 +124,7 @@ bool KExiv2::isReadOnly(const QString& filePath)
 
 //-- General methods ----------------------------------------------
 
-bool KExiv2::load(const QString& filePath)
+bool KExiv2::load(const QString& filePath) const
 {
     QFileInfo finfo(filePath);
     if (filePath.isEmpty() || !finfo.isReadable())
@@ -171,7 +171,7 @@ bool KExiv2::load(const QString& filePath)
     return false;
 }
 
-bool KExiv2::save(const QString& filePath)
+bool KExiv2::save(const QString& filePath) const
 {
     if (filePath.isEmpty())
         return false;
@@ -240,12 +240,12 @@ bool KExiv2::save(const QString& filePath)
     return false;
 }
 
-bool KExiv2::applyChanges()
+bool KExiv2::applyChanges() const
 {
     return save(d->filePath);
 }
 
-bool KExiv2::isEmpty()
+bool KExiv2::isEmpty() const
 {
     if (!hasComments() && !hasExif() && !hasIptc() && !hasXmp())
         return true;
@@ -263,7 +263,7 @@ QString KExiv2::getFilePath() const
     return d->filePath;
 }
 
-bool KExiv2::setProgramId(bool /*on*/)
+bool KExiv2::setProgramId(bool /*on*/) const
 {
     return true; 
 }

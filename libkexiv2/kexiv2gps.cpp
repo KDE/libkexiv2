@@ -136,7 +136,7 @@ bool KExiv2::getGPSInfo(double& altitude, double& latitude, double& longitude) c
     return false;
 }
 
-bool KExiv2::setGPSInfo(double altitude, double latitude, double longitude, bool setProgramName)
+bool KExiv2::setGPSInfo(double altitude, double latitude, double longitude, bool setProgramName) const
 {
     if (!setProgramId(setProgramName))
         return false;
@@ -253,7 +253,7 @@ bool KExiv2::setGPSInfo(double altitude, double latitude, double longitude, bool
     return false;
 }
 
-bool KExiv2::removeGPSInfo(bool setProgramName)
+bool KExiv2::removeGPSInfo(bool setProgramName) const
 {
     if (!setProgramId(setProgramName))
         return false;

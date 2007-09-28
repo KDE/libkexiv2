@@ -134,18 +134,18 @@ public:
 
     /** Load all metadata (Exif, Iptc, Xmp, and JFIF Comments) from a picture (JPEG, RAW, TIFF, PNG, 
         DNG, etc...). Return true if metadata have been loaded successfully from file. */
-    virtual bool load(const QString& filePath);
+    virtual bool load(const QString& filePath) const;
 
     /** Save all metadata to a file. This one can be different than original picture to perform 
         transfert operation Return true if metadata have been saved into file. */
-    bool save(const QString& filePath);
+    bool save(const QString& filePath) const;
 
     /** The same than save() method, but it apply on current image. Return true if metadata 
         have been saved into file. */
-    bool applyChanges();
+    bool applyChanges() const;
 
     /** Return 'true' if metadata container in memory as no Comments, Exif, Iptc, and Xmp. */
-    bool isEmpty();
+    bool isEmpty() const;
 
     /** Set the file path of current image. */
     void setFilePath(const QString& path);
@@ -238,10 +238,10 @@ public:
     //-- Comments manipulation methods --------------------------------
 
     /** Return 'true' if metadata container in memory as Comments. */
-    bool hasComments();
+    bool hasComments() const;
 
     /** Clear the Comments metadata container in memory. */
-    bool clearComments();
+    bool clearComments() const;
 
     /** Return a Qt byte array copy of Comments container get from current image. 
         Comments are JFIF section of JPEG images. Look Exiv2 API for more information.
@@ -255,7 +255,7 @@ public:
 
     /** Set the Comments data using a Qt byte array. Return true if Comments metadata
         have been changed in memory. */
-    bool setComments(const QByteArray& data);
+    bool setComments(const QByteArray& data) const;
 
     /** Wrapper method to convert a Comments content to a QString. */ 
     static QString convertCommentValue(const Exiv2::Exifdatum &comment);
@@ -271,10 +271,10 @@ public:
     //-- Exif manipulation methods --------------------------------
 
     /** Return 'true' if metadata container in memory as Exif. */
-    bool hasExif();
+    bool hasExif() const;
 
     /** Clear the Exif metadata container in memory. */
-    bool clearExif();
+    bool clearExif() const;
 
     /** Return a Qt byte array copy of Exif container get from current image. 
         Set true 'addExifHeader' parameter to add an Exif header to Exif metadata. 
@@ -283,7 +283,7 @@ public:
 
     /** Set the Exif data using a Qt byte array. Return true if Exif metadata
         have been changed in memory. */
-    bool setExif(const QByteArray& data);
+    bool setExif(const QByteArray& data) const;
 
     /** Return a QImage copy of Exif thumbnail image. Return a null image if thumbnail cannot 
         be found. The 'fixOrientation' parameter will rotate automatically the thumbnail if Exif 
@@ -292,7 +292,7 @@ public:
 
     /** Set the Exif Thumbnail image. The thumbnail image must have the right dimensions before. 
         Look Exif specification for details. Return true if thumbnail have been changed in metadata. */
-    bool setExifThumbnail(const QImage& thumb, bool setProgramName=true);
+    bool setExifThumbnail(const QImage& thumb, bool setProgramName=true) const;
     
     /** Return a QString copy of Exif user comments. Return a null string if user comments cannot 
         be found. */
@@ -300,20 +300,20 @@ public:
 
     /** Set the Exif user comments from image. Look Exif specification for more details about this tag. 
         Return true if Exif user comments have been changed in metadata. */
-    bool setExifComment(const QString& comment, bool setProgramName=true);
+    bool setExifComment(const QString& comment, bool setProgramName=true) const;
 
     /** Get an Exif tags content like a string. If 'escapeCR' parameter is true, the CR characters
         will be removed. If Exif tag cannot be found a null string is returned. */
     QString getExifTagString(const char *exifTagName, bool escapeCR=true) const;
 
     /** Set an Exif tag content using a string. Return true if tag is set successfully. */
-    bool setExifTagString(const char *exifTagName, const QString& value, bool setProgramName=true);
+    bool setExifTagString(const char *exifTagName, const QString& value, bool setProgramName=true) const;
 
     /** Get an Exif tags content like a long value. Return true if Exif tag be found. */
     bool getExifTagLong(const char* exifTagName, long &val) const;
 
     /** Set an Exif tag content using a long value. Return true if tag is set successfully. */
-    bool setExifTagLong(const char *exifTagName, long val, bool setProgramName=true);
+    bool setExifTagLong(const char *exifTagName, long val, bool setProgramName=true) const;
 
     /** Get the 'component' index of an Exif tags content like a rational value. 
         'num' and 'den' are the numerator and the denominator of the rational value. 
@@ -323,14 +323,14 @@ public:
     /** Set an Exif tags content using a rational value. 
         'num' and 'den' are the numerator and the denominator of the rational value. 
         Return true if tag is set successfully. */
-    bool setExifTagRational(const char *exifTagName, long int num, long int den, bool setProgramName=true);
+    bool setExifTagRational(const char *exifTagName, long int num, long int den, bool setProgramName=true) const;
 
     /** Get an Exif tags content like a bytes array. Return an empty bytes array if Exif 
         tag cannot be found. */
     QByteArray getExifTagData(const char *exifTagName) const;
 
     /** Set an Exif tag content using a bytes array. Return true if tag is set successfully. */
-    bool setExifTagData(const char *exifTagName, const QByteArray& data, bool setProgramName=true);
+    bool setExifTagData(const char *exifTagName, const QByteArray& data, bool setProgramName=true) const;
 
     /** Get an Exif tags content as a QVariant. Returns a null QVariant if the Exif
         tag cannot be found.
@@ -347,11 +347,11 @@ public:
         For the meaning of rationalWantSmallDenominator, see the documentation of the convertToRational methods.
      */
     bool setExifTagVariant(const char *exifTagName, const QVariant& data,
-                           bool rationalWantSmallDenominator=true, bool setProgramName=true);
+                           bool rationalWantSmallDenominator=true, bool setProgramName=true) const;
 
     /** Remove the Exif tag 'exifTagName' from Exif metadata. Return true if tag is 
         removed successfully. */
-    bool removeExifTag(const char *exifTagName, bool setProgramName=true);
+    bool removeExifTag(const char *exifTagName, bool setProgramName=true) const;
 
     /** Return the Exif Tag title or a null string. */ 
     static QString getExifTagTitle(const char *exifTagName);
@@ -385,10 +385,10 @@ public:
     //-- Iptc manipulation methods --------------------------------
 
     /** Return 'true' if metadata container in memory as Iptc. */
-    bool hasIptc();
+    bool hasIptc() const;
 
     /** Clear the Iptc metadata container in memory. */
-    bool clearIptc();
+    bool clearIptc() const;
 
     /** Return a Qt byte array copy of Iptc container get from current image. 
         Set true 'addIrbHeader' parameter to add an Irb header to Iptc metadata. 
@@ -397,25 +397,25 @@ public:
 
     /** Set the Iptc data using a Qt byte array. Return true if Iptc metadata
         have been changed in memory. */
-    bool setIptc(const QByteArray& data);
+    bool setIptc(const QByteArray& data) const;
 
     /** Get an Iptc tags content like a string. If 'escapeCR' parameter is true, the CR characters
         will be removed. If Iptc tag cannot be found a null string is returned. */
     QString getIptcTagString(const char* iptcTagName, bool escapeCR=true) const;
 
     /** Set an Iptc tag content using a string. Return true if tag is set successfully. */
-    bool setIptcTagString(const char *iptcTagName, const QString& value, bool setProgramName=true);
+    bool setIptcTagString(const char *iptcTagName, const QString& value, bool setProgramName=true) const;
 
     /** Get an Iptc tags content like a bytes array. Return an empty bytes array if Iptc 
         tag cannot be found. */
     QByteArray getIptcTagData(const char *iptcTagName) const;
 
     /** Set an Iptc tag content using a bytes array. Return true if tag is set successfully. */
-    bool setIptcTagData(const char *iptcTagName, const QByteArray& data, bool setProgramName=true);
+    bool setIptcTagData(const char *iptcTagName, const QByteArray& data, bool setProgramName=true) const;
 
     /** Remove the Iptc tag 'iptcTagName' from Iptc metadata. Return true if tag is 
         removed successfully. */
-    bool removeIptcTag(const char *iptcTagName, bool setProgramName=true);
+    bool removeIptcTag(const char *iptcTagName, bool setProgramName=true) const;
 
     /** Return the Iptc Tag title or a null string. */ 
     static QString getIptcTagTitle(const char *iptcTagName);
@@ -444,10 +444,10 @@ public:
     //-- Xmp manipulation methods --------------------------------
 
     /** Return 'true' if metadata container in memory as Xmp. */
-    bool hasXmp();
+    bool hasXmp() const;
 
     /** Clear the Xmp metadata container in memory. */
-    bool clearXmp();
+    bool clearXmp() const;
 
     /** Return a Qt byte array copy of XMp container get from current image. 
         Return a null Qt byte array if there is no Xmp metadata in memory. */
@@ -455,14 +455,14 @@ public:
 
     /** Set the Xmp data using a Qt byte array. Return true if Xmp metadata
         have been changed in memory. */
-    bool setXmp(const QByteArray& data);
+    bool setXmp(const QByteArray& data) const;
 
     /** Get a Xmp tags content like a string. If 'escapeCR' parameter is true, the CR characters
         will be removed. If Xmp tag cannot be found a null string is returned. */
     QString getXmpTagString(const char* xmpTagName, bool escapeCR=true) const;
 
     /** Set a Xmp tag content using a string. Return true if tag is set successfully. */
-    bool setXmpTagString(const char *xmpTagName, const QString& value, bool setProgramName=true);
+    bool setXmpTagString(const char *xmpTagName, const QString& value, bool setProgramName=true) const;
 
     /** Return the Xmp Tag title or a null string. */ 
     static QString getXmpTagTitle(const char *xmpTagName);
@@ -495,11 +495,11 @@ public:
 
     /** Set all GPS location information into image. Return true if all information have been 
         changed in metadata. */
-    bool setGPSInfo(double altitude, double latitude, double longitude, bool setProgramName=true);
+    bool setGPSInfo(double altitude, double latitude, double longitude, bool setProgramName=true) const;
 
     /** Remove all Exif tags relevant of GPS location information. Return true if all tags have been 
         removed successfully in metadata. */
-    bool removeGPSInfo(bool setProgramName=true);
+    bool removeGPSInfo(bool setProgramName=true) const;
 
     /** This method converts 'number' to a rational value, returned in the 'numerator' and
         'denominator' parameters. Set the precision using 'rounding' parameter.
@@ -535,7 +535,7 @@ protected:
 
         return true;
     */
-    virtual bool setProgramId(bool on=true);
+    virtual bool setProgramId(bool on=true) const;
 
 private:
 

@@ -34,12 +34,12 @@
 namespace KExiv2Iface
 {
 
-bool KExiv2::hasIptc()
+bool KExiv2::hasIptc() const
 {
     return !d->iptcMetadata.empty();
 }
 
-bool KExiv2::clearIptc()
+bool KExiv2::clearIptc() const
 {
     try
     {
@@ -91,7 +91,7 @@ QByteArray KExiv2::getIptc(bool addIrbHeader) const
     return QByteArray();
 }
 
-bool KExiv2::setIptc(const QByteArray& data)
+bool KExiv2::setIptc(const QByteArray& data) const
 {
     try
     {
@@ -217,7 +217,7 @@ QString KExiv2::getIptcTagDescription(const char *iptcTagName)
     return QString();
 }
 
-bool KExiv2::removeIptcTag(const char *iptcTagName, bool setProgramName)
+bool KExiv2::removeIptcTag(const char *iptcTagName, bool setProgramName) const
 {
     if (!setProgramId(setProgramName))
         return false;
@@ -240,7 +240,7 @@ bool KExiv2::removeIptcTag(const char *iptcTagName, bool setProgramName)
     return false;
 }
 
-bool KExiv2::setIptcTagData(const char *iptcTagName, const QByteArray& data, bool setProgramName)
+bool KExiv2::setIptcTagData(const char *iptcTagName, const QByteArray& data, bool setProgramName) const
 {
     if (data.isEmpty())
         return false;
@@ -314,7 +314,7 @@ QString KExiv2::getIptcTagString(const char* iptcTagName, bool escapeCR) const
     return QString();
 }
 
-bool KExiv2::setIptcTagString(const char *iptcTagName, const QString& value, bool setProgramName)
+bool KExiv2::setIptcTagString(const char *iptcTagName, const QString& value, bool setProgramName) const
 {
     if (!setProgramId(setProgramName))
         return false;

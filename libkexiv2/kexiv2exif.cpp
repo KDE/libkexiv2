@@ -34,12 +34,12 @@
 namespace KExiv2Iface
 {
 
-bool KExiv2::hasExif()
+bool KExiv2::hasExif() const
 {
     return !d->exifMetadata.empty();
 }
 
-bool KExiv2::clearExif()
+bool KExiv2::clearExif() const
 {
     try
     {
@@ -89,7 +89,7 @@ QByteArray KExiv2::getExif(bool addExifHeader) const
     return QByteArray();
 }
 
-bool KExiv2::setExif(const QByteArray& data)
+bool KExiv2::setExif(const QByteArray& data) const
 {
     try
     {
@@ -197,7 +197,7 @@ QString KExiv2::getExifComment() const
     return QString();
 }
 
-bool KExiv2::setExifComment(const QString& comment, bool setProgramName)
+bool KExiv2::setExifComment(const QString& comment, bool setProgramName) const
 {
     if (!setProgramId(setProgramName))
         return false;
@@ -272,7 +272,7 @@ QString KExiv2::getExifTagDescription(const char *exifTagName)
     return QString();
 }
 
-bool KExiv2::removeExifTag(const char *exifTagName, bool setProgramName)
+bool KExiv2::removeExifTag(const char *exifTagName, bool setProgramName) const
 {
     if (!setProgramId(setProgramName))
         return false;
@@ -318,7 +318,7 @@ bool KExiv2::getExifTagRational(const char *exifTagName, long int &num, long int
     return false;
 }
 
-bool KExiv2::setExifTagLong(const char *exifTagName, long val, bool setProgramName)
+bool KExiv2::setExifTagLong(const char *exifTagName, long val, bool setProgramName) const
 {
     if (!setProgramId(setProgramName))
         return false;
@@ -336,7 +336,7 @@ bool KExiv2::setExifTagLong(const char *exifTagName, long val, bool setProgramNa
     return false;
 }
 
-bool KExiv2::setExifTagRational(const char *exifTagName, long int num, long int den, bool setProgramName)
+bool KExiv2::setExifTagRational(const char *exifTagName, long int num, long int den, bool setProgramName) const
 {
     if (!setProgramId(setProgramName))
         return false;
@@ -354,7 +354,7 @@ bool KExiv2::setExifTagRational(const char *exifTagName, long int num, long int 
     return false;
 }
 
-bool KExiv2::setExifTagData(const char *exifTagName, const QByteArray& data, bool setProgramName)
+bool KExiv2::setExifTagData(const char *exifTagName, const QByteArray& data, bool setProgramName) const
 {
     if (data.isEmpty())
         return false;
@@ -376,7 +376,8 @@ bool KExiv2::setExifTagData(const char *exifTagName, const QByteArray& data, boo
     return false;
 }
 
-bool KExiv2::setExifTagVariant(const char *exifTagName, const QVariant& val, bool rationalWantSmallDenominator, bool setProgramName)
+bool KExiv2::setExifTagVariant(const char *exifTagName, const QVariant& val, 
+                               bool rationalWantSmallDenominator, bool setProgramName) const
 {
     switch (val.type())
     {
@@ -663,7 +664,7 @@ QString KExiv2::getExifTagString(const char* exifTagName, bool escapeCR) const
     return QString();
 }
 
-bool KExiv2::setExifTagString(const char *exifTagName, const QString& value, bool setProgramName)
+bool KExiv2::setExifTagString(const char *exifTagName, const QString& value, bool setProgramName) const
 {
     if (!setProgramId(setProgramName))
         return false;
@@ -758,7 +759,7 @@ QImage KExiv2::getExifThumbnail(bool fixOrientation) const
     return thumbnail;
 }
 
-bool KExiv2::setExifThumbnail(const QImage& thumb, bool setProgramName)
+bool KExiv2::setExifThumbnail(const QImage& thumb, bool setProgramName) const
 {
     if (!setProgramId(setProgramName))
         return false;
