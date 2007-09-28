@@ -151,4 +151,22 @@ QString KExiv2::detectEncodingAndDecode(const std::string &value)
     //return QString::fromLatin1(value.c_str());
 }
 
+QString KExiv2::detectLanguageAlt(const QString &value, QString& lang)
+{
+    // Ex. from an Xmp tag Xmp.tiff.copyright: "lang="x-default" (c) Gilles Caulier 2007"
+
+    if (value.size() > 6 && value.startsWith(QString("lang=\"")))
+    {
+        int pos = value.indexOf(QString("\""), 6);
+        if (pos != -1)
+        {
+            lang = value.mid(6, pos-6);
+            return (value.mid(pos+2));
+        }
+    }
+
+    lang = QString();
+    return value;
+}
+
 }  // NameSpace KExiv2Iface

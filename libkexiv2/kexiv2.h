@@ -263,6 +263,11 @@ public:
     /** Charset autodetection to convert a string to a QString. */ 
     static QString detectEncodingAndDecode(const std::string &value);
 
+    /** Language Alternative autodetection. Return a QString without language alternative 
+        header. Header is saved into 'lang'. If no language alternative is founf, value is returned 
+        as well and 'lang' is set to a null string. */ 
+    static QString detectLanguageAlt(const QString &value, QString& lang);
+
     //-- Exif manipulation methods --------------------------------
 
     /** Return 'true' if metadata container in memory as Exif. */

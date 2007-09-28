@@ -136,6 +136,21 @@ KExiv2::MetaDataMap KExiv2::getXmpTagsDataList(const QStringList &xmpKeysFilter,
             std::ostringstream os;
             os << *md;
             QString value = QString::fromUtf8(os.str().c_str());
+
+            // If the tag is a language alternative type, parse content to detect encoding.
+            if (md->typeId() == Exiv2::langAlt)
+            {
+                QString lang;
+                qDebug() << "Language Alternative string to parse : " << value << endl;
+                value = detectLanguageAlt(value, lang);
+                qDebug() << "Language= " << lang << endl;
+                qDebug() << "String Extracted= " << value << endl;
+            }
+            else
+            {
+                value = QString::fromUtf8(os.str().c_str());
+            }
+
             // To make a string just on one line.
             value.replace("\n", " ");
 
