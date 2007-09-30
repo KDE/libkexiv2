@@ -157,7 +157,7 @@ public:
 
     /** Set Program name and program version in Exif and Iptc Metadata. Return true if information
         have been changed in metadata. */
-    bool setImageProgramId(const QString& program, const QString& version);
+    bool setImageProgramId(const QString& program, const QString& version) const;
 
     /** Return the size of image in pixels using Exif tags. Return a null dimmension if size cannot 
         be found. */
@@ -165,7 +165,7 @@ public:
 
     /** Set the size of image in pixels in Exif tags. Return true if size have been changed 
         in metadata. */
-    bool setImageDimensions(const QSize& size, bool setProgramName=true);
+    bool setImageDimensions(const QSize& size, bool setProgramName=true) const;
 
     /** Return the image orientation set in Exif metadata. The makernotes of image are also parsed to 
         get this information. See ImageOrientation values for details. */
@@ -173,7 +173,7 @@ public:
 
     /** Set the Exif orientation tag of image. See ImageOrientation values for details 
         Return true if orientation have been changed in metadata. */
-    bool setImageOrientation(ImageOrientation orientation, bool setProgramName=true);
+    bool setImageOrientation(ImageOrientation orientation, bool setProgramName=true) const;
 
     /** Return the image color-space set in Exif metadata. The makernotes of image are also parsed to 
         get this information. See ImageColorWorkSpace values for details. */
@@ -181,7 +181,7 @@ public:
 
     /** Set the Exif color-space tag of image. See ImageColorWorkSpace values for details 
         Return true if work-space have been changed in metadata. */
-    bool setImageColorWorkSpace(ImageColorWorkSpace workspace, bool setProgramName=true);
+    bool setImageColorWorkSpace(ImageColorWorkSpace workspace, bool setProgramName=true) const;
 
     /** Return the time stamp of image. Exif information are check in first, IPTC in second 
         if image don't have Exif information. If no time stamp is found, a null date is returned. */
@@ -190,7 +190,7 @@ public:
     /** Set the Exif and Iptc time stamp. If 'setDateTimeDigitized' parameter is true, the 'Digitalized'
         time stamp is set, else only 'Created' time stamp is set. */
     bool setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitized = false, 
-                          bool setProgramName=true);
+                          bool setProgramName=true) const;
 
     /** Return a QImage copy of Iptc preview image. Return a null image if preview cannot 
         be found. */
@@ -202,7 +202,7 @@ public:
         Re-implemente this method if you want to use another image file format than JPEG to 
         save preview.
     */
-    virtual bool setImagePreview(const QImage& preview, bool setProgramName=true);
+    virtual bool setImagePreview(const QImage& preview, bool setProgramName=true) const;
 
     /** Return a strings list of Iptc keywords from image. Return an empty list if no keyword are set. */
     QStringList getImageKeywords() const;
@@ -212,7 +212,7 @@ public:
         all new keywords with all old keywords to prevent duplicate entries in image. Return true if keywords
         have been changed in metadata. */
     bool setImageKeywords(const QStringList& oldKeywords, const QStringList& newKeywords, 
-                          bool setProgramName=true);
+                          bool setProgramName=true) const;
 
     /** Return a strings list of Iptc subjects from image. Return an empty list if no subject are set. */
     QStringList getImageSubjects() const;
@@ -222,7 +222,7 @@ public:
         all new subjects with all old subjects to prevent duplicate entries in image. Return true if subjects
         have been changed in metadata. */
     bool setImageSubjects(const QStringList& oldSubjects, const QStringList& newSubjects, 
-                          bool setProgramName=true);
+                          bool setProgramName=true) const;
 
     /** Return a strings list of Iptc sub-categories from image. Return an empty list if no sub-category 
         are set. */
@@ -233,7 +233,7 @@ public:
         from image. The method will compare all new sub-categories with all old sub-categories to prevent
         duplicate entries in image. Return true if sub-categories have been changed in metadata. */
     bool setImageSubCategories(const QStringList& oldSubCategories, const QStringList& newSubCategories, 
-                               bool setProgramName=true);
+                               bool setProgramName=true) const;
 
     //-- Comments manipulation methods --------------------------------
 
@@ -380,7 +380,7 @@ public:
         - not include "Iop", or "Thumbnail", or "Image", or "Photo" in the Exif tag keys 
           if 'inverSelection' is true.
         */ 
-    KExiv2::MetaDataMap getExifTagsDataList(const QStringList &exifKeysFilter, bool invertSelection=false);
+    KExiv2::MetaDataMap getExifTagsDataList(const QStringList &exifKeysFilter, bool invertSelection=false) const;
 
     //-- Iptc manipulation methods --------------------------------
 
@@ -439,7 +439,7 @@ public:
         - not include "Envelope", or "Application2" in the Iptc tag keys 
           if 'inverSelection' is true.
         */ 
-    KExiv2::MetaDataMap getIptcTagsDataList(const QStringList &iptcKeysFilter, bool invertSelection=false);
+    KExiv2::MetaDataMap getIptcTagsDataList(const QStringList &iptcKeysFilter, bool invertSelection=false) const;
 
     //-- Xmp manipulation methods --------------------------------
 
@@ -486,7 +486,7 @@ public:
         - not include "dc", or "xmp" in the Xmp tag keys 
           if 'inverSelection' is true.
         */ 
-    KExiv2::MetaDataMap getXmpTagsDataList(const QStringList &xmpKeysFilter, bool invertSelection=false);
+    KExiv2::MetaDataMap getXmpTagsDataList(const QStringList &xmpKeysFilter, bool invertSelection=false) const;
 
     /** Get a Xmp tags content like a string set with an alternative language header. 'lang' contain the 
         language alternative information (like fr-FR for French).
@@ -529,7 +529,7 @@ public:
         exact with rounding = 4 and more exact with rounding > 4.
      */
     static void convertToRationalSmallDenominator(double number, long int* numerator,
-                                  long int* denominator);
+                                                  long int* denominator);
 
 protected:
     

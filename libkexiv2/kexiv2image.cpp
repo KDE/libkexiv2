@@ -34,7 +34,7 @@
 namespace KExiv2Iface
 {
 
-bool KExiv2::setImageProgramId(const QString& program, const QString& version)
+bool KExiv2::setImageProgramId(const QString& program, const QString& version) const
 {
     try
     {
@@ -180,7 +180,7 @@ QSize KExiv2::getImageDimensions() const
     return QSize();
 }
 
-bool KExiv2::setImageDimensions(const QSize& size, bool setProgramName)
+bool KExiv2::setImageDimensions(const QSize& size, bool setProgramName) const
 {
     if (!setProgramId(setProgramName))
         return false;
@@ -307,7 +307,7 @@ KExiv2::ImageOrientation KExiv2::getImageOrientation() const
     return ORIENTATION_UNSPECIFIED;
 }
 
-bool KExiv2::setImageOrientation(ImageOrientation orientation, bool setProgramName)
+bool KExiv2::setImageOrientation(ImageOrientation orientation, bool setProgramName) const
 {
     if (!setProgramId(setProgramName))
         return false;
@@ -439,7 +439,7 @@ KExiv2::ImageColorWorkSpace KExiv2::getImageColorWorkSpace() const
     return WORKSPACE_UNSPECIFIED;
 }
 
-bool KExiv2::setImageColorWorkSpace(ImageColorWorkSpace workspace, bool setProgramName)
+bool KExiv2::setImageColorWorkSpace(ImageColorWorkSpace workspace, bool setProgramName) const
 {
     if (!setProgramId(setProgramName))
         return false;
@@ -668,7 +668,7 @@ QDateTime KExiv2::getImageDateTime() const
     return QDateTime();
 }
 
-bool KExiv2::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitized, bool setProgramName)
+bool KExiv2::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitized, bool setProgramName) const
 {
     if(!dateTime.isValid())
         return false;
@@ -754,7 +754,7 @@ bool KExiv2::getImagePreview(QImage& preview) const
     return false;
 }
 
-bool KExiv2::setImagePreview(const QImage& preview, bool setProgramName)
+bool KExiv2::setImagePreview(const QImage& preview, bool setProgramName) const
 {
     if (!setProgramId(setProgramName))
         return false;
@@ -829,7 +829,7 @@ QStringList KExiv2::getImageKeywords() const
 }
 
 bool KExiv2::setImageKeywords(const QStringList& oldKeywords, const QStringList& newKeywords, 
-                              bool setProgramName)
+                              bool setProgramName) const
 {
     if (!setProgramId(setProgramName))
         return false;
@@ -917,7 +917,7 @@ QStringList KExiv2::getImageSubjects() const
 }
 
 bool KExiv2::setImageSubjects(const QStringList& oldSubjects, const QStringList& newSubjects, 
-                              bool setProgramName)
+                              bool setProgramName) const
 {
     if (!setProgramId(setProgramName))
         return false;
@@ -1000,7 +1000,7 @@ QStringList KExiv2::getImageSubCategories() const
 }
 
 bool KExiv2::setImageSubCategories(const QStringList& oldSubCategories, const QStringList& newSubCategories, 
-                                   bool setProgramName)
+                                   bool setProgramName) const
 {
     if (!setProgramId(setProgramName))
         return false;

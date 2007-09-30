@@ -112,7 +112,7 @@ bool KExiv2::setExif(const QByteArray& data) const
     return false;
 }
 
-KExiv2::MetaDataMap KExiv2::getExifTagsDataList(const QStringList &exifKeysFilter, bool invertSelection)
+KExiv2::MetaDataMap KExiv2::getExifTagsDataList(const QStringList &exifKeysFilter, bool invertSelection) const
 {
     if (d->exifMetadata.empty())
        return MetaDataMap();

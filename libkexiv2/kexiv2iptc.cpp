@@ -114,7 +114,7 @@ bool KExiv2::setIptc(const QByteArray& data) const
     return false;
 }
 
-KExiv2::MetaDataMap KExiv2::getIptcTagsDataList(const QStringList &iptcKeysFilter, bool invertSelection)
+KExiv2::MetaDataMap KExiv2::getIptcTagsDataList(const QStringList &iptcKeysFilter, bool invertSelection) const
 {
     if (d->iptcMetadata.empty())
        return MetaDataMap();

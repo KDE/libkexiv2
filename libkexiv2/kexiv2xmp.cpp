@@ -114,7 +114,7 @@ bool KExiv2::setXmp(const QByteArray& data) const
     return false;
 }
 
-KExiv2::MetaDataMap KExiv2::getXmpTagsDataList(const QStringList &xmpKeysFilter, bool invertSelection)
+KExiv2::MetaDataMap KExiv2::getXmpTagsDataList(const QStringList &xmpKeysFilter, bool invertSelection) const
 {
 #ifdef _XMP_SUPPORT_
     if (d->xmpMetadata.empty())
