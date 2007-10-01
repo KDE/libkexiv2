@@ -507,10 +507,11 @@ public:
                             bool setProgramName=true) const;
 
     /** Register a namespace which Exiv2 doesn't know yet. This is only needed
-        when new Xmp properties are added manually. 
+        when new Xmp properties are added manually. 'uri' is the namespace url and prefix the 
+        string used to construct new Xmp key (ex. "Xmp.digiKam.tagList").
         NOTE: If the XMP metadata is read from an image, namespaces are decoded and registered 
         by Exiv2 at the same time. */
-    bool registerXmpNameSpace(const QString& nameSpace) const;
+    bool registerXmpNameSpace(const QString& uri, const QString& prefix) const;
 
     /** Remove the Xmp tag 'xmpTagName' from Xmp metadata. Return true if tag is 
         removed successfully. */

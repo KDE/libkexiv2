@@ -379,14 +379,15 @@ bool KExiv2::setXmpTagStringSeq(const char *xmpTagName, const QStringList& seq,
     return false;
 }
 
-bool KExiv2::registerXmpNameSpace(const QString& nameSpace) const
+bool KExiv2::registerXmpNameSpace(const QString& uri, const QString& prefix) const
 {
 #ifdef _XMP_SUPPORT_
 
     try
     {
-        QString ns = nameSpace + QString("/");
-        Exiv2::XmpProperties::registerNs(ns.toAscii().constData(), "ns");
+        QString ns = uri;
+        if (!uri.endsWith("/")) ns.append("/");
+        Exiv2::XmpProperties::registerNs(ns.toAscii().constData(), prefix.toAscii().constData());
         return true;
     }
     catch( Exiv2::Error &e )
