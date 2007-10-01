@@ -499,12 +499,12 @@ public:
         to default settings (x-default).
         Return true if tag is set successfully. */
     bool setXmpTagStringLangAlt(const char *xmpTagName, const QString& value, 
-                                const QString& lang, bool setProgramName) const;
+                                const QString& lang, bool setProgramName=true) const;
 
     /** Set a Xmp tag content using the sequence of strings 'seq'.
         Return true if tag is set successfully. */
     bool setXmpTagStringSeq(const char *xmpTagName, const QStringList& seq,
-                            bool setProgramName) const;
+                            bool setProgramName=true) const;
 
     /** Register a namespace which Exiv2 doesn't know yet. This is only needed
         when new Xmp properties are added manually. 
