@@ -309,7 +309,7 @@ public:
     /** Set an Exif tag content using a string. Return true if tag is set successfully. */
     bool setExifTagString(const char *exifTagName, const QString& value, bool setProgramName=true) const;
 
-    /** Get an Exif tags content like a long value. Return true if Exif tag be found. */
+    /** Get an Exif tag content like a long value. Return true if Exif tag be found. */
     bool getExifTagLong(const char* exifTagName, long &val) const;
 
     /** Set an Exif tag content using a long value. Return true if tag is set successfully. */
@@ -320,12 +320,12 @@ public:
         Return true if Exif tag be found. */
     bool getExifTagRational(const char *exifTagName, long int &num, long int &den, int component=0) const;
 
-    /** Set an Exif tags content using a rational value. 
+    /** Set an Exif tag content using a rational value. 
         'num' and 'den' are the numerator and the denominator of the rational value. 
         Return true if tag is set successfully. */
     bool setExifTagRational(const char *exifTagName, long int num, long int den, bool setProgramName=true) const;
 
-    /** Get an Exif tags content like a bytes array. Return an empty bytes array if Exif 
+    /** Get an Exif tag content like a bytes array. Return an empty bytes array if Exif 
         tag cannot be found. */
     QByteArray getExifTagData(const char *exifTagName) const;
 
@@ -399,14 +399,14 @@ public:
         have been changed in memory. */
     bool setIptc(const QByteArray& data) const;
 
-    /** Get an Iptc tags content like a string. If 'escapeCR' parameter is true, the CR characters
+    /** Get an Iptc tag content like a string. If 'escapeCR' parameter is true, the CR characters
         will be removed. If Iptc tag cannot be found a null string is returned. */
     QString getIptcTagString(const char* iptcTagName, bool escapeCR=true) const;
 
     /** Set an Iptc tag content using a string. Return true if tag is set successfully. */
     bool setIptcTagString(const char *iptcTagName, const QString& value, bool setProgramName=true) const;
 
-    /** Get an Iptc tags content like a bytes array. Return an empty bytes array if Iptc 
+    /** Get an Iptc tag content like a bytes array. Return an empty bytes array if Iptc 
         tag cannot be found. */
     QByteArray getIptcTagData(const char *iptcTagName) const;
 
@@ -457,7 +457,7 @@ public:
         have been changed in memory. */
     bool setXmp(const QByteArray& data) const;
 
-    /** Get a Xmp tags content like a string. If 'escapeCR' parameter is true, the CR characters
+    /** Get a Xmp tag content like a string. If 'escapeCR' parameter is true, the CR characters
         will be removed. If Xmp tag cannot be found a null string is returned. */
     QString getXmpTagString(const char* xmpTagName, bool escapeCR=true) const;
 
@@ -488,7 +488,7 @@ public:
         */ 
     KExiv2::MetaDataMap getXmpTagsDataList(const QStringList &xmpKeysFilter, bool invertSelection=false) const;
 
-    /** Get a Xmp tags content like a string set with an alternative language header. 'lang' contain the 
+    /** Get a Xmp tag content like a string set with an alternative language header. 'lang' contain the 
         language alternative information (like fr-FR for French).
         If 'escapeCR' parameter is true, the CR characters will be removed. 
         If Xmp tag cannot be found a null string is returned and 'lang' is set to null. */
@@ -500,6 +500,10 @@ public:
         Return true if tag is set successfully. */
     bool setXmpTagStringLangAlt(const char *xmpTagName, const QString& value, 
                                 const QString& lang, bool setProgramName=true) const;
+
+    /** Get a Xmp tag content like a sequence of strings. If 'escapeCR' parameter is true, the CR characters
+        will be removed from strings. If Xmp tag cannot be found a null string list is returned. */
+    QStringList getXmpTagStringSeq(const char* xmpTagName, bool escapeCR=true) const;
 
     /** Set a Xmp tag content using the sequence of strings 'seq'.
         Return true if tag is set successfully. */
