@@ -501,6 +501,12 @@ public:
     bool setXmpTagStringLangAlt(const char *xmpTagName, const QString& value, 
                                 const QString& lang, bool setProgramName) const;
 
+    /** Register a namespace which Exiv2 doesn't know yet. This is only needed
+        when new Xmp properties are added manually. 
+        NOTE: If the XMP metadata is read from an image, namespaces are decoded and registered 
+        by Exiv2 at the same time. */
+    bool registerXmpNameSpace(const QString& nameSpace) const;
+
     //-- GPS manipulation methods --------------------------------
 
     /** Get all GPS location information set in image. Return true if all information can be found. */

@@ -350,4 +350,24 @@ bool KExiv2::setXmpTagStringLangAlt(const char *xmpTagName, const QString& value
     return false;
 }
 
+bool KExiv2::registerXmpNameSpace(const QString& nameSpace) const
+{
+#ifdef _XMP_SUPPORT_
+
+    try
+    {
+        QString ns = nameSpace + QString("/");
+        Exiv2::XmpProperties::registerNs(ns.toAscii().constData(), "ns");
+        return true;
+    }
+    catch( Exiv2::Error &e )
+    {
+        printExiv2ExceptionError("Cannot register a new Xmp namespace using Exiv2 ", e);
+    }
+
+#endif // _XMP_SUPPORT_
+
+    return false;
+}
+
 }  // NameSpace KExiv2Iface
