@@ -507,6 +507,10 @@ public:
         by Exiv2 at the same time. */
     bool registerXmpNameSpace(const QString& nameSpace) const;
 
+    /** Remove the Xmp tag 'xmpTagName' from Xmp metadata. Return true if tag is 
+        removed successfully. */
+    bool removeXmpTag(const char *xmpTagName, bool setProgramName=true) const;
+
     //-- GPS manipulation methods --------------------------------
 
     /** Get all GPS location information set in image. Return true if all information can be found. */

@@ -370,4 +370,31 @@ bool KExiv2::registerXmpNameSpace(const QString& nameSpace) const
     return false;
 }
 
+bool KExiv2::removeXmpTag(const char *xmpTagName, bool setProgramName) const
+{
+#ifdef _XMP_SUPPORT_
+
+    if (!setProgramId(setProgramName))
+        return false;
+
+    try
+    {  
+        Exiv2::XmpKey xmpKey(xmpTagName);
+        Exiv2::XmpData::iterator it = d->xmpMetadata.findKey(xmpKey);
+        if (it != d->xmpMetadata.end())
+        {
+            d->xmpMetadata.erase(it);
+            return true;
+        }
+    }
+    catch( Exiv2::Error &e )
+    {
+        printExiv2ExceptionError("Cannot remove Iptc tag using Exiv2 ", e);
+    }        
+
+#endif // _XMP_SUPPORT_
+
+    return false;
+}
+
 }  // NameSpace KExiv2Iface
