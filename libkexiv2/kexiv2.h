@@ -501,6 +501,11 @@ public:
     bool setXmpTagStringLangAlt(const char *xmpTagName, const QString& value, 
                                 const QString& lang, bool setProgramName) const;
 
+    /** Set a Xmp tag content using the sequence of strings 'seq'.
+        Return true if tag is set successfully. */
+    bool setXmpTagStringSeq(const char *xmpTagName, const QStringList& seq,
+                            bool setProgramName) const;
+
     /** Register a namespace which Exiv2 doesn't know yet. This is only needed
         when new Xmp properties are added manually. 
         NOTE: If the XMP metadata is read from an image, namespaces are decoded and registered 

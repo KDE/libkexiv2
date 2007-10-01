@@ -350,6 +350,35 @@ bool KExiv2::setXmpTagStringLangAlt(const char *xmpTagName, const QString& value
     return false;
 }
 
+bool KExiv2::setXmpTagStringSeq(const char *xmpTagName, const QStringList& seq,
+                                bool setProgramName) const
+{
+    #ifdef _XMP_SUPPORT_
+    if (!setProgramId(setProgramName))
+        return false;
+
+    try
+    {
+        QStringList list = seq;
+        Exiv2::Value::AutoPtr xmpTxtSeq = Exiv2::Value::create(Exiv2::xmpSeq);
+
+        for (QStringList::Iterator it = list.begin(); it != list.end(); ++it )
+        {
+            const std::string &txt((*it).toUtf8().constData());
+            xmpTxtSeq->read(txt);
+        }
+        d->xmpMetadata.add(Exiv2::XmpKey(xmpTagName), xmpTxtSeq.get());
+        return true;
+    }
+    catch( Exiv2::Error &e )
+    {
+        printExiv2ExceptionError("Cannot set Xmp tag string lang-alt into image using Exiv2 ", e);
+    }
+#endif // _XMP_SUPPORT_
+
+    return false;
+}
+
 bool KExiv2::registerXmpNameSpace(const QString& nameSpace) const
 {
 #ifdef _XMP_SUPPORT_
@@ -389,7 +418,7 @@ bool KExiv2::removeXmpTag(const char *xmpTagName, bool setProgramName) const
     }
     catch( Exiv2::Error &e )
     {
-        printExiv2ExceptionError("Cannot remove Iptc tag using Exiv2 ", e);
+        printExiv2ExceptionError("Cannot remove Xmp tag using Exiv2 ", e);
     }        
 
 #endif // _XMP_SUPPORT_
