@@ -488,18 +488,18 @@ public:
         */ 
     KExiv2::MetaDataMap getXmpTagsDataList(const QStringList &xmpKeysFilter, bool invertSelection=false) const;
 
-    /** Get a Xmp tag content like a string set with an alternative language header. 'lang' contain the 
-        language alternative information (like fr-FR for French).
+    /** Get a Xmp tag content like a string set with an alternative language 
+        header 'altLang' (like "fr-FR" for French).
         If 'escapeCR' parameter is true, the CR characters will be removed. 
-        If Xmp tag cannot be found a null string is returned and 'lang' is set to null. */
-    QString getXmpTagStringLangAlt(const char* xmpTagName, QString& lang, bool escapeCR) const;
+        If Xmp tag cannot be found a null string is returned. */
+    QString getXmpTagStringLangAlt(const char* xmpTagName, const QString& altLang, bool escapeCR) const;
 
     /** Set a Xmp tag content using a string with an alternative language header. 'lang' contain the 
         language alternative information (like fr-FR for French) or is null to set alternative language 
         to default settings (x-default).
         Return true if tag is set successfully. */
     bool setXmpTagStringLangAlt(const char *xmpTagName, const QString& value, 
-                                const QString& lang, bool setProgramName=true) const;
+                                const QString& altLang, bool setProgramName=true) const;
 
     /** Get a Xmp tag content like a sequence of strings. If 'escapeCR' parameter is true, the CR characters
         will be removed from strings. If Xmp tag cannot be found a null string list is returned. */
@@ -509,6 +509,13 @@ public:
         Return true if tag is set successfully. */
     bool setXmpTagStringSeq(const char *xmpTagName, const QStringList& seq,
                             bool setProgramName=true) const;
+
+    /** Set Iptc keywords using a list of strings defined by 'newKeywords' parameter. Use 'getImageKeywords()' 
+        method to set 'oldKeywords' parameter with existing keywords from image. The method will compare 
+        all new keywords with all old keywords to prevent duplicate entries in image. Return true if keywords
+        have been changed in metadata. */
+    bool setXmpKeywords(const QStringList& oldKeywords, const QStringList& newKeywords, 
+                        bool setProgramName=true) const;
 
     /** Register a namespace which Exiv2 doesn't know yet. This is only needed
         when new Xmp properties are added manually. 'uri' is the namespace url and prefix the 

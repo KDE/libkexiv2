@@ -37,15 +37,20 @@ namespace KExiv2Iface
 bool KExiv2::hasXmp() const
 {
 #ifdef _XMP_SUPPORT_
+
     return !d->xmpMetadata.empty();
+
 #else
+
     return false;
+
 #endif // _XMP_SUPPORT_
 }
 
 bool KExiv2::clearXmp() const
 {
 #ifdef _XMP_SUPPORT_
+
     try
     {
         d->xmpMetadata.clear();
@@ -55,6 +60,7 @@ bool KExiv2::clearXmp() const
     {
         printExiv2ExceptionError("Cannot clear Xmp data using Exiv2 ", e);
     }
+
 #endif // _XMP_SUPPORT_
 
     return false;
@@ -63,6 +69,7 @@ bool KExiv2::clearXmp() const
 QByteArray KExiv2::getXmp() const
 {
 #ifdef _XMP_SUPPORT_
+
     try
     {
         if (!d->xmpMetadata.empty())
@@ -81,6 +88,7 @@ QByteArray KExiv2::getXmp() const
 
         printExiv2ExceptionError("Cannot get Xmp data using Exiv2 ", e);
     }
+
 #endif // _XMP_SUPPORT_
 
     return QByteArray();
@@ -89,6 +97,7 @@ QByteArray KExiv2::getXmp() const
 bool KExiv2::setXmp(const QByteArray& data) const
 {
 #ifdef _XMP_SUPPORT_
+
     try
     {
         if (!data.isEmpty())
@@ -109,6 +118,7 @@ bool KExiv2::setXmp(const QByteArray& data) const
 
         printExiv2ExceptionError("Cannot set Xmp data using Exiv2 ", e);
     }
+
 #endif // _XMP_SUPPORT_
 
     return false;
@@ -117,6 +127,7 @@ bool KExiv2::setXmp(const QByteArray& data) const
 KExiv2::MetaDataMap KExiv2::getXmpTagsDataList(const QStringList &xmpKeysFilter, bool invertSelection) const
 {
 #ifdef _XMP_SUPPORT_
+
     if (d->xmpMetadata.empty())
        return MetaDataMap();
 
@@ -196,6 +207,7 @@ KExiv2::MetaDataMap KExiv2::getXmpTagsDataList(const QStringList &xmpKeysFilter,
     {
         printExiv2ExceptionError("Cannot parse Xmp metadata using Exiv2 ", e);
     }
+
 #endif // _XMP_SUPPORT_
 
     return MetaDataMap();
@@ -204,6 +216,7 @@ KExiv2::MetaDataMap KExiv2::getXmpTagsDataList(const QStringList &xmpKeysFilter,
 QString KExiv2::getXmpTagTitle(const char *xmpTagName)
 {
 #ifdef _XMP_SUPPORT_
+
     try 
     {
         std::string xmpkey(xmpTagName);
@@ -214,6 +227,7 @@ QString KExiv2::getXmpTagTitle(const char *xmpTagName)
     {
         printExiv2ExceptionError("Cannot get Xmp metadata tag title using Exiv2 ", e);
     }
+
 #endif // _XMP_SUPPORT_
 
     return QString();
@@ -240,6 +254,7 @@ QString KExiv2::getXmpTagDescription(const char *xmpTagName)
 QString KExiv2::getXmpTagString(const char* xmpTagName, bool escapeCR) const
 {
 #ifdef _XMP_SUPPORT_
+
     try
     {
         Exiv2::XmpData xmpData(d->xmpMetadata);
@@ -262,6 +277,7 @@ QString KExiv2::getXmpTagString(const char* xmpTagName, bool escapeCR) const
         printExiv2ExceptionError(QString("Cannot find Xmp key '%1' into image using Exiv2 ")
                                  .arg(xmpTagName), e);
     }
+
 #endif // _XMP_SUPPORT_
 
     return QString();
@@ -270,6 +286,7 @@ QString KExiv2::getXmpTagString(const char* xmpTagName, bool escapeCR) const
 bool KExiv2::setXmpTagString(const char *xmpTagName, const QString& value, bool setProgramName) const
 {
 #ifdef _XMP_SUPPORT_
+
     if (!setProgramId(setProgramName))
         return false;
 
@@ -286,31 +303,37 @@ bool KExiv2::setXmpTagString(const char *xmpTagName, const QString& value, bool 
     {
         printExiv2ExceptionError("Cannot set Xmp tag string into image using Exiv2 ", e);
     }
+
 #endif // _XMP_SUPPORT_
 
     return false;
 }
 
-QString KExiv2::getXmpTagStringLangAlt(const char* xmpTagName, QString& lang, bool escapeCR) const
+QString KExiv2::getXmpTagStringLangAlt(const char* xmpTagName, const QString& langAlt, bool escapeCR) const
 {
 #ifdef _XMP_SUPPORT_
+
     try
     {
-        lang = QString();
         Exiv2::XmpData xmpData(d->xmpMetadata);
         Exiv2::XmpKey key(xmpTagName);
-        Exiv2::XmpData::iterator it = xmpData.findKey(key);
-        if (it != xmpData.end())
+        for (Exiv2::XmpData::iterator it = xmpData.begin(); it != xmpData.end(); ++it)
         {
-            std::ostringstream os;
-            os << *it;
-            QString tagValue = QString::fromUtf8(os.str().c_str());
-            tagValue = detectLanguageAlt(tagValue, lang);
-
-            if (escapeCR)
-                tagValue.replace("\n", " ");
-
-            return tagValue;
+            if (it->key() == xmpTagName && it->typeId() == Exiv2::langAlt)
+            {
+                std::ostringstream os;
+                os << *it;
+                QString lang;
+                QString tagValue = QString::fromUtf8(os.str().c_str());
+                tagValue = detectLanguageAlt(tagValue, lang);
+                if (langAlt == lang)
+                {
+                    if (escapeCR)
+                        tagValue.replace("\n", " ");
+        
+                    return tagValue;
+                }
+            }
         }
     }
     catch( Exiv2::Error &e )
@@ -318,24 +341,28 @@ QString KExiv2::getXmpTagStringLangAlt(const char* xmpTagName, QString& lang, bo
         printExiv2ExceptionError(QString("Cannot find Xmp key '%1' into image using Exiv2 ")
                                  .arg(xmpTagName), e);
     }
+
 #endif // _XMP_SUPPORT_
 
     return QString();
 }
 
 bool KExiv2::setXmpTagStringLangAlt(const char *xmpTagName, const QString& value, 
-                                    const QString& lang, bool setProgramName) const
+                                    const QString& altLang, bool setProgramName) const
 {
 #ifdef _XMP_SUPPORT_
+
     if (!setProgramId(setProgramName))
         return false;
 
     try
     {
-        QString txtLangAlt = value; // default language
+        QString lang("x-default"); // default alternative language.
 
-        if (!lang.isEmpty()) 
-            txtLangAlt = QString("lang=%1 %2").arg(lang).arg(value);
+        if (!altLang.isEmpty()) 
+            lang = altLang;
+
+        QString txtLangAlt = QString("lang=%1 %2").arg(lang).arg(value);
 
         Exiv2::Value::AutoPtr xmpTxtVal = Exiv2::Value::create(Exiv2::langAlt);
         const std::string &txt(txtLangAlt.toUtf8().constData());
@@ -347,6 +374,7 @@ bool KExiv2::setXmpTagStringLangAlt(const char *xmpTagName, const QString& value
     {
         printExiv2ExceptionError("Cannot set Xmp tag string lang-alt into image using Exiv2 ", e);
     }
+
 #endif // _XMP_SUPPORT_
 
     return false;
