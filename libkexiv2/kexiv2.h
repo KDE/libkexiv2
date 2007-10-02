@@ -489,17 +489,17 @@ public:
     KExiv2::MetaDataMap getXmpTagsDataList(const QStringList &xmpKeysFilter, bool invertSelection=false) const;
 
     /** Get a Xmp tag content like a string set with an alternative language 
-        header 'altLang' (like "fr-FR" for French).
+        header 'langAlt' (like "fr-FR" for French).
         If 'escapeCR' parameter is true, the CR characters will be removed. 
         If Xmp tag cannot be found a null string is returned. */
-    QString getXmpTagStringLangAlt(const char* xmpTagName, const QString& altLang, bool escapeCR) const;
+    QString getXmpTagStringLangAlt(const char* xmpTagName, const QString& langAlt, bool escapeCR) const;
 
-    /** Set a Xmp tag content using a string with an alternative language header. 'lang' contain the 
+    /** Set a Xmp tag content using a string with an alternative language header. 'langAlt' contain the 
         language alternative information (like "fr-FR" for French - RFC3066 notation) or is null to 
         set alternative language to default settings ("x-default").
         Return true if tag is set successfully. */
     bool setXmpTagStringLangAlt(const char *xmpTagName, const QString& value, 
-                                const QString& altLang, bool setProgramName=true) const;
+                                const QString& langAlt, bool setProgramName=true) const;
 
     /** Get a Xmp tag content like a sequence of strings. If 'escapeCR' parameter is true, the CR characters
         will be removed from strings. If Xmp tag cannot be found a null string list is returned. */

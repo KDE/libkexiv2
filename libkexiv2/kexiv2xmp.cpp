@@ -348,7 +348,7 @@ QString KExiv2::getXmpTagStringLangAlt(const char* xmpTagName, const QString& la
 }
 
 bool KExiv2::setXmpTagStringLangAlt(const char *xmpTagName, const QString& value, 
-                                    const QString& altLang, bool setProgramName) const
+                                    const QString& langAlt, bool setProgramName) const
 {
 #ifdef _XMP_SUPPORT_
 
@@ -359,13 +359,34 @@ bool KExiv2::setXmpTagStringLangAlt(const char *xmpTagName, const QString& value
     {
         QString lang("x-default"); // default alternative language.
 
-        if (!altLang.isEmpty()) 
-            lang = altLang;
+        if (!langAlt.isEmpty()) 
+            lang = langAlt;
 
         QString txtLangAlt = QString("lang=%1 %2").arg(lang).arg(value);
+        const std::string &txt(txtLangAlt.toUtf8().constData());
+
+        // Search if an Xmp tag already exist.
+
+        for (Exiv2::XmpData::iterator it = d->xmpMetadata.begin(); it != d->xmpMetadata.end(); ++it)
+        {
+            if (it->key() == xmpTagName && it->typeId() == Exiv2::langAlt)
+            {
+                std::ostringstream os;
+                os << *it;
+                QString lang;
+                QString tagValue = QString::fromUtf8(os.str().c_str());
+                tagValue = detectLanguageAlt(tagValue, lang);
+                if (langAlt == lang)
+                {
+                    it->setValue(txt);
+                    return true;
+                }
+            }
+        }
+
+        // No Xmp tag found, we create new one.
 
         Exiv2::Value::AutoPtr xmpTxtVal = Exiv2::Value::create(Exiv2::langAlt);
-        const std::string &txt(txtLangAlt.toUtf8().constData());
         xmpTxtVal->read(txt);
         d->xmpMetadata.add(Exiv2::XmpKey(xmpTagName), xmpTxtVal.get());
         return true;
