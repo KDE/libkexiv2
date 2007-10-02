@@ -357,12 +357,12 @@ bool KExiv2::setXmpTagStringLangAlt(const char *xmpTagName, const QString& value
 
     try
     {
-        QString lang("x-default"); // default alternative language.
+        QString language("x-default"); // default alternative language.
 
         if (!langAlt.isEmpty()) 
-            lang = langAlt;
+            language = langAlt;
 
-        QString txtLangAlt = QString("lang=%1 %2").arg(lang).arg(value);
+        QString txtLangAlt = QString("lang=%1 %2").arg(language).arg(value);
         const std::string &txt(txtLangAlt.toUtf8().constData());
 
         // Search if an Xmp tag already exist.
@@ -373,10 +373,10 @@ bool KExiv2::setXmpTagStringLangAlt(const char *xmpTagName, const QString& value
             {
                 std::ostringstream os;
                 os << *it;
-                QString lang;
+                QString langRead;
                 QString tagValue = QString::fromUtf8(os.str().c_str());
-                tagValue = detectLanguageAlt(tagValue, lang);
-                if (langAlt == lang)
+                tagValue = detectLanguageAlt(tagValue, langRead);
+                if (langRead == language)
                 {
                     it->setValue(txt);
                     return true;
