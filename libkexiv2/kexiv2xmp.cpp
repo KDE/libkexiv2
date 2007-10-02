@@ -367,15 +367,19 @@ QStringList KExiv2::getXmpTagStringSeq(const char* xmpTagName, bool escapeCR) co
             {
                 QStringList seq;
 
-/* TODO
-                std::ostringstream os;
-                os << *it;
-                QString tagValue = QString::fromUtf8(os.str().c_str());
-                tagValue = detectLanguageAlt(tagValue, lang);
-
-                if (escapeCR)
-                    tagValue.replace("\n", " ");*/
+                for (int i = 0; i < it->count(); ++i)
+                {
+                    std::ostringstream os;
+                    os << it->toString(i);
+                    QString seqValue = QString::fromUtf8(os.str().c_str());
     
+                    if (escapeCR)
+                        seqValue.replace("\n", " ");
+
+                    seq.append(seqValue);
+                }
+                qDebug() << "XMP String Seq (" << xmpTagName << "): " << seq << endl;  
+
                 return seq;
             }
         }
