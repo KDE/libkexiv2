@@ -495,8 +495,8 @@ public:
     QString getXmpTagStringLangAlt(const char* xmpTagName, const QString& altLang, bool escapeCR) const;
 
     /** Set a Xmp tag content using a string with an alternative language header. 'lang' contain the 
-        language alternative information (like fr-FR for French) or is null to set alternative language 
-        to default settings (x-default).
+        language alternative information (like "fr-FR" for French - RFC3066 notation) or is null to 
+        set alternative language to default settings ("x-default").
         Return true if tag is set successfully. */
     bool setXmpTagStringLangAlt(const char *xmpTagName, const QString& value, 
                                 const QString& altLang, bool setProgramName=true) const;
