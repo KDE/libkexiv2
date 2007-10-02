@@ -204,37 +204,6 @@ public:
     */
     virtual bool setImagePreview(const QImage& preview, bool setProgramName=true) const;
 
-    /** Return a strings list of Iptc keywords from image. Return an empty list if no keyword are set. */
-    QStringList getImageKeywords() const;
-
-    /** Set Iptc keywords using a list of strings defined by 'newKeywords' parameter. Use 'getImageKeywords()' 
-        method to set 'oldKeywords' parameter with existing keywords from image. The method will compare 
-        all new keywords with all old keywords to prevent duplicate entries in image. Return true if keywords
-        have been changed in metadata. */
-    bool setImageKeywords(const QStringList& oldKeywords, const QStringList& newKeywords, 
-                          bool setProgramName=true) const;
-
-    /** Return a strings list of Iptc subjects from image. Return an empty list if no subject are set. */
-    QStringList getImageSubjects() const;
-
-    /** Set Iptc subjects using a list of strings defined by 'newSubjects' parameter. Use 'getImageSubjects()' 
-        method to set 'oldSubjects' parameter with existing subjects from image. The method will compare 
-        all new subjects with all old subjects to prevent duplicate entries in image. Return true if subjects
-        have been changed in metadata. */
-    bool setImageSubjects(const QStringList& oldSubjects, const QStringList& newSubjects, 
-                          bool setProgramName=true) const;
-
-    /** Return a strings list of Iptc sub-categories from image. Return an empty list if no sub-category 
-        are set. */
-    QStringList getImageSubCategories() const;
-
-    /** Set Iptc sub-categories using a list of strings defined by 'newSubCategories' parameter. Use
-        'getImageSubCategories()' method to set 'oldSubCategories' parameter with existing sub-categories
-        from image. The method will compare all new sub-categories with all old sub-categories to prevent
-        duplicate entries in image. Return true if sub-categories have been changed in metadata. */
-    bool setImageSubCategories(const QStringList& oldSubCategories, const QStringList& newSubCategories, 
-                               bool setProgramName=true) const;
-
     //-- Comments manipulation methods --------------------------------
 
     /** Return 'true' if metadata container in memory as Comments. */
@@ -440,6 +409,37 @@ public:
           if 'inverSelection' is true.
         */ 
     KExiv2::MetaDataMap getIptcTagsDataList(const QStringList &iptcKeysFilter, bool invertSelection=false) const;
+
+    /** Return a strings list of Iptc keywords from image. Return an empty list if no keyword are set. */
+    QStringList getIptcKeywords() const;
+
+    /** Set Iptc keywords using a list of strings defined by 'newKeywords' parameter. Use 'getImageKeywords()' 
+        method to set 'oldKeywords' parameter with existing keywords from image. The method will compare 
+        all new keywords with all old keywords to prevent duplicate entries in image. Return true if keywords
+        have been changed in metadata. */
+    bool setIptcKeywords(const QStringList& oldKeywords, const QStringList& newKeywords, 
+                         bool setProgramName=true) const;
+
+    /** Return a strings list of Iptc subjects from image. Return an empty list if no subject are set. */
+    QStringList getIptcSubjects() const;
+
+    /** Set Iptc subjects using a list of strings defined by 'newSubjects' parameter. Use 'getImageSubjects()' 
+        method to set 'oldSubjects' parameter with existing subjects from image. The method will compare 
+        all new subjects with all old subjects to prevent duplicate entries in image. Return true if subjects
+        have been changed in metadata. */
+    bool setIptcSubjects(const QStringList& oldSubjects, const QStringList& newSubjects, 
+                         bool setProgramName=true) const;
+
+    /** Return a strings list of Iptc sub-categories from image. Return an empty list if no sub-category 
+        are set. */
+    QStringList getIptcSubCategories() const;
+
+    /** Set Iptc sub-categories using a list of strings defined by 'newSubCategories' parameter. Use
+        'getImageSubCategories()' method to set 'oldSubCategories' parameter with existing sub-categories
+        from image. The method will compare all new sub-categories with all old sub-categories to prevent
+        duplicate entries in image. Return true if sub-categories have been changed in metadata. */
+    bool setIptcSubCategories(const QStringList& oldSubCategories, const QStringList& newSubCategories, 
+                              bool setProgramName=true) const;
 
     //-- Xmp manipulation methods --------------------------------
 
