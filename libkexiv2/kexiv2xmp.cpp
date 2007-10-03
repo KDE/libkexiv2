@@ -467,7 +467,81 @@ bool KExiv2::setXmpTagStringSeq(const char *xmpTagName, const QStringList& seq,
     }
     catch( Exiv2::Error &e )
     {
-        printExiv2ExceptionError("Cannot set Xmp tag string lang-alt into image using Exiv2 ", e);
+        printExiv2ExceptionError("Cannot set Xmp tag string Seq into image using Exiv2 ", e);
+    }
+
+#endif // _XMP_SUPPORT_
+
+    return false;
+}
+
+QStringList KExiv2::getXmpTagStringBag(const char* xmpTagName, bool escapeCR) const
+{
+#ifdef _XMP_SUPPORT_
+
+    try
+    {
+        Exiv2::XmpData xmpData(d->xmpMetadata);
+        Exiv2::XmpKey key(xmpTagName);
+        Exiv2::XmpData::iterator it = xmpData.findKey(key);
+        if (it != xmpData.end())
+        {
+            if (it->typeId() == Exiv2::xmpBag)
+            {
+                QStringList bag;
+
+                for (int i = 0; i < it->count(); ++i)
+                {
+                    std::ostringstream os;
+                    os << it->toString(i);
+                    QString bagValue = QString::fromUtf8(os.str().c_str());
+    
+                    if (escapeCR)
+                        bagValue.replace("\n", " ");
+
+                    bag.append(bagValue);
+                }
+                qDebug() << "XMP String Bag (" << xmpTagName << "): " << bag << endl;  
+
+                return bag;
+            }
+        }
+    }
+    catch( Exiv2::Error &e )
+    {
+        printExiv2ExceptionError(QString("Cannot find Xmp key '%1' into image using Exiv2 ")
+                                 .arg(xmpTagName), e);
+    }
+
+#endif // _XMP_SUPPORT_
+
+    return QStringList();
+}
+
+bool KExiv2::setXmpTagStringBag(const char *xmpTagName, const QStringList& bag,
+                                bool setProgramName) const
+{
+#ifdef _XMP_SUPPORT_
+
+    if (!setProgramId(setProgramName))
+        return false;
+
+    try
+    {
+        QStringList list = bag;
+        Exiv2::Value::AutoPtr xmpTxtBag = Exiv2::Value::create(Exiv2::xmpBag);
+
+        for (QStringList::Iterator it = list.begin(); it != list.end(); ++it )
+        {
+            const std::string &txt((*it).toUtf8().constData());
+            xmpTxtBag->read(txt);
+        }
+        d->xmpMetadata.add(Exiv2::XmpKey(xmpTagName), xmpTxtBag.get());
+        return true;
+    }
+    catch( Exiv2::Error &e )
+    {
+        printExiv2ExceptionError("Cannot set Xmp tag string Bag into image using Exiv2 ", e);
     }
 
 #endif // _XMP_SUPPORT_
@@ -517,6 +591,38 @@ bool KExiv2::removeXmpTag(const char *xmpTagName, bool setProgramName) const
     {
         printExiv2ExceptionError("Cannot remove Xmp tag using Exiv2 ", e);
     }        
+
+#endif // _XMP_SUPPORT_
+
+    return false;
+}
+
+QStringList KExiv2::getXmpKeywords() const
+{
+    return (getXmpTagStringBag("Xmp.dc.subject", false));
+}
+
+bool KExiv2::setXmpKeywords(const QStringList& newKeywords, bool setProgramName) const
+{
+#ifdef _XMP_SUPPORT_
+
+    if (!setProgramId(setProgramName))
+        return false;
+
+    QStringList oldkeys = getXmpKeywords();
+    QStringList newkeys = newKeywords;
+    
+    // Create a list of keywords including old one witch already exists.
+    for (QStringList::Iterator it = oldkeys.begin(); it != oldkeys.end(); ++it )
+    {
+        if (!newkeys.contains(*it))
+            newkeys.append(*it);
+    }
+
+    qDebug("%s ==> Xmp Keywords: %s", d->filePath.toAscii().constData(), newkeys.join(",").toAscii().constData());
+    
+    if (setXmpTagStringBag("Xmp.dc.subject", newkeys, false))
+        return false;
 
 #endif // _XMP_SUPPORT_
 

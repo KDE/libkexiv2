@@ -68,7 +68,7 @@ QByteArray KExiv2::getIptc(bool addIrbHeader) const
 #if (EXIV2_TEST_VERSION(0,10,0))
                 c2 = Exiv2::Photoshop::setIptcIrb(0, 0, iptc);
 #else
-                qDebug("Exiv2 version is to old. Cannot add Irb header to IPTC metadata");
+                qDebug("Exiv2 version is to old. Cannot add Irb header to Iptc metadata");
                 return QByteArray();
 #endif
             }
@@ -138,10 +138,10 @@ KExiv2::MetaDataMap KExiv2::getIptcTagsDataList(const QStringList &iptcKeysFilte
             // To make a string just on one line.
             value.replace("\n", " ");
 
-            // Some IPTC key are redondancy. check if already one exist...
+            // Some Iptc key are redondancy. check if already one exist...
             MetaDataMap::iterator it = metaDataMap.find(key);
 
-            // We apply a filter to get only the IPTC tags that we need.
+            // We apply a filter to get only the Iptc tags that we need.
 
             if (!invertSelection)
             {
@@ -179,7 +179,7 @@ KExiv2::MetaDataMap KExiv2::getIptcTagsDataList(const QStringList &iptcKeysFilte
     }
     catch (Exiv2::Error& e)
     {
-        printExiv2ExceptionError("Cannot parse IPTC metadata using Exiv2 ", e);
+        printExiv2ExceptionError("Cannot parse Iptc metadata using Exiv2 ", e);
     }
 
     return MetaDataMap();
@@ -357,7 +357,7 @@ QStringList KExiv2::getIptcKeywords() const
     }
     catch( Exiv2::Error &e )
     {
-        printExiv2ExceptionError("Cannot get IPTC Keywords from image using Exiv2 ", e);
+        printExiv2ExceptionError("Cannot get Iptc Keywords from image using Exiv2 ", e);
     }        
     
     return QStringList();
@@ -374,7 +374,7 @@ bool KExiv2::setIptcKeywords(const QStringList& oldKeywords, const QStringList& 
         QStringList oldkeys = oldKeywords;
         QStringList newkeys = newKeywords;
         
-        qDebug("%s ==> Keywords: %s", d->filePath.toAscii().constData(), newkeys.join(",").toAscii().constData());
+        qDebug("%s ==> Iptc Keywords: %s", d->filePath.toAscii().constData(), newkeys.join(",").toAscii().constData());
         
         // Remove all old keywords.
         Exiv2::IptcData iptcData(d->iptcMetadata);
@@ -394,7 +394,7 @@ bool KExiv2::setIptcKeywords(const QStringList& oldKeywords, const QStringList& 
                 ++it;
         };
 
-        // Add new keywords. Note that Keywords IPTC tag is limited to 64 char but can be redondant.
+        // Add new keywords. Note that Keywords Iptc tag is limited to 64 char but can be redondant.
 
         Exiv2::IptcKey iptcTag("Iptc.Application2.Keywords");
 
@@ -414,7 +414,7 @@ bool KExiv2::setIptcKeywords(const QStringList& oldKeywords, const QStringList& 
     }
     catch( Exiv2::Error &e )
     {
-        printExiv2ExceptionError("Cannot set IPTC Keywords into image using Exiv2 ", e);
+        printExiv2ExceptionError("Cannot set Iptc Keywords into image using Exiv2 ", e);
     }        
     
     return false;
@@ -445,7 +445,7 @@ QStringList KExiv2::getIptcSubjects() const
     }
     catch( Exiv2::Error &e )
     {
-        printExiv2ExceptionError("Cannot get IPTC Subjects from image using Exiv2 ", e);
+        printExiv2ExceptionError("Cannot get Iptc Subjects from image using Exiv2 ", e);
     }        
     
     return QStringList();
@@ -477,7 +477,7 @@ bool KExiv2::setIptcSubjects(const QStringList& oldSubjects, const QStringList& 
                 ++it;
         };
 
-        // Add new subjects. Note that Keywords IPTC tag is limited to 236 char but can be redondant.
+        // Add new subjects. Note that Keywords Iptc tag is limited to 236 char but can be redondant.
 
         Exiv2::IptcKey iptcTag("Iptc.Application2.Subject");
 
@@ -497,7 +497,7 @@ bool KExiv2::setIptcSubjects(const QStringList& oldSubjects, const QStringList& 
     }
     catch( Exiv2::Error &e )
     {
-        printExiv2ExceptionError("Cannot set IPTC Subjects into image using Exiv2 ", e);
+        printExiv2ExceptionError("Cannot set Iptc Subjects into image using Exiv2 ", e);
     }        
     
     return false;
@@ -528,7 +528,7 @@ QStringList KExiv2::getIptcSubCategories() const
     }
     catch( Exiv2::Error &e )
     {
-        printExiv2ExceptionError("Cannot get IPTC Sub Categories from image using Exiv2 ", e);
+        printExiv2ExceptionError("Cannot get Iptc Sub Categories from image using Exiv2 ", e);
     }        
     
     return QStringList();
@@ -560,7 +560,7 @@ bool KExiv2::setIptcSubCategories(const QStringList& oldSubCategories, const QSt
                 ++it;
         };
 
-        // Add new Sub Categories. Note that SubCategories IPTC tag is limited to 32 
+        // Add new Sub Categories. Note that SubCategories Iptc tag is limited to 32 
         // characters but can be redondant.
 
         Exiv2::IptcKey iptcTag("Iptc.Application2.SuppCategory");
@@ -581,7 +581,7 @@ bool KExiv2::setIptcSubCategories(const QStringList& oldSubCategories, const QSt
     }
     catch( Exiv2::Error &e )
     {
-        printExiv2ExceptionError("Cannot set IPTC Sub Categories into image using Exiv2 ", e);
+        printExiv2ExceptionError("Cannot set Iptc Sub Categories into image using Exiv2 ", e);
     }        
     
     return false;

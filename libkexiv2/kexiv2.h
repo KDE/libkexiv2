@@ -510,17 +510,28 @@ public:
     bool setXmpTagStringSeq(const char *xmpTagName, const QStringList& seq,
                             bool setProgramName=true) const;
 
-    /** Set Iptc keywords using a list of strings defined by 'newKeywords' parameter. Use 'getImageKeywords()' 
-        method to set 'oldKeywords' parameter with existing keywords from image. The method will compare 
-        all new keywords with all old keywords to prevent duplicate entries in image. Return true if keywords
-        have been changed in metadata. */
-    bool setXmpKeywords(const QStringList& oldKeywords, const QStringList& newKeywords, 
-                        bool setProgramName=true) const;
+    /** Get a Xmp tag content like a bag of strings. If 'escapeCR' parameter is true, the CR characters
+        will be removed from strings. If Xmp tag cannot be found a null string list is returned. */
+    QStringList getXmpTagStringBag(const char* xmpTagName, bool escapeCR) const;
+
+    /** Set a Xmp tag content using the bag of strings 'bag'.
+        Return true if tag is set successfully. */
+    bool setXmpTagStringBag(const char *xmpTagName, const QStringList& bag,
+                            bool setProgramName=true) const;
+
+    /** Return a strings list of Xmp keywords from image. Return an empty list if no keyword are set. */
+    QStringList getXmpKeywords() const;
+
+    /** Set Xmp keywords using a list of strings defined by 'newKeywords' parameter. The existing 
+        keywords from image are preserved. The method will compare 
+        all new keywords with all old keywords to prevent duplicate entries in image. 
+        Return true if keywords have been changed in metadata. */
+    bool setXmpKeywords(const QStringList& newKeywords, bool setProgramName=true) const;
 
     /** Register a namespace which Exiv2 doesn't know yet. This is only needed
         when new Xmp properties are added manually. 'uri' is the namespace url and prefix the 
         string used to construct new Xmp key (ex. "Xmp.digiKam.tagList").
-        NOTE: If the XMP metadata is read from an image, namespaces are decoded and registered 
+        NOTE: If the Xmp metadata is read from an image, namespaces are decoded and registered 
         by Exiv2 at the same time. */
     bool registerXmpNameSpace(const QString& uri, const QString& prefix) const;
 
