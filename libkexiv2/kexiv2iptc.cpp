@@ -314,6 +314,42 @@ QString KExiv2::getIptcTagString(const char* iptcTagName, bool escapeCR) const
     return QString();
 }
 
+QStringList KExiv2::getIptcTagStringList(const char* iptcTagName, bool escapeCR) const
+{
+    try
+    {    
+        if (!d->iptcMetadata.empty())
+        {
+            QStringList values;          
+            Exiv2::IptcData iptcData(d->iptcMetadata);
+
+            for (Exiv2::IptcData::iterator it = iptcData.begin(); it != iptcData.end(); ++it)
+            {
+                QString key = QString::fromLocal8Bit(it->key().c_str());
+                
+                if (key == QString(iptcTagName))
+                {
+                    QString tagValue(it->toString().c_str());
+
+                    if (escapeCR)
+                        tagValue.replace("\n", " ");
+
+                    values.append(tagValue);
+                }
+            }
+            
+            return values;
+        }
+    }
+    catch( Exiv2::Error &e )
+    {
+        printExiv2ExceptionError(QString("Cannot find Iptc key '%1' into image using Exiv2 ")
+                                 .arg(iptcTagName), e);
+    }        
+    
+    return QStringList();
+}
+
 bool KExiv2::setIptcTagString(const char *iptcTagName, const QString& value, bool setProgramName) const
 {
     if (!setProgramId(setProgramName))

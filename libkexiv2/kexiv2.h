@@ -372,6 +372,9 @@ public:
         will be removed. If Iptc tag cannot be found a null string is returned. */
     QString getIptcTagString(const char* iptcTagName, bool escapeCR=true) const;
 
+    /** Return a strings list of a multiple Iptc tags from image. Return an empty list if no tag is found. */
+    QStringList getIptcTagStringList(const char* iptcTagName, bool escapeCR=true) const;
+
     /** Set an Iptc tag content using a string. Return true if tag is set successfully. */
     bool setIptcTagString(const char *iptcTagName, const QString& value, bool setProgramName=true) const;
 
