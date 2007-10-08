@@ -224,13 +224,19 @@ bool KExiv2::removeIptcTag(const char *iptcTagName, bool setProgramName) const
 
     try
     {  
-        Exiv2::IptcKey iptcKey(iptcTagName);
-        Exiv2::IptcData::iterator it = d->iptcMetadata.findKey(iptcKey);
-        if (it != d->iptcMetadata.end())
+        Exiv2::IptcData::iterator it = d->iptcMetadata.begin();
+        do
         {
-            d->iptcMetadata.erase(it);
-            return true;
+            QString key = QString::fromLocal8Bit(it->key().c_str());
+            
+            if (key == QString(iptcTagName))
+                it = d->iptcMetadata.erase(it);
+            else 
+                ++it;
         }
+        while(it != d->iptcMetadata.end());
+
+        return true;
     }
     catch( Exiv2::Error &e )
     {
@@ -314,7 +320,25 @@ QString KExiv2::getIptcTagString(const char* iptcTagName, bool escapeCR) const
     return QString();
 }
 
-QStringList KExiv2::getIptcTagStringList(const char* iptcTagName, bool escapeCR) const
+bool KExiv2::setIptcTagString(const char *iptcTagName, const QString& value, bool setProgramName) const
+{
+    if (!setProgramId(setProgramName))
+        return false;
+
+    try
+    {
+        d->iptcMetadata[iptcTagName] = value.toAscii().constData();
+        return true;
+    }
+    catch( Exiv2::Error &e )
+    {
+        printExiv2ExceptionError("Cannot set Iptc tag string into image using Exiv2 ", e);
+    }
+
+    return false;
+}
+
+QStringList KExiv2::getIptcTagsStringList(const char* iptcTagName, bool escapeCR) const
 {
     try
     {    
@@ -350,21 +374,63 @@ QStringList KExiv2::getIptcTagStringList(const char* iptcTagName, bool escapeCR)
     return QStringList();
 }
 
-bool KExiv2::setIptcTagString(const char *iptcTagName, const QString& value, bool setProgramName) const
+bool KExiv2::setIptcTagsStringList(const char* iptcTagName, int maxSize,
+                                   const QStringList& oldValues, const QStringList& newValues, 
+                                   bool setProgramName) const
 {
     if (!setProgramId(setProgramName))
         return false;
 
     try
-    {
-        d->iptcMetadata[iptcTagName] = value.toAscii().constData();
+    {    
+        QStringList oldvals = oldValues;
+        QStringList newvals = newValues;
+        
+        qDebug() << d->filePath.toAscii().constData() << " : " << iptcTagName 
+                 << " => " << newvals.join(",").toAscii().constData() << endl;
+        
+        // Remove all old values.
+        Exiv2::IptcData iptcData(d->iptcMetadata);
+        Exiv2::IptcData::iterator it = iptcData.begin();
+
+        while(it != iptcData.end())
+        {
+            QString key = QString::fromLocal8Bit(it->key().c_str());
+            QString val(it->toString().c_str());
+
+            // Also remove new values to avoid duplicates. They will be added again below.
+            if ( key == QString(iptcTagName) &&
+                 (oldvals.contains(val) || newvals.contains(val))
+               )
+                it = iptcData.erase(it);
+            else 
+                ++it;
+        };
+
+        // Add new values.
+
+        Exiv2::IptcKey iptcTag(iptcTagName);
+
+        for (QStringList::iterator it = newvals.begin(); it != newvals.end(); ++it)
+        {
+            QString key = *it;
+            key.truncate(maxSize);
+            
+            Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::string);
+            val->read(key.toLatin1().constData());
+            iptcData.add(iptcTag, val.get());        
+        }
+
+        d->iptcMetadata = iptcData;
+
         return true;
     }
     catch( Exiv2::Error &e )
     {
-        printExiv2ExceptionError("Cannot set Iptc tag string into image using Exiv2 ", e);
-    }
-
+        printExiv2ExceptionError(QString("Cannot set Iptc key '%1' into image using Exiv2 ")
+                                 .arg(iptcTagName), e);
+    }        
+    
     return false;
 }
 

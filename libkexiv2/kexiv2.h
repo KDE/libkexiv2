@@ -372,11 +372,17 @@ public:
         will be removed. If Iptc tag cannot be found a null string is returned. */
     QString getIptcTagString(const char* iptcTagName, bool escapeCR=true) const;
 
-    /** Return a strings list of a multiple Iptc tags from image. Return an empty list if no tag is found. */
-    QStringList getIptcTagStringList(const char* iptcTagName, bool escapeCR=true) const;
-
     /** Set an Iptc tag content using a string. Return true if tag is set successfully. */
     bool setIptcTagString(const char *iptcTagName, const QString& value, bool setProgramName=true) const;
+
+    /** Return a strings list of a multiple Iptc tags from image. Return an empty list if no tag is found. */
+    QStringList getIptcTagsStringList(const char* iptcTagName, bool escapeCR=true) const;
+
+    /** Set multiple Iptc tags contents using a strings list. 'maxSize' is the max characters size 
+        of one entry. Return true if all tags have been set successfully. */
+    bool setIptcTagsStringList(const char* iptcTagName, int maxSize,
+                               const QStringList& oldValues, const QStringList& newValues, 
+                               bool setProgramName=true) const;
 
     /** Get an Iptc tag content like a bytes array. Return an empty bytes array if Iptc 
         tag cannot be found. */
@@ -385,8 +391,8 @@ public:
     /** Set an Iptc tag content using a bytes array. Return true if tag is set successfully. */
     bool setIptcTagData(const char *iptcTagName, const QByteArray& data, bool setProgramName=true) const;
 
-    /** Remove the Iptc tag 'iptcTagName' from Iptc metadata. Return true if tag is 
-        removed successfully. */
+    /** Remove the all instance of Iptc tags 'iptcTagName' from Iptc metadata. Return true if all 
+        tags have been removed successfully. */
     bool removeIptcTag(const char *iptcTagName, bool setProgramName=true) const;
 
     /** Return the Iptc Tag title or a null string. */ 
