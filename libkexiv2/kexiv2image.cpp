@@ -62,7 +62,7 @@ bool KExiv2::setImageProgramId(const QString& program, const QString& version) c
         // set program info into XMP tags.
 
 #ifdef _XMP_SUPPORT_
-        
+
         if (!d->xmpMetadata.empty())
         {
             // Only create Xmp.xmp.CreatorTool if it do not exist.
@@ -283,7 +283,7 @@ KExiv2::ImageOrientation KExiv2::getImageOrientation() const
         // -- Standard Xmp tag --------------------------------
 
 #ifdef _XMP_SUPPORT_
-        
+
         bool ok = false;
         QString str = getXmpTagString("Xmp.tiff.Orientation");
         if (!str.isEmpty())
@@ -578,6 +578,19 @@ QDateTime KExiv2::getImageDateTime() const
                 }  
             }
             {
+                Exiv2::XmpKey key("Xmp.tiff.DateTime");
+                Exiv2::XmpData::iterator it = xmpData.findKey(key);
+                if (it != xmpData.end())
+                {
+                    QDateTime dateTime = QDateTime::fromString(it->toString().c_str(), Qt::ISODate);
+                    if (dateTime.isValid())
+                    {
+                        qDebug() << "DateTime => Xmp.tiff.DateTime => " << dateTime << endl;
+                        return dateTime;
+                    }
+                }  
+            }
+            {
                 Exiv2::XmpKey key("Xmp.xmp.ModifyDate");
                 Exiv2::XmpData::iterator it = xmpData.findKey(key);
                 if (it != xmpData.end())
@@ -704,7 +717,7 @@ bool KExiv2::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitiz
         d->xmpMetadata.add(Exiv2::XmpKey("Xmp.tiff.DateTime"),         xmpTxtVal.get());
         d->xmpMetadata.add(Exiv2::XmpKey("Xmp.xmp.CreateDate"),        xmpTxtVal.get());
         d->xmpMetadata.add(Exiv2::XmpKey("Xmp.xmp.MetadataDate"),      xmpTxtVal.get());
-        d->xmpMetadata.add(Exiv2::XmpKey("Xmp.xmp.ModifyDate"),        xmpTxtVal.get());        
+        d->xmpMetadata.add(Exiv2::XmpKey("Xmp.xmp.ModifyDate"),        xmpTxtVal.get());
         if(setDateTimeDigitized)
             d->xmpMetadata.add(Exiv2::XmpKey("Xmp.exif.DateTimeDigitized"), xmpTxtVal.get());
 
@@ -772,21 +785,21 @@ bool KExiv2::setImagePreview(const QImage& preview, bool setProgramName) const
         qDebug("JPEG image preview size: (%i x %i) pixels - %i bytes", 
                preview.width(), preview.height(), 
                (int)previewFile.size());
-        
+
         QByteArray data;
         data.resize(previewFile.size());
         QDataStream stream( &previewFile );
         stream.readRawData(data.data(), data.size());
         previewFile.close();
-        
+
         Exiv2::DataValue val;
         val.read((Exiv2::byte *)data.data(), data.size());
         d->iptcMetadata["Iptc.Application2.Preview"] = val;
-        
+
         // See http://www.iptc.org/std/IIM/4.1/specification/IIMV4.1.pdf Appendix A for details.
         d->iptcMetadata["Iptc.Application2.PreviewFormat"]  = 11;  // JPEG 
         d->iptcMetadata["Iptc.Application2.PreviewVersion"] = 1;
-        
+
         return true;
     }
     catch( Exiv2::Error &e )
