@@ -597,6 +597,38 @@ bool KExiv2::removeXmpTag(const char *xmpTagName, bool setProgramName) const
     return false;
 }
 
+QStringList KExiv2::getXmpSubCategories() const
+{
+    return (getXmpTagStringBag("Xmp.photoshop.SupplementalCategories", false));
+}
+
+bool KExiv2::setXmpSubCategories(const QStringList& newSubCategories, bool setProgramName) const
+{
+#ifdef _XMP_SUPPORT_
+
+    if (!setProgramId(setProgramName))
+        return false;
+
+    QStringList oldSubCat = getXmpSubCategories();
+    QStringList newSubCat = newSubCategories;
+    
+    // Create a list of sub-categories including old one witch already exists.
+    for (QStringList::Iterator it = oldSubCat.begin(); it != oldSubCat.end(); ++it )
+    {
+        if (!newSubCat.contains(*it))
+            newSubCat.append(*it);
+    }
+
+    qDebug("%s ==> Xmp SubCategories: %s", d->filePath.toAscii().constData(), newSubCat.join(",").toAscii().constData());
+    
+    if (setXmpTagStringBag("Xmp.photoshop.SupplementalCategories", newSubCat, false))
+        return false;
+
+#endif // _XMP_SUPPORT_
+
+    return false;
+}
+
 QStringList KExiv2::getXmpKeywords() const
 {
     return (getXmpTagStringBag("Xmp.dc.subject", false));

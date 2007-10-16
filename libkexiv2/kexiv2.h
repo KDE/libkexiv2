@@ -532,11 +532,21 @@ public:
     /** Return a strings list of Xmp keywords from image. Return an empty list if no keyword are set. */
     QStringList getXmpKeywords() const;
 
-    /** Set Xmp keywords using a list of strings defined by 'newKeywords' parameter. The existing 
-        keywords from image are preserved. The method will compare 
-        all new keywords with all old keywords to prevent duplicate entries in image. 
+    /** Set Xmp keywords using a list of strings defined by 'newKeywords' parameter. 
+        The existing keywords from image are preserved. The method will compare 
+        all new keywords with all already existing keywords to prevent duplicate entries in image. 
         Return true if keywords have been changed in metadata. */
     bool setXmpKeywords(const QStringList& newKeywords, bool setProgramName=true) const;
+
+    /** Return a strings list of Xmp sub-categories from image. Return an empty list if no sub-category 
+        are set. */
+    QStringList getXmpSubCategories() const;
+
+    /** Set Xmp sub-categories using a list of strings defined by 'newSubCategories' parameter. 
+        The existing sub-categories from image are preserved. The method will compare 
+        all new sub-categories with all already existing sub-categories to prevent duplicate entries in image. 
+        Return true if sub-categories have been changed in metadata. */
+    bool setXmpSubCategories(const QStringList& newSubCategories, bool setProgramName=true) const;
 
     /** Register a namespace which Exiv2 doesn't know yet. This is only needed
         when new Xmp properties are added manually. 'uri' is the namespace url and prefix the 
