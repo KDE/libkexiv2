@@ -538,6 +538,15 @@ public:
         Return true if keywords have been changed in metadata. */
     bool setXmpKeywords(const QStringList& newKeywords, bool setProgramName=true) const;
 
+    /** Return a strings list of Xmp subjects from image. Return an empty list if no subject are set. */
+    QStringList getXmpSubjects() const;
+
+    /** Set Xmp subjects using a list of strings defined by 'newSubjects' parameter. 
+        The existing subjects from image are preserved. The method will compare 
+        all new subject with all already existing subject to prevent duplicate entries in image. 
+        Return true if subjects have been changed in metadata. */
+    bool setXmpSubjects(const QStringList& newSubjects, bool setProgramName=true) const;
+
     /** Return a strings list of Xmp sub-categories from image. Return an empty list if no sub-category 
         are set. */
     QStringList getXmpSubCategories() const;

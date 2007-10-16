@@ -597,6 +597,38 @@ bool KExiv2::removeXmpTag(const char *xmpTagName, bool setProgramName) const
     return false;
 }
 
+QStringList KExiv2::getXmpKeywords() const
+{
+    return (getXmpTagStringBag("Xmp.dc.subject", false));
+}
+
+bool KExiv2::setXmpKeywords(const QStringList& newKeywords, bool setProgramName) const
+{
+#ifdef _XMP_SUPPORT_
+
+    if (!setProgramId(setProgramName))
+        return false;
+
+    QStringList oldkeys = getXmpKeywords();
+    QStringList newkeys = newKeywords;
+    
+    // Create a list of keywords including old one witch already exists.
+    for (QStringList::Iterator it = oldkeys.begin(); it != oldkeys.end(); ++it )
+    {
+        if (!newkeys.contains(*it))
+            newkeys.append(*it);
+    }
+
+    qDebug("%s ==> Xmp Keywords: %s", d->filePath.toAscii().constData(), newkeys.join(",").toAscii().constData());
+    
+    if (setXmpTagStringBag("Xmp.dc.subject", newkeys, false))
+        return false;
+
+#endif // _XMP_SUPPORT_
+
+    return false;
+}
+
 QStringList KExiv2::getXmpSubCategories() const
 {
     return (getXmpTagStringBag("Xmp.photoshop.SupplementalCategories", false));
@@ -629,31 +661,31 @@ bool KExiv2::setXmpSubCategories(const QStringList& newSubCategories, bool setPr
     return false;
 }
 
-QStringList KExiv2::getXmpKeywords() const
+QStringList KExiv2::getXmpSubjects() const
 {
-    return (getXmpTagStringBag("Xmp.dc.subject", false));
+    return (getXmpTagStringBag("Xmp.iptc.SubjectCode", false));
 }
 
-bool KExiv2::setXmpKeywords(const QStringList& newKeywords, bool setProgramName) const
+bool KExiv2::setXmpSubjects(const QStringList& newSubjects, bool setProgramName) const
 {
 #ifdef _XMP_SUPPORT_
 
     if (!setProgramId(setProgramName))
         return false;
 
-    QStringList oldkeys = getXmpKeywords();
-    QStringList newkeys = newKeywords;
+    QStringList oldSubjectCodes = getXmpSubjects();
+    QStringList newSubjectCodes = newSubjects;
     
-    // Create a list of keywords including old one witch already exists.
-    for (QStringList::Iterator it = oldkeys.begin(); it != oldkeys.end(); ++it )
+    // Create a list of sub-categories including old one witch already exists.
+    for (QStringList::Iterator it = oldSubjectCodes.begin(); it != oldSubjectCodes.end(); ++it )
     {
-        if (!newkeys.contains(*it))
-            newkeys.append(*it);
+        if (!newSubjectCodes.contains(*it))
+            newSubjectCodes.append(*it);
     }
 
-    qDebug("%s ==> Xmp Keywords: %s", d->filePath.toAscii().constData(), newkeys.join(",").toAscii().constData());
+    qDebug("%s ==> Xmp Subjects: %s", d->filePath.toAscii().constData(), newSubjectCodes.join(",").toAscii().constData());
     
-    if (setXmpTagStringBag("Xmp.dc.subject", newkeys, false))
+    if (setXmpTagStringBag("Xmp.iptc.SubjectCode", newSubjectCodes, false))
         return false;
 
 #endif // _XMP_SUPPORT_
