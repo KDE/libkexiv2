@@ -749,6 +749,81 @@ bool KExiv2::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitiz
     return false;
 }
 
+QDateTime KExiv2::getDigitizationDateTime(bool fallbackToCreationTime) const
+{
+    try
+    {
+        // In first, trying to get Date & time from Exif tags.
+
+        if (!d->exifMetadata.empty())
+        {
+            // Try Exif date time digitized.
+
+            Exiv2::ExifData exifData(d->exifMetadata);
+            Exiv2::ExifKey key("Exif.Photo.DateTimeDigitized");
+            Exiv2::ExifData::iterator it = exifData.findKey(key);
+
+            if (it != exifData.end())
+            {
+                QDateTime dateTime = QDateTime::fromString(it->toString().c_str(), Qt::ISODate);
+
+                if (dateTime.isValid())
+                {
+                    // qDebug("DateTime (Exif digitalized): %s", dateTime.toString().toAscii().constData());
+                    return dateTime;
+                }
+            }
+
+        }
+
+        // In second, trying to get Date & time from Iptc tags.
+
+        if (!d->iptcMetadata.empty())
+        {
+
+            // Try digitization Iptc date time entries.
+
+            Exiv2::IptcData iptcData(d->iptcMetadata);
+            Exiv2::IptcKey keyDigitizationDate("Iptc.Application2.DigitizationDate");
+            Exiv2::IptcData::iterator it = iptcData.findKey(keyDigitizationDate);
+
+            if (it != iptcData.end())
+            {
+                QString IptcDateDigitization(it->toString().c_str());
+
+                Exiv2::IptcKey keyDigitizationTime("Iptc.Application2.DigitizationTime");
+                Exiv2::IptcData::iterator it2 = iptcData.findKey(keyDigitizationTime);
+
+                if (it2 != iptcData.end())
+                {
+                    QString IptcTimeDigitization(it2->toString().c_str());
+
+                    QDate date = QDate::fromString(IptcDateDigitization, Qt::ISODate);
+                    QTime time = QTime::fromString(IptcTimeDigitization, Qt::ISODate);
+                    QDateTime dateTime = QDateTime(date, time);
+
+                    if (dateTime.isValid())
+                    {
+                        //qDebug("Date (IPTC digitalized): %s", dateTime.toString().toAscii().constData());
+                        return dateTime;
+                    }
+                }
+            }
+        }
+    }
+    catch( Exiv2::Error &e )
+    {
+        printExiv2ExceptionError("Cannot parse Exif digitization date & time tag using Exiv2 ", e);
+    }
+
+    if (fallbackToCreationTime)
+        return getImageDateTime();
+    else
+        return QDateTime();
+}
+
+
+
 bool KExiv2::getImagePreview(QImage& preview) const
 {
     try

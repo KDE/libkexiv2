@@ -193,7 +193,12 @@ public:
     bool setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitized = false, 
                           bool setProgramName=true) const;
 
-    /** Return a QImage copy of Iptc preview image. Return a null image if preview cannot 
+    /** Return the digitization time stamp of the image. First Exif information is checked, then IPTC.
+        If no digitization time stamp is found, getImageDateTime() is called if fallbackToCreationTime
+        is true, or a null QDateTime is returned if fallbackToCreationTime is false. */
+    QDateTime getDigitizationDateTime(bool fallbackToCreationTime = false) const;
+
+    /** Return a QImage copy of Iptc preview image. Return a null image if preview cannot
         be found. */
     bool getImagePreview(QImage& preview) const;
 
@@ -308,13 +313,15 @@ public:
         for date and time values QVariant::DateTime.
         Rationals will be returned as QVariant::List with two integer QVariants (numerator, denominator)
         if rationalAsListOfInts is true, as double if rationalAsListOfInts is false.
+        An exif tag of numerical type may contain more than one value; set component to the desired index.
      */
-    QVariant getExifTagVariant(const char *exifTagName, bool rationalAsListOfInts = true, bool escapeCR=true) const;
+    QVariant getExifTagVariant(const char *exifTagName, bool rationalAsListOfInts = true, bool escapeCR=true, int component=0) const;
 
     /** Set an Exif tag content using a QVariant. Returns true if tag is set successfully.
         All types described for the above method are supported.
         Calling with a QVariant of type ByteArray is equivalent to calling setExifTagData.
         For the meaning of rationalWantSmallDenominator, see the documentation of the convertToRational methods.
+        Setting a value with multiple components is currently not supported.
      */
     bool setExifTagVariant(const char *exifTagName, const QVariant& data,
                            bool rationalWantSmallDenominator=true, bool setProgramName=true) const;
@@ -329,8 +336,11 @@ public:
     /** Return the Exif Tag description or a null string. */ 
     static QString getExifTagDescription(const char *exifTagName);
 
-    /** TODO document me */
-    static QString createExifTagStringFromValue(const char *exifTagName, const QVariant &val, bool escapeCR=true);
+    /** Takes a QVariant value as it could have been retrieved by getExifTagVariant with the given exifTagName,
+        and returns its value properly converted to a string (including i18n).
+        This is equivalent to calling getExifTagString directly.
+        If escapeCR is true CR characters will be removed from the result. */
+    static QString createExifUserStringFromValue(const char *exifTagName, const QVariant &val, bool escapeCR=true);
 
     /** Return a map of Exif tags name/value found in metadata sorted by 
         Exif keys given by 'exifKeysFilter'. 
@@ -376,7 +386,12 @@ public:
     /** Set an Iptc tag content using a string. Return true if tag is set successfully. */
     bool setIptcTagString(const char *iptcTagName, const QString& value, bool setProgramName=true) const;
 
-    /** Return a strings list of a multiple Iptc tags from image. Return an empty list if no tag is found. */
+    /** Returns a strings list with of multiple Iptc tags from the image. Return an empty list if no tag is found. */
+    /** Get the values of all IPTC tags with the given tag name in a string list.
+        (In Iptc, there can be multiple tags with the same name)
+        If the 'escapeCR' parameter is true, the CR characters
+        will be removed.
+        If no tag can be found an empty list is returned. */
     QStringList getIptcTagsStringList(const char* iptcTagName, bool escapeCR=true) const;
 
     /** Set multiple Iptc tags contents using a strings list. 'maxSize' is the max characters size 
@@ -385,7 +400,7 @@ public:
                                const QStringList& oldValues, const QStringList& newValues, 
                                bool setProgramName=true) const;
 
-    /** Get an Iptc tag content like a bytes array. Return an empty bytes array if Iptc 
+    /** Get an Iptc tag content as a bytes array. Return an empty bytes array if Iptc
         tag cannot be found. */
     QByteArray getIptcTagData(const char *iptcTagName) const;
 
@@ -504,7 +519,7 @@ public:
         If Xmp tag cannot be found a null string is returned. */
     QString getXmpTagStringLangAlt(const char* xmpTagName, const QString& langAlt, bool escapeCR) const;
 
-    /** Set a Xmp tag content using a string with an alternative language header. 'langAlt' contain the 
+    /** Set a Xmp tag content using a string with an alternative language header. 'langAlt' contain the
         language alternative information (like "fr-FR" for French - RFC3066 notation) or is null to 
         set alternative language to default settings ("x-default").
         Return true if tag is set successfully. */
@@ -528,6 +543,18 @@ public:
         Return true if tag is set successfully. */
     bool setXmpTagStringBag(const char *xmpTagName, const QStringList& bag,
                             bool setProgramName=true) const;
+
+    /** Get an Xmp tag content as a QVariant. Returns a null QVariant if the Xmp
+        tag cannot be found.
+        For string and integer values the matching QVariant types will be used,
+        for date and time values QVariant::DateTime.
+        Rationals will be returned as QVariant::List with two integer QVariants (numerator, denominator)
+        if rationalAsListOfInts is true, as double if rationalAsListOfInts is false.
+        Arrays (ordered, unordered, alternative) are returned as type StringList.
+        LangAlt values will have type Map (QMap<QString, QVariant>) with the language
+        code as key and the contents as value, of type String.
+     */
+    QVariant getXmpTagVariant(const char *xmpTagName, bool rationalAsListOfInts, bool stringEscapeCR) const;
 
     /** Return a strings list of Xmp keywords from image. Return an empty list if no keyword are set. */
     QStringList getXmpKeywords() const;
@@ -573,9 +600,28 @@ public:
     /** Get all GPS location information set in image. Return true if all information can be found. */
     bool getGPSInfo(double& altitude, double& latitude, double& longitude) const;
 
+    /** Get GPS location information set in the image, in the GPSCoordinate format
+        as described in the XMP specification. Returns a null string in the information cannot be found. */
+    QString getGPSLatitudeString() const;
+    QString getGPSLongitudeString() const;
+
+    /** Get GPS location information set in the image, as a double floating point number as in degrees
+        where the sign determines the direction ref (North/South; East/West).
+        Returns true if the information is available.
+    */
+    bool getGPSLatitudeNumber(double *latitude) const;
+    bool getGPSLongitudeNumber(double *longitude) const;
+
+    /** Get GPS altitude information, in meters, relative to sea level (positive sign above sea level) */
+    bool getGPSAltitude(double *altitude) const;
+
     /** Set all GPS location information into image. Return true if all information have been 
         changed in metadata. */
     bool setGPSInfo(double altitude, double latitude, double longitude, bool setProgramName=true) const;
+
+    /** Set all GPS location information into image. Return true if all information have been 
+        changed in metadata. */
+    bool setGPSInfo(double altitude, const QString &latitude, const QString &longitude, bool setProgramName=true);
 
     /** Remove all Exif tags relevant of GPS location information. Return true if all tags have been 
         removed successfully in metadata. */
@@ -598,9 +644,41 @@ public:
     static void convertToRationalSmallDenominator(double number, long int* numerator,
                                                   long int* denominator);
 
+    /** Converts a GPS position stored as rationals in Exif to the form described
+        as GPSCoordinate in the XMP specification, either in the from "256,45,34N" or "256,45.566667N"
+     */
+    static QString convertToGPSCoordinateString(long int numeratorDegrees, long int denominatorDegrees,
+                                                long int numeratorMinutes, long int denominatorMinutes,
+                                                long int numeratorSeconds, long int denominatorSeconds,
+                                                char directionReference);
+
+    /** Converts a GPSCoordinate string as defined by XMP to three rationals and the direction reference.
+        Returns true if the conversion was successful.
+        If minutes is given in the fractional form, a denominator of 1000000 for the minutes will be used.
+     */
+    static bool convertFromGPSCoordinateString(const QString &coordinate,
+                                               long int *numeratorDegrees, long int *denominatorDegrees,
+                                               long int *numeratorMinutes, long int *denominatorMinutes,
+                                               long int *numeratorSeconds, long int *denominatorSeconds,
+                                               char *directionReference);
+
+    /** Converts a GPSCoordinate string to user presentable numbers, integer degrees and minutes and
+        double floating point seconds, and a direction reference ('N' or 'S', 'E' or 'W')
+     */
+    static bool convertToUserPresentableNumbers(const QString &coordinate,
+                                                int *degrees, int *minutes, double *seconds, char *directionReference);
+
+    /** Converts a double floating point number to user presentable numbers, integer degrees and minutes and
+        double floating point seconds, and a direction reference ('N' or 'S', 'E' or 'W').
+        The method needs to know for the direction reference
+        if the latitude or the longitude is meant by the double parameter.
+     */
+    static void convertToUserPresentableNumbers(bool isLatitude, double coordinate,
+                                                int *degrees, int *minutes, double *seconds, char *directionReference);
+
 protected:
     
-    /** Re-implemente this method to set automatically the Program Name and Program Version 
+    /** Re-implemente this method to set automatically the Program Name and Program Version
         information in Exif and Iptc metadata if 'on' argument is true. This method is called by all methods witch
         change tags in metadata. By default this method do nothing and return true.
  

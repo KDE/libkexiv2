@@ -549,6 +549,110 @@ bool KExiv2::setXmpTagStringBag(const char *xmpTagName, const QStringList& bag,
     return false;
 }
 
+QVariant KExiv2::getXmpTagVariant(const char *xmpTagName, bool rationalAsListOfInts, bool stringEscapeCR) const
+{
+#ifdef _XMP_SUPPORT_
+    try
+    {
+        Exiv2::XmpData xmpData(d->xmpMetadata);
+        Exiv2::XmpKey key(xmpTagName);
+        Exiv2::XmpData::iterator it = xmpData.findKey(key);
+        if (it != xmpData.end())
+        {
+            switch (it->typeId())
+            {
+                case Exiv2::unsignedByte:
+                case Exiv2::unsignedShort:
+                case Exiv2::unsignedLong:
+                case Exiv2::signedShort:
+                case Exiv2::signedLong:
+                    return QVariant((int)it->toLong());
+                case Exiv2::unsignedRational:
+                case Exiv2::signedRational:
+                    if (rationalAsListOfInts)
+                    {
+                        QList<QVariant> list;
+                        list << (*it).toRational().first;
+                        list << (*it).toRational().second;
+                        return QVariant(list);
+                    }
+                    else
+                    {
+                        // prefer double precision
+                        double num = (*it).toRational().first;
+                        double den = (*it).toRational().second;
+                        if (den == 0.0)
+                            return QVariant(QVariant::Double);
+                        return QVariant(num / den);
+                    }
+                case Exiv2::date:
+                case Exiv2::time:
+                {
+                    QDateTime dateTime = QDateTime::fromString(it->toString().c_str(), Qt::ISODate);
+                    return QVariant(dateTime);
+                }
+                case Exiv2::asciiString:
+                case Exiv2::comment:
+                case Exiv2::string:
+                {
+                    std::ostringstream os;
+                    os << *it;
+                    QString tagValue = QString::fromLocal8Bit(os.str().c_str());
+
+                    if (stringEscapeCR)
+                        tagValue.replace("\n", " ");
+
+                    return QVariant(tagValue);
+                }
+                case Exiv2::xmpText:
+                {
+                    std::ostringstream os;
+                    os << *it;
+                    QString tagValue = QString::fromUtf8(os.str().c_str());
+
+                    if (stringEscapeCR)
+                        tagValue.replace("\n", " ");
+
+                    return tagValue;
+                }
+                case Exiv2::xmpBag:
+                case Exiv2::xmpSeq:
+                {
+                    QStringList list;
+                    for (int i=0; i<it->count(); i++)
+                    {
+                        list << QString::fromUtf8(it->toString(i).c_str());
+                    }
+                    return list;
+                }
+                case Exiv2::xmpAlt:
+                {
+                    // access the value directly
+                    const Exiv2::LangAltValue &value = static_cast<const Exiv2::LangAltValue &>(it->value());
+                    QMap<QString, QVariant> map;
+                    // access the ValueType std::map< std::string, std::string>
+                    Exiv2::LangAltValue::ValueType::const_iterator i;
+                    for (i = value.value_.begin(); i != value.value_.end(); ++i) {
+                        map[QString::fromUtf8(i->first.c_str())] = QString::fromUtf8(i->second.c_str());
+                    }
+                    return map;
+                }
+                default:
+                    break;
+            }
+        }
+    }
+    catch( Exiv2::Error &e )
+    {
+        printExiv2ExceptionError(QString("Cannot find Xmp key '%1' into image using Exiv2 ")
+                                 .arg(xmpTagName), e);
+    }
+
+#endif // _XMP_SUPPORT_
+
+    return QVariant();
+}
+
 bool KExiv2::registerXmpNameSpace(const QString& uri, const QString& prefix) const
 {
 #ifdef _XMP_SUPPORT_

@@ -442,7 +442,7 @@ bool KExiv2::setExifTagVariant(const char *exifTagName, const QVariant& val,
     return false;
 }
 
-QString KExiv2::createExifTagStringFromValue(const char *exifTagName, const QVariant &val, bool escapeCR)
+QString KExiv2::createExifUserStringFromValue(const char *exifTagName, const QVariant &val, bool escapeCR)
 {
     try
     {
@@ -568,7 +568,7 @@ QByteArray KExiv2::getExifTagData(const char* exifTagName) const
     return QByteArray();
 }
 
-QVariant KExiv2::getExifTagVariant(const char *exifTagName, bool rationalAsListOfInts, bool stringEscapeCR) const
+QVariant KExiv2::getExifTagVariant(const char *exifTagName, bool rationalAsListOfInts, bool stringEscapeCR, int component) const
 {
     try
     {
@@ -584,23 +584,23 @@ QVariant KExiv2::getExifTagVariant(const char *exifTagName, bool rationalAsListO
                 case Exiv2::unsignedLong:
                 case Exiv2::signedShort:
                 case Exiv2::signedLong:
-                    return QVariant((int)it->toLong());
+                    return QVariant((int)it->toLong(component));
                 case Exiv2::unsignedRational:
                 case Exiv2::signedRational:
                     if (rationalAsListOfInts)
                     {
                         QList<QVariant> list;
-                        list << (*it).toRational(0).first;
-                        list << (*it).toRational(0).second;
+                        list << (*it).toRational(component).first;
+                        list << (*it).toRational(component).second;
                         return QVariant(list);
                     }
                     else
                     {
                         // prefer double precision
-                        double num = (*it).toRational(0).first;
-                        double den = (*it).toRational(0).second;
+                        double num = (*it).toRational(component).first;
+                        double den = (*it).toRational(component).second;
                         if (den == 0.0)
-                            return QVariant();
+                            return QVariant(QVariant::Double);
                         return QVariant(num / den);
                     }
                 case Exiv2::date:
@@ -623,7 +623,7 @@ QVariant KExiv2::getExifTagVariant(const char *exifTagName, bool rationalAsListO
                     return QVariant(tagValue);
                 }
                 default:
-                    return QVariant();
+                    break;
             }
         }
     }
@@ -633,7 +633,7 @@ QVariant KExiv2::getExifTagVariant(const char *exifTagName, bool rationalAsListO
                                  .arg(exifTagName), e);
     }
 
-    return false;
+    return QVariant();
 }
 
 QString KExiv2::getExifTagString(const char* exifTagName, bool escapeCR) const
