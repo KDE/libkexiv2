@@ -115,7 +115,9 @@ public:
 
 public:
 
-    //-- Statics methods ----------------------------------------------
+    //-----------------------------------------------------------------
+    //-- STATICS methods ----------------------------------------------
+    //-----------------------------------------------------------------
 
     /** Return true if library can handle Xmp metadata */
     static bool supportXmp();
@@ -131,7 +133,9 @@ public:
     /** return true if metadata from file cannot be written by Exiv2. */
     static bool isReadOnly(const QString& filePath);
 
-    //-- General methods ----------------------------------------------
+    //-----------------------------------------------------------------
+    //-- GENERAL methods ----------------------------------------------
+    //-----------------------------------------------------------------
 
     /** Load all metadata (Exif, Iptc, Xmp, and JFIF Comments) from a picture (JPEG, RAW, TIFF, PNG, 
         DNG, etc...). Return true if metadata have been loaded successfully from file. */
@@ -154,7 +158,9 @@ public:
     /** Return the file path of current image. */
     QString getFilePath() const;
 
-    //-- Metadata Image Information manipulation methods ----------------
+    //-------------------------------------------------------------------
+    //-- Metadata IMAGE INFORMATION manipulation methods ----------------
+    //-------------------------------------------------------------------
 
     /** Set Program name and program version in Exif and Iptc Metadata. Return true if information
         have been changed in metadata. */
@@ -210,7 +216,9 @@ public:
     */
     virtual bool setImagePreview(const QImage& preview, bool setProgramName=true) const;
 
-    //-- Comments manipulation methods --------------------------------
+    //-----------------------------------------------------------------
+    //-- COMMENTS manipulation methods --------------------------------
+    //-----------------------------------------------------------------
 
     /** Return 'true' if metadata container in memory as Comments. */
     bool hasComments() const;
@@ -362,7 +370,9 @@ public:
         */ 
     KExiv2::MetaDataMap getExifTagsDataList(const QStringList &exifKeysFilter, bool invertSelection=false) const;
 
-    //-- Iptc manipulation methods --------------------------------
+    //-------------------------------------------------------------
+    //-- IPTC manipulation methods --------------------------------
+    //-------------------------------------------------------------
 
     /** Return 'true' if metadata container in memory as Iptc. */
     bool hasIptc() const;
@@ -466,7 +476,9 @@ public:
     bool setIptcSubCategories(const QStringList& oldSubCategories, const QStringList& newSubCategories, 
                               bool setProgramName=true) const;
 
-    //-- Xmp manipulation methods --------------------------------
+    //------------------------------------------------------------
+    //-- XMP manipulation methods --------------------------------
+    //------------------------------------------------------------
 
     /** Return 'true' if metadata container in memory as Xmp. */
     bool hasXmp() const;
@@ -595,7 +607,9 @@ public:
         removed successfully. */
     bool removeXmpTag(const char *xmpTagName, bool setProgramName=true) const;
 
+    //------------------------------------------------------------
     //-- GPS manipulation methods --------------------------------
+    //------------------------------------------------------------
 
     /** Get all GPS location information set in image. Return true if all information can be found. */
     bool getGPSInfo(double& altitude, double& latitude, double& longitude) const;
