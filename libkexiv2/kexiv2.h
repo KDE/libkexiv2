@@ -525,6 +525,11 @@ public:
         */ 
     KExiv2::MetaDataMap getXmpTagsDataList(const QStringList &xmpKeysFilter, bool invertSelection=false) const;
 
+    /** Get all redondant Text or Alternative Language Xmp tags content like a strings list. 
+        If 'escapeCR' parameter is true, the CR characters will be removed from strings. 
+        If Xmp tag cannot be found a null string list is returned. */
+    QStringList getXmpRedondantTagsString(const char* xmpTagName, bool escapeCR=true) const;
+
     /** Get a Xmp tag content like a string set with an alternative language 
         header 'langAlt' (like "fr-FR" for French).
         If 'escapeCR' parameter is true, the CR characters will be removed. 

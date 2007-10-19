@@ -150,7 +150,7 @@ KExiv2::MetaDataMap KExiv2::getXmpTagsDataList(const QStringList &xmpKeysFilter,
 
             qDebug() << key << " = " << value << endl; 
 
-            // If the tag is a language alternative type, parse content to detect encoding.
+            // If the tag is a language alternative type, parse content to detect language.
             if (md->typeId() == Exiv2::langAlt)
             {
                 QString lang;
@@ -307,6 +307,42 @@ bool KExiv2::setXmpTagString(const char *xmpTagName, const QString& value, bool 
 #endif // _XMP_SUPPORT_
 
     return false;
+}
+
+QStringList KExiv2::getXmpRedondantTagsString(const char* xmpTagName, bool escapeCR) const
+{
+#ifdef _XMP_SUPPORT_
+
+    try
+    {
+        Exiv2::XmpData xmpData = d->xmpMetadata;
+        QStringList list;
+
+        for (Exiv2::XmpData::iterator it = xmpData.begin(); it != xmpData.end(); ++it)
+        {
+            if (it->key() == xmpTagName && (it->typeId() == Exiv2::langAlt || it->typeId() == Exiv2::xmpText))
+            {
+                std::ostringstream os;
+                os << *it;
+                QString val = QString::fromUtf8(os.str().c_str());
+                if (escapeCR)
+                    val.replace("\n", " ");
+
+                list.append(val);
+            }
+        }
+
+        return list;
+    }
+    catch( Exiv2::Error &e )
+    {
+        printExiv2ExceptionError(QString("Cannot find Xmp key '%1' into image using Exiv2 ")
+                                 .arg(xmpTagName), e);
+    }
+
+#endif // _XMP_SUPPORT_
+
+    return QStringList();
 }
 
 QString KExiv2::getXmpTagStringLangAlt(const char* xmpTagName, const QString& langAlt, bool escapeCR) const
