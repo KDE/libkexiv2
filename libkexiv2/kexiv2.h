@@ -573,7 +573,7 @@ public:
         LangAlt values will have type Map (QMap<QString, QVariant>) with the language
         code as key and the contents as value, of type String.
      */
-    QVariant getXmpTagVariant(const char *xmpTagName, bool rationalAsListOfInts, bool stringEscapeCR) const;
+    QVariant getXmpTagVariant(const char *xmpTagName, bool rationalAsListOfInts=true, bool stringEscapeCR=true) const;
 
     /** Return a strings list of Xmp keywords from image. Return an empty list if no keyword are set. */
     QStringList getXmpKeywords() const;
