@@ -251,7 +251,9 @@ public:
         as well and 'lang' is set to a null string. */ 
     static QString detectLanguageAlt(const QString &value, QString& lang);
 
-    //-- Exif manipulation methods --------------------------------
+    //-----------------------------------------------------------------
+    //-- EXIF manipulation methods ------------------------------------
+    //-----------------------------------------------------------------
 
     /** Return 'true' if metadata container in memory as Exif. */
     bool hasExif() const;
@@ -531,7 +533,7 @@ public:
     QStringList getXmpRedondantTagsString(const char* xmpTagName, bool escapeCR=true) const;
 
     /** Get a Xmp tag content like a string set with an alternative language 
-        header 'langAlt' (like "fr-FR" for French).
+        header 'langAlt' (like "fr-FR" for French - RFC3066 notation).
         If 'escapeCR' parameter is true, the CR characters will be removed. 
         If Xmp tag cannot be found a null string is returned. */
     QString getXmpTagStringLangAlt(const char* xmpTagName, const QString& langAlt, bool escapeCR) const;
