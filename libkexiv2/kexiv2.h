@@ -527,10 +527,25 @@ public:
         */ 
     KExiv2::MetaDataMap getXmpTagsDataList(const QStringList &xmpKeysFilter, bool invertSelection=false) const;
 
-    /** Get all redondant Text or Alternative Language Xmp tags content like a strings list. 
+    /** Get all redondant Alternative Language Xmp tags content like a strings list. 
+        Each value from list are formated like this:
+        lang="fr-FR" Mon commentaire
+        Language alternative information (like "fr-FR" for French - RFC3066 notation) 
+        is the first part of the value. Text follow language alternative header separated 
+        by a blank space.
         If 'escapeCR' parameter is true, the CR characters will be removed from strings. 
         If Xmp tag cannot be found a null string list is returned. */
-    QStringList getXmpRedondantTagsString(const char* xmpTagName, bool escapeCR=true) const;
+    QStringList getXmpTagStringListLangAlt(const char* xmpTagName, bool escapeCR=true) const;
+
+    /** Set a Xmp tag content using a string list. If tag already exist, it wil be removed before.
+        Each value must be formated like this:
+        lang="fr-FR" Mon commentaire
+        Language alternative information (like "fr-FR" for French - RFC3066 notation) 
+        is the first part of the value. Text follow language alternative header separated 
+        by a blank space.
+        Return true if tag is set successfully. */
+    bool setXmpTagStringListLangAlt(const char *xmpTagName, const QStringList& values, 
+                                    bool setProgramName) const;
 
     /** Get a Xmp tag content like a string set with an alternative language 
         header 'langAlt' (like "fr-FR" for French - RFC3066 notation).
