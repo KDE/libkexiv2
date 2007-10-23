@@ -333,7 +333,6 @@ KExiv2::AltLangMap KExiv2::getXmpTagStringListLangAlt(const char* xmpTagName, bo
                     map.insert(lang, text);
                 }
 
-                qDebug() << map << endl;
                 return map;
             }
         }
@@ -363,7 +362,7 @@ bool KExiv2::setXmpTagStringListLangAlt(const char *xmpTagName, const KExiv2::Al
         removeXmpTag(xmpTagName);
 
         Exiv2::Value::AutoPtr xmpTxtVal = Exiv2::Value::create(Exiv2::langAlt);
-
+        
         for (AltLangMap::const_iterator it = values.begin(); it != values.end(); ++it)
         {
             QString lang = it.key();  
