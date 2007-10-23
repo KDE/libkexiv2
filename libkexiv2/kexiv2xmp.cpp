@@ -307,7 +307,7 @@ bool KExiv2::setXmpTagString(const char *xmpTagName, const QString& value, bool 
     return false;
 }
 
-QStringList KExiv2::getXmpTagStringListLangAlt(const char* xmpTagName, bool escapeCR) const
+KExiv2::AltLangMap KExiv2::getXmpTagStringListLangAlt(const char* xmpTagName, bool escapeCR) const
 {
 #ifdef _XMP_SUPPORT_
 
@@ -319,7 +319,7 @@ QStringList KExiv2::getXmpTagStringListLangAlt(const char* xmpTagName, bool esca
         {
             if (it->key() == xmpTagName && it->typeId() == Exiv2::langAlt)
             {
-                QStringList list;
+                AltLangMap map;
                 const Exiv2::LangAltValue &value = static_cast<const Exiv2::LangAltValue &>(it->value());
 
                 for (Exiv2::LangAltValue::ValueType::const_iterator it2 = value.value_.begin(); 
@@ -330,10 +330,11 @@ QStringList KExiv2::getXmpTagStringListLangAlt(const char* xmpTagName, bool esca
                     if (escapeCR)
                         text.replace("\n", " ");
         
-                    list.append(QString("lang=\"%1\" %2").arg(lang).arg(text));
+                    map.insert(lang, text);
                 }
 
-                return list;
+                qDebug() << map << endl;
+                return map;
             }
         }
     }
@@ -345,10 +346,10 @@ QStringList KExiv2::getXmpTagStringListLangAlt(const char* xmpTagName, bool esca
 
 #endif // _XMP_SUPPORT_
 
-    return QStringList();
+    return AltLangMap();
 }
 
-bool KExiv2::setXmpTagStringListLangAlt(const char *xmpTagName, const QStringList& values, 
+bool KExiv2::setXmpTagStringListLangAlt(const char *xmpTagName, const KExiv2::AltLangMap& values, 
                                         bool setProgramName) const
 {
 #ifdef _XMP_SUPPORT_
@@ -363,10 +364,10 @@ bool KExiv2::setXmpTagStringListLangAlt(const char *xmpTagName, const QStringLis
 
         Exiv2::Value::AutoPtr xmpTxtVal = Exiv2::Value::create(Exiv2::langAlt);
 
-        for (QStringList::const_iterator it = values.begin(); it != values.end(); ++it)
+        for (AltLangMap::const_iterator it = values.begin(); it != values.end(); ++it)
         {
-            QString lang;  
-            QString text = detectLanguageAlt(*it, lang);
+            QString lang = it.key();  
+            QString text = it.value();
             QString txtLangAlt = QString("lang=%1 %2").arg(lang).arg(text);
             const std::string &txt(txtLangAlt.toUtf8().constData());
             xmpTxtVal->read(txt);
@@ -449,14 +450,12 @@ bool KExiv2::setXmpTagStringLangAlt(const char *xmpTagName, const QString& value
 
         // Search if an Xmp tag already exist.
 
-        QStringList list = getXmpTagStringListLangAlt(xmpTagName, false);
-        if (!list.isEmpty())
+        AltLangMap map = getXmpTagStringListLangAlt(xmpTagName, false);
+        if (!map.isEmpty())
         {
-            for (QStringList::iterator it = list.begin(); it != list.end(); ++it)
+            for (AltLangMap::iterator it = map.begin(); it != map.end(); ++it)
             {
-                QString lang;  
-                detectLanguageAlt(*it, lang);
-                if (lang != langAlt)
+                if (it.key() != langAlt)
                 {
                     const std::string &val((*it).toUtf8().constData());
                     xmpTxtVal->read(val);

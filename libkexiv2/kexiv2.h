@@ -94,7 +94,12 @@ public:
 
     /** A map used by decodeExifMetadata() decodeIptcMetadata() methods
         to store Tags Key and Tags Value. */
-    typedef QMap<QString, QString>  MetaDataMap;
+    typedef QMap<QString, QString> MetaDataMap;
+
+    /** A map used to store a list of Alternative Language values. 
+        The map key is the language code following RFC3066 notation 
+        (like "fr-FR" for French), and the map value the text. */
+    typedef QMap<QString, QString> AltLangMap; 
 
 public:
 
@@ -527,24 +532,16 @@ public:
         */ 
     KExiv2::MetaDataMap getXmpTagsDataList(const QStringList &xmpKeysFilter, bool invertSelection=false) const;
 
-    /** Get all redondant Alternative Language Xmp tags content like a strings list. 
-        Each value from list are formated like this:
-        lang="fr-FR" Mon commentaire
-        Language alternative information (like "fr-FR" for French - RFC3066 notation) 
-        is the first part of the value. Text follow language alternative header separated 
-        by a blank space.
+    /** Get all redondant Alternative Language Xmp tags content like a map. 
+        See AltLangMap class description for details.
         If 'escapeCR' parameter is true, the CR characters will be removed from strings. 
         If Xmp tag cannot be found a null string list is returned. */
-    QStringList getXmpTagStringListLangAlt(const char* xmpTagName, bool escapeCR=true) const;
+    KExiv2::AltLangMap getXmpTagStringListLangAlt(const char* xmpTagName, bool escapeCR=true) const;
 
-    /** Set a Xmp tag content using a string list. If tag already exist, it wil be removed before.
-        Each value must be formated like this:
-        lang="fr-FR" Mon commentaire
-        Language alternative information (like "fr-FR" for French - RFC3066 notation) 
-        is the first part of the value. Text follow language alternative header separated 
-        by a blank space.
+    /** Set an Alternative Language Xmp tag content using a map. See AltLangMap class 
+        description for details. If tag already exist, it wil be removed before.
         Return true if tag is set successfully. */
-    bool setXmpTagStringListLangAlt(const char *xmpTagName, const QStringList& values, 
+    bool setXmpTagStringListLangAlt(const char *xmpTagName, const KExiv2::AltLangMap& values, 
                                     bool setProgramName) const;
 
     /** Get a Xmp tag content like a string set with an alternative language 
