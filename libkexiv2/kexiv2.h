@@ -51,7 +51,6 @@
 
 namespace Exiv2
 {
-    class DataBuf;
     class Exifdatum;
     class ExifData;
     class IptcData;
