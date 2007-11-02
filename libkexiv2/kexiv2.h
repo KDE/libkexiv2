@@ -638,7 +638,7 @@ public:
     QString getGPSLongitudeString() const;
 
     /** Get GPS location information set in the image, as a double floating point number as in degrees
-        where the sign determines the direction ref (North/South; East/West).
+        where the sign determines the direction ref (North + / South - ; East + / West -).
         Returns true if the information is available.
     */
     bool getGPSLatitudeNumber(double *latitude) const;
@@ -684,6 +684,11 @@ public:
                                                 long int numeratorSeconds, long int denominatorSeconds,
                                                 char directionReference);
 
+    /** Converts a GPS position stored as double floating point number in degrees to the form described
+        as GPSCoordinate in the XMP specification.
+     */
+    static QString convertToGPSCoordinateString(bool isLatitude, double coordinate);
+
     /** Converts a GPSCoordinate string as defined by XMP to three rationals and the direction reference.
         Returns true if the conversion was successful.
         If minutes is given in the fractional form, a denominator of 1000000 for the minutes will be used.
@@ -693,6 +698,12 @@ public:
                                                long int *numeratorMinutes, long int *denominatorMinutes,
                                                long int *numeratorSeconds, long int *denominatorSeconds,
                                                char *directionReference);
+
+    /** Convert a GPSCoordinate string as defined by XMP to a double floating point number in degrees
+        where the sign determines the direction ref (North + / South - ; East + / West -).
+        Returns true if the conversion was successful.
+     */
+    static bool convertFromGPSCoordinateString(const QString &gpsString, double *coordinate);
 
     /** Converts a GPSCoordinate string to user presentable numbers, integer degrees and minutes and
         double floating point seconds, and a direction reference ('N' or 'S', 'E' or 'W')

@@ -630,6 +630,14 @@ QString KExiv2::convertToGPSCoordinateString(long int numeratorDegrees, long int
                                              long int numeratorSeconds, long int denominatorSeconds,
                                              char directionReference)
 {
+    /**
+     * Precision:
+     * A second at sea level measures 30m for our purposes, a minute 1800m.
+     * (for more details, see http://en.wikipedia.org/wiki/Geographic_coordinate_system)
+     * This means with a decimal precision of 8 for minutes we get +/-0,018mm.
+     * (if I calculated correctly)
+     */
+
     QString coordinate;
 
     if (denominatorDegrees == 1 &&
@@ -649,7 +657,7 @@ QString KExiv2::convertToGPSCoordinateString(long int numeratorDegrees, long int
         coordinate = coordinate.arg(numeratorDegrees);
         double minutes = numeratorMinutes / denominatorMinutes;
         minutes += (numeratorSeconds / denominatorSeconds) / 60.0;
-        coordinate = coordinate.arg(minutes, 0, 'f').arg(directionReference);
+        coordinate = coordinate.arg(minutes, 0, 'f', 8).arg(directionReference);
     }
     else if (denominatorDegrees == 0 ||
              denominatorMinutes == 0 ||
@@ -666,9 +674,49 @@ QString KExiv2::convertToGPSCoordinateString(long int numeratorDegrees, long int
         double wholeDegrees = trunc(degrees);
         double minutes = numeratorMinutes / denominatorMinutes;
         minutes += (degrees - wholeDegrees) * 60;
-        coordinate = coordinate.arg(minutes, 0, 'f').arg(directionReference);
+        coordinate = coordinate.arg(minutes, 0, 'f', 8).arg(directionReference);
     }
     return coordinate;
+}
+
+QString KExiv2::convertToGPSCoordinateString(bool isLatitude, double coordinate)
+{
+    if (coordinate < -360.0 || coordinate > 360.0)
+        return QString();
+
+    QString coordinateString;
+
+    char directionReference;
+
+    if (isLatitude)
+    {
+        if (coordinate < 0)
+            directionReference = 'S';
+        else
+            directionReference = 'N';
+    }
+    else
+    {
+        if (coordinate < 0)
+            directionReference = 'W';
+        else
+            directionReference = 'E';
+    }
+
+    // remove sign
+    coordinate = fabs(coordinate);
+
+    int degrees = (int)floor(coordinate);
+    // get fractional part
+    coordinate = coordinate - (double)(degrees);
+    // To minutes
+    double minutes = coordinate * 60.0;
+
+    // use form DDD,MM.mmk
+    coordinateString = "%1,%2%3";
+    coordinateString = coordinateString.arg(degrees);
+    coordinateString = coordinateString.arg(minutes, 0, 'f', 8).arg(directionReference);
+    return coordinateString;
 }
 
 bool KExiv2::convertFromGPSCoordinateString(const QString &gpsString,
@@ -710,6 +758,43 @@ bool KExiv2::convertFromGPSCoordinateString(const QString &gpsString,
         *numeratorDegrees = parts[0].toLong();
         *numeratorMinutes = parts[1].toLong();
         *numeratorSeconds = parts[2].toLong();
+        return true;
+    }
+    else
+        return false;
+}
+
+bool KExiv2::convertFromGPSCoordinateString(const QString &gpsString, double *degrees)
+{
+    if (gpsString.isEmpty())
+        return false;
+
+    char directionReference = gpsString.at(gpsString.length() - 1).toUpper().toLatin1();
+    QString coordinate = gpsString.left(gpsString.length() - 1);
+
+    QStringList parts = coordinate.split(',');
+    if (parts.size() == 2)
+    {
+        // form DDD,MM.mmk
+        *degrees =  parts[0].toLong();
+        *degrees += parts[1].toDouble() / 60.0;
+
+        if (directionReference == 'W' || directionReference == 'S')
+            *degrees *= -1.0;
+
+        return true;
+    }
+    else if (parts.size() == 3)
+    {
+        // use form DDD,MM,SSk
+
+        *degrees =  parts[0].toLong();
+        *degrees += parts[1].toLong() / 60.0;
+        *degrees += parts[2].toLong() / 3600.0;
+
+        if (directionReference == 'W' || directionReference == 'S')
+            *degrees *= -1.0;
+
         return true;
     }
     else
@@ -775,7 +860,7 @@ void KExiv2::convertToUserPresentableNumbers(bool isLatitude, double coordinate,
     coordinate *= 60.0;
     *minutes = (int)floor(coordinate);
     // get fractional part
-    coordinate = coordinate - (double)(*degrees);
+    coordinate = coordinate - (double)(*minutes);
     // To seconds
     coordinate *= 60.0;
     *seconds = coordinate;
