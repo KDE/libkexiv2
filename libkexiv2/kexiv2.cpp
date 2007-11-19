@@ -108,7 +108,7 @@ QString KExiv2::Exiv2Version()
 void KExiv2::printExiv2ExceptionError(const QString& msg, Exiv2::Error& e)
 {
     std::string s(e.what());
-    qDebug("%s (%s)", msg.toAscii().constData(), s.c_str());
+    qDebug("%s (Error #%i: %s)", msg.toAscii().constData(), e.code(), s.c_str());
 }
 
 bool KExiv2::isReadOnly(const QString& filePath)
