@@ -129,8 +129,8 @@ QString KExiv2::Exiv2Version()
 
 void KExiv2::printExiv2ExceptionError(const QString& msg, Exiv2::Error& e)
 {
-    std::string s(e.what());
-    qDebug("%s (%s)", msg.ascii(), s.c_str());
+    std::string s(e.what());    
+    qDebug("%s (Error #%i: %s)", msg.ascii(), e.code(), s.c_str());
 }
 
 std::string& KExiv2::commentsMetaData()
