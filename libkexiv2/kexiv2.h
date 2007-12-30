@@ -129,6 +129,9 @@ public:
     /** Return a string version of Exiv2 release in format "major.minor.patch" */ 
     static QString Exiv2Version();
 
+    /** Return a string version of libkexiv2 release */
+    static QString version();
+
     /** Generic method to print the Exiv2 C++ Exception error message from 'e'.
         'msg' string is printed just before like debug header.
     */

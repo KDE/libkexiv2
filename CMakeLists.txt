@@ -12,6 +12,7 @@ PROJECT(libkexiv2)
 # 0.1.4 => 2.0.2
 # 0.1.5 => 2.1.1
 # 0.1.6 => 3.0.0
+# 0.1.7 => 4.0.0
 # ... here we can have new releases from KDE3 branch
 # 0.2.0 => 6.0.0
 

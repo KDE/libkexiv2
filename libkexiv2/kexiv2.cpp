@@ -27,6 +27,7 @@
 
 // Local includes.
 
+#include "version.h"
 #include "kexiv2private.h"
 #include "kexiv2.h"
 
@@ -103,6 +104,11 @@ QString KExiv2::Exiv2Version()
                               .arg(EXIV2_MINOR_VERSION)
                               .arg(EXIV2_PATCH_VERSION);
 #endif
+}
+
+QString KExiv2::version()
+{
+    return QString(kexiv2_version);
 }
 
 void KExiv2::printExiv2ExceptionError(const QString& msg, Exiv2::Error& e)
