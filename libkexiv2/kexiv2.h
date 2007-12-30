@@ -66,23 +66,23 @@ public:
     /** The image color workspace values given by Exif metadata. */
     enum ImageColorWorkSpace
     {
-        WORKSPACE_UNSPECIFIED  = 0,    
-        WORKSPACE_SRGB         = 1,    
-        WORKSPACE_ADOBERGB     = 2,    
-        WORKSPACE_UNCALIBRATED = 65535 
+        WORKSPACE_UNSPECIFIED  = 0,
+        WORKSPACE_SRGB         = 1,
+        WORKSPACE_ADOBERGB     = 2,
+        WORKSPACE_UNCALIBRATED = 65535
     };
 
     /** The image orientation values given by Exif metadata. */
     enum ImageOrientation
     {
-        ORIENTATION_UNSPECIFIED  = 0, 
-        ORIENTATION_NORMAL       = 1, 
-        ORIENTATION_HFLIP        = 2, 
-        ORIENTATION_ROT_180      = 3, 
-        ORIENTATION_VFLIP        = 4, 
-        ORIENTATION_ROT_90_HFLIP = 5, 
-        ORIENTATION_ROT_90       = 6, 
-        ORIENTATION_ROT_90_VFLIP = 7, 
+        ORIENTATION_UNSPECIFIED  = 0,
+        ORIENTATION_NORMAL       = 1,
+        ORIENTATION_HFLIP        = 2,
+        ORIENTATION_ROT_180      = 3,
+        ORIENTATION_VFLIP        = 4,
+        ORIENTATION_ROT_90_HFLIP = 5,
+        ORIENTATION_ROT_90       = 6,
+        ORIENTATION_ROT_90_VFLIP = 7,
         ORIENTATION_ROT_270      = 8
     };
 
@@ -103,6 +103,9 @@ public:
 
     /** Return a string version of Exiv2 release in format "major.minor.patch" */ 
     static QString Exiv2Version();
+
+    /** Return a string version of libkexiv2 release */
+    static QString version();
 
     /** Generic method to print the Exiv2 C++ Exception error message from 'e'.
         'msg' string is printed just before like debug header.

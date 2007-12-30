@@ -77,6 +77,7 @@
 
 // Local includes.
 
+#include "version.h"
 #include "kexiv2.h"
 
 namespace KExiv2Iface
@@ -95,7 +96,9 @@ public:
     Exiv2::ExifData exifMetadata;
 
     Exiv2::IptcData iptcMetadata;
+
 };
+
 
 KExiv2::KExiv2()
 {
@@ -113,6 +116,11 @@ KExiv2::~KExiv2()
     delete d;
 }
 
+QString KExiv2::version()
+{
+  return QString( kexiv2_version );
+}
+
 QString KExiv2::Exiv2Version()
 {
     // Since 0.14.0 release, we can extract run-time version of Exiv2.
@@ -120,7 +128,7 @@ QString KExiv2::Exiv2Version()
 
 #if (EXIV2_TEST_VERSION(0,14,0))
     return QString(Exiv2::version());
-#else	   
+#else
     return QString("%1.%2.%3").arg(EXIV2_MAJOR_VERSION)
                               .arg(EXIV2_MINOR_VERSION)
                               .arg(EXIV2_PATCH_VERSION);
@@ -129,7 +137,7 @@ QString KExiv2::Exiv2Version()
 
 void KExiv2::printExiv2ExceptionError(const QString& msg, Exiv2::Error& e)
 {
-    std::string s(e.what());    
+    std::string s(e.what());
     qDebug("%s (Error #%i: %s)", msg.ascii(), e.code(), s.c_str());
 }
 
@@ -156,7 +164,7 @@ bool KExiv2::clearComments()
 bool KExiv2::clearExif()
 {
     try
-    {    
+    {
         d->exifMetadata.clear();
         return true;
     }
