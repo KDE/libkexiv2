@@ -40,8 +40,9 @@ namespace KExiv2Iface
 
 bool KExiv2::getGPSInfo(double& altitude, double& latitude, double& longitude) const
 {
-    if (!getGPSAltitude(&altitude))
-         return false;
+    // Some GPS device do not set Altitude. So a valid GPS position can be with a zero value.
+    getGPSAltitude(&altitude);
+
     if (!getGPSLatitudeNumber(&latitude))
          return false;
     if (!getGPSLongitudeNumber(&longitude))
