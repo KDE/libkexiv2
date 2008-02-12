@@ -6,7 +6,7 @@
  * Date        : 2006-09-15
  * Description : Exiv2 library interface for KDE
  *
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * NOTE: Do not use kdDebug() in this implementation because 
@@ -98,7 +98,6 @@ public:
     Exiv2::IptcData iptcMetadata;
 
 };
-
 
 KExiv2::KExiv2()
 {
@@ -1793,13 +1792,14 @@ bool KExiv2::setGPSInfo(double altitude, double latitude, double longitude, bool
         // Now start adding data.
 
         // ALTITUDE.
-        // Altitude reference: byte "00" meaning "sea level".
+        // Altitude reference: byte "00" meaning "above sea level", "01" mening "behing sea level".
         value = Exiv2::Value::create(Exiv2::unsignedByte);
-        value->read("0");
+	if (altitude >= 0) value->read("0");
+	else               value->read("1");
         d->exifMetadata.add(Exiv2::ExifKey("Exif.GPSInfo.GPSAltitudeRef"), value.get());
         
-        // And the actual altitude.
-        convertToRational(altitude, &nom, &denom, 4);
+        // And the actual altitude, as absolute value.
+        convertToRational(fabs(altitude), &nom, &denom, 4);
         snprintf(scratchBuf, 100, "%ld/%ld", nom, denom);
         d->exifMetadata["Exif.GPSInfo.GPSAltitude"] = scratchBuf;
 
