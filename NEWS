@@ -1,3 +1,9 @@
+0.1.7
+------------------------------------------------------------------------
+
+Bugs fixed from B.K.O (http://bugs.kde.org):
+001 ==> 157552: negative altitudes are not shown in metadata GPS sidebar
+
 0.1.6
 ------------------------------------------------------------------------
 - API Changed : Kexiv2 destructor is now virtual.
