@@ -282,10 +282,14 @@ public:
         orientation tags information are attached with thumbnail. */
     QImage getExifThumbnail(bool fixOrientation) const;
 
+    /** Fix orientation of a QImage image accordingly with Exif orientation tag.
+        Return true if image is rotated, else false. */
+    bool rotateExifQImage(QImage &image, ImageOrientation orientation) const;
+
     /** Set the Exif Thumbnail image. The thumbnail image must have the right dimensions before. 
         Look Exif specification for details. Return true if thumbnail have been changed in metadata. */
     bool setExifThumbnail(const QImage& thumb, bool setProgramName=true) const;
-    
+
     /** Return a QString copy of Exif user comments. Return a null string if user comments cannot 
         be found. */
     QString getExifComment() const;

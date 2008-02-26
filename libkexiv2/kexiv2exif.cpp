@@ -703,48 +703,9 @@ QImage KExiv2::getExifThumbnail(bool fixOrientation) const
                 Exiv2::ExifData::iterator it = exifData.findKey(key);
                 if (it != exifData.end())
                 {
-                    QMatrix matrix;
                     long orientation = it->toLong();
                     qDebug("Exif Thumbnail Orientation: %i", (int)orientation);
-
-                    switch (orientation) 
-                    {
-                        case ORIENTATION_HFLIP:
-                            matrix.scale(-1, 1);
-                            break;
-
-                        case ORIENTATION_ROT_180:
-                            matrix.rotate(180);
-                            break;
-
-                        case ORIENTATION_VFLIP:
-                            matrix.scale(1, -1);
-                            break;
-
-                        case ORIENTATION_ROT_90_HFLIP:
-                            matrix.scale(-1, 1);
-                            matrix.rotate(90);
-                            break;
-
-                        case ORIENTATION_ROT_90:
-                            matrix.rotate(90);
-                            break;
-
-                        case ORIENTATION_ROT_90_VFLIP:
-                            matrix.scale(1, -1);
-                            matrix.rotate(90);
-                            break;
-
-                        case ORIENTATION_ROT_270:
-                            matrix.rotate(270);
-                            break;
-
-                        default:
-                            break;
-                    }
-
-                    if ( orientation != ORIENTATION_NORMAL )
-                        thumbnail = thumbnail.transformed( matrix );
+                    rotateExifQImage(thumbnail, (ImageOrientation)orientation);
                 }
 
                 return thumbnail;
@@ -757,6 +718,55 @@ QImage KExiv2::getExifThumbnail(bool fixOrientation) const
     }
 
     return thumbnail;
+}
+
+bool KExiv2::rotateExifQImage(QImage &image, ImageOrientation orientation) const
+{
+    QMatrix matrix;
+
+    switch(orientation)
+    {
+        case ORIENTATION_HFLIP:
+            matrix.scale(-1, 1);
+            break;
+
+        case ORIENTATION_ROT_180:
+            matrix.rotate(180);
+            break;
+
+        case ORIENTATION_VFLIP:
+            matrix.scale(1, -1);
+            break;
+
+        case ORIENTATION_ROT_90_HFLIP:
+            matrix.scale(-1, 1);
+            matrix.rotate(90);
+            break;
+
+        case ORIENTATION_ROT_90:
+            matrix.rotate(90);
+            break;
+
+        case ORIENTATION_ROT_90_VFLIP:
+            matrix.scale(1, -1);
+            matrix.rotate(90);
+            break;
+
+        case ORIENTATION_ROT_270:
+            matrix.rotate(270);
+            break;
+
+        default:
+            break;
+    }
+
+    if (orientation != ORIENTATION_NORMAL)
+    {
+        image = image.transformed(matrix);
+        return true;
+    }
+
+    return false;
 }
 
 bool KExiv2::setExifThumbnail(const QImage& thumb, bool setProgramName) const
