@@ -4,7 +4,7 @@ libdir=@libdir@
 includedir=@includedir@
 
 Name: libkexiv2
-Description: KDE wrapper library for Exiv2 library with some extras
+Description: A C++ library to manipulate EXIF/IPTC metadata using Exiv2 library. This library is used by digiKam and kipi-plugins.
 Requires:
 Version: 0.1.7
 Libs: -L${libdir} -lkexiv2
