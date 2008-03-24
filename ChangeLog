@@ -10,11 +10,6 @@ V 0.1.7 - 2008-03-24
 	* [r787184] libkexiv2/libkexiv2.lsm, libkexiv2/libkexiv2.pc.in:
 	  update
 
-2008-02-12 08:01  cgilles
-
-	* [r773952] libkexiv2/NEWS:
-	  update
-
 2008-02-12 07:58  cgilles
 
 	* [r773947] libkexiv2/libkexiv2/kexiv2.cpp,
@@ -41,35 +36,10 @@ V 0.1.7 - 2008-03-24
 	* [r738755] libkexiv2/libkexiv2/kexiv2.cpp:
 	  print error code
 
-2007-10-18 07:48  cgilles
-
-	* [r726601] libkexiv2/README:
-	  update
-
 2007-09-26 10:50  cgilles
 
 	* [r717230] libkexiv2/libkexiv2/kexiv2.cpp:
 	  polish
-
-2007-09-07 22:55  vfuoglio
-
-	* [r709616] libkexiv2/NEWS:
-	  Preparing for libkexiv2 0.1.6 release
-	  
-	  SVN_SILENT:
-
-2007-09-07 22:44  vfuoglio
-
-	* [r709612] libkexiv2/ChangeLog, libkexiv2/libkexiv2.lsm,
-	  libkexiv2/libkexiv2/Makefile.am, prepare_libkexiv2.rb:
-	  Preparing for libkexiv2 0.1.6 release
-	  
-	  SVN_SILENT:
-
-2007-09-01 10:47  cgilles
-
-	* [r707244] libkexiv2/NEWS:
-	  update
 
 ----------------------------------------------------------------------------
 V 0.1.6 - 2007-09-08
