@@ -59,3 +59,5 @@ if (EXIV2_FOUND)
     INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/libkexiv2.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig )
   ENDIF(NOT WIN32)
 endif (EXIV2_FOUND)
+
+macro_log_feature(EXIV2_FOUND "exiv2" "" "" FALSE "" "Needed for libkexiv2")
