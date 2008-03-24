@@ -1,3 +1,77 @@
+V 0.1.7 - 2008-03-24
+----------------------------------------------------------------------------
+2008-03-18 18:47  cgilles
+
+	* [r787192] libkexiv2/libkexiv2.pc.in:
+	  update
+
+2008-03-18 18:37  cgilles
+
+	* [r787184] libkexiv2/libkexiv2.lsm, libkexiv2/libkexiv2.pc.in:
+	  update
+
+2008-02-12 08:01  cgilles
+
+	* [r773952] libkexiv2/NEWS:
+	  update
+
+2008-02-12 07:58  cgilles
+
+	* [r773947] libkexiv2/libkexiv2/kexiv2.cpp,
+	  libkexiv2/libkexiv2/kexiv2.h:
+	  libkexiv2 from KDE3 branch : set negative altitude value properly
+	  CCBUGS : 157552
+
+2007-12-30 22:00  anaselli
+
+	* [r754872] libkexiv2/libkexiv2/Makefile.am,
+	  libkexiv2/libkexiv2/kexiv2.cpp, libkexiv2/libkexiv2/kexiv2.h:
+	  Breakage of the year, new static method version has been added
+	  
+	  CCMAIL: kde-imaging@kde.org
+
+2007-12-14 14:11  cgilles
+
+	* [r748437] libkexiv2/libkexiv2.lsm, libkexiv2/libkexiv2.pc.in,
+	  libkexiv2/libkexiv2/version.h:
+	  new version
+
+2007-11-19 15:50  cgilles
+
+	* [r738755] libkexiv2/libkexiv2/kexiv2.cpp:
+	  print error code
+
+2007-10-18 07:48  cgilles
+
+	* [r726601] libkexiv2/README:
+	  update
+
+2007-09-26 10:50  cgilles
+
+	* [r717230] libkexiv2/libkexiv2/kexiv2.cpp:
+	  polish
+
+2007-09-07 22:55  vfuoglio
+
+	* [r709616] libkexiv2/NEWS:
+	  Preparing for libkexiv2 0.1.6 release
+	  
+	  SVN_SILENT:
+
+2007-09-07 22:44  vfuoglio
+
+	* [r709612] libkexiv2/ChangeLog, libkexiv2/libkexiv2.lsm,
+	  libkexiv2/libkexiv2/Makefile.am, prepare_libkexiv2.rb:
+	  Preparing for libkexiv2 0.1.6 release
+	  
+	  SVN_SILENT:
+
+2007-09-01 10:47  cgilles
+
+	* [r707244] libkexiv2/NEWS:
+	  update
+
+----------------------------------------------------------------------------
 V 0.1.6 - 2007-09-08
 ----------------------------------------------------------------------------
 2007-09-01 10:46  cgilles
