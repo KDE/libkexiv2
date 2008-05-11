@@ -657,10 +657,12 @@ QString KExiv2::convertToGPSCoordinateString(long int numeratorDegrees, long int
     {
         // use form DDD,MM.mmk
         coordinate = "%1,%2%3";
-        coordinate = coordinate.arg(numeratorDegrees);
-        double minutes = numeratorMinutes / denominatorMinutes;
-        minutes += (numeratorSeconds / denominatorSeconds) / 60.0;
-        coordinate = coordinate.arg(minutes, 0, 'f', 8).arg(directionReference);
+        double minutes = (double)numeratorMinutes / (double)denominatorMinutes;
+        minutes += (double)numeratorSeconds / 60.0;
+        QString minutesString = QString::number(minutes, 'f', 8);
+        while (minutesString.endsWith('0') && !minutesString.endsWith(".0"))
+            minutesString.chop(1);
+        coordinate = coordinate.arg(numeratorDegrees).arg(minutesString).arg(directionReference);
     }
     else if (denominatorDegrees == 0 ||
              denominatorMinutes == 0 ||
@@ -673,11 +675,15 @@ QString KExiv2::convertToGPSCoordinateString(long int numeratorDegrees, long int
     {
         // use form DDD,MM.mmk
         coordinate = "%1,%2%3";
-        double degrees = numeratorDegrees / denominatorDegrees;
+        double degrees = (double)numeratorDegrees / (double)denominatorDegrees;
         double wholeDegrees = trunc(degrees);
-        double minutes = numeratorMinutes / denominatorMinutes;
-        minutes += (degrees - wholeDegrees) * 60;
-        coordinate = coordinate.arg(minutes, 0, 'f', 8).arg(directionReference);
+        double minutes = (double)numeratorMinutes / (double)denominatorMinutes;
+        minutes += (degrees - wholeDegrees) * 60.0;
+        minutes += ((double)numeratorSeconds / (double)denominatorSeconds) / 60.0;
+        QString minutesString = QString::number(minutes, 'f', 8);
+        while (minutesString.endsWith('0') && !minutesString.endsWith(".0"))
+            minutesString.chop(1);
+        coordinate = coordinate.arg((int)wholeDegrees).arg(minutesString).arg(directionReference);
     }
     return coordinate;
 }
