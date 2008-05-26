@@ -7,22 +7,22 @@
  * Description : Exiv2 library interface for KDE
  *
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
- * NOTE: Do not use kdDebug() in this implementation because 
- *       it will be multithreaded. Use qDebug() instead. 
+ * NOTE: Do not use kdDebug() in this implementation because
+ *       it will be multithreaded. Use qDebug() instead.
  *       See B.K.O #133026 for details.
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
  // C++ includes.
@@ -91,7 +91,7 @@ public:
 
     QString         filePath;
 
-    std::string     imageComments;  
+    std::string     imageComments;
 
     Exiv2::ExifData exifMetadata;
 
@@ -177,24 +177,24 @@ bool KExiv2::clearExif()
     catch( Exiv2::Error &e )
     {
         printExiv2ExceptionError("Cannot clear Exif data using Exiv2 ", e);
-    }    
+    }
 
-    return false;       
+    return false;
 }
 
 bool KExiv2::clearIptc()
 {
     try
-    {    
+    {
         d->iptcMetadata.clear();
         return true;
     }
     catch( Exiv2::Error &e )
     {
         printExiv2ExceptionError("Cannot clear Iptc data using Exiv2 ", e);
-    }    
+    }
 
-    return false;       
+    return false;
 }
 
 QString KExiv2::getFilePath() const
@@ -220,7 +220,7 @@ std::string KExiv2::getCommentsString() const
 QByteArray KExiv2::getExif() const
 {
     try
-    {    
+    {
         if (!d->exifMetadata.empty())
         {
 
@@ -238,21 +238,21 @@ QByteArray KExiv2::getExif() const
             qDebug ("From file %s", d->filePath.ascii());
 
         printExiv2ExceptionError("Cannot get Exif data using Exiv2 ", e);
-    }       
-    
+    }
+
     return QByteArray();
 }
 
 QByteArray KExiv2::getIptc(bool addIrbHeader) const
 {
     try
-    {    
+    {
         if (!d->iptcMetadata.empty())
-        {                
+        {
             Exiv2::IptcData& iptc = d->iptcMetadata;
             Exiv2::DataBuf c2;
 
-            if (addIrbHeader) 
+            if (addIrbHeader)
             {
 #if (EXIV2_TEST_VERSION(0,10,0))
                 c2 = Exiv2::Photoshop::setIptcIrb(0, 0, iptc);
@@ -261,7 +261,7 @@ QByteArray KExiv2::getIptc(bool addIrbHeader) const
                 return QByteArray();
 #endif
             }
-            else 
+            else
                 c2 = iptc.copy();
 
             QByteArray data(c2.size_);
@@ -276,8 +276,8 @@ QByteArray KExiv2::getIptc(bool addIrbHeader) const
             qDebug ("From file %s", d->filePath.ascii());
 
         printExiv2ExceptionError("Cannot get Iptc data using Exiv2 ",e);
-    }       
-    
+    }
+
     return QByteArray();
 }
 
@@ -290,12 +290,12 @@ bool KExiv2::setComments(const QByteArray& data)
 bool KExiv2::setExif(const QByteArray& data)
 {
     try
-    {    
+    {
         if (!data.isEmpty())
         {
             if (d->exifMetadata.load((const Exiv2::byte*)data.data(), data.size()) != 0)
-		return false;
-	    else		
+                return false;
+            else
                 return true;
         }
     }
@@ -305,7 +305,7 @@ bool KExiv2::setExif(const QByteArray& data)
             qDebug ("From file %s", d->filePath.ascii());
 
         printExiv2ExceptionError("Cannot set Exif data using Exiv2 ", e);
-    }        
+    }
 
     return false;
 }
@@ -313,12 +313,12 @@ bool KExiv2::setExif(const QByteArray& data)
 bool KExiv2::setIptc(const QByteArray& data)
 {
     try
-    {    
+    {
         if (!data.isEmpty())
         {
             if (d->iptcMetadata.load((const Exiv2::byte*)data.data(), data.size()) != 0)
-		return false;
-	    else
+                return false;
+            else
                 return true;
         }
     }
@@ -328,15 +328,15 @@ bool KExiv2::setIptc(const QByteArray& data)
             qDebug ("From file %s", d->filePath.ascii());
 
         printExiv2ExceptionError("Cannot set Iptc data using Exiv2 ", e);
-    }    
+    }
 
-    return false;    
+    return false;
 }
 
 bool KExiv2::setExif(Exiv2::DataBuf const data)
 {
     try
-    {    
+    {
         if (data.size_ != 0)
         {
             if (d->exifMetadata.load(data.pData_, data.size_) != 0)
@@ -351,15 +351,15 @@ bool KExiv2::setExif(Exiv2::DataBuf const data)
             qDebug ("From file %s", d->filePath.ascii());
 
         printExiv2ExceptionError("Cannot set Exif data using Exiv2 ", e);
-    }    
+    }
 
-    return false;    
+    return false;
 }
 
 bool KExiv2::setIptc(Exiv2::DataBuf const data)
 {
     try
-    {    
+    {
         if (data.size_ != 0)
         {
             if (d->iptcMetadata.load(data.pData_, data.size_) != 0)
@@ -374,7 +374,7 @@ bool KExiv2::setIptc(Exiv2::DataBuf const data)
             qDebug ("From file %s", d->filePath.ascii());
 
         printExiv2ExceptionError("Cannot set Iptc data using Exiv2 ", e);
-    }        
+    }
 
     return false;
 }
@@ -399,11 +399,11 @@ bool KExiv2::load(const QString& filePath)
         d->imageComments = image->comment();
 
         // Exif metadata ----------------------------------
-        
+
         d->exifMetadata = image->exifData();
 
         // Iptc metadata ----------------------------------
-        
+
         d->iptcMetadata = image->iptcData();
 
         d->filePath = filePath;
@@ -414,7 +414,7 @@ bool KExiv2::load(const QString& filePath)
     {
         printExiv2ExceptionError("Cannot load metadata using Exiv2 ", e);
     }
-    
+
     return false;
 }
 
@@ -424,8 +424,8 @@ bool KExiv2::save(const QString& filePath)
         return false;
 
     // NOTE: see B.K.O #137770 & #138540 : never touch the file if is read only.
-    QFileInfo finfo(filePath); 
-    QFileInfo dinfo(finfo.dirPath()); 
+    QFileInfo finfo(filePath);
+    QFileInfo dinfo(finfo.dirPath());
     if (!finfo.isWritable())
     {
         qDebug("File '%s' is read-only. Metadata not saved.", finfo.fileName().ascii());
@@ -438,31 +438,31 @@ bool KExiv2::save(const QString& filePath)
     }
 
     try
-    {    
+    {
         Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
                                       (QFile::encodeName(filePath)));
-        
+
         // Image Comments ---------------------------------
-        
+
         if (!d->imageComments.empty())
         {
             image->setComment(d->imageComments);
         }
 
         // Exif metadata ----------------------------------
-        
+
         if (!d->exifMetadata.empty())
         {
             image->setExifData(d->exifMetadata);
         }
 
         // Iptc metadata ----------------------------------
-        
+
         if (!d->iptcMetadata.empty())
         {
             image->setIptcData(d->iptcMetadata);
         }
-    
+
         image->writeMetadata();
 
         return true;
@@ -484,7 +484,7 @@ bool KExiv2::isReadOnly(const QString& filePath)
 {
     QFileInfo fi(filePath);
     QString ext = fi.extension(false).upper();
-    
+
     if (ext != QString("JPG") && ext != QString("JPEG") && ext != QString("JPE"))
         return true;
 
@@ -495,8 +495,8 @@ bool KExiv2::setImageProgramId(const QString& program, const QString& version)
 {
     try
     {
-	// Record program info in Exif.Image.ProcessingSoftware tag (only available with Exiv2 >= 0.14.0).
-    
+        // Record program info in Exif.Image.ProcessingSoftware tag (only available with Exiv2 >= 0.14.0).
+
 #if (EXIV2_TEST_VERSION(0,14,0))
         QString software(program);
         software.append("-");
@@ -505,23 +505,23 @@ bool KExiv2::setImageProgramId(const QString& program, const QString& version)
 #endif
 
         // See B.K.O #142564: Check if Exif.Image.Software already exist. If yes, do not touch this tag.
-            
+
         if (!d->exifMetadata.empty())
-	{
+        {
             Exiv2::ExifData exifData(d->exifMetadata);
             Exiv2::ExifKey key("Exif.Image.Software");
             Exiv2::ExifData::iterator it = exifData.findKey(key);
-       
+
             if (it == exifData.end())
-	    {
+            {
                 QString software(program);
                 software.append("-");
                 software.append(version);
                 d->exifMetadata["Exif.Image.Software"]      = software.ascii();
-	    }
-	}
+            }
+        }
 
-	// Record program info in IPTC tags.
+        // Record program info in IPTC tags.
 
         d->iptcMetadata["Iptc.Application2.Program"]        = program.ascii();
         d->iptcMetadata["Iptc.Application2.ProgramVersion"] = version.ascii();
@@ -541,21 +541,21 @@ QSize KExiv2::getImageDimensions() const
         return QSize();
 
     try
-    {    
+    {
         long width=-1, height=-1;
 
         // Try to get Exif.Photo tags
-        
+
         Exiv2::ExifData exifData(d->exifMetadata);
         Exiv2::ExifKey key("Exif.Photo.PixelXDimension");
         Exiv2::ExifData::iterator it = exifData.findKey(key);
-       
+
         if (it != exifData.end())
             width = it->toLong();
 
         Exiv2::ExifKey key2("Exif.Photo.PixelYDimension");
         Exiv2::ExifData::iterator it2 = exifData.findKey(key2);
-        
+
         if (it2 != exifData.end())
             height = it2->toLong();
 
@@ -563,30 +563,30 @@ QSize KExiv2::getImageDimensions() const
             return QSize(width, height);
 
         // Try to get Exif.Image tags
-                
-        width=-1;
-        height=-1;
+
+        width  = -1;
+        height = -1;
 
         Exiv2::ExifKey key3("Exif.Image.ImageWidth");
         Exiv2::ExifData::iterator it3 = exifData.findKey(key3);
-       
+
         if (it3 != exifData.end())
             width = it3->toLong();
 
         Exiv2::ExifKey key4("Exif.Image.ImageLength");
         Exiv2::ExifData::iterator it4 = exifData.findKey(key4);
-        
+
         if (it4 != exifData.end())
             height = it4->toLong();
-        
+
         if (width != -1 && height != -1)
             return QSize(width, height);
     }
     catch( Exiv2::Error &e )
     {
         printExiv2ExceptionError("Cannot parse image dimensions tag using Exiv2 ", e);
-    }        
-    
+    }
+
     return QSize();
 }
 
@@ -596,7 +596,7 @@ bool KExiv2::setImageDimensions(const QSize& size, bool setProgramName)
         return false;
 
     try
-    {    
+    {
         // NOTE: see B.K.O #144604: you a cast to record an unsigned integer value.
         d->exifMetadata["Exif.Image.ImageWidth"]      = static_cast<uint32_t>(size.width());
         d->exifMetadata["Exif.Image.ImageLength"]     = static_cast<uint32_t>(size.height());
@@ -607,23 +607,23 @@ bool KExiv2::setImageDimensions(const QSize& size, bool setProgramName)
     catch( Exiv2::Error &e )
     {
         printExiv2ExceptionError("Cannot set image dimensions using Exiv2 ", e);
-    }        
-    
+    }
+
     return false;
 }
 
 QImage KExiv2::getExifThumbnail(bool fixOrientation) const
 {
     QImage thumbnail;
-    
+
     if (d->exifMetadata.empty())
        return thumbnail;
-    
+
     try
-    {    
+    {
         Exiv2::DataBuf const c1(d->exifMetadata.copyThumbnail());
         thumbnail.loadFromData(c1.pData_, c1.size_);
-        
+
         if (!thumbnail.isNull())
         {
             if (fixOrientation)
@@ -636,47 +636,47 @@ QImage KExiv2::getExifThumbnail(bool fixOrientation) const
                     QWMatrix matrix;
                     long orientation = it->toLong();
                     qDebug("Exif Thumbnail Orientation: %i", (int)orientation);
-                    
-                    switch (orientation) 
+
+                    switch (orientation)
                     {
                         case ORIENTATION_HFLIP:
                             matrix.scale(-1, 1);
                             break;
-                    
+
                         case ORIENTATION_ROT_180:
                             matrix.rotate(180);
                             break;
-                    
+
                         case ORIENTATION_VFLIP:
                             matrix.scale(1, -1);
                             break;
-                    
+
                         case ORIENTATION_ROT_90_HFLIP:
                             matrix.scale(-1, 1);
                             matrix.rotate(90);
                             break;
-                    
+
                         case ORIENTATION_ROT_90:
                             matrix.rotate(90);
                             break;
-                    
+
                         case ORIENTATION_ROT_90_VFLIP:
                             matrix.scale(1, -1);
                             matrix.rotate(90);
                             break;
-                    
+
                         case ORIENTATION_ROT_270:
                             matrix.rotate(270);
                             break;
-                            
+
                         default:
                             break;
                     }
-        
+
                     if ( orientation != ORIENTATION_NORMAL )
                         thumbnail = thumbnail.xForm( matrix );
                 }
-                    
+
                 return thumbnail;
             }
         }
@@ -684,8 +684,8 @@ QImage KExiv2::getExifThumbnail(bool fixOrientation) const
     catch( Exiv2::Error &e )
     {
         printExiv2ExceptionError("Cannot get Exif Thumbnail using Exiv2 ", e);
-    }        
-    
+    }
+
     return thumbnail;
 }
 
@@ -695,7 +695,7 @@ bool KExiv2::setExifThumbnail(const QImage& thumb, bool setProgramName)
         return false;
 
     try
-    {   
+    {
         KTempFile thumbFile(QString(), "KExiv2ExifThumbnail");
         thumbFile.setAutoDelete(true);
         thumb.save(thumbFile.name(), "JPEG");
@@ -707,8 +707,8 @@ bool KExiv2::setExifThumbnail(const QImage& thumb, bool setProgramName)
     catch( Exiv2::Error &e )
     {
         printExiv2ExceptionError("Cannot set Exif Thumbnail using Exiv2 ", e);
-    }        
-    
+    }
+
     return false;
 }
 
@@ -737,7 +737,7 @@ KExiv2::ImageOrientation KExiv2::getImageOrientation() const
         long orientation;
         ImageOrientation imageOrient = ORIENTATION_NORMAL;
 
-        // Because some camera set a wrong standard exif orientation tag, 
+        // Because some camera set a wrong standard exif orientation tag,
         // We need to check makernote tags in first!
 
         // -- Minolta Cameras ----------------------------------
@@ -825,13 +825,13 @@ bool KExiv2::setImageOrientation(ImageOrientation orientation, bool setProgramNa
     }
 
     try
-    {    
+    {
         if (orientation < ORIENTATION_UNSPECIFIED || orientation > ORIENTATION_ROT_270)
         {
             qDebug("Exif orientation tag value is not correct!");
             return false;
         }
-        
+
         d->exifMetadata["Exif.Image.Orientation"] = static_cast<uint16_t>(orientation);
         qDebug("Exif orientation tag set to: %i", (int)orientation);
 
@@ -840,8 +840,8 @@ bool KExiv2::setImageOrientation(ImageOrientation orientation, bool setProgramNa
         if (supportMinolta)
         {
             // Minolta camera store image rotation in Makernote.
-            // We remove these information to prevent duplicate values. 
-    
+            // We remove these information to prevent duplicate values.
+
             Exiv2::ExifData::iterator it;
 
             Exiv2::ExifKey minoltaKey1("Exif.MinoltaCs7D.Rotation");
@@ -851,7 +851,7 @@ bool KExiv2::setImageOrientation(ImageOrientation orientation, bool setProgramNa
                 d->exifMetadata.erase(it);
                 qDebug("Removing Exif.MinoltaCs7D.Rotation tag");
             }
-        
+
             Exiv2::ExifKey minoltaKey2("Exif.MinoltaCs5D.Rotation");
             it = d->exifMetadata.findKey(minoltaKey2);
             if (it != d->exifMetadata.end())
@@ -866,17 +866,17 @@ bool KExiv2::setImageOrientation(ImageOrientation orientation, bool setProgramNa
     catch( Exiv2::Error &e )
     {
         printExiv2ExceptionError("Cannot set Exif Orientation tag using Exiv2 ", e);
-    }        
-    
+    }
+
     return false;
 }
 
 KExiv2::ImageColorWorkSpace KExiv2::getImageColorWorkSpace() const
 {
     if (!d->exifMetadata.empty())
-    {        
+    {
         long colorSpace;
-    
+
         if (getExifTagLong("Exif.Photo.ColorSpace", colorSpace))
         {
             switch (colorSpace)
@@ -893,13 +893,13 @@ KExiv2::ImageColorWorkSpace KExiv2::getImageColorWorkSpace() const
                 }
                 case 65535:
                 {
-                    // Nikon camera set Exif.Photo.ColorSpace to uncalibrated and 
+                    // Nikon camera set Exif.Photo.ColorSpace to uncalibrated and
                     // Exif.Nikon3.ColorMode to "MODE2" when users work in AdobRGB color space.
                     if (getExifTagString("Exif.Nikon3.ColorMode").contains("MODE2"))
                         return WORKSPACE_ADOBERGB;
-    
+
                     // TODO : add more Makernote parsing here ...
-    
+
                     return WORKSPACE_UNCALIBRATED;
                     break;
                 }
@@ -910,9 +910,9 @@ KExiv2::ImageColorWorkSpace KExiv2::getImageColorWorkSpace() const
                 }
             }
         }
-    }    
+    }
 
-    return WORKSPACE_UNSPECIFIED;    
+    return WORKSPACE_UNSPECIFIED;
 }
 
 bool KExiv2::setImageColorWorkSpace(ImageColorWorkSpace workspace, bool setProgramName)
@@ -924,7 +924,7 @@ bool KExiv2::setImageColorWorkSpace(ImageColorWorkSpace workspace, bool setProgr
         return false;
 
     try
-    {    
+    {
         d->exifMetadata["Exif.Photo.ColorSpace"] = static_cast<uint16_t>(workspace);
         qDebug("Exif color workspace tag set to: %i",  (int)workspace);
         return true;
@@ -932,45 +932,45 @@ bool KExiv2::setImageColorWorkSpace(ImageColorWorkSpace workspace, bool setProgr
     catch( Exiv2::Error &e )
     {
         printExiv2ExceptionError("Cannot set Exif color workspace tag using Exiv2 ", e);
-    }        
-    
+    }
+
     return false;
 }
 
 QDateTime KExiv2::getImageDateTime() const
 {
     try
-    {    
+    {
         // In first, trying to get Date & time from Exif tags.
-        
+
         if (!d->exifMetadata.empty())
-        {        
+        {
             // Try Exif date time original.
-    
+
             Exiv2::ExifData exifData(d->exifMetadata);
             Exiv2::ExifKey key2("Exif.Photo.DateTimeOriginal");
             Exiv2::ExifData::iterator it2 = exifData.findKey(key2);
-            
+
             if (it2 != exifData.end())
             {
                 QDateTime dateTime = QDateTime::fromString(it2->toString().c_str(), Qt::ISODate);
-    
+
                 if (dateTime.isValid())
                 {
                     // qDebug("DateTime (Exif original): %s", dateTime.toString().ascii());
                     return dateTime;
                 }
             }
-    
+
             // Bogus Exif date time original entry. Try Exif date time digitized.
-    
+
             Exiv2::ExifKey key3("Exif.Photo.DateTimeDigitized");
             Exiv2::ExifData::iterator it3 = exifData.findKey(key3);
-            
+
             if (it3 != exifData.end())
             {
                 QDateTime dateTime = QDateTime::fromString(it3->toString().c_str(), Qt::ISODate);
-    
+
                 if (dateTime.isValid())
                 {
                     // qDebug("DateTime (Exif digitalized): %s", dateTime.toString().ascii());
@@ -979,90 +979,89 @@ QDateTime KExiv2::getImageDateTime() const
             }
 
             // Bogus Exif date time digitized. Try standard Exif date time entry.
-    
+
             Exiv2::ExifKey key("Exif.Image.DateTime");
             Exiv2::ExifData::iterator it = exifData.findKey(key);
-            
+
             if (it != exifData.end())
             {
                 QDateTime dateTime = QDateTime::fromString(it->toString().c_str(), Qt::ISODate);
-    
+
                 if (dateTime.isValid())
                 {
                     // qDebug("DateTime (Exif standard): %s", dateTime.toString().ascii());
                     return dateTime;
                 }
             }
-    
         }
-        
+
         // In second, trying to get Date & time from Iptc tags.
-            
+
         if (!d->iptcMetadata.empty())
-        {        
+        {
             // Try creation Iptc date time entries.
 
             Exiv2::IptcKey keyDateCreated("Iptc.Application2.DateCreated");
             Exiv2::IptcData iptcData(d->iptcMetadata);
             Exiv2::IptcData::iterator it = iptcData.findKey(keyDateCreated);
-                        
+
             if (it != iptcData.end())
             {
                 QString IptcDateCreated(it->toString().c_str());
-    
+
                 Exiv2::IptcKey keyTimeCreated("Iptc.Application2.TimeCreated");
                 Exiv2::IptcData::iterator it2 = iptcData.findKey(keyTimeCreated);
-                
+
                 if (it2 != iptcData.end())
                 {
                     QString IptcTimeCreated(it2->toString().c_str());
-                    
+
                     QDate date = QDate::fromString(IptcDateCreated, Qt::ISODate);
                     QTime time = QTime::fromString(IptcTimeCreated, Qt::ISODate);
                     QDateTime dateTime = QDateTime(date, time);
-                    
+
                     if (dateTime.isValid())
                     {
                         // qDebug("Date (IPTC created): %s", dateTime.toString().ascii());
                         return dateTime;
-                    }                    
+                    }
                 }
-            }                        
-            
+            }
+
             // Try digitization Iptc date time entries.
-    
+
             Exiv2::IptcKey keyDigitizationDate("Iptc.Application2.DigitizationDate");
             Exiv2::IptcData::iterator it3 = iptcData.findKey(keyDigitizationDate);
-                        
+
             if (it3 != iptcData.end())
             {
                 QString IptcDateDigitization(it3->toString().c_str());
-    
+
                 Exiv2::IptcKey keyDigitizationTime("Iptc.Application2.DigitizationTime");
                 Exiv2::IptcData::iterator it4 = iptcData.findKey(keyDigitizationTime);
-                
+
                 if (it4 != iptcData.end())
                 {
                     QString IptcTimeDigitization(it4->toString().c_str());
-                    
+
                     QDate date = QDate::fromString(IptcDateDigitization, Qt::ISODate);
                     QTime time = QTime::fromString(IptcTimeDigitization, Qt::ISODate);
                     QDateTime dateTime = QDateTime(date, time);
-                    
+
                     if (dateTime.isValid())
                     {
                         //qDebug("Date (IPTC digitalized): %s", dateTime.toString().ascii());
                         return dateTime;
-                    }                    
+                    }
                 }
-            }                       
+            }
         }
     }
     catch( Exiv2::Error &e )
     {
         printExiv2ExceptionError("Cannot parse Exif date & time tag using Exiv2 ", e);
-    }        
-    
+    }
+
     return QDateTime();
 }
 
@@ -1070,14 +1069,14 @@ bool KExiv2::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitiz
 {
     if(!dateTime.isValid())
         return false;
- 
+
     if (!setProgramId(setProgramName))
         return false;
-   
+
     try
-    {    
+    {
         // In first we write date & time into Exif.
-        
+
         // DateTimeDigitized is set by slide scanners etc. when a picture is digitized.
         // DateTimeOriginal specifies the date/time when the picture was taken.
         // For digital cameras, these dates should be both set, and identical.
@@ -1088,7 +1087,7 @@ bool KExiv2::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitiz
         d->exifMetadata["Exif.Photo.DateTimeOriginal"] = exifdatetime;
         if(setDateTimeDigitized)
             d->exifMetadata["Exif.Photo.DateTimeDigitized"] = exifdatetime;
-        
+
         // In Second we write date & time into Iptc.
 
         const std::string &iptcdate(dateTime.date().toString(Qt::ISODate).ascii());
@@ -1100,14 +1099,14 @@ bool KExiv2::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitiz
             d->iptcMetadata["Iptc.Application2.DigitizationDate"] = iptcdate;
             d->iptcMetadata["Iptc.Application2.DigitizationTime"] = iptctime;
         }
-        
+
         return true;
     }
     catch( Exiv2::Error &e )
     {
         printExiv2ExceptionError("Cannot set Date & Time into image using Exiv2 ", e);
-    }        
-    
+    }
+
     return false;
 }
 
@@ -1142,25 +1141,25 @@ bool KExiv2::setImagePreview(const QImage& preview, bool setProgramName)
         preview.save(previewFile.name(), "JPEG");
 
         QFile file(previewFile.name());
-        if ( !file.open(IO_ReadOnly) ) 
+        if ( !file.open(IO_ReadOnly) )
             return false;
 
-        qDebug("JPEG image preview size: (%i x %i) pixels - %i bytes", 
+        qDebug("JPEG image preview size: (%i x %i) pixels - %i bytes",
                preview.width(), preview.height(), (int)file.size());
-        
+
         QByteArray data(file.size());
         QDataStream stream( &file );
         stream.readRawBytes(data.data(), data.size());
         file.close();
-        
+
         Exiv2::DataValue val;
         val.read((Exiv2::byte *)data.data(), data.size());
         d->iptcMetadata["Iptc.Application2.Preview"] = val;
-        
+
         // See http://www.iptc.org/std/IIM/4.1/specification/IIMV4.1.pdf Appendix A for details.
-        d->iptcMetadata["Iptc.Application2.PreviewFormat"]  = 11;  // JPEG 
+        d->iptcMetadata["Iptc.Application2.PreviewFormat"]  = 11;  // JPEG
         d->iptcMetadata["Iptc.Application2.PreviewVersion"] = 1;
-        
+
         return true;
     }
     catch( Exiv2::Error &e )
@@ -1266,7 +1265,7 @@ bool KExiv2::setIptcTagString(const char *iptcTagName, const QString& value, boo
 bool KExiv2::getExifTagLong(const char* exifTagName, long &val) const
 {
     try
-    {    
+    {
         Exiv2::ExifKey exifKey(exifTagName);
         Exiv2::ExifData exifData(d->exifMetadata);
         Exiv2::ExifData::iterator it = exifData.findKey(exifKey);
@@ -1280,9 +1279,9 @@ bool KExiv2::getExifTagLong(const char* exifTagName, long &val) const
     {
         printExiv2ExceptionError(QString("Cannot find Exif key '%1' into image using Exiv2 ")
                                  .arg(exifTagName), e);
-    }        
-    
-    return false;    
+    }
+
+    return false;
 }
 
 QByteArray KExiv2::getExifTagData(const char* exifTagName) const
@@ -1349,7 +1348,7 @@ bool KExiv2::getExifTagRational(const char *exifTagName, long int &num, long int
     }
     catch( Exiv2::Error &e )
     {
-        printExiv2ExceptionError(QString("Cannot find Exif Rational value from key '%1' " 
+        printExiv2ExceptionError(QString("Cannot find Exif Rational value from key '%1' "
                                          "into image using Exiv2 ").arg(exifTagName), e);
     }
 
@@ -1395,7 +1394,7 @@ bool KExiv2::setExifTagRational(const char *exifTagName, long int num, long int 
 bool KExiv2::setExifTagData(const char *exifTagName, const QByteArray& data, bool setProgramName)
 {
     if (data.isEmpty())
-	return false;
+    return false;
 
     if (!setProgramId(setProgramName))
         return false;
@@ -1417,13 +1416,13 @@ bool KExiv2::setExifTagData(const char *exifTagName, const QByteArray& data, boo
 bool KExiv2::setIptcTagData(const char *iptcTagName, const QByteArray& data, bool setProgramName)
 {
     if (data.isEmpty())
-	return false;
-	
+    return false;
+
     if (!setProgramId(setProgramName))
         return false;
 
     try
-    {	
+    {
         Exiv2::DataValue val((Exiv2::byte *)data.data(), data.size());
         d->iptcMetadata[iptcTagName] = val;
         return true;
@@ -1442,7 +1441,7 @@ bool KExiv2::removeExifTag(const char *exifTagName, bool setProgramName)
         return false;
 
     try
-    {  
+    {
         Exiv2::ExifKey exifKey(exifTagName);
         Exiv2::ExifData::iterator it = d->exifMetadata.findKey(exifKey);
         if (it != d->exifMetadata.end())
@@ -1454,8 +1453,8 @@ bool KExiv2::removeExifTag(const char *exifTagName, bool setProgramName)
     catch( Exiv2::Error &e )
     {
         printExiv2ExceptionError("Cannot remove Exif tag using Exiv2 ", e);
-    }        
-    
+    }
+
     return false;
 }
 
@@ -1465,32 +1464,38 @@ bool KExiv2::removeIptcTag(const char *iptcTagName, bool setProgramName)
         return false;
 
     try
-    {  
-        Exiv2::IptcKey iptcKey(iptcTagName);
-        Exiv2::IptcData::iterator it = d->iptcMetadata.findKey(iptcKey);
-        if (it != d->iptcMetadata.end())
+    {
+        Exiv2::IptcData::iterator it = d->iptcMetadata.begin();
+        do
         {
-            d->iptcMetadata.erase(it);
-            return true;
+            QString key = QString::fromLocal8Bit(it->key().c_str());
+
+            if (key == QString(iptcTagName))
+                it = d->iptcMetadata.erase(it);
+            else
+                ++it;
         }
+        while(it != d->iptcMetadata.end());
+
+        return true;
     }
     catch( Exiv2::Error &e )
     {
         printExiv2ExceptionError("Cannot remove Iptc tag using Exiv2 ", e);
-    }        
-    
+    }
+
     return false;
 }
 
 QString KExiv2::getExifTagTitle(const char *exifTagName)
 {
-    try 
+    try
     {
         std::string exifkey(exifTagName);
-        Exiv2::ExifKey ek(exifkey); 
+        Exiv2::ExifKey ek(exifkey);
         return QString::fromLocal8Bit( Exiv2::ExifTags::tagTitle(ek.tag(), ek.ifdId()) );
     }
-    catch (Exiv2::Error& e) 
+    catch (Exiv2::Error& e)
     {
         printExiv2ExceptionError("Cannot get metadata tag title using Exiv2 ", e);
     }
@@ -1500,13 +1505,13 @@ QString KExiv2::getExifTagTitle(const char *exifTagName)
 
 QString KExiv2::getExifTagDescription(const char *exifTagName)
 {
-    try 
+    try
     {
         std::string exifkey(exifTagName);
-        Exiv2::ExifKey ek(exifkey); 
+        Exiv2::ExifKey ek(exifkey);
         return QString::fromLocal8Bit( Exiv2::ExifTags::tagDesc(ek.tag(), ek.ifdId()) );
     }
-    catch (Exiv2::Error& e) 
+    catch (Exiv2::Error& e)
     {
         printExiv2ExceptionError("Cannot get metadata tag description using Exiv2 ", e);
     }
@@ -1516,13 +1521,13 @@ QString KExiv2::getExifTagDescription(const char *exifTagName)
 
 QString KExiv2::getIptcTagTitle(const char *iptcTagName)
 {
-    try 
+    try
     {
         std::string iptckey(iptcTagName);
-        Exiv2::IptcKey ik(iptckey); 
+        Exiv2::IptcKey ik(iptckey);
         return QString::fromLocal8Bit( Exiv2::IptcDataSets::dataSetTitle(ik.tag(), ik.record()) );
     }
-    catch (Exiv2::Error& e) 
+    catch (Exiv2::Error& e)
     {
         printExiv2ExceptionError("Cannot get metadata tag title using Exiv2 ", e);
     }
@@ -1532,13 +1537,13 @@ QString KExiv2::getIptcTagTitle(const char *iptcTagName)
 
 QString KExiv2::getIptcTagDescription(const char *iptcTagName)
 {
-    try 
+    try
     {
         std::string iptckey(iptcTagName);
-        Exiv2::IptcKey ik(iptckey); 
+        Exiv2::IptcKey ik(iptckey);
         return QString::fromLocal8Bit( Exiv2::IptcDataSets::dataSetDesc(ik.tag(), ik.record()) );
     }
-    catch (Exiv2::Error& e) 
+    catch (Exiv2::Error& e)
     {
         printExiv2ExceptionError("Cannot get metadata tag description using Exiv2 ", e);
     }
@@ -1555,7 +1560,7 @@ KExiv2::MetaDataMap KExiv2::getExifTagsDataList(const QStringList &exifKeysFilte
     {
         Exiv2::ExifData exifData = d->exifMetadata;
         exifData.sortByKey();
-        
+
         QString     ifDItemName;
         MetaDataMap metaDataMap;
 
@@ -1612,14 +1617,14 @@ KExiv2::MetaDataMap KExiv2::getIptcTagsDataList(const QStringList &iptcKeysFilte
     {
         Exiv2::IptcData iptcData = d->iptcMetadata;
         iptcData.sortByKey();
-        
+
         QString     ifDItemName;
         MetaDataMap metaDataMap;
 
         for (Exiv2::IptcData::iterator md = iptcData.begin(); md != iptcData.end(); ++md)
         {
             QString key = QString::fromAscii(md->key().c_str());
-            
+
             // Decode the tag value with a user friendly output.
             std::ostringstream os;
             os << *md;
@@ -1644,7 +1649,7 @@ KExiv2::MetaDataMap KExiv2::getIptcTagsDataList(const QStringList &iptcKeysFilte
                         v.append(", ");
                         v.append(value);
                         metaDataMap.replace(key, v);
-                    }                
+                    }
                 }
             }
             else
@@ -1659,7 +1664,7 @@ KExiv2::MetaDataMap KExiv2::getIptcTagsDataList(const QStringList &iptcKeysFilte
                         v.append(", ");
                         v.append(value);
                         metaDataMap.replace(key, v);
-                    }                
+                    }
                 }
             }
         }
@@ -1677,10 +1682,10 @@ KExiv2::MetaDataMap KExiv2::getIptcTagsDataList(const QStringList &iptcKeysFilte
 bool KExiv2::getGPSInfo(double& altitude, double& latitude, double& longitude) const
 {
     try
-    {    
+    {
         double num, den, min, sec;
         latitude=0.0, longitude=0.0, altitude=0.0;
-        
+
         // Get the reference in first.
 
         QByteArray latRef = getExifTagData("Exif.GPSInfo.GPSLatitudeRef");
@@ -1714,11 +1719,11 @@ bool KExiv2::getGPSInfo(double& altitude, double& latitude, double& longitude) c
             if (sec != -1.0)
                 latitude = latitude + sec/3600.0;
         }
-        else 
+        else
             return false;
-        
+
         if (latRef[0] == 'S') latitude *= -1.0;
-    
+
         // Longitude decoding.
 
         Exiv2::ExifKey exifKey2("Exif.GPSInfo.GPSLongitude");
@@ -1741,14 +1746,14 @@ bool KExiv2::getGPSInfo(double& altitude, double& latitude, double& longitude) c
             if (sec != -1.0)
                 longitude = longitude + sec/3600.0;
         }
-        else 
+        else
             return false;
-        
+
         if (lngRef[0] == 'W') longitude *= -1.0;
 
         // Altitude decoding.
 
-        if (!altRef.isEmpty()) 
+        if (!altRef.isEmpty())
         {
             Exiv2::ExifKey exifKey3("Exif.GPSInfo.GPSAltitude");
             it = exifData.findKey(exifKey3);
@@ -1758,7 +1763,7 @@ bool KExiv2::getGPSInfo(double& altitude, double& latitude, double& longitude) c
                 den = (double)((*it).toRational(0).second);
                 altitude = num/den;
             }
-        
+
             if (altRef[0] == '1') altitude *= -1.0;
         }
 
@@ -1767,8 +1772,8 @@ bool KExiv2::getGPSInfo(double& altitude, double& latitude, double& longitude) c
     catch( Exiv2::Error &e )
     {
         printExiv2ExceptionError("Cannot get Exif GPS tag using Exiv2 ", e);
-    }        
-    
+    }
+
     return false;
 }
 
@@ -1778,14 +1783,14 @@ bool KExiv2::setGPSInfo(double altitude, double latitude, double longitude, bool
         return false;
 
     try
-    {    
+    {
         // In first, we need to clean up all existing GPS info.
         removeGPSInfo();
 
         char scratchBuf[100];
         long int nom, denom;
         long int deg, min;
-        
+
         // Do all the easy constant ones first.
         // GPSVersionID tag: standard says is should be four bytes: 02 00 00 00
         // (and, must be present).
@@ -1795,16 +1800,16 @@ bool KExiv2::setGPSInfo(double altitude, double latitude, double longitude, bool
 
         // Datum: the datum of the measured data. If not given, we insert WGS-84.
         d->exifMetadata["Exif.GPSInfo.GPSMapDatum"] = "WGS-84";
-        
+
         // Now start adding data.
 
         // ALTITUDE.
         // Altitude reference: byte "00" meaning "above sea level", "01" mening "behing sea level".
         value = Exiv2::Value::create(Exiv2::unsignedByte);
-	if (altitude >= 0) value->read("0");
-	else               value->read("1");
+    if (altitude >= 0) value->read("0");
+    else               value->read("1");
         d->exifMetadata.add(Exiv2::ExifKey("Exif.GPSInfo.GPSAltitudeRef"), value.get());
-        
+
         // And the actual altitude, as absolute value.
         convertToRational(fabs(altitude), &nom, &denom, 4);
         snprintf(scratchBuf, 100, "%ld/%ld", nom, denom);
@@ -1817,14 +1822,14 @@ bool KExiv2::setGPSInfo(double altitude, double latitude, double longitude, bool
             // Less than Zero: ie, minus: means
             // Southern hemisphere. Where I live.
             d->exifMetadata["Exif.GPSInfo.GPSLatitudeRef"] = "S";
-        } 
-        else 
+        }
+        else
         {
             // More than Zero: ie, plus: means
             // Northern hemisphere.
             d->exifMetadata["Exif.GPSInfo.GPSLatitudeRef"] = "N";
         }
-        
+
         // Now the actual lattitude itself.
         // This is done as three rationals.
         // I choose to do it as:
@@ -1844,7 +1849,7 @@ bool KExiv2::setGPSInfo(double altitude, double latitude, double longitude, bool
         min   = (int)floor((fabs(latitude) - floor(fabs(latitude))) * 60000000);
         snprintf(scratchBuf, 100, "%ld/1 %ld/1000000 0/1", deg, min);
         d->exifMetadata["Exif.GPSInfo.GPSLatitude"] = scratchBuf;
-        
+
         // LONGITUDE
         // Longitude reference: "E" or "W".
         if (longitude < 0)
@@ -1852,8 +1857,8 @@ bool KExiv2::setGPSInfo(double altitude, double latitude, double longitude, bool
             // Less than Zero: ie, minus: means
             // Western hemisphere.
             d->exifMetadata["Exif.GPSInfo.GPSLongitudeRef"] = "W";
-        } 
-        else 
+        }
+        else
         {
             // More than Zero: ie, plus: means
             // Eastern hemisphere. Where I live.
@@ -1878,15 +1883,15 @@ bool KExiv2::setGPSInfo(double altitude, double latitude, double longitude, bool
         deg   = (int)floor(fabs(longitude)); // Slice off after decimal.
         min   = (int)floor((fabs(longitude) - floor(fabs(longitude))) * 60000000);
         snprintf(scratchBuf, 100, "%ld/1 %ld/1000000 0/1", deg, min);
-        d->exifMetadata["Exif.GPSInfo.GPSLongitude"] = scratchBuf; 
-    
+        d->exifMetadata["Exif.GPSInfo.GPSLongitude"] = scratchBuf;
+
         return true;
     }
     catch( Exiv2::Error &e )
     {
         printExiv2ExceptionError("Cannot set Exif GPS tag using Exiv2 ", e);
-    }        
-    
+    }
+
     return false;
 }
 
@@ -1896,9 +1901,9 @@ bool KExiv2::removeGPSInfo(bool setProgramName)
         return false;
 
     try
-    {  
+    {
         QStringList gpsTagsKeys;
-  
+
         for (Exiv2::ExifData::iterator it = d->exifMetadata.begin();
              it != d->exifMetadata.end(); ++it)
         {
@@ -1908,32 +1913,32 @@ bool KExiv2::removeGPSInfo(bool setProgramName)
                 gpsTagsKeys.append(key);
         }
 
-        for(QStringList::Iterator it2 = gpsTagsKeys.begin(); it2 != gpsTagsKeys.end(); ++it2)             
+        for(QStringList::Iterator it2 = gpsTagsKeys.begin(); it2 != gpsTagsKeys.end(); ++it2)
         {
             Exiv2::ExifKey gpsKey((*it2).ascii());
             Exiv2::ExifData::iterator it3 = d->exifMetadata.findKey(gpsKey);
             if (it3 != d->exifMetadata.end())
                 d->exifMetadata.erase(it3);
         }
-        
+
         return true;
     }
     catch( Exiv2::Error &e )
     {
         printExiv2ExceptionError("Cannot remove Exif GPS tag using Exiv2 ", e);
-    }        
-    
+    }
+
     return false;
 }
 
-void KExiv2::convertToRational(double number, long int* numerator, 
+void KExiv2::convertToRational(double number, long int* numerator,
                                   long int* denominator, int rounding)
 {
     // This function converts the given decimal number
     // to a rational (fractional) number.
     //
     // Examples in comments use Number as 25.12345, Rounding as 4.
-    
+
     // Split up the number.
     double whole      = trunc(number);
     double fractional = number - whole;
@@ -1958,7 +1963,7 @@ void KExiv2::convertToRational(double number, long int* numerator,
     double denTemp = rounder;
 
     // Now we should reduce until we can reduce no more.
-    
+
     // Try simple reduction...
     // if   Num
     //     ----- = integer out then....
@@ -1969,7 +1974,7 @@ void KExiv2::convertToRational(double number, long int* numerator,
         numTemp /= denTemp;
         denTemp /= denTemp;
     }
-    
+
     // And, if that fails, brute force it.
     while (1)
     {
@@ -1989,47 +1994,47 @@ void KExiv2::convertToRational(double number, long int* numerator,
 QStringList KExiv2::getImageKeywords() const
 {
     try
-    {    
+    {
         if (!d->iptcMetadata.empty())
         {
-            QStringList keywords;          
+            QStringList keywords;
             Exiv2::IptcData iptcData(d->iptcMetadata);
 
             for (Exiv2::IptcData::iterator it = iptcData.begin(); it != iptcData.end(); ++it)
             {
                 QString key = QString::fromLocal8Bit(it->key().c_str());
-                
+
                 if (key == QString("Iptc.Application2.Keywords"))
                 {
                     QString val(it->toString().c_str());
                     keywords.append(val);
                 }
             }
-            
+
             return keywords;
         }
     }
     catch( Exiv2::Error &e )
     {
         printExiv2ExceptionError("Cannot get IPTC Keywords from image using Exiv2 ", e);
-    }        
-    
+    }
+
     return QStringList();
 }
 
-bool KExiv2::setImageKeywords(const QStringList& oldKeywords, const QStringList& newKeywords, 
+bool KExiv2::setImageKeywords(const QStringList& oldKeywords, const QStringList& newKeywords,
                               bool setProgramName)
 {
     if (!setProgramId(setProgramName))
         return false;
 
     try
-    {    
+    {
         QStringList oldkeys = oldKeywords;
         QStringList newkeys = newKeywords;
-        
+
         qDebug("%s ==> Keywords: %s", d->filePath.ascii(), newkeys.join(",").ascii());
-        
+
         // Remove all old keywords.
         Exiv2::IptcData iptcData(d->iptcMetadata);
         Exiv2::IptcData::iterator it = iptcData.begin();
@@ -2044,7 +2049,7 @@ bool KExiv2::setImageKeywords(const QStringList& oldKeywords, const QStringList&
                  (oldKeywords.contains(val) || newKeywords.contains(val))
                )
                 it = iptcData.erase(it);
-            else 
+            else
                 ++it;
         };
 
@@ -2056,10 +2061,10 @@ bool KExiv2::setImageKeywords(const QStringList& oldKeywords, const QStringList&
         {
             QString key = *it;
             key.truncate(64);
-            
+
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::string);
             val->read(key.latin1());
-            iptcData.add(iptcTag, val.get());        
+            iptcData.add(iptcTag, val.get());
         }
 
         d->iptcMetadata = iptcData;
@@ -2069,53 +2074,53 @@ bool KExiv2::setImageKeywords(const QStringList& oldKeywords, const QStringList&
     catch( Exiv2::Error &e )
     {
         printExiv2ExceptionError("Cannot set IPTC Keywords into image using Exiv2 ", e);
-    }        
-    
+    }
+
     return false;
 }
 
 QStringList KExiv2::getImageSubjects() const
 {
     try
-    {    
+    {
         if (!d->iptcMetadata.empty())
         {
-            QStringList subjects;          
+            QStringList subjects;
             Exiv2::IptcData iptcData(d->iptcMetadata);
 
             for (Exiv2::IptcData::iterator it = iptcData.begin(); it != iptcData.end(); ++it)
             {
                 QString key = QString::fromLocal8Bit(it->key().c_str());
-                
+
                 if (key == QString("Iptc.Application2.Subject"))
                 {
                     QString val(it->toString().c_str());
                     subjects.append(val);
                 }
             }
-            
+
             return subjects;
         }
     }
     catch( Exiv2::Error &e )
     {
         printExiv2ExceptionError("Cannot get IPTC Subjects from image using Exiv2 ", e);
-    }        
-    
+    }
+
     return QStringList();
 }
 
-bool KExiv2::setImageSubjects(const QStringList& oldSubjects, const QStringList& newSubjects, 
+bool KExiv2::setImageSubjects(const QStringList& oldSubjects, const QStringList& newSubjects,
                               bool setProgramName)
 {
     if (!setProgramId(setProgramName))
         return false;
 
     try
-    {    
+    {
         QStringList oldDef = oldSubjects;
         QStringList newDef = newSubjects;
-        
+
         // Remove all old subjects.
         Exiv2::IptcData iptcData(d->iptcMetadata);
         Exiv2::IptcData::iterator it = iptcData.begin();
@@ -2124,10 +2129,10 @@ bool KExiv2::setImageSubjects(const QStringList& oldSubjects, const QStringList&
         {
             QString key = QString::fromLocal8Bit(it->key().c_str());
             QString val(it->toString().c_str());
-            
+
             if (key == QString("Iptc.Application2.Subject") && oldDef.contains(val))
                 it = iptcData.erase(it);
-            else 
+            else
                 ++it;
         };
 
@@ -2139,10 +2144,10 @@ bool KExiv2::setImageSubjects(const QStringList& oldSubjects, const QStringList&
         {
             QString key = *it;
             key.truncate(236);
-            
+
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::string);
             val->read(key.latin1());
-            iptcData.add(iptcTag, val.get());        
+            iptcData.add(iptcTag, val.get());
         }
 
         d->iptcMetadata = iptcData;
@@ -2152,53 +2157,53 @@ bool KExiv2::setImageSubjects(const QStringList& oldSubjects, const QStringList&
     catch( Exiv2::Error &e )
     {
         printExiv2ExceptionError("Cannot set IPTC Subjects into image using Exiv2 ", e);
-    }        
-    
+    }
+
     return false;
 }
 
 QStringList KExiv2::getImageSubCategories() const
 {
     try
-    {    
+    {
         if (!d->iptcMetadata.empty())
         {
-            QStringList subCategories;          
+            QStringList subCategories;
             Exiv2::IptcData iptcData(d->iptcMetadata);
 
             for (Exiv2::IptcData::iterator it = iptcData.begin(); it != iptcData.end(); ++it)
             {
                 QString key = QString::fromLocal8Bit(it->key().c_str());
-                
+
                 if (key == QString("Iptc.Application2.SuppCategory"))
                 {
                     QString val(it->toString().c_str());
                     subCategories.append(val);
                 }
             }
-            
+
             return subCategories;
         }
     }
     catch( Exiv2::Error &e )
     {
         printExiv2ExceptionError("Cannot get IPTC Sub Categories from image using Exiv2 ", e);
-    }        
-    
+    }
+
     return QStringList();
 }
 
-bool KExiv2::setImageSubCategories(const QStringList& oldSubCategories, const QStringList& newSubCategories, 
+bool KExiv2::setImageSubCategories(const QStringList& oldSubCategories, const QStringList& newSubCategories,
                                    bool setProgramName)
 {
     if (!setProgramId(setProgramName))
         return false;
 
     try
-    {    
+    {
         QStringList oldkeys = oldSubCategories;
         QStringList newkeys = newSubCategories;
-        
+
         // Remove all old Sub Categories.
         Exiv2::IptcData iptcData(d->iptcMetadata);
         Exiv2::IptcData::iterator it = iptcData.begin();
@@ -2207,14 +2212,14 @@ bool KExiv2::setImageSubCategories(const QStringList& oldSubCategories, const QS
         {
             QString key = QString::fromLocal8Bit(it->key().c_str());
             QString val(it->toString().c_str());
-            
+
             if (key == QString("Iptc.Application2.SuppCategory") && oldSubCategories.contains(val))
                 it = iptcData.erase(it);
-            else 
+            else
                 ++it;
         };
 
-        // Add new Sub Categories. Note that SubCategories IPTC tag is limited to 32 
+        // Add new Sub Categories. Note that SubCategories IPTC tag is limited to 32
         // characters but can be redondant.
 
         Exiv2::IptcKey iptcTag("Iptc.Application2.SuppCategory");
@@ -2223,10 +2228,10 @@ bool KExiv2::setImageSubCategories(const QStringList& oldSubCategories, const QS
         {
             QString key = *it;
             key.truncate(32);
-            
+
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::string);
             val->read(key.latin1());
-            iptcData.add(iptcTag, val.get());        
+            iptcData.add(iptcTag, val.get());
         }
 
         d->iptcMetadata = iptcData;
@@ -2236,8 +2241,8 @@ bool KExiv2::setImageSubCategories(const QStringList& oldSubCategories, const QS
     catch( Exiv2::Error &e )
     {
         printExiv2ExceptionError("Cannot set IPTC Sub Categories into image using Exiv2 ", e);
-    }        
-    
+    }
+
     return false;
 }
 
@@ -2430,7 +2435,7 @@ QString KExiv2::detectEncodingAndDecode(const std::string &value)
 
 bool KExiv2::setProgramId(bool /*on*/)
 {
-    return true; 
+    return true;
 }
 
 }  // NameSpace KExiv2Iface

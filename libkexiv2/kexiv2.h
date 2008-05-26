@@ -7,7 +7,7 @@
  * Description : Exiv2 library interface for KDE
  *
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * Exiv2: http://www.exiv2.org
  * Exif : http://www.exif.org/Exif2-2.PDF 
@@ -334,8 +334,8 @@ public:
         removed successfully. */
     bool removeExifTag(const char *exifTagName, bool setProgramName=true);
 
-    /** Remove the Iptc tag 'iptcTagName' from Iptc metadata. Return true if tag is 
-        removed successfully. */
+    /** Remove the all instance of Iptc tags 'iptcTagName' from Iptc metadata. Return true if all 
+        tags have been removed successfully. */
     bool removeIptcTag(const char *iptcTagName, bool setProgramName=true);
 
     /** Return the Exif Tag title or a null string. */ 
@@ -352,7 +352,7 @@ public:
 
     /** Return a map of Exif tags name/value found in metadata sorted by 
         Exif keys given by 'exifKeysFilter'. 
-        
+
         'exifKeysFilter' is a QStringList of Exif keys. 
         For example, if you use the string list given below:
 
@@ -372,7 +372,7 @@ public:
 
     /** Return a map of Iptc tags name/value found in metadata sorted by 
         Iptc keys given by 'iptcKeysFilter'. 
-        
+
         'iptcKeysFilter' is a QStringList of Iptc keys. 
         For example, if you use the string list given below:
 
@@ -402,11 +402,11 @@ public:
     static QString detectEncodingAndDecode(const std::string &value);
 
 protected:
-    
+
     /** Re-implemente this method to set automatically the Program Name and Program Version 
         information in Exif and Iptc metadata if 'on' argument is true. This method is called by all methods witch
         change tags in metadata. By default this method do nothing and return true.
- 
+
         In digiKam this method is re-implementated like this:
 
         if (on)
@@ -415,9 +415,9 @@ protected:
             QString software("digiKam");
             return setImageProgramId(software, version);
         }
-        
+
         return true;
-    */      
+    */
     virtual bool setProgramId(bool on=true);
 
 private:
