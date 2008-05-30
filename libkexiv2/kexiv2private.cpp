@@ -34,50 +34,5 @@
 namespace KExiv2Iface
 {
 
-std::string KExiv2::commentsMetaData() const
-{
-    return d->imageComments;
-}
-
-Exiv2::ExifData KExiv2::exifMetaData() const
-{
-    return d->exifMetadata;
-}
-
-Exiv2::IptcData KExiv2::iptcMetaData() const
-{
-    return d->iptcMetadata;
-}
-
-Exiv2::XmpData KExiv2::xmpMetaData() const
-{
-#ifdef _XMP_SUPPORT_
-    return d->xmpMetadata;
-#else
-    return Exiv2::XmpData();
-#endif
-}
-
-void KExiv2::setComments(std::string comments)
-{
-    d->imageComments = comments;
-}
-
-void KExiv2::setExif(Exiv2::ExifData data)
-{
-    d->exifMetadata = data;
-}
-
-void KExiv2::setIptc(Exiv2::IptcData data)
-{
-    d->iptcMetadata = data;
-}
-
-void KExiv2::setXmp(Exiv2::XmpData data)
-{
-#ifdef _XMP_SUPPORT_
-    d->xmpMetadata = data;
-#endif
-}
 
 }  // NameSpace KExiv2Iface

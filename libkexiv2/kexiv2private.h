@@ -69,7 +69,7 @@
     (EXIV2_MAJOR_VERSION ==0 && EXIV2_MINOR_VERSION >15 ) || \
     (EXIV2_MAJOR_VERSION >0)
 #   define _XMP_SUPPORT_ 1
-#endif 
+#endif
 
 // Make sure an EXIV2_TEST_VERSION macro exists:
 
@@ -90,7 +90,7 @@ namespace Exiv2
 {
     class XmpData{};
 }
-#endif 
+#endif
 
 namespace KExiv2Iface
 {
@@ -103,6 +103,8 @@ public:
     {
         imageComments = std::string();
     }
+
+public:
 
     QString         filePath;
 

@@ -19,7 +19,7 @@
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -535,7 +535,7 @@ public:
           if 'inverSelection' is false.
         - not include "dc", or "xmp" in the Xmp tag keys 
           if 'inverSelection' is true.
-        */ 
+        */
     KExiv2::MetaDataMap getXmpTagsDataList(const QStringList &xmpKeysFilter, bool invertSelection=false) const;
 
     /** Get all redondant Alternative Language Xmp tags content like a map. 
@@ -727,11 +727,11 @@ public:
                                                 int *degrees, int *minutes, double *seconds, char *directionReference);
 
 protected:
-    
+
     /** Re-implemente this method to set automatically the Program Name and Program Version
         information in Exif and Iptc metadata if 'on' argument is true. This method is called by all methods witch
         change tags in metadata. By default this method do nothing and return true.
- 
+
         In digiKam this method is re-implementated like this:
 
         if (on)
@@ -744,37 +744,6 @@ protected:
         return true;
     */
     virtual bool setProgramId(bool on=true) const;
-
-private:
-
-    /** Return a standard C++ string copy of Comments container get from current image.
-        Return a null standard string if there is no Comments metadata in memory. */
-    std::string commentsMetaData() const;
-
-    /** Return a reference to Exif metadata object from memory. */
-    Exiv2::ExifData exifMetaData() const;
-
-    /** Return a reference to Iptc metadata object from memory. */
-    Exiv2::IptcData iptcMetaData() const;
-
-    /** Return a reference to Xmp metadata object from memory. */
-    Exiv2::XmpData xmpMetaData() const;
-
-    /** Set the Comments data using an string object. Return true if comments metadata
-        have been changed in memory. */
-    void setComments(std::string comments);
-
-    /** Set the Exif data using an Exiv2 byte array. Return true if Exif metadata
-        have been changed in memory. */
-    void setExif(Exiv2::ExifData data);
-
-    /** Set the Iptc data using an Exiv2 byte array. Return true if Iptc metadata
-        have been changed in memory. */
-    void setIptc(Exiv2::IptcData data);
-
-    /** Set the Xmp data using an Exiv2 byte array. Return true if Xmp metadata
-        have been changed in memory. */
-    void setXmp(Exiv2::XmpData data);
 
 private:
 

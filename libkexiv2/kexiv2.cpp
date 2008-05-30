@@ -17,12 +17,12 @@
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Local includes.
@@ -43,13 +43,13 @@ KExiv2::KExiv2(const KExiv2& metadata)
 {
     d = new KExiv2Priv;
 
-    // No need to use QT containers transormations here. We can use original objects directly. 
-    setComments(metadata.commentsMetaData());
-    setExif(metadata.exifMetaData());
-    setIptc(metadata.iptcMetaData());
+    // No need to use QT containers transormations here. We can use original objects directly.
+    d->imageComments = metadata.d->imageComments;
+    d->exifMetadata  = metadata.d->exifMetadata;
+    d->iptcMetadata  = metadata.d->iptcMetadata;
 
 #ifdef _XMP_SUPPORT_
-    setXmp(metadata.xmpMetaData());
+    d->xmpMetadata   = metadata.d->xmpMetadata;
 #endif // _XMP_SUPPORT_
 
     setFilePath(metadata.getFilePath());
@@ -67,19 +67,19 @@ KExiv2::~KExiv2()
 
     // Fix memory leak if Exiv2 support XMP.
 #ifdef _XMP_SUPPORT_
-    Exiv2::XmpParser::terminate();    
+    Exiv2::XmpParser::terminate();
 #endif // _XMP_SUPPORT_
 }
 
 KExiv2& KExiv2::operator=(const KExiv2& metadata)
 {
-    // No need to use QT containers transormations here. We can use original objects directly. 
-    setComments(metadata.commentsMetaData());
-    setExif(metadata.exifMetaData());
-    setIptc(metadata.iptcMetaData());
+    // No need to use QT containers transormations here. We can use original objects directly.
+    d->imageComments = metadata.d->imageComments;
+    d->exifMetadata  = metadata.d->exifMetadata;
+    d->iptcMetadata  = metadata.d->iptcMetadata;
 
 #ifdef _XMP_SUPPORT_
-    setXmp(metadata.xmpMetaData());
+    d->xmpMetadata   = metadata.d->xmpMetadata;
 #endif // _XMP_SUPPORT_
 
     setFilePath(metadata.getFilePath());
@@ -104,7 +104,7 @@ QString KExiv2::Exiv2Version()
 
 #if (EXIV2_TEST_VERSION(0,14,0))
     return QString(Exiv2::version());
-#else      
+#else
     return QString("%1.%2.%3").arg(EXIV2_MAJOR_VERSION)
                               .arg(EXIV2_MINOR_VERSION)
                               .arg(EXIV2_PATCH_VERSION);
@@ -276,7 +276,7 @@ QString KExiv2::getFilePath() const
 
 bool KExiv2::setProgramId(bool /*on*/) const
 {
-    return true; 
+    return true;
 }
 
 }  // NameSpace KExiv2Iface
