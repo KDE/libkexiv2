@@ -9,6 +9,7 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake ${CMAKE_CURRENT_BINAR
 #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=default")
 
 SET(kexiv2_LIB_SRCS kexiv2.cpp
+                    kexiv2private.cpp
                     kexiv2image.cpp
                     kexiv2comments.cpp
                     kexiv2exif.cpp
