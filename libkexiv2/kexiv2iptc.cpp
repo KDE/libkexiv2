@@ -48,7 +48,7 @@ bool KExiv2::clearIptc() const
     }
     catch( Exiv2::Error &e )
     {
-        printExiv2ExceptionError("Cannot clear Iptc data using Exiv2 ", e);
+        d->printExiv2ExceptionError("Cannot clear Iptc data using Exiv2 ", e);
     }
 
     return false;
@@ -85,7 +85,7 @@ QByteArray KExiv2::getIptc(bool addIrbHeader) const
         if (!d->filePath.isEmpty())
             qDebug ("From file %s", d->filePath.toAscii().constData());
 
-        printExiv2ExceptionError("Cannot get Iptc data using Exiv2 ",e);
+        d->printExiv2ExceptionError("Cannot get Iptc data using Exiv2 ",e);
     }
 
     return QByteArray();
@@ -108,7 +108,7 @@ bool KExiv2::setIptc(const QByteArray& data) const
         if (!d->filePath.isEmpty())
             qDebug ("From file %s", d->filePath.toAscii().constData());
 
-        printExiv2ExceptionError("Cannot set Iptc data using Exiv2 ", e);
+        d->printExiv2ExceptionError("Cannot set Iptc data using Exiv2 ", e);
     }
 
     return false;
@@ -179,7 +179,7 @@ KExiv2::MetaDataMap KExiv2::getIptcTagsDataList(const QStringList &iptcKeysFilte
     }
     catch (Exiv2::Error& e)
     {
-        printExiv2ExceptionError("Cannot parse Iptc metadata using Exiv2 ", e);
+        d->printExiv2ExceptionError("Cannot parse Iptc metadata using Exiv2 ", e);
     }
 
     return MetaDataMap();
@@ -195,7 +195,7 @@ QString KExiv2::getIptcTagTitle(const char *iptcTagName)
     }
     catch (Exiv2::Error& e) 
     {
-        printExiv2ExceptionError("Cannot get metadata tag title using Exiv2 ", e);
+        d->printExiv2ExceptionError("Cannot get metadata tag title using Exiv2 ", e);
     }
 
     return QString();
@@ -211,7 +211,7 @@ QString KExiv2::getIptcTagDescription(const char *iptcTagName)
     }
     catch (Exiv2::Error& e) 
     {
-        printExiv2ExceptionError("Cannot get metadata tag description using Exiv2 ", e);
+        d->printExiv2ExceptionError("Cannot get metadata tag description using Exiv2 ", e);
     }
 
     return QString();
@@ -240,7 +240,7 @@ bool KExiv2::removeIptcTag(const char *iptcTagName, bool setProgramName) const
     }
     catch( Exiv2::Error &e )
     {
-        printExiv2ExceptionError("Cannot remove Iptc tag using Exiv2 ", e);
+        d->printExiv2ExceptionError("Cannot remove Iptc tag using Exiv2 ", e);
     }        
     
     return false;
@@ -262,7 +262,7 @@ bool KExiv2::setIptcTagData(const char *iptcTagName, const QByteArray& data, boo
     }
     catch( Exiv2::Error &e )
     {
-        printExiv2ExceptionError("Cannot set Iptc tag data into image using Exiv2 ", e);
+        d->printExiv2ExceptionError("Cannot set Iptc tag data into image using Exiv2 ", e);
     }
 
     return false;
@@ -285,7 +285,7 @@ QByteArray KExiv2::getIptcTagData(const char *iptcTagName) const
     }
     catch( Exiv2::Error &e )
     {
-        printExiv2ExceptionError(QString("Cannot find Iptc key '%1' into image using Exiv2 ")
+        d->printExiv2ExceptionError(QString("Cannot find Iptc key '%1' into image using Exiv2 ")
                                  .arg(iptcTagName), e);
     }
 
@@ -313,7 +313,7 @@ QString KExiv2::getIptcTagString(const char* iptcTagName, bool escapeCR) const
     }
     catch( Exiv2::Error &e )
     {
-        printExiv2ExceptionError(QString("Cannot find Iptc key '%1' into image using Exiv2 ")
+        d->printExiv2ExceptionError(QString("Cannot find Iptc key '%1' into image using Exiv2 ")
                                  .arg(iptcTagName), e);
     }
 
@@ -332,7 +332,7 @@ bool KExiv2::setIptcTagString(const char *iptcTagName, const QString& value, boo
     }
     catch( Exiv2::Error &e )
     {
-        printExiv2ExceptionError("Cannot set Iptc tag string into image using Exiv2 ", e);
+        d->printExiv2ExceptionError("Cannot set Iptc tag string into image using Exiv2 ", e);
     }
 
     return false;
@@ -367,7 +367,7 @@ QStringList KExiv2::getIptcTagsStringList(const char* iptcTagName, bool escapeCR
     }
     catch( Exiv2::Error &e )
     {
-        printExiv2ExceptionError(QString("Cannot find Iptc key '%1' into image using Exiv2 ")
+        d->printExiv2ExceptionError(QString("Cannot find Iptc key '%1' into image using Exiv2 ")
                                  .arg(iptcTagName), e);
     }        
     
@@ -427,7 +427,7 @@ bool KExiv2::setIptcTagsStringList(const char* iptcTagName, int maxSize,
     }
     catch( Exiv2::Error &e )
     {
-        printExiv2ExceptionError(QString("Cannot set Iptc key '%1' into image using Exiv2 ")
+        d->printExiv2ExceptionError(QString("Cannot set Iptc key '%1' into image using Exiv2 ")
                                  .arg(iptcTagName), e);
     }        
     
@@ -459,7 +459,7 @@ QStringList KExiv2::getIptcKeywords() const
     }
     catch( Exiv2::Error &e )
     {
-        printExiv2ExceptionError("Cannot get Iptc Keywords from image using Exiv2 ", e);
+        d->printExiv2ExceptionError("Cannot get Iptc Keywords from image using Exiv2 ", e);
     }        
     
     return QStringList();
@@ -516,7 +516,7 @@ bool KExiv2::setIptcKeywords(const QStringList& oldKeywords, const QStringList& 
     }
     catch( Exiv2::Error &e )
     {
-        printExiv2ExceptionError("Cannot set Iptc Keywords into image using Exiv2 ", e);
+        d->printExiv2ExceptionError("Cannot set Iptc Keywords into image using Exiv2 ", e);
     }        
     
     return false;
@@ -547,7 +547,7 @@ QStringList KExiv2::getIptcSubjects() const
     }
     catch( Exiv2::Error &e )
     {
-        printExiv2ExceptionError("Cannot get Iptc Subjects from image using Exiv2 ", e);
+        d->printExiv2ExceptionError("Cannot get Iptc Subjects from image using Exiv2 ", e);
     }        
     
     return QStringList();
@@ -599,7 +599,7 @@ bool KExiv2::setIptcSubjects(const QStringList& oldSubjects, const QStringList& 
     }
     catch( Exiv2::Error &e )
     {
-        printExiv2ExceptionError("Cannot set Iptc Subjects into image using Exiv2 ", e);
+        d->printExiv2ExceptionError("Cannot set Iptc Subjects into image using Exiv2 ", e);
     }        
     
     return false;
@@ -630,7 +630,7 @@ QStringList KExiv2::getIptcSubCategories() const
     }
     catch( Exiv2::Error &e )
     {
-        printExiv2ExceptionError("Cannot get Iptc Sub Categories from image using Exiv2 ", e);
+        d->printExiv2ExceptionError("Cannot get Iptc Sub Categories from image using Exiv2 ", e);
     }        
     
     return QStringList();
@@ -683,7 +683,7 @@ bool KExiv2::setIptcSubCategories(const QStringList& oldSubCategories, const QSt
     }
     catch( Exiv2::Error &e )
     {
-        printExiv2ExceptionError("Cannot set Iptc Sub Categories into image using Exiv2 ", e);
+        d->printExiv2ExceptionError("Cannot set Iptc Sub Categories into image using Exiv2 ", e);
     }        
     
     return false;

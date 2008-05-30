@@ -116,12 +116,6 @@ QString KExiv2::version()
     return QString(kexiv2_version);
 }
 
-void KExiv2::printExiv2ExceptionError(const QString& msg, Exiv2::Error& e)
-{
-    std::string s(e.what());
-    qDebug("%s (Error #%i: %s)", msg.toAscii().constData(), e.code(), s.c_str());
-}
-
 bool KExiv2::isReadOnly(const QString& filePath)
 {
     QFileInfo fi(filePath);
@@ -176,7 +170,7 @@ bool KExiv2::load(const QString& filePath) const
     }
     catch( Exiv2::Error &e )
     {
-        printExiv2ExceptionError("Cannot load metadata using Exiv2 ", e);
+        d->printExiv2ExceptionError("Cannot load metadata using Exiv2 ", e);
     }
 
     return false;
@@ -245,7 +239,7 @@ bool KExiv2::save(const QString& filePath) const
     }
     catch( Exiv2::Error &e )
     {
-        printExiv2ExceptionError("Cannot save metadata using Exiv2 ", e);
+        d->printExiv2ExceptionError("Cannot save metadata using Exiv2 ", e);
     }
 
     return false;

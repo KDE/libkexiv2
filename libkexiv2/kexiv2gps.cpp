@@ -101,7 +101,7 @@ bool KExiv2::getGPSLatitudeNumber(double *latitude) const
     }
     catch( Exiv2::Error &e )
     {
-        printExiv2ExceptionError("Cannot get Exif GPS tag using Exiv2 ", e);
+        d->printExiv2ExceptionError("Cannot get Exif GPS tag using Exiv2 ", e);
     }
 
     return false;
@@ -158,7 +158,7 @@ bool KExiv2::getGPSLongitudeNumber(double *longitude) const
     }
     catch( Exiv2::Error &e )
     {
-        printExiv2ExceptionError("Cannot get Exif GPS tag using Exiv2 ", e);
+        d->printExiv2ExceptionError("Cannot get Exif GPS tag using Exiv2 ", e);
     }
 
     return false;
@@ -203,7 +203,7 @@ bool KExiv2::getGPSAltitude(double *altitude) const
     }
     catch( Exiv2::Error &e )
     {
-        printExiv2ExceptionError("Cannot get Exif GPS tag using Exiv2 ", e);
+        d->printExiv2ExceptionError("Cannot get Exif GPS tag using Exiv2 ", e);
     }
 
     return false;
@@ -235,7 +235,7 @@ QString KExiv2::getGPSLatitudeString() const
     }
     catch( Exiv2::Error &e )
     {
-        printExiv2ExceptionError("Cannot get Exif GPS tag using Exiv2 ", e);
+        d->printExiv2ExceptionError("Cannot get Exif GPS tag using Exiv2 ", e);
     }
 
     return QString();
@@ -267,7 +267,7 @@ QString KExiv2::getGPSLongitudeString() const
     }
     catch( Exiv2::Error &e )
     {
-        printExiv2ExceptionError("Cannot get Exif GPS tag using Exiv2 ", e);
+        d->printExiv2ExceptionError("Cannot get Exif GPS tag using Exiv2 ", e);
     }
 
     return QString();
@@ -386,7 +386,7 @@ bool KExiv2::setGPSInfo(double altitude, double latitude, double longitude, bool
     }
     catch( Exiv2::Error &e )
     {
-        printExiv2ExceptionError("Cannot set Exif GPS tag using Exiv2 ", e);
+        d->printExiv2ExceptionError("Cannot set Exif GPS tag using Exiv2 ", e);
     }
 
     return false;
@@ -462,7 +462,7 @@ bool KExiv2::setGPSInfo(double altitude, const QString &latitude, const QString 
     }
     catch( Exiv2::Error &e )
     {
-        printExiv2ExceptionError("Cannot set Exif GPS tag using Exiv2 ", e);
+        d->printExiv2ExceptionError("Cannot set Exif GPS tag using Exiv2 ", e);
     }
 
     return false;
@@ -498,7 +498,7 @@ bool KExiv2::removeGPSInfo(bool setProgramName) const
     }
     catch( Exiv2::Error &e )
     {
-        printExiv2ExceptionError("Cannot remove Exif GPS tag using Exiv2 ", e);
+        d->printExiv2ExceptionError("Cannot remove Exif GPS tag using Exiv2 ", e);
     }
 
     return false;

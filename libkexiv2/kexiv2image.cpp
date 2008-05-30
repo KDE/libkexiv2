@@ -85,7 +85,7 @@ bool KExiv2::setImageProgramId(const QString& program, const QString& version) c
     }
     catch( Exiv2::Error &e )
     {
-        printExiv2ExceptionError("Cannot set Program identity into image using Exiv2 ", e);
+        d->printExiv2ExceptionError("Cannot set Program identity into image using Exiv2 ", e);
     }
 
     return false;
@@ -174,7 +174,7 @@ QSize KExiv2::getImageDimensions() const
     }
     catch( Exiv2::Error &e )
     {
-        printExiv2ExceptionError("Cannot parse image dimensions tag using Exiv2 ", e);
+        d->printExiv2ExceptionError("Cannot parse image dimensions tag using Exiv2 ", e);
     }
 
     return QSize();
@@ -210,7 +210,7 @@ bool KExiv2::setImageDimensions(const QSize& size, bool setProgramName) const
     }
     catch( Exiv2::Error &e )
     {
-        printExiv2ExceptionError("Cannot set image dimensions using Exiv2 ", e);
+        d->printExiv2ExceptionError("Cannot set image dimensions using Exiv2 ", e);
     }
 
     return false;
@@ -301,7 +301,7 @@ KExiv2::ImageOrientation KExiv2::getImageOrientation() const
     }
     catch( Exiv2::Error &e )
     {
-        printExiv2ExceptionError("Cannot parse Exif Orientation tag using Exiv2 ", e);
+        d->printExiv2ExceptionError("Cannot parse Exif Orientation tag using Exiv2 ", e);
     }
 
     return ORIENTATION_UNSPECIFIED;
@@ -360,7 +360,7 @@ bool KExiv2::setImageOrientation(ImageOrientation orientation, bool setProgramNa
     }
     catch( Exiv2::Error &e )
     {
-        printExiv2ExceptionError("Cannot set Exif Orientation tag using Exiv2 ", e);
+        d->printExiv2ExceptionError("Cannot set Exif Orientation tag using Exiv2 ", e);
     }
 
     return false;
@@ -462,7 +462,7 @@ bool KExiv2::setImageColorWorkSpace(ImageColorWorkSpace workspace, bool setProgr
     }
     catch( Exiv2::Error &e )
     {
-        printExiv2ExceptionError("Cannot set Exif color workspace tag using Exiv2 ", e);
+        d->printExiv2ExceptionError("Cannot set Exif color workspace tag using Exiv2 ", e);
     }
 
     return false;
@@ -675,7 +675,7 @@ QDateTime KExiv2::getImageDateTime() const
     }
     catch( Exiv2::Error &e )
     {
-        printExiv2ExceptionError("Cannot parse Exif date & time tag using Exiv2 ", e);
+        d->printExiv2ExceptionError("Cannot parse Exif date & time tag using Exiv2 ", e);
     }
 
     return QDateTime();
@@ -743,7 +743,7 @@ bool KExiv2::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitiz
     }
     catch( Exiv2::Error &e )
     {
-        printExiv2ExceptionError("Cannot set Date & Time into image using Exiv2 ", e);
+        d->printExiv2ExceptionError("Cannot set Date & Time into image using Exiv2 ", e);
     }
 
     return false;
@@ -813,7 +813,7 @@ QDateTime KExiv2::getDigitizationDateTime(bool fallbackToCreationTime) const
     }
     catch( Exiv2::Error &e )
     {
-        printExiv2ExceptionError("Cannot parse Exif digitization date & time tag using Exiv2 ", e);
+        d->printExiv2ExceptionError("Cannot parse Exif digitization date & time tag using Exiv2 ", e);
     }
 
     if (fallbackToCreationTime)
@@ -836,7 +836,7 @@ bool KExiv2::getImagePreview(QImage& preview) const
     }
     catch( Exiv2::Error &e )
     {
-        printExiv2ExceptionError("Cannot get image preview using Exiv2 ", e);
+        d->printExiv2ExceptionError("Cannot get image preview using Exiv2 ", e);
     }
 
     return false;
@@ -879,7 +879,7 @@ bool KExiv2::setImagePreview(const QImage& preview, bool setProgramName) const
     }
     catch( Exiv2::Error &e )
     {
-        printExiv2ExceptionError("Cannot get image preview using Exiv2 ", e);
+        d->printExiv2ExceptionError("Cannot get image preview using Exiv2 ", e);
     }
 
     return false;
