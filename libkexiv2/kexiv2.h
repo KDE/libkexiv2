@@ -217,7 +217,7 @@ public:
     /** Set the Exif and Iptc time stamp. If 'setDateTimeDigitized' parameter is true, the 'Digitalized'
         time stamp is set, else only 'Created' time stamp is set.
      */
-    bool setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitized = false, 
+    bool setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitized=false,
                           bool setProgramName=true) const;
 
     /** Return the digitization time stamp of the image. First Exif information is checked, then IPTC.
@@ -369,7 +369,7 @@ public:
         if rationalAsListOfInts is true, as double if rationalAsListOfInts is false.
         An exif tag of numerical type may contain more than one value; set component to the desired index.
      */
-    QVariant getExifTagVariant(const char *exifTagName, bool rationalAsListOfInts = true, bool escapeCR=true, int component=0) const;
+    QVariant getExifTagVariant(const char *exifTagName, bool rationalAsListOfInts=true, bool escapeCR=true, int component=0) const;
 
     /** Set an Exif tag content using a QVariant. Returns true if tag is set successfully.
         All types described for the above method are supported.
@@ -613,7 +613,7 @@ public:
         description for details. If tag already exist, it wil be removed before.
         Return true if tag is set successfully.
      */
-    bool setXmpTagStringListLangAlt(const char *xmpTagName, const KExiv2::AltLangMap& values, 
+    bool setXmpTagStringListLangAlt(const char *xmpTagName, const KExiv2::AltLangMap& values,
                                     bool setProgramName) const;
 
     /** Get a Xmp tag content like a string set with an alternative language
