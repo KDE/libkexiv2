@@ -52,9 +52,6 @@
 namespace Exiv2
 {
     class Exifdatum;
-    class ExifData;
-    class IptcData;
-    class XmpData;
     class Error;
 }
 
