@@ -91,7 +91,7 @@ namespace Exiv2
 {
     class XmpData{};
 }
-#endif
+#endif // _XMP_SUPPORT_
 
 namespace KExiv2Iface
 {
