@@ -59,11 +59,9 @@ KExiv2::~KExiv2()
     delete d;
 
     // Fix memory leak if Exiv2 support XMP.
-    #if (EXIV2_MAJOR_VERSION ==0 && EXIV2_MINOR_VERSION ==15 && EXIV2_PATCH_VERSION >=99) || \
-        (EXIV2_MAJOR_VERSION ==0 && EXIV2_MINOR_VERSION >15 ) || \
-            (EXIV2_MAJOR_VERSION >0)
+    #ifdef _XMP_SUPPORT_
         Exiv2::XmpParser::terminate();
-    #endif
+    #endif // _XMP_SUPPORT_
 }
 
 QString KExiv2::version()
