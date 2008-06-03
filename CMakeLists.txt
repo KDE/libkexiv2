@@ -48,9 +48,6 @@ SET(KEXIV2_LIB_SO_VERSION_STRING "${KEXIV2_LIB_SO_CUR_VERSION}.${KEXIV2_LIB_SO_R
 # =======================================================
 
 
-# Detect Exiv2 library properlly with CMake script from 'cmake/modules'
-FIND_PACKAGE(Exiv2)
-
 if (EXIV2_FOUND)
   SUBDIRS(libkexiv2)
 
@@ -60,5 +57,3 @@ if (EXIV2_FOUND)
     INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/libkexiv2.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig )
   ENDIF(NOT WIN32)
 endif (EXIV2_FOUND)
-
-macro_log_feature(EXIV2_FOUND "exiv2" "" "" FALSE "" "Needed for libkexiv2")
