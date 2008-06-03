@@ -30,6 +30,7 @@
 #include <cfloat>
 #include <iostream>
 #include <iomanip>
+#include <string>
 
 // Qt includes.
 

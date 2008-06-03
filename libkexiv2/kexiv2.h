@@ -30,10 +30,6 @@
 #ifndef KEXIV2_H
 #define KEXIV2_H
 
-// C++ includes.
-
-#include <string>
-
 // QT includes.
 
 #include <QtCore/QByteArray>
