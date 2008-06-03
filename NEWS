@@ -1,9 +1,11 @@
 0.1.8
 ------------------------------------------------------------------------
 
+- API changed: Move all Exiv2 classes acess methods to interanl provate container.
 
 Bugs fixed from B.K.O (http://bugs.kde.org):
-001 ==> 
+001 ==> 158989: digikam won't start: MakerTagInfo registry full.
+002 ==> 
 
 0.1.7
 ------------------------------------------------------------------------
