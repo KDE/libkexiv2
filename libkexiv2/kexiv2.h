@@ -28,10 +28,6 @@
 #ifndef KEXIV2_H
 #define KEXIV2_H
 
-// C++ includes.
-
-#include <string>
-
 // QT includes.
 
 #include <qcstring.h>
@@ -43,15 +39,6 @@
 // Local includes.
 
 #include "libkexiv2_export.h"
-
-namespace Exiv2
-{
-    class DataBuf;
-    class Exifdatum;
-    class ExifData;
-    class IptcData;
-    class Error;
-}
 
 namespace KExiv2Iface
 {
@@ -106,11 +93,6 @@ public:
 
     /** Return a string version of libkexiv2 release */
     static QString version();
-
-    /** Generic method to print the Exiv2 C++ Exception error message from 'e'.
-        'msg' string is printed just before like debug header.
-    */
-    static void printExiv2ExceptionError(const QString& msg, Exiv2::Error& e);
 
     //-- Metadata manipulation methods ----------------------------------------------
 
@@ -339,16 +321,16 @@ public:
     bool removeIptcTag(const char *iptcTagName, bool setProgramName=true);
 
     /** Return the Exif Tag title or a null string. */ 
-    static QString getExifTagTitle(const char *exifTagName);
+    QString getExifTagTitle(const char *exifTagName);
 
     /** Return the Exif Tag description or a null string. */ 
-    static QString getExifTagDescription(const char *exifTagName);
+    QString getExifTagDescription(const char *exifTagName);
 
     /** Return the Iptc Tag title or a null string. */ 
-    static QString getIptcTagTitle(const char *iptcTagName);
+    QString getIptcTagTitle(const char *iptcTagName);
 
     /** Return the Iptc Tag description or a null string. */ 
-    static QString getIptcTagDescription(const char *iptcTagName);
+    QString getIptcTagDescription(const char *iptcTagName);
 
     /** Return a map of Exif tags name/value found in metadata sorted by 
         Exif keys given by 'exifKeysFilter'. 
@@ -395,12 +377,6 @@ public:
     static void convertToRational(double number, long int* numerator, 
                                   long int* denominator, int rounding);
 
-    /** Wrapper method to convert a Comments content to a QString. */ 
-    static QString convertCommentValue(const Exiv2::Exifdatum &comment);
-
-    /** Charset autodetection to convert a string to a QString. */ 
-    static QString detectEncodingAndDecode(const std::string &value);
-
 protected:
 
     /** Re-implemente this method to set automatically the Program Name and Program Version 
@@ -419,29 +395,6 @@ protected:
         return true;
     */
     virtual bool setProgramId(bool on=true);
-
-private:
-
-    /** Return a reference to Exif metadata object in memory. */
-    Exiv2::ExifData& exifMetaData();
-
-    /** Return a reference to Iptc metadata object in memory. */
-    Exiv2::IptcData& iptcMetaData();
-
-    /** Set the Exif data using an Exiv2 byte array. Return true if Exif metadata
-        have been changed in memory. */
-    bool setExif(Exiv2::DataBuf const data);
-
-    /** Set the Iptc data using an Exiv2 byte array. Return true if Iptc metadata
-        have been changed in memory. */
-    bool setIptc(Exiv2::DataBuf const data);
-
-    /** Return a reference to comments string object in memory. */
-    std::string& commentsMetaData();
-
-    /** Return a standard C++ string copy of Comments container get from current image.
-        Return a null standard string if there is no Comments metadata in memory. */
-    std::string getCommentsString() const;
 
 private:
 
