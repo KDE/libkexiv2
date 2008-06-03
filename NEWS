@@ -8,6 +8,15 @@ New method to fix orientation of a QImage accordingly with Exif orientation tag.
 Bugs fixed from B.K.O (http://bugs.kde.org):
 001 ==> 146864: Lesser XMP support in digiKam.
 
+0.1.7
+------------------------------------------------------------------------
+
+- API changed: Added a version method to get runtime library version.
+- Fix RemoveIptcTag() to handle all redondant Iptc tags at the same time.
+
+Bugs fixed from B.K.O (http://bugs.kde.org):
+001 ==> 157552: negative altitudes are not shown in metadata GPS sidebar
+
 0.1.6
 ------------------------------------------------------------------------
 - API Changed : Kexiv2 destructor is now virtual.
