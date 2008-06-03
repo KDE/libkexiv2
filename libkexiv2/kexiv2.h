@@ -39,7 +39,6 @@
 #include <QtCore/QMap>
 #include <QtCore/QStringList>
 #include <QtCore/QVariant>
-#include <QtCore/QtDebug>
 
 // Local includes.
 
