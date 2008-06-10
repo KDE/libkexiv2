@@ -37,7 +37,7 @@ KExiv2Priv::KExiv2Priv()
     imageComments = std::string();
 
 #ifdef _XMP_SUPPORT_
-    Exiv2::XmpProperties::registerNs("MicrosoftPhoto/", "MicrosoftPhoto");
+    Exiv2::XmpProperties::registerNs("http://www.microsoft.com/Photo/", "MicrosoftPhoto");
 #endif
 }
 
