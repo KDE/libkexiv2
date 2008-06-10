@@ -35,6 +35,10 @@ namespace KExiv2Iface
 KExiv2Priv::KExiv2Priv()
 {
     imageComments = std::string();
+
+#ifdef _XMP_SUPPORT_
+    Exiv2::XmpProperties::registerNs("MicrosoftPhoto/", "ns");
+#endif
 }
 
 KExiv2Priv::~KExiv2Priv()
