@@ -29,7 +29,7 @@
 // C++ includes.
 
 #include <climits>
-#include "math.h"
+#include <cmath>
 
 // Local includes.
 
