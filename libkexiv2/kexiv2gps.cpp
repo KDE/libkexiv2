@@ -31,6 +31,8 @@
 #include <climits>
 #include <cmath>
 
+#include <math.h>
+
 // Local includes.
 
 #include "kexiv2private.h"
