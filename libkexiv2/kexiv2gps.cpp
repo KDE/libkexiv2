@@ -29,6 +29,7 @@
 // C++ includes.
 
 #include <climits>
+#include "math.h"
 
 // Local includes.
 
@@ -518,7 +519,7 @@ void KExiv2::convertToRational(double number, long int* numerator,
 
     // Calculate the "number" used for rounding.
     // This is 10^Digits - ie, 4 places gives us 10000.
-    double rounder = pow(10, rounding);
+    double rounder = pow(10.0, rounding);
 
     // Round the fractional part, and leave the number
     // as greater than 1.
