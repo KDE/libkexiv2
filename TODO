@@ -1,1 +1,3 @@
 - Extract GPS info from XMP tags.
+- Exif/Iptc => Xmp synchrosization.
+- Xmp side-car file support.
