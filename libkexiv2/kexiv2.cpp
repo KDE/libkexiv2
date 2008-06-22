@@ -202,6 +202,7 @@ bool KExiv2::save(const QString& filePath) const
 
     try
     {
+        QString ext = finfo.suffix().toUpper();
         Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
                                       (QFile::encodeName(filePath)));
 
@@ -209,7 +210,9 @@ bool KExiv2::save(const QString& filePath) const
 
         if (!d->imageComments.empty())
         {
-            image->setComment(d->imageComments);
+            // Only JPEG file can host comments
+            if (ext != QString("JPG") && ext != QString("JPEG") && ext != QString("JPE"))
+                image->setComment(d->imageComments);
         }
 
         // Exif metadata ----------------------------------
