@@ -73,7 +73,15 @@ QByteArray KExiv2::getIptc(bool addIrbHeader) const
 #endif
             }
             else 
+            {
+            // Since 0.18 release, API has changed.
+
+#if (EXIV2_TEST_VERSION(0,17,91))
+                c2 = Exiv2::IptcParser::encode(d->iptcMetadata);
+#else
                 c2 = iptc.copy();
+#endif
+            }
 
             QByteArray data((const char*)c2.pData_, c2.size_);
             return data;
@@ -97,10 +105,17 @@ bool KExiv2::setIptc(const QByteArray& data) const
     {
         if (!data.isEmpty())
         {
+            // Since 0.18 release, API has changed.
+
+#if (EXIV2_TEST_VERSION(0,17,91))
+            Exiv2::IptcParser::decode(d->iptcMetadata, (const Exiv2::byte*)data.data(), data.size());
+            return (!d->iptcMetadata.empty());
+#else
             if (d->iptcMetadata.load((const Exiv2::byte*)data.data(), data.size()) != 0)
                 return false;
             else
                 return true;
+#endif
         }
     }
     catch( Exiv2::Error &e )

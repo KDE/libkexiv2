@@ -62,8 +62,14 @@ QByteArray KExiv2::getExif(bool addExifHeader) const
         {
             QByteArray data;
             Exiv2::ExifData& exif = d->exifMetadata;
-            Exiv2::DataBuf c2     = exif.copy();
+#if (EXIV2_TEST_VERSION(0,17,91))
+            Exiv2::Blob blob;
+            Exiv2::ExifParser::encode(blob, Exiv2::bigEndian, exif);
+            QByteArray ba((const char*)&blob[0], blob.size());
+#else
+            Exiv2::DataBuf c2 = exif.copy();
             QByteArray ba((const char*)c2.pData_, c2.size_);
+#endif
             if (addExifHeader)
             {
                 const uchar ExifHeader[] = {0x45, 0x78, 0x69, 0x66, 0x00, 0x00};
@@ -95,10 +101,15 @@ bool KExiv2::setExif(const QByteArray& data) const
     {
         if (!data.isEmpty())
         {
+#if (EXIV2_TEST_VERSION(0,17,91))
+            Exiv2::ExifParser::decode(d->exifMetadata, (const Exiv2::byte*)data.data(), data.size());
+            return (!d->exifMetadata.empty());
+#else
             if (d->exifMetadata.load((const Exiv2::byte*)data.data(), data.size()) != 0)
                 return false;
             else
                 return true;
+#endif
         }
     }
     catch( Exiv2::Error &e )
@@ -290,8 +301,8 @@ bool KExiv2::removeExifTag(const char *exifTagName, bool setProgramName) const
     catch( Exiv2::Error &e )
     {
         d->printExiv2ExceptionError("Cannot remove Exif tag using Exiv2 ", e);
-    }        
-    
+    }
+
     return false;
 }
 
@@ -691,7 +702,12 @@ QImage KExiv2::getExifThumbnail(bool fixOrientation) const
 
     try
     {
+#if (EXIV2_TEST_VERSION(0,17,91))
+        Exiv2::ExifThumbC thumb(d->exifMetadata);
+        Exiv2::DataBuf const c1 = thumb.copy();
+#else
         Exiv2::DataBuf const c1(d->exifMetadata.copyThumbnail());
+#endif
         thumbnail.loadFromData(c1.pData_, c1.size_);
 
         if (!thumbnail.isNull())
@@ -784,7 +800,12 @@ bool KExiv2::setExifThumbnail(const QImage& thumb, bool setProgramName) const
         qDebug("Thumbnail temp file: %s", thumbFile.fileName().toAscii().data());
 
         const std::string &fileName((const char*)(QFile::encodeName(thumbFile.fileName())));
+#if (EXIV2_TEST_VERSION(0,17,91))
+        Exiv2::ExifThumb thumb(d->exifMetadata);
+        thumb.setJpegThumbnail( fileName );
+#else
         d->exifMetadata.setJpegThumbnail( fileName );
+#endif
         return true;
     }
     catch( Exiv2::Error &e )
