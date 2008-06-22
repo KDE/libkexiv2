@@ -211,7 +211,7 @@ bool KExiv2::save(const QString& filePath) const
         if (!d->imageComments.empty())
         {
             // Only JPEG file can host comments
-            if (ext != QString("JPG") && ext != QString("JPEG") && ext != QString("JPE"))
+            if (ext == QString("JPG") || ext == QString("JPEG") || ext == QString("JPE"))
                 image->setComment(d->imageComments);
         }
 
