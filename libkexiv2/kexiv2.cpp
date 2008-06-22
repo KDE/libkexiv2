@@ -121,7 +121,12 @@ bool KExiv2::isReadOnly(const QString& filePath)
     QFileInfo fi(filePath);
     QString ext = fi.suffix().toUpper();
 
-    if (ext != QString("JPG") && ext != QString("JPEG") && ext != QString("JPE"))
+    if (ext != QString("JPG") && ext != QString("JPEG") && ext != QString("JPE")
+#if (EXIV2_TEST_VERSION(0,17,91))
+        // With Exiv2 0.18, tiff write support have been implemented.
+        && ext != QString("TIF") && ext != QString("TIFF") && ext != QString("DNG")
+#endif
+       )
         return true;
 
     return false;
