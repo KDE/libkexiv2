@@ -74,8 +74,6 @@ QByteArray KExiv2::getIptc(bool addIrbHeader) const
             }
             else 
             {
-            // Since 0.18 release, API has changed.
-
 #if (EXIV2_TEST_VERSION(0,17,91))
                 c2 = Exiv2::IptcParser::encode(d->iptcMetadata);
 #else
@@ -105,8 +103,6 @@ bool KExiv2::setIptc(const QByteArray& data) const
     {
         if (!data.isEmpty())
         {
-            // Since 0.18 release, API has changed.
-
 #if (EXIV2_TEST_VERSION(0,17,91))
             Exiv2::IptcParser::decode(d->iptcMetadata, (const Exiv2::byte*)data.data(), data.size());
             return (!d->iptcMetadata.empty());
