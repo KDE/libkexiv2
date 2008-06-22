@@ -1201,7 +1201,13 @@ QByteArray KExiv2::getExifTagData(const char* exifTagName) const
         {
             QByteArray data((*it).size());
             if (data.size())
+            {
+#if (EXIV2_TEST_VERSION(0,17,91))
+                (*it).copy((Exiv2::byte*)data.data(), Exiv2::bigEndian);
+#else
                 (*it).copy((Exiv2::byte*)data.data(), exifData.byteOrder());
+#endif
+            }
             return data;
         }
     }
