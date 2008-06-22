@@ -686,7 +686,7 @@ bool KExiv2::setExifTagString(const char *exifTagName, const QString& value, boo
 
     try
     {
-        d->exifMetadata[exifTagName] = value.toAscii().constData();
+        d->exifMetadata[exifTagName] = std::string(value.toAscii().constData());
         return true;
     }
     catch( Exiv2::Error &e )

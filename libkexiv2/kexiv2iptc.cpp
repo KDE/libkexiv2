@@ -337,7 +337,7 @@ bool KExiv2::setIptcTagString(const char *iptcTagName, const QString& value, boo
 
     try
     {
-        d->iptcMetadata[iptcTagName] = value.toAscii().constData();
+        d->iptcMetadata[iptcTagName] = std::string(value.toAscii().constData());
         return true;
     }
     catch( Exiv2::Error &e )

@@ -45,7 +45,7 @@ bool KExiv2::setImageProgramId(const QString& program, const QString& version) c
         // Set program info into Exif.Image.ProcessingSoftware tag (only available with Exiv2 >= 0.14.0).
 
 #if (EXIV2_TEST_VERSION(0,14,0))
-        d->exifMetadata["Exif.Image.ProcessingSoftware"] = software.toAscii().constData();
+        d->exifMetadata["Exif.Image.ProcessingSoftware"] = std::string(software.toAscii().constData());
 #endif
 
         // See B.K.O #142564: Check if Exif.Image.Software already exist. If yes, do not touch this tag.
@@ -56,7 +56,7 @@ bool KExiv2::setImageProgramId(const QString& program, const QString& version) c
             Exiv2::ExifKey key("Exif.Image.Software");
             Exiv2::ExifData::iterator it = exifData.findKey(key);
             if (it == exifData.end())
-                d->exifMetadata["Exif.Image.Software"] = software.toAscii().constData();
+                d->exifMetadata["Exif.Image.Software"] = std::string(software.toAscii().constData());
         }
 
         // set program info into XMP tags.
@@ -79,8 +79,8 @@ bool KExiv2::setImageProgramId(const QString& program, const QString& version) c
 
         // Set program info into IPTC tags.
 
-        d->iptcMetadata["Iptc.Application2.Program"]        = program.toAscii().constData();
-        d->iptcMetadata["Iptc.Application2.ProgramVersion"] = version.toAscii().constData();
+        d->iptcMetadata["Iptc.Application2.Program"]        = std::string(program.toAscii().constData());
+        d->iptcMetadata["Iptc.Application2.ProgramVersion"] = std::string(version.toAscii().constData());
         return true;
     }
     catch( Exiv2::Error &e )
