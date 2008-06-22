@@ -141,11 +141,21 @@ QByteArray KExiv2::getExif() const
         {
 
             Exiv2::ExifData& exif = d->exifMetadata;
+
+#if (EXIV2_TEST_VERSION(0,17,91))
+            Exiv2::Blob blob;
+            Exiv2::ExifParser::encode(blob, Exiv2::bigEndian, exif);
+            QByteArray ba(blob.size());
+            if (ba.size())
+                memcpy(ba.data(), (const char*)&blob[0], blob.size());
+#else
             Exiv2::DataBuf c2 = exif.copy();
-            QByteArray data(c2.size_);
-            if (data.size())
-                memcpy(data.data(), c2.pData_, c2.size_);
-            return data;
+            QByteArray ba(c2.size_);
+            if (ba.size())
+                memcpy(ba.data(), c2.pData_, c2.size_);
+#endif
+
+            return ba;
         }
     }
     catch( Exiv2::Error &e )
@@ -178,7 +188,13 @@ QByteArray KExiv2::getIptc(bool addIrbHeader) const
 #endif
             }
             else
+            {
+#if (EXIV2_TEST_VERSION(0,17,91))
+                c2 = Exiv2::IptcParser::encode(d->iptcMetadata);
+#else
                 c2 = iptc.copy();
+#endif
+            }
 
             QByteArray data(c2.size_);
             if (data.size())
@@ -209,10 +225,15 @@ bool KExiv2::setExif(const QByteArray& data)
     {
         if (!data.isEmpty())
         {
+#if (EXIV2_TEST_VERSION(0,17,91))
+            Exiv2::ExifParser::decode(d->exifMetadata, (const Exiv2::byte*)data.data(), data.size());
+            return (!d->exifMetadata.empty());
+#else
             if (d->exifMetadata.load((const Exiv2::byte*)data.data(), data.size()) != 0)
                 return false;
             else
                 return true;
+#endif
         }
     }
     catch( Exiv2::Error &e )
@@ -232,10 +253,15 @@ bool KExiv2::setIptc(const QByteArray& data)
     {
         if (!data.isEmpty())
         {
+#if (EXIV2_TEST_VERSION(0,17,91))
+            Exiv2::IptcParser::decode(d->iptcMetadata, (const Exiv2::byte*)data.data(), data.size());
+            return (!d->iptcMetadata.empty());
+#else
             if (d->iptcMetadata.load((const Exiv2::byte*)data.data(), data.size()) != 0)
                 return false;
             else
                 return true;
+#endif
         }
     }
     catch( Exiv2::Error &e )
@@ -491,7 +517,12 @@ QImage KExiv2::getExifThumbnail(bool fixOrientation) const
 
     try
     {
+#if (EXIV2_TEST_VERSION(0,17,91))
+        Exiv2::ExifThumbC thumb(d->exifMetadata);
+        Exiv2::DataBuf const c1 = thumb.copy();
+#else
         Exiv2::DataBuf const c1(d->exifMetadata.copyThumbnail());
+#endif
         thumbnail.loadFromData(c1.pData_, c1.size_);
 
         if (!thumbnail.isNull())
@@ -571,7 +602,12 @@ bool KExiv2::setExifThumbnail(const QImage& thumb, bool setProgramName)
         thumb.save(thumbFile.name(), "JPEG");
 
         const std::string &fileName( (const char*)(QFile::encodeName(thumbFile.name())) );
+#if (EXIV2_TEST_VERSION(0,17,91))
+        Exiv2::ExifThumb thumb(d->exifMetadata);
+        thumb.setJpegThumbnail( fileName );
+#else
         d->exifMetadata.setJpegThumbnail( fileName );
+#endif
         return true;
     }
     catch( Exiv2::Error &e )

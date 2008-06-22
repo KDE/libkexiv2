@@ -47,10 +47,15 @@ bool KExiv2Priv::setExif(Exiv2::DataBuf const data)
     {
         if (data.size_ != 0)
         {
+#if (EXIV2_TEST_VERSION(0,17,91))
+            Exiv2::ExifParser::decode(exifMetadata, data.pData_, data.size_);
+            return (!exifMetadata.empty());
+#else
             if (exifMetadata.load(data.pData_, data.size_) != 0)
                 return false;
             else
                 return true;
+#endif
         }
     }
     catch( Exiv2::Error &e )
@@ -70,10 +75,15 @@ bool KExiv2Priv::setIptc(Exiv2::DataBuf const data)
     {
         if (data.size_ != 0)
         {
+#if (EXIV2_TEST_VERSION(0,17,91))
+            Exiv2::IptcParser::decode(iptcMetadata, data.pData_, data.size_);
+            return (!iptcMetadata.empty());
+#else
             if (iptcMetadata.load(data.pData_, data.size_) != 0)
                 return false;
             else
                 return true;
+#endif
         }
     }
     catch( Exiv2::Error &e )
