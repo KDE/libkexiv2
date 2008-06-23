@@ -58,10 +58,10 @@ KExiv2::~KExiv2()
 {
     delete d;
 
+#ifdef _XMP_SUPPORT_
     // Fix memory leak if Exiv2 support XMP.
-    #ifdef _XMP_SUPPORT_
-        Exiv2::XmpParser::terminate();
-    #endif // _XMP_SUPPORT_
+    Exiv2::XmpParser::terminate();
+#endif // _XMP_SUPPORT_
 }
 
 QString KExiv2::version()
@@ -335,29 +335,33 @@ bool KExiv2::save(const QString& filePath)
 
     try
     {
-        QString ext = finfo.extension(false).upper();
+        Exiv2::AccessMode mode;
         Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
                                       (QFile::encodeName(filePath)));
 
         // Image Comments ---------------------------------
 
-        if (!d->imageComments.empty())
+        mode = image->checkMode(Exiv2::mdComment);
+        if (!d->imageComments.empty() && 
+            (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite))
         {
-            // Only JPEG file can host comments
-            if (ext == QString("JPG") || ext == QString("JPEG") || ext == QString("JPE"))
-                image->setComment(d->imageComments);
+            image->setComment(d->imageComments);
         }
 
         // Exif metadata ----------------------------------
 
-        if (!d->exifMetadata.empty())
+        mode = image->checkMode(Exiv2::mdExif);
+        if (!d->exifMetadata.empty() && 
+            (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite))
         {
             image->setExifData(d->exifMetadata);
         }
 
         // Iptc metadata ----------------------------------
 
-        if (!d->iptcMetadata.empty())
+        mode = image->checkMode(Exiv2::mdIptc);
+        if (!d->iptcMetadata.empty() && 
+            (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite))
         {
             image->setIptcData(d->iptcMetadata);
         }
@@ -381,18 +385,31 @@ bool KExiv2::applyChanges()
 
 bool KExiv2::isReadOnly(const QString& filePath)
 {
-    QFileInfo fi(filePath);
-    QString ext = fi.extension(false).upper();
+    try
+    {
+        Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
+                                      (QFile::encodeName(filePath)));
 
-    if (ext != QString("JPG") && ext != QString("JPEG") && ext != QString("JPE")
-#if (EXIV2_TEST_VERSION(0,17,91))
-        // With Exiv2 0.18, tiff write support have been implemented.
-        && ext != QString("TIF") && ext != QString("TIFF") && ext != QString("DNG")
-#endif
-       )
-        return true;
+        Exiv2::AccessMode mode;
+        mode = image->checkMode(Exiv2::mdComment);
+        if (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite) 
+            return false;
 
-    return false;
+        mode = image->checkMode(Exiv2::mdExif);
+        if (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite) 
+            return false;
+
+        mode = image->checkMode(Exiv2::mdIptc);
+        if (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite) 
+            return false;
+    }
+    catch( Exiv2::Error &e )
+    {
+        std::string s(e.what());
+        qDebug("%s (Error #%i: %s)", "Cannot check metadata access mode using Exiv2 ", e.code(), s.c_str());
+    }
+
+    return true;
 }
 
 bool KExiv2::setImageProgramId(const QString& program, const QString& version)
