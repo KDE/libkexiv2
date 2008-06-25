@@ -39,6 +39,10 @@ KExiv2Priv::KExiv2Priv()
 
 KExiv2Priv::~KExiv2Priv()
 {
+#ifdef _XMP_SUPPORT_
+    // Fix memory leak if Exiv2 support XMP.
+    Exiv2::XmpParser::terminate();
+#endif // _XMP_SUPPORT_
 }
 
 bool KExiv2Priv::setExif(Exiv2::DataBuf const data)
