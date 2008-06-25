@@ -64,11 +64,6 @@ KExiv2::KExiv2(const QString& filePath)
 KExiv2::~KExiv2()
 {
     delete d;
-
-    // Fix memory leak if Exiv2 support XMP.
-#ifdef _XMP_SUPPORT_
-    Exiv2::XmpParser::terminate();
-#endif // _XMP_SUPPORT_
 }
 
 KExiv2& KExiv2::operator=(const KExiv2& metadata)
