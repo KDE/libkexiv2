@@ -160,10 +160,11 @@ bool KExiv2::load(const QString& filePath) const
 
     try
     {
-        d->filePath = filePath;
 
         Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
                                       (QFile::encodeName(filePath)));
+
+        d->filePath = filePath;
         image->readMetadata();
 
         // Image comments ---------------------------------
