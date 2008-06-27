@@ -41,8 +41,7 @@ bool KExiv2::canWriteExif(const QString& filePath)
         Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
                                       (QFile::encodeName(filePath)));
 
-        Exiv2::AccessMode mode;
-        mode = image->checkMode(Exiv2::mdExif);
+        Exiv2::AccessMode mode = image->checkMode(Exiv2::mdExif);
         return (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite);
     }
     catch( Exiv2::Error &e )
