@@ -281,8 +281,10 @@ bool KExiv2::load(const QString& filePath)
 
     try
     {
+
         Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
                                       (QFile::encodeName(filePath)));
+        d->filePath = filePath;
         image->readMetadata();
 
         // Image comments ---------------------------------
@@ -296,8 +298,6 @@ bool KExiv2::load(const QString& filePath)
         // Iptc metadata ----------------------------------
 
         d->iptcMetadata = image->iptcData();
-
-        d->filePath = filePath;
 
         return true;
     }
