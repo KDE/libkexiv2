@@ -160,6 +160,8 @@ bool KExiv2::load(const QString& filePath) const
 
     try
     {
+        d->filePath = filePath;
+
         Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
                                       (QFile::encodeName(filePath)));
         image->readMetadata();
@@ -183,8 +185,6 @@ bool KExiv2::load(const QString& filePath) const
         d->xmpMetadata = image->xmpData();
 
 #endif // _XMP_SUPPORT_
-
-        d->filePath = filePath;
 
         return true;
     }
@@ -280,8 +280,8 @@ bool KExiv2::save(const QString& filePath) const
 bool KExiv2::applyChanges() const
 {
     if (d->filePath.isEmpty())
-	return false;
-	
+        return false;
+
     return save(d->filePath);
 }
 
