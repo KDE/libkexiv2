@@ -238,6 +238,10 @@ public:
     //-- COMMENTS manipulation methods --------------------------------
     //-----------------------------------------------------------------
 
+    /** Return 'true' if Comments can be written in file.
+     */
+    static bool canWriteComment(const QString& filePath);
+
     /** Return 'true' if metadata container in memory as Comments.
      */
     bool hasComments() const;
@@ -272,6 +276,10 @@ public:
     //-----------------------------------------------------------------
     //-- EXIF manipulation methods ------------------------------------
     //-----------------------------------------------------------------
+
+    /** Return 'true' if Exif can be written in file.
+     */
+    static bool canWriteExif(const QString& filePath);
 
     /** Return 'true' if metadata container in memory as Exif.
      */
@@ -419,6 +427,10 @@ public:
     //-- IPTC manipulation methods --------------------------------
     //-------------------------------------------------------------
 
+    /** Return 'true' if Iptc can be written in file.
+     */
+    static bool canWriteIptc(const QString& filePath);
+
     /** Return 'true' if metadata container in memory as Iptc.
      */
     bool hasIptc() const;
@@ -543,6 +555,10 @@ public:
     //------------------------------------------------------------
     //-- XMP manipulation methods --------------------------------
     //------------------------------------------------------------
+
+    /** Return 'true' if Xmp can be written in file.
+     */
+    static bool canWriteXmp(const QString& filePath);
 
     /** Return 'true' if metadata container in memory as Xmp.
      */

@@ -34,6 +34,33 @@
 namespace KExiv2Iface
 {
 
+bool KExiv2::canWriteXmp(const QString& filePath)
+{
+#ifdef _XMP_SUPPORT_
+    try
+    {
+        Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
+                                      (QFile::encodeName(filePath)));
+
+        Exiv2::AccessMode mode;
+        mode = image->checkMode(Exiv2::mdXmp);
+        return (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite);
+    }
+    catch( Exiv2::Error &e )
+    {
+        std::string s(e.what());
+        qDebug("%s (Error #%i: %s)", "Cannot check Xmp access mode using Exiv2 ", e.code(), s.c_str());
+    }
+
+    return false;
+
+#else
+
+    return false;
+
+#endif // _XMP_SUPPORT_
+}
+
 bool KExiv2::hasXmp() const
 {
 #ifdef _XMP_SUPPORT_

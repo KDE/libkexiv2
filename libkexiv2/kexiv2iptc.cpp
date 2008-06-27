@@ -34,6 +34,26 @@
 namespace KExiv2Iface
 {
 
+bool KExiv2::canWriteIptc(const QString& filePath)
+{
+    try
+    {
+        Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
+                                      (QFile::encodeName(filePath)));
+
+        Exiv2::AccessMode mode;
+        mode = image->checkMode(Exiv2::mdIptc);
+        return (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite);
+    }
+    catch( Exiv2::Error &e )
+    {
+        std::string s(e.what());
+        qDebug("%s (Error #%i: %s)", "Cannot check Iptc access mode using Exiv2 ", e.code(), s.c_str());
+    }
+
+    return false;
+}
+
 bool KExiv2::hasIptc() const
 {
     return !d->iptcMetadata.empty();

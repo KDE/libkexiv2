@@ -113,36 +113,19 @@ QString KExiv2::version()
 
 bool KExiv2::isReadOnly(const QString& filePath)
 {
-    try
-    {
-        Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
-                                      (QFile::encodeName(filePath)));
+    if (!canWriteComment(filePath))
+        return false;
 
-        Exiv2::AccessMode mode;
-        mode = image->checkMode(Exiv2::mdComment);
-        if (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite) 
-            return false;
+    if (!canWriteExif(filePath))
+        return false;
 
-        mode = image->checkMode(Exiv2::mdExif);
-        if (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite) 
-            return false;
-
-        mode = image->checkMode(Exiv2::mdIptc);
-        if (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite) 
-            return false;
+    if (!canWriteIptc(filePath))
+        return false;
 
 #ifdef _XMP_SUPPORT_
-        mode = image->checkMode(Exiv2::mdXmp);
-        if (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite) 
-            return false;
+    if (!canWriteXmp(filePath))
+        return false;
 #endif // _XMP_SUPPORT_
-
-    }
-    catch( Exiv2::Error &e )
-    {
-        std::string s(e.what());
-        qDebug("%s (Error #%i: %s)", "Cannot check metadata access mode using Exiv2 ", e.code(), s.c_str());
-    }
 
     return true;
 }
