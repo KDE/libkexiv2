@@ -279,7 +279,7 @@ bool KExiv2::save(const QString& filePath) const
 
 bool KExiv2::applyChanges() const
 {
-    if (d-filePath.isEmpty())
+    if (d->filePath.isEmpty())
 	return false;
 	
     return save(d->filePath);
