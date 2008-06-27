@@ -221,12 +221,9 @@ bool KExiv2::save(const QString& filePath) const
         Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
                                       (QFile::encodeName(filePath)));
 
-        // Special case with TIFF format: like all tiff file structure is based on Exif, we
-        // need to read all metadata from original file before to update all. Exiv2 will merge 
-        // old and new data.
-        QString ext = finfo.suffix().toUpper();
-        if (ext == QString("TIF") || ext == QString("TIFF") || ext == QString("DNG"))
-            image->readMetadata();
+        // We need to load target file metadata to merge with new one. It's mandatory with TIFF format: 
+        // like all tiff file structure is based on Exif.
+        image->readMetadata();
 
         // Image Comments ---------------------------------
 
