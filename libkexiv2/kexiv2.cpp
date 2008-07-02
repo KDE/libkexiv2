@@ -224,7 +224,42 @@ bool KExiv2::save(const QString& filePath) const
         if (!d->exifMetadata.empty() && 
             (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite))
         {
-            image->setExifData(d->exifMetadata);
+            if (image->mimeType() == "image/tiff")
+            {
+                // With tiff image we cannot overwrite whole Exif data as well, because 
+                // image data are stored in Exif container. We need to take a care about
+                // to not lost image data.
+                Exiv2::ExifData exif = image->exifData();
+                QStringList untouchedTags;
+                untouchedTags << "Exif.Image.ImageWidth";
+                untouchedTags << "Exif.Image.ImageLength";
+                untouchedTags << "Exif.Image.BitsPerSample";
+                untouchedTags << "Exif.Image.Compression";
+                untouchedTags << "Exif.Image.PhotometricInterpretation";
+                untouchedTags << "Exif.Image.FillOrder";
+                untouchedTags << "Exif.Image.SamplesPerPixel";
+                untouchedTags << "Exif.Image.StripOffsets";
+                untouchedTags << "Exif.Image.RowsPerStrip";
+                untouchedTags << "Exif.Image.StripByteCounts";
+                untouchedTags << "Exif.Image.XResolution";
+                untouchedTags << "Exif.Image.YResolution";
+                untouchedTags << "Exif.Image.PlanarConfiguration";
+                untouchedTags << "Exif.Image.ResolutionUnit";
+
+                for (Exiv2::ExifData::iterator it = d->exifMetadata.begin(); it != d->exifMetadata.end(); ++it)
+                {
+                    if (!untouchedTags.contains(it->key().c_str()))
+                    {
+                        exif[it->key().c_str()] = d->exifMetadata[it->key().c_str()];
+                    }
+                }
+
+                image->setExifData(exif);
+            }
+            else
+            {
+                image->setExifData(d->exifMetadata);
+            }
         }
 
         // Iptc metadata ----------------------------------
