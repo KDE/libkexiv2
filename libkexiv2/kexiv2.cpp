@@ -422,31 +422,73 @@ bool KExiv2::applyChanges()
 
 bool KExiv2::isReadOnly(const QString& filePath)
 {
+    if (!canWriteComment(filePath))
+        return false;
+
+    if (!canWriteExif(filePath))
+        return false;
+
+    if (!canWriteIptc(filePath))
+        return false;
+
+    return true;
+}
+
+bool KExiv2::canWriteComment(const QString& filePath)
+{
     try
     {
         Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
                                       (QFile::encodeName(filePath)));
 
-        Exiv2::AccessMode mode;
-        mode = image->checkMode(Exiv2::mdComment);
-        if (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite) 
-            return false;
-
-        mode = image->checkMode(Exiv2::mdExif);
-        if (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite) 
-            return false;
-
-        mode = image->checkMode(Exiv2::mdIptc);
-        if (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite) 
-            return false;
+        Exiv2::AccessMode mode = image->checkMode(Exiv2::mdComment);
+        return (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite);
     }
     catch( Exiv2::Error &e )
     {
         std::string s(e.what());
-        qDebug("%s (Error #%i: %s)", "Cannot check metadata access mode using Exiv2 ", e.code(), s.c_str());
+        qDebug("%s (Error #%i: %s)", "Cannot check Comment access mode using Exiv2 ", e.code(), s.c_str());
     }
 
-    return true;
+    return false;
+}
+
+bool KExiv2::canWriteExif(const QString& filePath)
+{
+    try
+    {
+        Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
+                                      (QFile::encodeName(filePath)));
+
+        Exiv2::AccessMode mode = image->checkMode(Exiv2::mdExif);
+        return (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite);
+    }
+    catch( Exiv2::Error &e )
+    {
+        std::string s(e.what());
+        qDebug("%s (Error #%i: %s)", "Cannot check Exif access mode using Exiv2 ", e.code(), s.c_str());
+    }
+
+    return false;
+}
+
+bool KExiv2::canWriteIptc(const QString& filePath)
+{
+    try
+    {
+        Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
+                                      (QFile::encodeName(filePath)));
+
+        Exiv2::AccessMode mode = image->checkMode(Exiv2::mdIptc);
+        return (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite);
+    }
+    catch( Exiv2::Error &e )
+    {
+        std::string s(e.what());
+        qDebug("%s (Error #%i: %s)", "Cannot check Iptc access mode using Exiv2 ", e.code(), s.c_str());
+    }
+
+    return false;
 }
 
 bool KExiv2::setImageProgramId(const QString& program, const QString& version)
