@@ -2,6 +2,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
 
 INCLUDE_DIRECTORIES(${EXIV2_INCLUDE_DIR})
 
+ADD_DEFINITIONS(${EXIV2_DEFINITIONS})
+
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/version.h)
 
 # This was used to enable catching of exceptions thrown by libexiv2.
