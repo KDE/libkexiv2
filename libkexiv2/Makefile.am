@@ -1,7 +1,7 @@
 METASOURCES = AUTO
 KDE_CXXFLAGS = $(USE_EXCEPTIONS) 
 
-INCLUDES= $(all_includes)
+INCLUDES= $(EXIV2_CFLAGS) $(all_includes)
 
 lib_LTLIBRARIES = libkexiv2.la
 
