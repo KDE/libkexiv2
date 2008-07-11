@@ -59,6 +59,15 @@ KExiv2::~KExiv2()
     delete d;
 }
 
+bool KExiv2::supportTiffWritting()
+{
+#if (EXIV2_TEST_VERSION(0,17,91))
+    return true;
+#else
+    return false;
+#endif
+}
+
 QString KExiv2::version()
 {
   return QString( kexiv2_version );

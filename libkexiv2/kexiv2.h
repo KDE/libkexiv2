@@ -94,6 +94,10 @@ public:
      */
     virtual ~KExiv2();
 
+    /** Return true if library can writte metadata to TIFF/DNG files
+     */
+    static bool supportTiffWritting();
+
     /** Return a string version of Exiv2 release in format "major.minor.patch" 
      */
     static QString Exiv2Version();
