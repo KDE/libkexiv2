@@ -92,6 +92,15 @@ bool KExiv2::supportXmp()
 #endif // _XMP_SUPPORT_
 }
 
+bool KExiv2::supportTiffWritting()
+{
+#if (EXIV2_TEST_VERSION(0,17,91))
+    return true;
+#else
+    return false;
+#endif
+}
+
 QString KExiv2::Exiv2Version()
 {
     // Since 0.14.0 release, we can extract run-time version of Exiv2.
