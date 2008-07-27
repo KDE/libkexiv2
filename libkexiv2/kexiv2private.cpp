@@ -37,6 +37,9 @@ KExiv2Priv::KExiv2Priv()
     imageComments = std::string();
 
 #ifdef _XMP_SUPPORT_
+    // Force to initialize XMP tool kit at this place.
+    Exiv2::XmpParser::initialize();
+    // Register Microsoft XMP namespace.    
     Exiv2::XmpProperties::registerNs("http://www.microsoft.com/Photo/", "MicrosoftPhoto");
 #endif
 }
