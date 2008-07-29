@@ -37,11 +37,18 @@ KExiv2Priv::KExiv2Priv()
     imageComments = std::string();
 
 #ifdef _XMP_SUPPORT_
+
+#if (EXIV2_TEST_VERSION(0,17,91))
+    // Nothing todo here. Microsoft namespace have been already registered in Exiv2 core.
+#else
+    // With 0.16 <= Exiv2 < 0.18
     // Force to initialize XMP tool kit at this place.
     Exiv2::XmpParser::initialize();
-    // Register Microsoft XMP namespace.    
-    Exiv2::XmpProperties::registerNs("http://www.microsoft.com/Photo/", "MicrosoftPhoto");
-#endif
+    // Register Microsoft XMP namespace.
+    Exiv2::XmpProperties::registerNs("http://ns.microsoft.com/Photo/1.0", "MicrosoftPhoto");
+#endif // (EXIV2_TEST_VERSION(0,17,91))
+
+#endif // _XMP_SUPPORT_
 }
 
 KExiv2Priv::~KExiv2Priv()
