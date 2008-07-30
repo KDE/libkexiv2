@@ -15,7 +15,7 @@ PROJECT(libkexiv2)
 # 0.1.7 => 4.0.1
 # 0.1.8 => 5.0.0
 # ... here we can have new releases from KDE3 branch
-# 0.2.0 => 6.0.0
+# 0.2.0 => 6.0.0     (released with KDE 4.1.0)
 # 0.3.0 => 7.0.0
 
 # Library API version
