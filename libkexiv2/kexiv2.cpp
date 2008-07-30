@@ -83,6 +83,15 @@ KExiv2& KExiv2::operator=(const KExiv2& metadata)
 
 //-- Statics methods ----------------------------------------------
 
+bool KExiv2::initializeExiv2()
+{
+#ifdef _XMP_SUPPORT_
+    return (Exiv2::XmpParser::initialize());
+#endif // _XMP_SUPPORT_
+
+    return true;
+}
+
 bool KExiv2::supportXmp()
 {
 #ifdef _XMP_SUPPORT_

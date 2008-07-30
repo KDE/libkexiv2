@@ -118,6 +118,13 @@ public:
     //-- STATICS methods ----------------------------------------------
     //-----------------------------------------------------------------
 
+    /** Return true if Exiv2 library initialization is done properlly.
+        This method must be call before to use multithreading with libkexiv2.
+        It initialize several non re-entrancy code from Adobe XMP SDK 
+        See B.K.O #166424 for details.
+     */
+    static bool initializeExiv2();
+
     /** Return true if library can handle Xmp metadata
      */
     static bool supportXmp();
