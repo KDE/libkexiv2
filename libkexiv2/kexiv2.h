@@ -125,6 +125,13 @@ public:
      */
     static bool initializeExiv2();
 
+    /** Return true if Exiv2 library memory allocations are cleaned properlly.
+        This method must be call after to use multithreading with libkexiv2.
+        It cleanup memory used by Adobe XMP SDK 
+        See B.K.O #166424 for details.
+     */
+    static bool cleanupExiv2();
+
     /** Return true if library can handle Xmp metadata
      */
     static bool supportXmp();

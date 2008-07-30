@@ -92,6 +92,16 @@ bool KExiv2::initializeExiv2()
     return true;
 }
 
+bool KExiv2::cleanupExiv2()
+{
+    // Fix memory leak if Exiv2 support XMP.
+#ifdef _XMP_SUPPORT_
+    Exiv2::XmpParser::terminate();
+#endif // _XMP_SUPPORT_
+
+    return true;
+}
+
 bool KExiv2::supportXmp()
 {
 #ifdef _XMP_SUPPORT_
