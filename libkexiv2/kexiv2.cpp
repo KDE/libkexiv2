@@ -92,13 +92,38 @@ bool KExiv2::supportXmp()
 #endif // _XMP_SUPPORT_
 }
 
-bool KExiv2::supportTiffWritting()
+bool KExiv2::supportMetadataWritting(const QString& typeMime)
 {
+    if (typeMime == QString("image/jpeg"))
+    {
+        return true;
+    }
+    else if (typeMime == QString("image/tiff"))
+    {
 #if (EXIV2_TEST_VERSION(0,17,91))
-    return true;
+        return true;
 #else
-    return false;
+        return false;
 #endif
+    }
+    else if (typeMime == QString("image/png"))
+    {
+#if (EXIV2_TEST_VERSION(0,17,91))
+        return true;
+#else
+        return false;
+#endif
+    }
+    else if (typeMime == QString("image/jp2"))
+    {
+#if (EXIV2_TEST_VERSION(0,17,91))
+        return true;
+#else
+        return false;
+#endif
+    }
+
+    return false;
 }
 
 QString KExiv2::Exiv2Version()
