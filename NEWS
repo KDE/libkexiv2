@@ -6,6 +6,7 @@
 - Fix broken compilation with Exiv2 0.18.
 - Support TIFF metadata writting mode (require Exiv2 >= 0.18).
 - Added new methods canWriteComment(), canWriteExif(), canWriteIptc().
+- Added new method supportMetadataWritting().
 
 Bugs fixed from B.K.O (http://bugs.kde.org):
 001 ==> 158989: digikam won't start: MakerTagInfo registry full.

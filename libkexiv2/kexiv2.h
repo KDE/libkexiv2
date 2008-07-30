@@ -94,9 +94,9 @@ public:
      */
     virtual ~KExiv2();
 
-    /** Return true if library can writte metadata to TIFF/DNG files
+    /** Return true if library can writte metadata to typeMime file format.
      */
-    static bool supportTiffWritting();
+    static bool supportMetadataWritting(const QString& typeMime);
 
     /** Return a string version of Exiv2 release in format "major.minor.patch" 
      */
