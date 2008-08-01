@@ -252,6 +252,13 @@ bool KExiv2::save(const QString& filePath) const
         return false;
     }
 
+    QString rawTiffBased("3fr arw cr2 dcr erf k25 kdc mos nef orf pef raw sr2 srf"); 
+    if (!rawTiffBased.contains(finfo.suffix().toUpper()))
+    {
+        qDebug("'%s' is TIFF based RAW file not yet supported. Metadata not saved.", dinfo.filePath().toAscii().constData());
+        return false;
+    }
+
     try
     {
         Exiv2::AccessMode mode;
@@ -279,11 +286,12 @@ bool KExiv2::save(const QString& filePath) const
         {
             if (image->mimeType() == "image/tiff")
             {
+                Exiv2::ExifData exif = image->exifData();
+                QStringList untouchedTags;
+
                 // With tiff image we cannot overwrite whole Exif data as well, because 
                 // image data are stored in Exif container. We need to take a care about
                 // to not lost image data.
-                Exiv2::ExifData exif = image->exifData();
-                QStringList untouchedTags;
                 untouchedTags << "Exif.Image.ImageWidth";
                 untouchedTags << "Exif.Image.ImageLength";
                 untouchedTags << "Exif.Image.BitsPerSample";
