@@ -363,7 +363,7 @@ bool KExiv2::save(const QString& filePath)
     }
 
     QString rawTiffBased("3fr arw cr2 dcr erf k25 kdc mos nef orf pef raw sr2 srf"); 
-    if (!rawTiffBased.contains(finfo.extension(false).upper()))
+    if (rawTiffBased.contains(finfo.extension(false).upper()))
     {
         qDebug("'%s' is TIFF based RAW file not yet supported. Metadata not saved.", dinfo.filePath().ascii());
         return false;
