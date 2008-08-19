@@ -252,8 +252,9 @@ bool KExiv2::save(const QString& filePath) const
         return false;
     }
 
-    QString rawTiffBased("3fr arw cr2 dcr erf k25 kdc mos nef orf pef raw sr2 srf"); 
-    if (rawTiffBased.contains(finfo.suffix().toUpper()))
+    // TIFF/EP Raw file based supported by Exiv2 0.18 are : DNG, NEF, PEF.
+    QString rawTiffBasedNotSupported("3fr arw cr2 dcr erf k25 kdc mos orf raw sr2 srf");
+    if (rawTiffBasedNotSupported.contains(finfo.suffix().toUpper()))
     {
         qDebug("'%s' is TIFF based RAW file not yet supported. Metadata not saved.", dinfo.filePath().toAscii().constData());
         return false;
