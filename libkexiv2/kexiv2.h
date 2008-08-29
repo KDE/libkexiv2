@@ -164,6 +164,11 @@ public:
 
     //-- File access methods ----------------------------------------------
 
+    /** Load all metadata (EXIF, IPTC and JFIF Comments) from a byte array. 
+        Return true if metadata have been loaded successfully from image data.
+     */
+    bool load(const QByteArray& imgData);
+
     /** Load all metadata (EXIF, IPTC and JFIF Comments) from a picture (JPEG, RAW, TIFF, PNG, 
         DNG, etc...). Return true if metadata have been loaded successfully from file. 
      */

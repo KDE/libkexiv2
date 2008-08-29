@@ -304,6 +304,40 @@ bool KExiv2::setIptc(const QByteArray& data)
     return false;
 }
 
+bool KExiv2::load(const QByteArray& imgData)
+{
+    if (imgData.isEmpty())
+        return false;
+
+    try
+    {
+
+        Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((Exiv2::byte*)imgData.data(), imgData.size());
+        d->filePath = QString;
+        image->readMetadata();
+
+        // Image comments ---------------------------------
+
+        d->imageComments = image->comment();
+
+        // Exif metadata ----------------------------------
+
+        d->exifMetadata = image->exifData();
+
+        // Iptc metadata ----------------------------------
+
+        d->iptcMetadata = image->iptcData();
+
+        return true;
+    }
+    catch( Exiv2::Error &e )
+    {
+        d->printExiv2ExceptionError("Cannot load metadata using Exiv2 ", e);
+    }
+
+    return false;
+}
+
 bool KExiv2::load(const QString& filePath)
 {
     QFileInfo finfo(filePath);
