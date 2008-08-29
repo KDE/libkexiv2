@@ -156,6 +156,11 @@ public:
     //-- GENERAL methods ----------------------------------------------
     //-----------------------------------------------------------------
 
+    /** Load all metadata (Exif, Iptc, Xmp, and JFIF Comments) from a byte array. 
+        Return true if metadata have been loaded successfully from image data.
+     */
+    bool load(const QByteArray& imgData) const;
+
     /** Load all metadata (Exif, Iptc, Xmp, and JFIF Comments) from a picture (JPEG, RAW, TIFF, PNG,
         DNG, etc...). Return true if metadata have been loaded successfully from file.
      */

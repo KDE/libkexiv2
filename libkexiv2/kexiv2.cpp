@@ -185,6 +185,48 @@ bool KExiv2::isReadOnly(const QString& filePath)
 
 //-- General methods ----------------------------------------------
 
+bool KExiv2::load(const QByteArray& imgData) const
+{
+    if (imgData.isEmpty())
+        return false;
+
+    try
+    {
+        Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((Exiv2::byte*)imgData.data(), imgData.size());
+
+        d->filePath = QString();
+        image->readMetadata();
+
+        // Image comments ---------------------------------
+
+        d->imageComments = image->comment();
+
+        // Exif metadata ----------------------------------
+
+        d->exifMetadata = image->exifData();
+
+        // Iptc metadata ----------------------------------
+
+        d->iptcMetadata = image->iptcData();
+
+#ifdef _XMP_SUPPORT_
+
+        // Xmp metadata -----------------------------------
+
+        d->xmpMetadata = image->xmpData();
+
+#endif // _XMP_SUPPORT_
+
+        return true;
+    }
+    catch( Exiv2::Error &e )
+    {
+        d->printExiv2ExceptionError("Cannot load metadata using Exiv2 ", e);
+    }
+
+    return false;
+}
+
 bool KExiv2::load(const QString& filePath) const
 {
     QFileInfo finfo(filePath);
@@ -196,7 +238,6 @@ bool KExiv2::load(const QString& filePath) const
 
     try
     {
-
         Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
                                       (QFile::encodeName(filePath)));
 
