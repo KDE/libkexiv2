@@ -6,6 +6,7 @@
                all multithreaded operations with KExiv2.
                * initializeExiv2().        
                * cleanupExiv2().       
+               Added a new method to load image data from a byte array.
 
 Bugs fixed from B.K.O (http://bugs.kde.org):
 001 ==> 166424: Crash when editing Caption with Digikam4 SVN.
