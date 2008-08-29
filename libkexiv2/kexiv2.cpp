@@ -313,7 +313,7 @@ bool KExiv2::load(const QByteArray& imgData)
     {
 
         Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((Exiv2::byte*)imgData.data(), imgData.size());
-        d->filePath = QString;
+        d->filePath = QString();
         image->readMetadata();
 
         // Image comments ---------------------------------
