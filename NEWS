@@ -1,9 +1,23 @@
-0.2.0
+0.3.0 - 
+------------------------------------------------------------------------
+
+- API changed: Added 2 new static methods to init and clear non re-entrant Adobe XMP 
+               SDK code from Exiv2 core. This code must be called before and after 
+               all multithreaded operations with KExiv2.
+               * initializeExiv2().        
+               * cleanupExiv2().       
+               Added a new method to load image data from a byte array.
+
+Bugs fixed from B.K.O (http://bugs.kde.org):
+001 ==> 166424: Crash when editing Caption with Digikam4 SVN.
+
+0.2.0 - Released with KDE 4.1.0
 ------------------------------------------------------------------------
 Port to CMake/KDE4/QT4
 Support of XMP metadata (require Exiv2 0.16)
 Split methods to separate files to provide a more readable implementation.
 New method to fix orientation of a QImage accordingly with Exif orientation tag.
+Moved from extragear/libs to kdegraphics/libs
 
 Bugs fixed from B.K.O (http://bugs.kde.org):
 001 ==> 146864: Lesser XMP support in digiKam.

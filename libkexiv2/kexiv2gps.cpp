@@ -185,7 +185,7 @@ bool KExiv2::getGPSAltitude(double *altitude) const
             Exiv2::ExifKey exifKey3("Exif.GPSInfo.GPSAltitude");
             Exiv2::ExifData exifData(d->exifMetadata);
             Exiv2::ExifData::iterator it = exifData.findKey(exifKey3);
-            if (it != exifData.end())
+            if (it != exifData.end() && (*it).count())
             {
                 num = (double)((*it).toRational(0).first);
                 den = (double)((*it).toRational(0).second);
@@ -226,7 +226,7 @@ QString KExiv2::getGPSLatitudeString() const
         Exiv2::ExifKey exifKey("Exif.GPSInfo.GPSLatitude");
         Exiv2::ExifData exifData(d->exifMetadata);
         Exiv2::ExifData::iterator it = exifData.findKey(exifKey);
-        if (it != exifData.end())
+        if (it != exifData.end() && (*it).count() == 3)
         {
             return convertToGPSCoordinateString((*it).toRational(0).first, (*it).toRational(0).second,
                                                 (*it).toRational(1).first, (*it).toRational(1).second,
@@ -258,7 +258,7 @@ QString KExiv2::getGPSLongitudeString() const
         Exiv2::ExifKey exifKey("Exif.GPSInfo.GPSLongitude");
         Exiv2::ExifData exifData(d->exifMetadata);
         Exiv2::ExifData::iterator it = exifData.findKey(exifKey);
-        if (it != exifData.end())
+        if (it != exifData.end() && (*it).count() == 3)
         {
             return convertToGPSCoordinateString((*it).toRational(0).first, (*it).toRational(0).second,
                                                 (*it).toRational(1).first, (*it).toRational(1).second,
