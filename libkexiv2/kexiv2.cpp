@@ -9,10 +9,6 @@
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
- * NOTE: Do not use kdDebug() in this implementation because 
- *       it will be multithreaded. Use qDebug() instead. 
- *       See B.K.O #133026 for details.
- *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -232,7 +228,7 @@ bool KExiv2::load(const QString& filePath) const
     QFileInfo finfo(filePath);
     if (filePath.isEmpty() || !finfo.isReadable())
     {
-        qDebug("File '%s' is not readable.", finfo.fileName().toAscii().constData());
+        kDebug(51003) << "File '" << finfo.fileName().toAscii().constData() << "' is not readable." << endl;
         return false;
     }
 
@@ -284,12 +280,12 @@ bool KExiv2::save(const QString& filePath) const
     QFileInfo dinfo(finfo.path());
     if (!finfo.isWritable())
     {
-        qDebug("File '%s' is read-only. Metadata not saved.", finfo.fileName().toAscii().constData());
+        kDebug(51003) << "File '" << finfo.fileName().toAscii().constData() << "' is read-only. Metadata not saved." << endl;
         return false;
     }
     if (!dinfo.isWritable())
     {
-        qDebug("Dir '%s' is read-only. Metadata not saved.", dinfo.filePath().toAscii().constData());
+        kDebug(51003) << "Dir '" << dinfo.filePath().toAscii().constData() << "' is read-only. Metadata not saved." << endl;
         return false;
     }
 
@@ -297,7 +293,8 @@ bool KExiv2::save(const QString& filePath) const
     QString rawTiffBasedNotSupported("3fr arw cr2 dcr erf k25 kdc mos orf raw sr2 srf");
     if (rawTiffBasedNotSupported.contains(finfo.suffix().toUpper()))
     {
-        qDebug("'%s' is TIFF based RAW file not yet supported. Metadata not saved.", dinfo.filePath().toAscii().constData());
+        kDebug(51003) << "'" << dinfo.filePath().toAscii().constData() 
+                      << "' is TIFF based RAW file not yet supported. Metadata not saved." << endl;
         return false;
     }
 

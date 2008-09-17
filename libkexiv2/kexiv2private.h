@@ -41,7 +41,6 @@
 #include <QMatrix>
 #include <QFileInfo>
 #include <QDataStream>
-#include <QDebug>
 
 // KDE includes.
 
@@ -49,6 +48,7 @@
 #include <kencodingdetector.h>
 #include <kstringhandler.h>
 #include <kdeversion.h>
+#include <kdebug.h>
 
 // Exiv2 includes.
 
