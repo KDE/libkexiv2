@@ -272,7 +272,6 @@ QString KExiv2::getGPSLongitudeString() const
     return QString();
 }
 
-
 bool KExiv2::setGPSInfo(double altitude, double latitude, double longitude, bool setProgramName) const
 {
     if (!setProgramId(setProgramName))

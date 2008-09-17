@@ -10,20 +10,16 @@
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
- * NOTE: Do not use kdDebug() in this implementation because 
- *       it will be multithreaded. Use qDebug() instead. 
- *       See B.K.O #133026 for details.
- *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // Local includes.
@@ -47,7 +43,8 @@ bool KExiv2::canWriteIptc(const QString& filePath)
     catch( Exiv2::Error &e )
     {
         std::string s(e.what());
-        qDebug("%s (Error #%i: %s)", "Cannot check Iptc access mode using Exiv2 ", e.code(), s.c_str());
+        kDebug(51003) << "Cannot check Iptc access mode using Exiv2 (Error #" 
+                      << e.code() << ": " << s.c_str() << ")" << endl;
     }
 
     return false;
@@ -87,7 +84,7 @@ QByteArray KExiv2::getIptc(bool addIrbHeader) const
 #if (EXIV2_TEST_VERSION(0,10,0))
                 c2 = Exiv2::Photoshop::setIptcIrb(0, 0, iptc);
 #else
-                qDebug("Exiv2 version is to old. Cannot add Irb header to Iptc metadata");
+                kDebug(51003) << "Exiv2 version is to old. Cannot add Irb header to Iptc metadata" << endl;
                 return QByteArray();
 #endif
             }
@@ -108,7 +105,7 @@ QByteArray KExiv2::getIptc(bool addIrbHeader) const
     catch( Exiv2::Error &e )
     {
         if (!d->filePath.isEmpty())
-            qDebug ("From file %s", d->filePath.toAscii().constData());
+            kDebug(51003) << "From file " << d->filePath.toAscii().constData() << endl;
 
         d->printExiv2ExceptionError("Cannot get Iptc data using Exiv2 ",e);
     }
@@ -136,7 +133,7 @@ bool KExiv2::setIptc(const QByteArray& data) const
     catch( Exiv2::Error &e )
     {
         if (!d->filePath.isEmpty())
-            qDebug ("From file %s", d->filePath.toAscii().constData());
+            kDebug(51003) << "From file " << d->filePath.toAscii().constData() << endl;
 
         d->printExiv2ExceptionError("Cannot set Iptc data using Exiv2 ", e);
     }
@@ -315,7 +312,7 @@ QByteArray KExiv2::getIptcTagData(const char *iptcTagName) const
     catch( Exiv2::Error &e )
     {
         d->printExiv2ExceptionError(QString("Cannot find Iptc key '%1' into image using Exiv2 ")
-                                 .arg(iptcTagName), e);
+                                    .arg(iptcTagName), e);
     }
 
     return QByteArray();
@@ -343,7 +340,7 @@ QString KExiv2::getIptcTagString(const char* iptcTagName, bool escapeCR) const
     catch( Exiv2::Error &e )
     {
         d->printExiv2ExceptionError(QString("Cannot find Iptc key '%1' into image using Exiv2 ")
-                                 .arg(iptcTagName), e);
+                                    .arg(iptcTagName), e);
     }
 
     return QString();
@@ -397,7 +394,7 @@ QStringList KExiv2::getIptcTagsStringList(const char* iptcTagName, bool escapeCR
     catch( Exiv2::Error &e )
     {
         d->printExiv2ExceptionError(QString("Cannot find Iptc key '%1' into image using Exiv2 ")
-                                 .arg(iptcTagName), e);
+                                    .arg(iptcTagName), e);
     }
 
     return QStringList();
@@ -415,8 +412,8 @@ bool KExiv2::setIptcTagsStringList(const char* iptcTagName, int maxSize,
         QStringList oldvals = oldValues;
         QStringList newvals = newValues;
 
-        qDebug() << d->filePath.toAscii().constData() << " : " << iptcTagName 
-                 << " => " << newvals.join(",").toAscii().constData() << endl;
+        kDebug(51003) << d->filePath.toAscii().constData() << " : " << iptcTagName 
+                      << " => " << newvals.join(",").toAscii().constData() << endl;
 
         // Remove all old values.
         Exiv2::IptcData iptcData(d->iptcMetadata);
@@ -457,7 +454,7 @@ bool KExiv2::setIptcTagsStringList(const char* iptcTagName, int maxSize,
     catch( Exiv2::Error &e )
     {
         d->printExiv2ExceptionError(QString("Cannot set Iptc key '%1' into image using Exiv2 ")
-                                 .arg(iptcTagName), e);
+                                    .arg(iptcTagName), e);
     }
 
     return false;
@@ -505,7 +502,8 @@ bool KExiv2::setIptcKeywords(const QStringList& oldKeywords, const QStringList& 
         QStringList oldkeys = oldKeywords;
         QStringList newkeys = newKeywords;
 
-        qDebug("%s ==> Iptc Keywords: %s", d->filePath.toAscii().constData(), newkeys.join(",").toAscii().constData());
+        kDebug(51003) << d->filePath.toAscii().constData() 
+                      << " ==> Iptc Keywords: " << newkeys.join(",").toAscii().constData() << endl;
 
         // Remove all old keywords.
         Exiv2::IptcData iptcData(d->iptcMetadata);
@@ -518,8 +516,7 @@ bool KExiv2::setIptcKeywords(const QStringList& oldKeywords, const QStringList& 
 
             // Also remove new keywords to avoid duplicates. They will be added again below.
             if ( key == QString("Iptc.Application2.Keywords") &&
-                 (oldKeywords.contains(val) || newKeywords.contains(val))
-               )
+                 (oldKeywords.contains(val) || newKeywords.contains(val)) )
                 it = iptcData.erase(it);
             else 
                 ++it;
