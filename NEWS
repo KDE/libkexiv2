@@ -1,4 +1,8 @@
-0.3.0 - 
+0.4.0 - 
+
+- Use kDebug(51003) instead qDebug()
+
+0.3.0 - Released with KDE 4.1.2
 ------------------------------------------------------------------------
 
 - API changed: Added 2 new static methods to init and clear non re-entrant Adobe XMP 
