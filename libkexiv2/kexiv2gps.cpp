@@ -10,20 +10,16 @@
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
- * NOTE: Do not use kdDebug() in this implementation because 
- *       it will be multithreaded. Use qDebug() instead. 
- *       See B.K.O #133026 for details.
- *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 // C++ includes.
@@ -425,7 +421,7 @@ bool KExiv2::setGPSInfo(double altitude, const QString &latitude, const QString 
         // Altitude reference: byte "00" meaning "above sea level", "01" mening "behing sea level".
         value = Exiv2::Value::create(Exiv2::unsignedByte);
         if (altitude >= 0) value->read("0");
-	else               value->read("1");
+        else               value->read("1");
         d->exifMetadata.add(Exiv2::ExifKey("Exif.GPSInfo.GPSAltitudeRef"), value.get());
 
         // And the actual altitude, as absolute value..
@@ -477,7 +473,7 @@ bool KExiv2::removeGPSInfo(bool setProgramName) const
         return false;
 
     try
-    {  
+    {
         QStringList gpsTagsKeys;
 
         for (Exiv2::ExifData::iterator it = d->exifMetadata.begin();
@@ -629,7 +625,6 @@ void KExiv2::convertToRationalSmallDenominator(double number, long int* numerato
         *denominator = bestdenom;
     }
 }
-
 
 QString KExiv2::convertToGPSCoordinateString(long int numeratorDegrees, long int denominatorDegrees,
                                              long int numeratorMinutes, long int denominatorMinutes,
@@ -877,7 +872,5 @@ void KExiv2::convertToUserPresentableNumbers(bool isLatitude, double coordinate,
     coordinate *= 60.0;
     *seconds = coordinate;
 }
-
-
 
 }  // NameSpace KExiv2Iface
