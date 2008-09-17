@@ -557,7 +557,7 @@ bool KExiv2::setXmpTagStringSeq(const char *xmpTagName, const QStringList& seq,
         QStringList list = seq;
         Exiv2::Value::AutoPtr xmpTxtSeq = Exiv2::Value::create(Exiv2::xmpSeq);
 
-        for (QStringList::Iterator it = list.begin(); it != list.end(); ++it )
+        for (QStringList::const_iterator it = list.begin(); it != list.end(); ++it )
         {
             const std::string &txt((*it).toUtf8().constData());
             xmpTxtSeq->read(txt);
@@ -630,7 +630,7 @@ bool KExiv2::setXmpTagStringBag(const char *xmpTagName, const QStringList& bag,
         QStringList list = bag;
         Exiv2::Value::AutoPtr xmpTxtBag = Exiv2::Value::create(Exiv2::xmpBag);
 
-        for (QStringList::Iterator it = list.begin(); it != list.end(); ++it )
+        for (QStringList::const_iterator it = list.begin(); it != list.end(); ++it )
         {
             const std::string &txt((*it).toUtf8().constData());
             xmpTxtBag->read(txt);
@@ -817,7 +817,7 @@ bool KExiv2::setXmpKeywords(const QStringList& newKeywords, bool setProgramName)
     QStringList newkeys = newKeywords;
 
     // Create a list of keywords including old one witch already exists.
-    for (QStringList::Iterator it = oldkeys.begin(); it != oldkeys.end(); ++it )
+    for (QStringList::const_iterator it = oldkeys.begin(); it != oldkeys.end(); ++it )
     {
         if (!newkeys.contains(*it))
             newkeys.append(*it);
@@ -847,7 +847,7 @@ bool KExiv2::setXmpSubCategories(const QStringList& newSubCategories, bool setPr
     QStringList newSubCat = newSubCategories;
 
     // Create a list of sub-categories including old one witch already exists.
-    for (QStringList::Iterator it = oldSubCat.begin(); it != oldSubCat.end(); ++it )
+    for (QStringList::const_iterator it = oldSubCat.begin(); it != oldSubCat.end(); ++it )
     {
         if (!newSubCat.contains(*it))
             newSubCat.append(*it);
@@ -877,7 +877,7 @@ bool KExiv2::setXmpSubjects(const QStringList& newSubjects, bool setProgramName)
     QStringList newSubjectCodes = newSubjects;
 
     // Create a list of sub-categories including old one witch already exists.
-    for (QStringList::Iterator it = oldSubjectCodes.begin(); it != oldSubjectCodes.end(); ++it )
+    for (QStringList::const_iterator it = oldSubjectCodes.begin(); it != oldSubjectCodes.end(); ++it )
     {
         if (!newSubjectCodes.contains(*it))
             newSubjectCodes.append(*it);

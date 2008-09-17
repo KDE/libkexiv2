@@ -484,7 +484,7 @@ bool KExiv2::removeGPSInfo(bool setProgramName) const
                 gpsTagsKeys.append(key);
         }
 
-        for(QStringList::Iterator it2 = gpsTagsKeys.begin(); it2 != gpsTagsKeys.end(); ++it2)
+        for(QStringList::const_iterator it2 = gpsTagsKeys.begin(); it2 != gpsTagsKeys.end(); ++it2)
         {
             Exiv2::ExifKey gpsKey((*it2).toAscii().constData());
             Exiv2::ExifData::iterator it3 = d->exifMetadata.findKey(gpsKey);
