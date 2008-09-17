@@ -10,10 +10,6 @@
  * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
- * NOTE: Do not use kdDebug() in this implementation because
- *       it will be multithreaded. Use qDebug() instead.
- *       See B.K.O #133026 for details.
- *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -47,7 +43,8 @@ bool KExiv2::canWriteComment(const QString& filePath)
     catch( Exiv2::Error &e )
     {
         std::string s(e.what());
-        qDebug("%s (Error #%i: %s)", "Cannot check Comment access mode using Exiv2 ", e.code(), s.c_str());
+        kDebug(51003) << "Cannot check Comment access mode using Exiv2 (Error #" 
+                      << e.code() << ": " << s.c_str() << ")" << endl;
     }
 
     return false;
