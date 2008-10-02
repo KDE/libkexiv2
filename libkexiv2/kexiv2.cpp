@@ -83,25 +83,6 @@ KExiv2& KExiv2::operator=(const KExiv2& metadata)
 
 //-- Statics methods ----------------------------------------------
 
-bool KExiv2::initializeExiv2()
-{
-#ifdef _XMP_SUPPORT_
-    return (Exiv2::XmpParser::initialize());
-#endif // _XMP_SUPPORT_
-
-    return true;
-}
-
-bool KExiv2::cleanupExiv2()
-{
-    // Fix memory leak if Exiv2 support XMP.
-#ifdef _XMP_SUPPORT_
-    Exiv2::XmpParser::terminate();
-#endif // _XMP_SUPPORT_
-
-    return true;
-}
-
 bool KExiv2::supportXmp()
 {
 #ifdef _XMP_SUPPORT_
@@ -111,38 +92,13 @@ bool KExiv2::supportXmp()
 #endif // _XMP_SUPPORT_
 }
 
-bool KExiv2::supportMetadataWritting(const QString& typeMime)
+bool KExiv2::supportTiffWritting()
 {
-    if (typeMime == QString("image/jpeg"))
-    {
-        return true;
-    }
-    else if (typeMime == QString("image/tiff"))
-    {
 #if (EXIV2_TEST_VERSION(0,17,91))
-        return true;
+    return true;
 #else
-        return false;
-#endif
-    }
-    else if (typeMime == QString("image/png"))
-    {
-#if (EXIV2_TEST_VERSION(0,17,91))
-        return true;
-#else
-        return false;
-#endif
-    }
-    else if (typeMime == QString("image/jp2"))
-    {
-#if (EXIV2_TEST_VERSION(0,17,91))
-        return true;
-#else
-        return false;
-#endif
-    }
-
     return false;
+#endif
 }
 
 QString KExiv2::Exiv2Version()
@@ -185,48 +141,6 @@ bool KExiv2::isReadOnly(const QString& filePath)
 
 //-- General methods ----------------------------------------------
 
-bool KExiv2::load(const QByteArray& imgData) const
-{
-    if (imgData.isEmpty())
-        return false;
-
-    try
-    {
-        Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((Exiv2::byte*)imgData.data(), imgData.size());
-
-        d->filePath = QString();
-        image->readMetadata();
-
-        // Image comments ---------------------------------
-
-        d->imageComments = image->comment();
-
-        // Exif metadata ----------------------------------
-
-        d->exifMetadata = image->exifData();
-
-        // Iptc metadata ----------------------------------
-
-        d->iptcMetadata = image->iptcData();
-
-#ifdef _XMP_SUPPORT_
-
-        // Xmp metadata -----------------------------------
-
-        d->xmpMetadata = image->xmpData();
-
-#endif // _XMP_SUPPORT_
-
-        return true;
-    }
-    catch( Exiv2::Error &e )
-    {
-        d->printExiv2ExceptionError("Cannot load metadata using Exiv2 ", e);
-    }
-
-    return false;
-}
-
 bool KExiv2::load(const QString& filePath) const
 {
     QFileInfo finfo(filePath);
@@ -238,6 +152,7 @@ bool KExiv2::load(const QString& filePath) const
 
     try
     {
+
         Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
                                       (QFile::encodeName(filePath)));
 
@@ -293,14 +208,6 @@ bool KExiv2::save(const QString& filePath) const
         return false;
     }
 
-    // TIFF/EP Raw file based supported by Exiv2 0.18 are : DNG, NEF, PEF.
-    QString rawTiffBasedNotSupported("3fr arw cr2 dcr erf k25 kdc mos orf raw sr2 srf");
-    if (rawTiffBasedNotSupported.contains(finfo.suffix().toUpper()))
-    {
-        qDebug("'%s' is TIFF based RAW file not yet supported. Metadata not saved.", dinfo.filePath().toAscii().constData());
-        return false;
-    }
-
     try
     {
         Exiv2::AccessMode mode;
@@ -328,12 +235,11 @@ bool KExiv2::save(const QString& filePath) const
         {
             if (image->mimeType() == "image/tiff")
             {
-                Exiv2::ExifData exif = image->exifData();
-                QStringList untouchedTags;
-
                 // With tiff image we cannot overwrite whole Exif data as well, because 
                 // image data are stored in Exif container. We need to take a care about
                 // to not lost image data.
+                Exiv2::ExifData exif = image->exifData();
+                QStringList untouchedTags;
                 untouchedTags << "Exif.Image.ImageWidth";
                 untouchedTags << "Exif.Image.ImageLength";
                 untouchedTags << "Exif.Image.BitsPerSample";

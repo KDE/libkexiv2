@@ -35,10 +35,18 @@ namespace KExiv2Iface
 KExiv2Priv::KExiv2Priv()
 {
     imageComments = std::string();
+
+#ifdef _XMP_SUPPORT_
+    Exiv2::XmpProperties::registerNs("http://www.microsoft.com/Photo/", "MicrosoftPhoto");
+#endif
 }
 
 KExiv2Priv::~KExiv2Priv()
 {
+    // Fix memory leak if Exiv2 support XMP.
+#ifdef _XMP_SUPPORT_
+    Exiv2::XmpParser::terminate();
+#endif // _XMP_SUPPORT_
 }
 
 void KExiv2Priv::printExiv2ExceptionError(const QString& msg, Exiv2::Error& e)
