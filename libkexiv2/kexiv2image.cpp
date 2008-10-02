@@ -708,7 +708,7 @@ bool KExiv2::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitiz
 
         // In second we write date & time into Xmp.
 
-        const std::string &xmpdatetime(dateTime.toString(Qt::ISODate).toAscii().constData());
+        const std::string &xmpdatetime(dateTime.toString(QString("yyyy:MM:dd hh:mm:ss")).toAscii().constData());
 
         Exiv2::Value::AutoPtr xmpTxtVal = Exiv2::Value::create(Exiv2::xmpText);
         xmpTxtVal->read(xmpdatetime);

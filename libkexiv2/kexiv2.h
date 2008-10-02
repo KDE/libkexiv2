@@ -118,27 +118,13 @@ public:
     //-- STATICS methods ----------------------------------------------
     //-----------------------------------------------------------------
 
-    /** Return true if Exiv2 library initialization is done properlly.
-        This method must be call before to use multithreading with libkexiv2.
-        It initialize several non re-entrancy code from Adobe XMP SDK 
-        See B.K.O #166424 for details.
-     */
-    static bool initializeExiv2();
-
-    /** Return true if Exiv2 library memory allocations are cleaned properlly.
-        This method must be call after to use multithreading with libkexiv2.
-        It cleanup memory used by Adobe XMP SDK 
-        See B.K.O #166424 for details.
-     */
-    static bool cleanupExiv2();
-
     /** Return true if library can handle Xmp metadata
      */
     static bool supportXmp();
 
-    /** Return true if library can writte metadata to typeMime file format.
+    /** Return true if library can writte metadata to TIFF/DNG files
      */
-    static bool supportMetadataWritting(const QString& typeMime);
+    static bool supportTiffWritting();
 
     /** Return a string version of Exiv2 release in format "major.minor.patch"
      */
@@ -155,11 +141,6 @@ public:
     //-----------------------------------------------------------------
     //-- GENERAL methods ----------------------------------------------
     //-----------------------------------------------------------------
-
-    /** Load all metadata (Exif, Iptc, Xmp, and JFIF Comments) from a byte array. 
-        Return true if metadata have been loaded successfully from image data.
-     */
-    bool load(const QByteArray& imgData) const;
 
     /** Load all metadata (Exif, Iptc, Xmp, and JFIF Comments) from a picture (JPEG, RAW, TIFF, PNG,
         DNG, etc...). Return true if metadata have been loaded successfully from file.
