@@ -9,7 +9,9 @@ See AUTHORS file for details.
 -- ABOUT --------------------------------------------------------------
 
 Libkexiv2 is a wrapper around Exiv2 library to manipulate pictures 
-metadata as EXIF/IPTC and XMP.
+metadata as EXIF/IPTC and XMP. Metadata interface follow this paper:
+
+http://www.metadataworkinggroup.com/pdf/mwg_guidance.pdf
 
 This library is used by kipi-plugins, digiKam and others kipi host programs.
 
