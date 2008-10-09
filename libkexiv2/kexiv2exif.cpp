@@ -615,11 +615,16 @@ QVariant KExiv2::getExifTagVariant(const char *exifTagName, bool rationalAsListO
                 case Exiv2::unsignedLong:
                 case Exiv2::signedShort:
                 case Exiv2::signedLong:
-                    return QVariant((int)it->toLong(component));
+                    if (it->count() > component)
+                        return QVariant((int)it->toLong(component));
+                    else
+                        return QVariant(QVariant::Int);
                 case Exiv2::unsignedRational:
                 case Exiv2::signedRational:
                     if (rationalAsListOfInts)
                     {
+                        if (it->count() <= component)
+                            return QVariant(QVariant::List);
                         QList<QVariant> list;
                         list << (*it).toRational(component).first;
                         list << (*it).toRational(component).second;
@@ -627,6 +632,8 @@ QVariant KExiv2::getExifTagVariant(const char *exifTagName, bool rationalAsListO
                     }
                     else
                     {
+                        if (it->count() <= component)
+                            return QVariant(QVariant::Double);
                         // prefer double precision
                         double num = (*it).toRational(component).first;
                         double den = (*it).toRational(component).second;
