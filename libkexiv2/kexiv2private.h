@@ -119,6 +119,8 @@ public:
 
 public:
 
+    bool            writeRawFiles;
+
     QString         filePath;
 
     std::string     imageComments;

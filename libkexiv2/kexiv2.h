@@ -188,6 +188,16 @@ public:
      */
     QString getFilePath() const;
 
+    /** Enable or disable writing metadata operations to RAW tiff based files.
+        It's require Exiv2 0.18. By default RAW files are untouched.
+     */
+    void setWriteRawFiles(bool on);
+
+    /** Return true if writing metadata operations on RAW tiff based files is enabled.
+        It's require Exiv2 0.18.
+     */
+    bool writeRawFiles() const;
+
     //-------------------------------------------------------------------
     //-- Metadata IMAGE INFORMATION manipulation methods ----------------
     //-------------------------------------------------------------------

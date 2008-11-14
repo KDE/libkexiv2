@@ -30,6 +30,7 @@ namespace KExiv2Iface
 
 KExiv2Priv::KExiv2Priv()
 {
+    writeRawFiles = false;
     imageComments = std::string();
 }
 
