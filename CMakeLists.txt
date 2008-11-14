@@ -18,10 +18,11 @@ PROJECT(libkexiv2)
 # 0.2.0 => 6.0.0     (released with KDE 4.1.0)
 # 0.3.0 => 7.0.0     (released with KDE 4.1.2)
 # 0.4.0 => 7.1.0
+# 0.5.0 => 7.2.0     (Released with KDE 4.2.0)
 
 # Library API version
 SET(KEXIV2_LIB_MAJOR_VERSION "0")
-SET(KEXIV2_LIB_MINOR_VERSION "4")
+SET(KEXIV2_LIB_MINOR_VERSION "5")
 SET(KEXIV2_LIB_PATCH_VERSION "0")
 
 # Suffix to add at end of version string. Usual values are:
@@ -36,7 +37,7 @@ SET(KEXIV2_LIB_SUFFIX_VERSION "")
 # Library ABI version used by linker.
 # For details : http://www.gnu.org/software/libtool/manual.html#Updating-version-info
 SET(KEXIV2_LIB_SO_CUR_VERSION "7")
-SET(KEXIV2_LIB_SO_REV_VERSION "1")
+SET(KEXIV2_LIB_SO_REV_VERSION "2")
 SET(KEXIV2_LIB_SO_AGE_VERSION "0")
 
 # =======================================================
@@ -48,7 +49,6 @@ SET(KEXIV2_LIB_VERSION_ID "0x0${KEXIV2_LIB_MAJOR_VERSION}0${KEXIV2_LIB_MINOR_VER
 SET(KEXIV2_LIB_SO_VERSION_STRING "${KEXIV2_LIB_SO_CUR_VERSION}.${KEXIV2_LIB_SO_REV_VERSION}.${KEXIV2_LIB_SO_AGE_VERSION}")
 
 # =======================================================
-
 
 if (EXIV2_FOUND)
   SUBDIRS(libkexiv2)
