@@ -396,11 +396,13 @@ bool KExiv2::save(const QString& filePath)
         return false;
     }
 
-    // TIFF/EP Raw file based supported by Exiv2 0.18 are : DNG, NEF, PEF.
-    QString rawTiffBasedNotSupported("3fr arw cr2 dcr erf k25 kdc mos orf raw sr2 srf"); 
-    if (rawTiffBasedNotSupported.contains(finfo.extension(false).upper()))
+    // TIFF/EP Raw files based are supported by Exiv2 0.18 as experimental. We will do touch it for the moment.
+    // Metadata writing is supported in implementation from svn trunk.
+    QString rawTiffBased("dng nef pef 3fr arw cr2 dcr erf k25 kdc mos orf raw sr2 srf"); 
+    if (rawTiffBased.contains(finfo.extension(false).upper()))
     {
-        qDebug("'%s' is TIFF based RAW file not yet supported. Metadata not saved.", dinfo.filePath().ascii());
+        qDebug("'%s' is TIFF based RAW file and writing mode is disable with this libkexiv2 version. Metadata not saved.", 
+               dinfo.filePath().ascii());
         return false;
     }
 
