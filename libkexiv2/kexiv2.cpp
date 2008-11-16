@@ -171,20 +171,20 @@ QString KExiv2::version()
 bool KExiv2::isReadOnly(const QString& filePath)
 {
     if (!canWriteComment(filePath))
-        return false;
+        return true;
 
     if (!canWriteExif(filePath))
-        return false;
+        return true;
 
     if (!canWriteIptc(filePath))
-        return false;
+        return true;
 
 #ifdef _XMP_SUPPORT_
     if (!canWriteXmp(filePath))
-        return false;
+        return true;
 #endif // _XMP_SUPPORT_
 
-    return true;
+    return false;
 }
 
 //-- General methods ----------------------------------------------
