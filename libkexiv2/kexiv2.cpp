@@ -501,15 +501,15 @@ bool KExiv2::applyChanges()
 bool KExiv2::isReadOnly(const QString& filePath)
 {
     if (!canWriteComment(filePath))
-        return false;
+        return true;
 
     if (!canWriteExif(filePath))
-        return false;
+        return true;
 
     if (!canWriteIptc(filePath))
-        return false;
+        return true;
 
-    return true;
+    return false;
 }
 
 bool KExiv2::canWriteComment(const QString& filePath)
