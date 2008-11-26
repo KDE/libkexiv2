@@ -523,7 +523,7 @@ void KExiv2::convertToRational(double number, long int* numerator,
     // To do this we: (for example)
     //  0.12345 * 10000 = 1234.5
     //  floor(1234.5) = 1234 - now bigger than 1 - ready...
-    fractional = trunc(fractional * rounder);
+    fractional = round(fractional * rounder);
 
     // Convert the whole thing to a fraction.
     // Fraction is:
