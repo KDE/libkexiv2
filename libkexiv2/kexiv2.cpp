@@ -2025,7 +2025,7 @@ bool KExiv2::removeGPSInfo(bool setProgramName)
 }
 
 void KExiv2::convertToRational(double number, long int* numerator,
-                                  long int* denominator, int rounding)
+                               long int* denominator, int rounding)
 {
     // This function converts the given decimal number
     // to a rational (fractional) number.
@@ -2038,14 +2038,14 @@ void KExiv2::convertToRational(double number, long int* numerator,
 
     // Calculate the "number" used for rounding.
     // This is 10^Digits - ie, 4 places gives us 10000.
-    double rounder = pow(10, rounding);
+    double rounder = pow(10.0, rounding);
 
     // Round the fractional part, and leave the number
     // as greater than 1.
     // To do this we: (for example)
     //  0.12345 * 10000 = 1234.5
     //  floor(1234.5) = 1234 - now bigger than 1 - ready...
-    fractional = trunc(fractional * rounder);
+    fractional = round(fractional * rounder);
 
     // Convert the whole thing to a fraction.
     // Fraction is:
