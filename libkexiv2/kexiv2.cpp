@@ -21,6 +21,14 @@
  *
  * ============================================================ */
 
+// C ANSI includes.
+
+extern "C"
+{
+#include <sys/stat.h>
+#include <utime.h>
+}
+
 // Local includes.
 
 #include "version.h"
@@ -401,7 +409,17 @@ bool KExiv2::save(const QString& filePath) const
 
 #endif // _XMP_SUPPORT_
 
+        // NOTE: Don't touch access and modification timestamp of file.
+        struct stat st;
+        ::stat(QFile::encodeName(filePath), &st);
+
+        struct utimbuf ut;
+        ut.modtime = st.st_mtime;
+        ut.actime  = st.st_atime;
+
         image->writeMetadata();
+
+        ::utime(QFile::encodeName(filePath), &ut);
 
         return true;
     }
