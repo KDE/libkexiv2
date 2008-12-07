@@ -25,6 +25,14 @@
  *
  * ============================================================ */
 
+// C ANSI includes.
+
+extern "C"
+{
+#include <sys/stat.h>
+#include <utime.h>
+}
+
 // Qt includes.
 
 #include <qfile.h>
@@ -478,7 +486,17 @@ bool KExiv2::save(const QString& filePath)
             image->setIptcData(d->iptcMetadata);
         }
 
+        // NOTE: Don't touch access and modification timestamp of file.
+        struct stat st;
+        ::stat(QFile::encodeName(filePath), &st);
+
+        struct utimbuf ut;
+        ut.modtime = st.st_mtime;
+        ut.actime  = st.st_atime;
+
         image->writeMetadata();
+
+        ::utime(QFile::encodeName(filePath), &ut);
 
         return true;
     }
