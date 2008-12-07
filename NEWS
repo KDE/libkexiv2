@@ -7,6 +7,7 @@
 - Support TIFF metadata writting mode (require Exiv2 >= 0.18).
 - Added new methods canWriteComment(), canWriteExif(), canWriteIptc().
 - Added new method supportMetadataWritting().
+- Do not change file time-stamp when metadata are changed.
 
 Bugs fixed from B.K.O (http://bugs.kde.org):
 001 ==> 158989: digikam won't start: MakerTagInfo registry full.
