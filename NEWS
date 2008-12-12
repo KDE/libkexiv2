@@ -10,8 +10,9 @@
 - Do not change file time-stamp when metadata are changed.
 
 Bugs fixed from B.K.O (http://bugs.kde.org):
-001 ==> 158989: digikam won't start: MakerTagInfo registry full.
-002 ==> 
+
+001 ==> 158989 : digiKam won't start: MakerTagInfo registry full.
+002 ==> 157173 : Crash by adding gps data to pictures.
 
 0.1.7
 ------------------------------------------------------------------------
@@ -20,7 +21,7 @@ Bugs fixed from B.K.O (http://bugs.kde.org):
 - Fix RemoveIptcTag() to handle all redondant Iptc tags at the same time.
 
 Bugs fixed from B.K.O (http://bugs.kde.org):
-001 ==> 157552: negative altitudes are not shown in metadata GPS sidebar
+001 ==> 157552 : negative altitudes are not shown in metadata GPS sidebar
 
 0.1.6
 ------------------------------------------------------------------------
@@ -43,8 +44,8 @@ Fix release version informations.
 0.1.3
 ------------------------------------------------------------------------
 New features
-- API changed: added 4 new static methods to get Exif/Iptc tags description/title. 
-               moved depreceate protected methods used by digiKam core to private.
+- API changed : added 4 new static methods to get Exif/Iptc tags description/title. 
+                moved depreceate protected methods used by digiKam core to private.
 
 Bugs fixed from B.K.O (http://bugs.kde.org):
 001 ==> 144604: Rotation causes Exif data corruption. GPS data fix
@@ -61,13 +62,13 @@ New features
 - API changed: added printExiv2ExceptionError to manage Exiv2 C++ Exception error message 
 
 Bugs fixed from B.K.O (http://bugs.kde.org):
-001 ==> 142564: digiKam-signature in iptc and exif tags.
-002 ==> 140297: GPS kipi plugin truncates input coordinates, introducing inacuracy.
+001 ==> 142564 : digiKam-signature in iptc and exif tags.
+002 ==> 140297 : GPS kipi plugin truncates input coordinates, introducing inacuracy.
 
 0.1.1
 ------------------------------------------------------------------------
 Bugs fixed from B.K.O (http://bugs.kde.org):
-001 ==> 141980: digiKam crash when rescan certain files exiv2.
+001 ==> 141980 : digiKam crash when rescan certain files exiv2.
 
 0.1.0
 ------------------------------------------------------------------------
