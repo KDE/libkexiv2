@@ -1,3 +1,214 @@
+V 0.1.8 - 2008-12-13
+----------------------------------------------------------------------------
+2008-12-07 19:17  cgilles
+
+    * NEWS: update
+
+2008-12-07 19:16  cgilles
+
+    * libkexiv2/kexiv2.cpp: backport commit #894042 from trunk: do not
+      change file time stamp when metadata are changed
+      CCBUG: 150609
+      CCBUG: 157788
+      CCBUG: 144215
+
+2008-11-27 06:42  cgilles
+
+    * libkexiv2/kexiv2.cpp: sync with trunk
+      CCBUG: 169637
+
+2008-11-16 17:22  cgilles
+
+    * libkexiv2/kexiv2.cpp: libkexiv2 from KDE3 branch: backport commit
+      #885140 from trunk
+      CCBUG: 175304
+
+2008-11-15 09:31  cgilles
+
+    * libkexiv2/kexiv2.cpp: libkexiv2 from KDE3 branch : disable here
+      (for the moment) metadata writing mode with RAW TIFF/EP files
+      based.
+      Its supported in trunk as experimental.
+
+2008-08-29 14:55  cgilles
+
+    * libkexiv2/kexiv2.cpp: compile
+
+2008-08-29 14:52  cgilles
+
+    * libkexiv2/kexiv2.cpp, libkexiv2/kexiv2.h: backport commit #854462
+      from KDE4
+
+2008-08-19 08:25  cgilles
+
+    * libkexiv2/kexiv2.cpp: update TIFF/EP based RAW file foirmat
+      supported in writting mode with Exiv2 0.18
+
+2008-08-07 10:51  cgilles
+
+    * libkexiv2/kexiv2.cpp: wrong logic
+      BUG: 168567
+
+2008-08-01 10:55  cgilles
+
+    * libkexiv2/kexiv2.cpp: backport commit #840602 from KDE4
+
+2008-07-30 14:18  cgilles
+
+    * NEWS, libkexiv2/kexiv2.cpp, libkexiv2/kexiv2.h: sync with KDE4
+      api
+
+2008-07-11 08:12  cgilles
+
+    * libkexiv2/kexiv2.cpp, libkexiv2/kexiv2.h: backport commit #830775
+      from KDE4
+
+2008-07-10 20:34  cgilles
+
+    * libkexiv2/Makefile.am: libkexiv2 from KDE3 branch: same problem
+      here than with KDE4 : we missing to pass EXIV2_CFLAGS as include
+      dir during compilation (compilation failed if exiv2 is installed
+      in a specific dir)
+      CCMAIL: arnd.baecker@web.de
+
+2008-07-10 09:27  cgilles
+
+    * NEWS: update
+
+2008-07-10 09:26  cgilles
+
+    * libkexiv2/kexiv2.cpp, libkexiv2/kexiv2.h: backport canWrite*()
+      methods from KDE4
+
+2008-07-02 09:10  cgilles
+
+    * libkexiv2/kexiv2.cpp: backport commit #827085 from KDE4
+
+2008-07-02 09:06  cgilles
+
+    * NEWS: update
+
+2008-06-27 07:27  cgilles
+
+    * libkexiv2/kexiv2.cpp: backport from KDE4
+
+2008-06-27 06:02  cgilles
+
+    * libkexiv2/kexiv2.cpp: backport last changes from KDE4
+
+2008-06-26 15:37  cgilles
+
+    * libkexiv2/kexiv2.cpp: backport commit #824710 from KDE4
+
+2008-06-25 11:37  cgilles
+
+    * libkexiv2/kexiv2.cpp, libkexiv2/kexiv2private.cpp: backport
+      commit #824233 from KDE4
+
+2008-06-23 12:46  cgilles
+
+    * libkexiv2/kexiv2.cpp: backport commit #823447 from KDE4
+
+2008-06-22 20:52  cgilles
+
+    * libkexiv2/kexiv2.cpp: fix logic
+
+2008-06-22 20:51  cgilles
+
+    * libkexiv2/kexiv2.cpp: fix logic
+
+2008-06-22 20:48  cgilles
+
+    * libkexiv2/kexiv2.cpp: only JPEG canhost Exiv2::Comments
+
+2008-06-22 20:03  cgilles
+
+    * libkexiv2/kexiv2.cpp: backport commit #823203 from KDE4
+
+2008-06-22 19:03  cgilles
+
+    * libkexiv2/kexiv2.cpp: cmpile
+
+2008-06-22 18:04  cgilles
+
+    * NEWS: update
+
+2008-06-22 18:04  cgilles
+
+    * libkexiv2/kexiv2.cpp, libkexiv2/kexiv2private.cpp: backport
+      commit #823156 from KDE4 (fix broken compilation with current
+      Exiv2 from trunk - future Exiv2 0.18 with tiff write mode
+      support).
+      It's not yet fully compatible with new Exiv2 api.
+
+2008-06-13 07:13  cgilles
+
+    * libkexiv2/kexiv2.cpp: backport commit #820082 from KDE4
+
+2008-06-03 08:05  cgilles
+
+    * NEWS: update
+
+2008-06-03 08:04  cgilles
+
+    * libkexiv2/Makefile.am: fix library ABI number for 0.1.8 release
+
+2008-06-03 08:01  cgilles
+
+    * libkexiv2/kexiv2.cpp: polish
+
+2008-06-03 07:48  cgilles
+
+    * NEWS: update
+
+2008-06-03 07:46  cgilles
+
+    * libkexiv2/Makefile.am, libkexiv2/kexiv2.cpp, libkexiv2/kexiv2.h,
+      libkexiv2/kexiv2private.cpp, libkexiv2/kexiv2private.h: libkexiv2
+      from KDE3 branch : binary compatibility is broken here. API
+      change to export all Exiv2 access classes to internal private
+      container.
+      This fix is similar than last changes from KDE4 implementation.
+      BUGS: 158989
+
+2008-06-03 06:53  cgilles
+
+    * README, libkexiv2.lsm, libkexiv2.pc.in, libkexiv2/version.h: fix
+      release number
+
+2008-06-03 06:51  cgilles
+
+    * NEWS: update
+
+2008-05-26 06:11  cgilles
+
+    * NEWS, libkexiv2/kexiv2.cpp, libkexiv2/kexiv2.h: likexiv2 from
+      KDE3 branch : backport code from KDE4 : removeIptcTags will
+      handle all redondant IPTC tags at the same time, not only the
+      first one from tags list.
+      BUGS: 153207
+
+2008-05-16 12:18  cgilles
+
+    * libkexiv2/kexiv2.cpp: Fix memory leak if Exiv2 support XMP
+      (version >= 0.16)
+
+2008-03-25 21:51  anaselli
+
+    * NEWS: SVN_SILENT: updated
+
+2008-03-24 16:11  vfuoglio
+
+    * ChangeLog: Preparing for libkexiv2 release
+
+2008-03-24 16:09  vfuoglio
+
+    * ChangeLog, libkexiv2.lsm, libkexiv2/Makefile.am: Preparing
+      libkexiv2 0.1.7 release
+      
+      
+      SVN_SILENT:
+
 V 0.1.7 - 2008-03-24
 ----------------------------------------------------------------------------
 2008-03-18 18:47  cgilles
@@ -171,7 +382,7 @@ v 0.1.3 - 2007-05-05
 	  CCBUGS: 144895
 
 	* [r658899] BUG:144455
-	thanks a lot to Stéphane Pontier, corrected a lot of spelling errors 
+	thanks a lot to Stï¿½phane Pontier, corrected a lot of spelling errors 
 	and missing mails
 	M /trunk/extragear/libs/libkexiv2/libkexiv2_export.h
 	M /trunk/extragear/libs/libkexiv2/kexiv2.cpp
