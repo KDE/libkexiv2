@@ -420,7 +420,7 @@ public:
                            bool rationalWantSmallDenominator=true, bool setProgramName=true) const;
 
     /** Remove the Exif tag 'exifTagName' from Exif metadata. Return true if tag is 
-        removed successfully.
+        removed successfully or if no tag was present.
      */
     bool removeExifTag(const char *exifTagName, bool setProgramName=true) const;
 
@@ -521,7 +521,7 @@ public:
     bool setIptcTagData(const char *iptcTagName, const QByteArray& data, bool setProgramName=true) const;
 
     /** Remove the all instance of Iptc tags 'iptcTagName' from Iptc metadata. Return true if all 
-        tags have been removed successfully.
+        tags have been removed successfully (or none were present).
      */
     bool removeIptcTag(const char *iptcTagName, bool setProgramName=true) const;
 
@@ -755,7 +755,7 @@ public:
     bool registerXmpNameSpace(const QString& uri, const QString& prefix) const;
 
     /** Remove the Xmp tag 'xmpTagName' from Xmp metadata. Return true if tag is 
-        removed successfully.
+        removed successfully or if no tag was present.
      */
     bool removeXmpTag(const char *xmpTagName, bool setProgramName=true) const;
 

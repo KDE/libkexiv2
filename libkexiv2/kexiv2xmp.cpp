@@ -790,6 +790,8 @@ bool KExiv2::removeXmpTag(const char *xmpTagName, bool setProgramName) const
             d->xmpMetadata.erase(it);
             return true;
         }
+
+        return true;
     }
     catch( Exiv2::Error &e )
     {
