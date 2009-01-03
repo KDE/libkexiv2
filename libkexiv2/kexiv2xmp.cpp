@@ -816,7 +816,7 @@ bool KExiv2::setXmpKeywords(const QStringList& newKeywords, bool setProgramName)
     QStringList oldkeys = getXmpKeywords();
     QStringList newkeys = newKeywords;
 
-    // Create a list of keywords including old one witch already exists.
+    // Create a list of keywords including old one which already exists.
     for (QStringList::const_iterator it = oldkeys.constBegin(); it != oldkeys.constEnd(); ++it )
     {
         if (!newkeys.contains(*it))
@@ -824,7 +824,7 @@ bool KExiv2::setXmpKeywords(const QStringList& newKeywords, bool setProgramName)
     }
 
     if (setXmpTagStringBag("Xmp.dc.subject", newkeys, false))
-        return false;
+        return true;
 
 #endif // _XMP_SUPPORT_
 
@@ -846,7 +846,7 @@ bool KExiv2::setXmpSubCategories(const QStringList& newSubCategories, bool setPr
     const QStringList oldSubCat = getXmpSubCategories();
     QStringList newSubCat = newSubCategories;
 
-    // Create a list of sub-categories including old one witch already exists.
+    // Create a list of sub-categories including old one which already exists.
     for (QStringList::const_iterator it = oldSubCat.constBegin(); it != oldSubCat.constEnd(); ++it )
     {
         if (!newSubCat.contains(*it))
@@ -854,7 +854,7 @@ bool KExiv2::setXmpSubCategories(const QStringList& newSubCategories, bool setPr
     }
 
     if (setXmpTagStringBag("Xmp.photoshop.SupplementalCategories", newSubCat, false))
-        return false;
+        return true;
 
 #endif // _XMP_SUPPORT_
 
@@ -876,7 +876,7 @@ bool KExiv2::setXmpSubjects(const QStringList& newSubjects, bool setProgramName)
     QStringList oldSubjectCodes = getXmpSubjects();
     QStringList newSubjectCodes = newSubjects;
 
-    // Create a list of sub-categories including old one witch already exists.
+    // Create a list of sub-categories including old one which already exists.
     for (QStringList::const_iterator it = oldSubjectCodes.constBegin(); it != oldSubjectCodes.constEnd(); ++it )
     {
         if (!newSubjectCodes.contains(*it))
@@ -884,7 +884,7 @@ bool KExiv2::setXmpSubjects(const QStringList& newSubjects, bool setProgramName)
     }
 
     if (setXmpTagStringBag("Xmp.iptc.SubjectCode", newSubjectCodes, false))
-        return false;
+        return true;
 
 #endif // _XMP_SUPPORT_
 
