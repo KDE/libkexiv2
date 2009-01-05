@@ -21,6 +21,10 @@
  *
  * ============================================================ */
 
+#ifndef KEXIV2PRIVATE_H
+#define KEXIV2PRIVATE_H
+
+
  // C++ includes.
 
 #include <cstdlib>
@@ -135,3 +139,4 @@ public:
 };
 
 }  // NameSpace KExiv2Iface
+#endif
