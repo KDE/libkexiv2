@@ -554,16 +554,23 @@ bool KExiv2::setXmpTagStringSeq(const char *xmpTagName, const QStringList& seq,
 
     try
     {
-        const QStringList list = seq;
-        Exiv2::Value::AutoPtr xmpTxtSeq = Exiv2::Value::create(Exiv2::xmpSeq);
-
-        for (QStringList::const_iterator it = list.constBegin(); it != list.constEnd(); ++it )
+        if (seq.isEmpty())
         {
-            const std::string &txt((*it).toUtf8().constData());
-            xmpTxtSeq->read(txt);
+            removeXmpTag(xmpTagName);
         }
-        d->xmpMetadata.add(Exiv2::XmpKey(xmpTagName), xmpTxtSeq.get());
-        return true;
+        else
+        {
+            const QStringList list = seq;
+            Exiv2::Value::AutoPtr xmpTxtSeq = Exiv2::Value::create(Exiv2::xmpSeq);
+
+            for (QStringList::const_iterator it = list.constBegin(); it != list.constEnd(); ++it )
+            {
+                const std::string &txt((*it).toUtf8().constData());
+                xmpTxtSeq->read(txt);
+            }
+            d->xmpMetadata[xmpTagName].setValue(xmpTxtSeq.get());
+            return true;
+        }
     }
     catch( Exiv2::Error &e )
     {
@@ -627,16 +634,23 @@ bool KExiv2::setXmpTagStringBag(const char *xmpTagName, const QStringList& bag,
 
     try
     {
-        QStringList list = bag;
-        Exiv2::Value::AutoPtr xmpTxtBag = Exiv2::Value::create(Exiv2::xmpBag);
-
-        for (QStringList::const_iterator it = list.constBegin(); it != list.constEnd(); ++it )
+        if (bag.isEmpty())
         {
-            const std::string &txt((*it).toUtf8().constData());
-            xmpTxtBag->read(txt);
+            removeXmpTag(xmpTagName);
         }
-        d->xmpMetadata.add(Exiv2::XmpKey(xmpTagName), xmpTxtBag.get());
-        return true;
+        else
+        {
+            QStringList list = bag;
+            Exiv2::Value::AutoPtr xmpTxtBag = Exiv2::Value::create(Exiv2::xmpBag);
+
+            for (QStringList::const_iterator it = list.constBegin(); it != list.constEnd(); ++it )
+            {
+                const std::string &txt((*it).toUtf8().constData());
+                xmpTxtBag->read(txt);
+            }
+            d->xmpMetadata[xmpTagName].setValue(xmpTxtBag.get());
+            return true;
+        }
     }
     catch( Exiv2::Error &e )
     {
