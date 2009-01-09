@@ -6,8 +6,8 @@
  * Date        : 2006-09-15
  * Description : Exiv2 library interface for KDE
  *
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * Exiv2: http://www.exiv2.org
  * Exif : http://www.exif.org/Exif2-2.PDF
@@ -200,6 +200,15 @@ public:
         It's require Exiv2 0.18.
      */
     bool writeRawFiles() const;
+
+    /** Enable or disable file timestamp updating when metadata are saved.
+        By default files timestamp are untouched.
+     */
+    void setUpdateFileTimeStamp(bool on);
+
+    /** Return true if file timestamp is updated when metadata are saved.
+     */
+    bool updateFileTimeStamp() const;
 
     //-------------------------------------------------------------------
     //-- Metadata IMAGE INFORMATION manipulation methods ----------------

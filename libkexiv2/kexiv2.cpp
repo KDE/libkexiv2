@@ -6,8 +6,8 @@
  * Date        : 2006-09-15
  * Description : Exiv2 library interface for KDE
  *
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -409,17 +409,20 @@ bool KExiv2::save(const QString& filePath) const
 
 #endif // _XMP_SUPPORT_
 
-        // NOTE: Don't touch access and modification timestamp of file.
-        struct stat st;
-        ::stat(QFile::encodeName(filePath), &st);
+        if (!d->updateFileTimeStamp)
+        {
+            // NOTE: Don't touch access and modification timestamp of file.
+            struct stat st;
+            ::stat(QFile::encodeName(filePath), &st);
 
-        struct utimbuf ut;
-        ut.modtime = st.st_mtime;
-        ut.actime  = st.st_atime;
+            struct utimbuf ut;
+            ut.modtime = st.st_mtime;
+            ut.actime  = st.st_atime;
 
-        image->writeMetadata();
+            image->writeMetadata();
 
-        ::utime(QFile::encodeName(filePath), &ut);
+            ::utime(QFile::encodeName(filePath), &ut);
+        }
 
         return true;
     }
@@ -465,6 +468,16 @@ void KExiv2::setWriteRawFiles(bool on)
 bool KExiv2::writeRawFiles() const
 {
     return d->writeRawFiles;
+}
+
+void KExiv2::setUpdateFileTimeStamp(bool on)
+{
+    d->updateFileTimeStamp = on;
+}
+
+bool KExiv2::updateFileTimeStamp() const
+{
+    return d->updateFileTimeStamp;
 }
 
 bool KExiv2::setProgramId(bool /*on*/) const
