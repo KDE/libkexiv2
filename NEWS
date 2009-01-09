@@ -1,6 +1,8 @@
-0.4.0 - 
+0.4.0 - Released with KDE 4.2.0
+------------------------------------------------------------------------
 
 - Use kDebug(51003) instead qDebug()
+- New option to enable/disable Raw metadata writting.
 
 0.3.0 - Released with KDE 4.1.2
 ------------------------------------------------------------------------
