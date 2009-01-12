@@ -1,7 +1,7 @@
 PROJECT(libkexiv2)
 
 # =======================================================
-# Informations to update before to release this library.
+# Information to update before to release this library.
 
 # Library version history:
 # API      ABI
