@@ -22,6 +22,10 @@
  *
  * ============================================================ */
 
+// Qt includes
+
+#include <QBuffer>
+
 // Local includes.
 
 #include "kexiv2private.h"
@@ -845,22 +849,14 @@ bool KExiv2::setImagePreview(const QImage& preview, bool setProgramName) const
 
     try
     {
-        KTemporaryFile previewFile;
-        previewFile.setSuffix("KExiv2ImagePreview");
-        previewFile.setAutoRemove(true);
-        if ( !previewFile.open() )
-            return false;
+        QByteArray data;
+        QBuffer buffer(&data);
+        buffer.open(QIODevice::WriteOnly);
 
         // A little bit compressed preview jpeg image to limit IPTC size.
-        preview.save(previewFile.fileName(), "JPEG");
+        preview.save(&buffer, "JPEG");
         kDebug(51003) << "JPEG image preview size: (" << preview.width() << " x " 
-                      << preview.height() << ") pixels - " << (int)previewFile.size() << " bytes" << endl;
-
-        QByteArray data;
-        data.resize(previewFile.size());
-        QDataStream stream( &previewFile );
-        stream.readRawData(data.data(), data.size());
-        previewFile.close();
+                      << preview.height() << ") pixels - " << data.size() << " bytes" << endl;
 
         Exiv2::DataValue val;
         val.read((Exiv2::byte *)data.data(), data.size());
