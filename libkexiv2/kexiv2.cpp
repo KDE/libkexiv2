@@ -6,8 +6,8 @@
  * Date        : 2006-09-15
  * Description : Exiv2 library interface for KDE
  *
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * NOTE: Do not use kdDebug() in this implementation because
  *       it will be multithreaded. Use qDebug() instead.
@@ -41,6 +41,7 @@ extern "C"
 #include <qtextcodec.h>
 #include <qwmatrix.h>
 #include <qfileinfo.h>
+#include <qbuffer.h>
 
 // Local includes.
 
@@ -1241,22 +1242,14 @@ bool KExiv2::setImagePreview(const QImage& preview, bool setProgramName)
 
     try
     {
-        KTempFile previewFile(QString(), "KExiv2ImagePreview");
-        previewFile.setAutoDelete(true);
+        QByteArray data;
+        QBuffer buffer(data);
+        buffer.open(IO_WriteOnly);
+
         // A little bit compressed preview jpeg image to limit IPTC size.
-        preview.save(previewFile.name(), "JPEG");
-
-        QFile file(previewFile.name());
-        if ( !file.open(IO_ReadOnly) )
-            return false;
-
+        preview.save(&buffer, "JPEG");
         qDebug("JPEG image preview size: (%i x %i) pixels - %i bytes",
-               preview.width(), preview.height(), (int)file.size());
-
-        QByteArray data(file.size());
-        QDataStream stream( &file );
-        stream.readRawBytes(data.data(), data.size());
-        file.close();
+               preview.width(), preview.height(), (int)data.size());
 
         Exiv2::DataValue val;
         val.read((Exiv2::byte *)data.data(), data.size());
