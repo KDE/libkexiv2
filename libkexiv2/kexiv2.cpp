@@ -798,15 +798,22 @@ bool KExiv2::setExifThumbnail(const QImage& thumb, bool setProgramName)
 
     try
     {
+#if (EXIV2_TEST_VERSION(0,17,91))
+        QByteArray data;
+        QBuffer buffer(data);
+        buffer.open(IO_WriteOnly);
+        thumb.save(&buffer, "JPEG");
+        Exiv2::ExifThumb thumb(d->exifMetadata);
+        thumb.setJpegThumbnail((Exiv2::byte *)data.data(), data.size());
+#else
+        Exiv2::ExifThumb thumb(d->exifMetadata);
+        thumb.setJpegThumbnail( fileName );
+
         KTempFile thumbFile(QString(), "KExiv2ExifThumbnail");
         thumbFile.setAutoDelete(true);
         thumb.save(thumbFile.name(), "JPEG");
 
         const std::string &fileName( (const char*)(QFile::encodeName(thumbFile.name())) );
-#if (EXIV2_TEST_VERSION(0,17,91))
-        Exiv2::ExifThumb thumb(d->exifMetadata);
-        thumb.setJpegThumbnail( fileName );
-#else
         d->exifMetadata.setJpegThumbnail( fileName );
 #endif
         return true;
