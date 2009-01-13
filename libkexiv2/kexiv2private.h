@@ -37,6 +37,7 @@
 
 // Qt includes.
 
+#include <QBuffer>
 #include <QFile>
 #include <QImage>
 #include <QSize>

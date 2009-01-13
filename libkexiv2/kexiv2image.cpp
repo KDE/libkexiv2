@@ -22,10 +22,6 @@
  *
  * ============================================================ */
 
-// Qt includes
-
-#include <QBuffer>
-
 // Local includes.
 
 #include "kexiv2private.h"
