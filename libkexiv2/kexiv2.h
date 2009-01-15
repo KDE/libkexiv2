@@ -891,7 +891,7 @@ private:
 
     /** Internal class to store private members. Used to improve binary compatibility
      */
-    KExiv2Priv *d;
+    KExiv2Priv* const d;
 };
 
 }  // NameSpace KExiv2Iface

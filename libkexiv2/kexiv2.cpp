@@ -39,14 +39,13 @@ namespace KExiv2Iface
 {
 
 KExiv2::KExiv2()
+      : d(new KExiv2Priv)
 {
-    d = new KExiv2Priv;
 }
 
 KExiv2::KExiv2(const KExiv2& metadata)
+      : d(new KExiv2Priv)
 {
-    d = new KExiv2Priv;
-
     // No need to use QT containers transormations here. We can use original objects directly.
     d->imageComments = metadata.d->imageComments;
     d->exifMetadata  = metadata.d->exifMetadata;
@@ -60,8 +59,9 @@ KExiv2::KExiv2(const KExiv2& metadata)
 }
 
 KExiv2::KExiv2(const QString& filePath)
+      : d(new KExiv2Priv)
+
 {
-    d = new KExiv2Priv;
     load(filePath);
 }
 
