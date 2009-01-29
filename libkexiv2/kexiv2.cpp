@@ -336,8 +336,7 @@ bool KExiv2::save(const QString& filePath) const
         // Image Comments ---------------------------------
 
         mode = image->checkMode(Exiv2::mdComment);
-        if (!d->imageComments.empty() && 
-            (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite))
+        if (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite)
         {
             image->setComment(d->imageComments);
         }
@@ -345,8 +344,7 @@ bool KExiv2::save(const QString& filePath) const
         // Exif metadata ----------------------------------
 
         mode = image->checkMode(Exiv2::mdExif);
-        if (!d->exifMetadata.empty() && 
-            (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite))
+        if (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite)
         {
             if (image->mimeType() == "image/tiff")
             {
@@ -390,8 +388,7 @@ bool KExiv2::save(const QString& filePath) const
         // Iptc metadata ----------------------------------
 
         mode = image->checkMode(Exiv2::mdIptc);
-        if (!d->iptcMetadata.empty() && 
-            (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite))
+        if (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite)
         {
             image->setIptcData(d->iptcMetadata);
         }
@@ -401,8 +398,7 @@ bool KExiv2::save(const QString& filePath) const
         // Xmp metadata -----------------------------------
 
         mode = image->checkMode(Exiv2::mdXmp);
-        if (!d->xmpMetadata.empty() && 
-            (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite))
+        if (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite)
         {
             image->setXmpData(d->xmpMetadata);
         }
