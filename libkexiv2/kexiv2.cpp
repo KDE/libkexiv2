@@ -308,20 +308,22 @@ bool KExiv2::save(const QString& filePath) const
     // TIFF/EP Raw file based supported by Exiv2 0.18 are : DNG, NEF, PEF.
     QString rawTiffBasedSupported("dng nef pef");
     QString rawTiffBasedNotSupported("3fr arw cr2 dcr erf k25 kdc mos orf raw sr2 srf");
-    if (rawTiffBasedNotSupported.contains(finfo.suffix().toUpper()))
+    QString ext = finfo.suffix().toLower();
+    if (rawTiffBasedNotSupported.contains(ext))
     {
-        kDebug(51003) << "'" << dinfo.filePath().toAscii().constData() 
+        kDebug(51003) << "'" << finfo.fileName().toAscii().constData() 
                       << "' is TIFF based RAW file not yet supported. Metadata not saved." << endl;
         return false;
     }
 
-    if (rawTiffBasedSupported.contains(finfo.suffix().toUpper()) && !d->writeRawFiles)
+    if (rawTiffBasedSupported.contains(finfo.suffix().toLower()) && !d->writeRawFiles)
     {
-        kDebug(51003) << "'" << dinfo.filePath().toAscii().constData() 
+        kDebug(51003) << "'" << finfo.fileName().toAscii().constData() 
                       << "' is TIFF based RAW file supported but writing mode is disabled. " 
                       << "Metadata not saved." << endl;
         return false;
     }
+    kDebug(51003) << "File Extension: " << ext << " is supported for writing mode" << endl;
 
     try
     {
