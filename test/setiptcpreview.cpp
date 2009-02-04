@@ -22,10 +22,10 @@
 
 // Qt includes.
 
-#include <qimage.h>
-#include <qstring.h>
-#include <qfile.h>
-#include <qfileinfo.h>
+#include <QMatrix>
+#include <QImage>
+#include <QString>
+#include <QFile>
 
 // KDE includes.
 
@@ -56,10 +56,14 @@ int main (int argc, char **argv)
         return -1;
     }
 
-    QString filePath(argv[1]);
-    QImage  image(filePath);
     QImage  preview;
+    QString filePath(argv[1]);
     KExiv2  meta(filePath);
+
+    QImage  image(filePath);
+    QMatrix matrix;
+    matrix.rotate(90);
+    image = image.transformed(matrix);
 
     QSize previewSize = image.size();
     previewSize.scale(1280, 1024, Qt::KeepAspectRatio);
