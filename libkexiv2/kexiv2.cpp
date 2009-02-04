@@ -421,6 +421,10 @@ bool KExiv2::save(const QString& filePath) const
 
             ::utime(QFile::encodeName(filePath), &ut);
         }
+        else
+        {
+            image->writeMetadata();
+        }
 
         return true;
     }
