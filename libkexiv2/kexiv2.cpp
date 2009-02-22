@@ -1279,10 +1279,15 @@ QString KExiv2::getExifTagString(const char* exifTagName, bool escapeCR) const
         Exiv2::ExifData::iterator it = exifData.findKey(exifKey);
         if (it != exifData.end())
         {
+#if (EXIV2_TEST_VERSION(0,17,91))
+            // See B.K.O #184156 comment #13
+            std::string val  = it->print(&exifData);
+            QString tagValue = QString::fromLocal8Bit(val.c_str());
+#else
             std::ostringstream os;
             os << *it;
             QString tagValue = QString::fromLocal8Bit(os.str().c_str());
-
+#endif
             if (escapeCR)
                 tagValue.replace("\n", " ");
 
