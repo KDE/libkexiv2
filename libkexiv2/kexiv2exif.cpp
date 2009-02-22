@@ -7,8 +7,8 @@
  * Description : Exiv2 library interface for KDE
  *               Exif manipulation methods
  *
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -685,9 +685,9 @@ QString KExiv2::getExifTagString(const char* exifTagName, bool escapeCR) const
         Exiv2::ExifData::iterator it = exifData.findKey(exifKey);
         if (it != exifData.end())
         {
-            std::ostringstream os;
-            os << *it;
-            QString tagValue = QString::fromLocal8Bit(os.str().c_str());
+            // See B.K.O #184156 comment #13
+            std::string val  = it->print(&exifData);
+            QString tagValue = QString::fromLocal8Bit(val.c_str());
 
             if (escapeCR)
                 tagValue.replace("\n", " ");
