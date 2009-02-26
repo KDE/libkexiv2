@@ -588,7 +588,8 @@ QByteArray KExiv2::getExifTagData(const char* exifTagName) const
 #else
             (*it).copy((Exiv2::byte*)s, exifData.byteOrder());
 #endif
-            QByteArray data = QByteArray::fromRawData(s, (*it).size());
+            QByteArray data(s, (*it).size());
+            delete s;
             return data;
         }
     }
