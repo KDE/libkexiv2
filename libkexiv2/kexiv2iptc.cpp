@@ -305,7 +305,8 @@ QByteArray KExiv2::getIptcTagData(const char *iptcTagName) const
         {
             char *s = new char[(*it).size()];
             (*it).copy((Exiv2::byte*)s, Exiv2::bigEndian);
-            QByteArray data = QByteArray::fromRawData(s, (*it).size());
+            QByteArray data(s, (*it).size());
+            delete s;
             return data;
         }
     }
