@@ -6,7 +6,7 @@
  * Date        : 2007-02-06
  * Description : Exiv2 library interface for KDE
  *
- * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,9 +23,9 @@
 #ifndef KEXIV2_VERSION_H
 #define KEXIV2_VERSION_H
 
-static const char kexiv2_version[] = "0.1.9";
+static const char kexiv2_version[] = "0.1.10";
 
-#define KEXIV2_VERSION 0x000109
+#define KEXIV2_VERSION 0x000110
 
 #endif // KEXIV2_VERSION_H
 
