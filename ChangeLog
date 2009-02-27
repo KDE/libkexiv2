@@ -1,3 +1,53 @@
+V 0.1.9 - 2009-02-27
+----------------------------------------------------------------------------
+2009-02-22 14:14  cgilles
+
+	* libkexiv2/kexiv2.cpp: backport commit #
+
+2009-01-30 12:27  cgilles
+
+	* libkexiv2/kexiv2.cpp: backport commit #918639 from trunk
+
+2009-01-29 12:34  cgilles
+
+	* NEWS, libkexiv2/kexiv2.cpp: backport commit #918138 from trunk
+	  CCBUG: 175746
+
+2009-01-27 14:47  cgilles
+
+	* README: fix qt url
+
+2009-01-14 16:43  cgilles
+
+	* libkexiv2/kexiv2.cpp: compile with Exiv2 < 0.18
+
+2009-01-13 12:20  cgilles
+
+	* libkexiv2/kexiv2.cpp: backport commit #910445 from trunk
+
+2009-01-13 12:04  cgilles
+
+	* libkexiv2/kexiv2.cpp, libkexiv2/kexiv2.h: backport commit #910071
+	  from trunk
+
+2009-01-05 12:51  cgilles
+
+	* libkexiv2/kexiv2private.cpp, libkexiv2/kexiv2private.h: backport
+	  commit #905987 from trunk
+
+2008-12-14 18:46  cgilles
+
+	* NEWS, libkexiv2.lsm, libkexiv2.pc.in, libkexiv2/version.h: update
+	  release version
+
+2008-12-13 10:13  cgilles
+
+	* ChangeLog, libkexiv2.lsm: preparing libkexiv2 0.1.8 for KDE3
+
+2008-12-12 23:13  cgilles
+
+	* NEWS: update
+
 V 0.1.8 - 2008-12-13
 ----------------------------------------------------------------------------
 2008-12-07 19:17  cgilles
