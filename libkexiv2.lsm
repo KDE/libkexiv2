@@ -1,7 +1,7 @@
 Begin4
 Title: libkexiv2
-Version: 0.1.9
-Entered-date: 2009-02-27
+Version: 0.1.10
+Entered-date: 2009-xx-xx
 Description: A C++ library to manipulate EXIF/IPTC metadata using Exiv2 library. This library is used by digiKam and kipi-plugins.
 Keywords: kde image jpeg raw tiff png exif iptc digiKam kipi-plugins
 Author: caulier dot gilles at gmail dot com (Gilles Caulier)
