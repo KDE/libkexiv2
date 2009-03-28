@@ -153,6 +153,14 @@ bool KExiv2::supportMetadataWritting(const QString& typeMime)
         return false;
 #endif
     }
+    else if (typeMime == QString("image/x-adobe-dng"))
+    {
+#if (EXIV2_TEST_VERSION(0,18,1))
+        return true;
+#else
+        return false;
+#endif
+    }
 
     return false;
 }
