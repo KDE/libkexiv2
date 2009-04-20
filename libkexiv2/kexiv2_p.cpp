@@ -23,7 +23,7 @@
 
 // Local includes.
 
-#include "kexiv2private.h"
+#include "kexiv2_p.h"
 
 namespace KExiv2Iface
 {
