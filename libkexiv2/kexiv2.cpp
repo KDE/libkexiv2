@@ -439,7 +439,10 @@ bool KExiv2::save(const QString& filePath) const
 bool KExiv2::applyChanges() const
 {
     if (d->filePath.isEmpty())
+    {
+        kDebug(51003) << "Failed to apply changes: file path is empty!" << endl;
         return false;
+    }
 
     return save(d->filePath);
 }
