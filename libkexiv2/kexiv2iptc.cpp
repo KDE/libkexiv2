@@ -7,8 +7,8 @@
  * Description : Exiv2 library interface for KDE
  *               Iptc manipulation methods
  *
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -156,12 +156,12 @@ KExiv2::MetaDataMap KExiv2::getIptcTagsDataList(const QStringList &iptcKeysFilte
 
         for (Exiv2::IptcData::iterator md = iptcData.begin(); md != iptcData.end(); ++md)
         {
-            QString key = QString::fromAscii(md->key().c_str());
+            QString key = QString::fromLocal8Bit(md->key().c_str());
 
             // Decode the tag value with a user friendly output.
             std::ostringstream os;
             os << *md;
-            QString value = QString::fromAscii(os.str().c_str());
+            QString value = QString(os.str().c_str());
             // To make a string just on one line.
             value.replace("\n", " ");
 
@@ -330,7 +330,7 @@ QString KExiv2::getIptcTagString(const char* iptcTagName, bool escapeCR) const
         {
             std::ostringstream os;
             os << *it;
-            QString tagValue = QString::fromLocal8Bit(os.str().c_str());
+            QString tagValue(os.str().c_str());
 
             if (escapeCR)
                 tagValue.replace("\n", " ");
