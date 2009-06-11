@@ -156,12 +156,12 @@ KExiv2::MetaDataMap KExiv2::getIptcTagsDataList(const QStringList &iptcKeysFilte
 
         for (Exiv2::IptcData::iterator md = iptcData.begin(); md != iptcData.end(); ++md)
         {
-            QString key = QString::fromAscii(md->key().c_str());
+            QString key = QString::fromLocal8Bit(md->key().c_str());
 
             // Decode the tag value with a user friendly output.
             std::ostringstream os;
             os << *md;
-            QString value = QString::fromAscii(os.str().c_str());
+            QString value = QString(os.str().c_str());
             // To make a string just on one line.
             value.replace("\n", " ");
 
@@ -330,7 +330,7 @@ QString KExiv2::getIptcTagString(const char* iptcTagName, bool escapeCR) const
         {
             std::ostringstream os;
             os << *it;
-            QString tagValue = QString::fromLocal8Bit(os.str().c_str());
+            QString tagValue(os.str().c_str());
 
             if (escapeCR)
                 tagValue.replace("\n", " ");
@@ -371,7 +371,7 @@ QStringList KExiv2::getIptcTagsStringList(const char* iptcTagName, bool escapeCR
     {
         if (!d->iptcMetadata.empty())
         {
-            QStringList values;          
+            QStringList values;
             Exiv2::IptcData iptcData(d->iptcMetadata);
 
             for (Exiv2::IptcData::iterator it = iptcData.begin(); it != iptcData.end(); ++it)
