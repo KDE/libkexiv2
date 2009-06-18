@@ -153,6 +153,14 @@ bool KExiv2::supportMetadataWritting(const QString& typeMime)
         return false;
 #endif
     }
+    else if (typeMime == QString("image/pgf"))
+    {
+#if (EXIV2_TEST_VERSION(0,18,2))
+        return true;
+#else
+        return false;
+#endif
+    }
 
     return false;
 }
