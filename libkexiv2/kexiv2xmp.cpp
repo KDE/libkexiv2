@@ -384,19 +384,22 @@ bool KExiv2::setXmpTagStringListLangAlt(const char *xmpTagName, const KExiv2::Al
         // Remove old XMP alternative Language tag.
         removeXmpTag(xmpTagName);
 
-        Exiv2::Value::AutoPtr xmpTxtVal = Exiv2::Value::create(Exiv2::langAlt);
-
-        for (AltLangMap::const_iterator it = values.begin(); it != values.end(); ++it)
+        if (!values.isEmpty())
         {
-            QString lang = it.key();  
-            QString text = it.value();
-            QString txtLangAlt = QString("lang=%1 %2").arg(lang).arg(text);
-            const std::string &txt(txtLangAlt.toUtf8().constData());
-            xmpTxtVal->read(txt);
-        }
+            Exiv2::Value::AutoPtr xmpTxtVal = Exiv2::Value::create(Exiv2::langAlt);
 
-        // ...and add the new one instead.
-        d->xmpMetadata.add(Exiv2::XmpKey(xmpTagName), xmpTxtVal.get());
+            for (AltLangMap::const_iterator it = values.begin(); it != values.end(); ++it)
+            {
+                QString lang = it.key();
+                QString text = it.value();
+                QString txtLangAlt = QString("lang=%1 %2").arg(lang).arg(text);
+                const std::string &txt(txtLangAlt.toUtf8().constData());
+                xmpTxtVal->read(txt);
+            }
+
+            // ...and add the new one instead.
+            d->xmpMetadata.add(Exiv2::XmpKey(xmpTagName), xmpTxtVal.get());
+        }
         return true;
     }
     catch( Exiv2::Error &e )
