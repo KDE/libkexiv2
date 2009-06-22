@@ -231,33 +231,35 @@ bool KExiv2::setExifComment(const QString& comment, bool setProgramName) const
 
     try
     {
-        if (comment.isEmpty())
-            return false;
+        removeExifTag("Exif.Photo.UserComment");
 
-    // Write as Unicode only when necessary.
-    QTextCodec *latin1Codec = QTextCodec::codecForName("iso8859-1");
-    if (latin1Codec->canEncode(comment))
-    {
-        // write as ASCII
-        std::string exifComment("charset=\"Ascii\" ");
-        exifComment += comment.toLatin1().constData();
-        d->exifMetadata["Exif.Photo.UserComment"] = exifComment;
-    }
-    else
-    {
-        // write as Unicode (UCS-2)
+        if (!comment.isNull())
+        {
+            // Write as Unicode only when necessary.
+            QTextCodec *latin1Codec = QTextCodec::codecForName("iso8859-1");
+            if (latin1Codec->canEncode(comment))
+            {
+                // write as ASCII
+                std::string exifComment("charset=\"Ascii\" ");
+                exifComment += comment.toLatin1().constData();
+                d->exifMetadata["Exif.Photo.UserComment"] = exifComment;
+            }
+            else
+            {
+                // write as Unicode (UCS-2)
 
-        // Be aware that we are dealing with a UCS-2 string.
-        // Null termination means \0\0, strlen does not work,
-        // do not use any const-char*-only methods,
-        // pass a std::string and not a const char * to ExifDatum::operator=().
-        const unsigned short *ucs2 = comment.utf16();
-        std::string exifComment("charset=\"Unicode\" ");
-        exifComment.append((const char*)ucs2, sizeof(unsigned short) * comment.length());
-        d->exifMetadata["Exif.Photo.UserComment"] = exifComment;
-    }
-
+                // Be aware that we are dealing with a UCS-2 string.
+                // Null termination means \0\0, strlen does not work,
+                // do not use any const-char*-only methods,
+                // pass a std::string and not a const char * to ExifDatum::operator=().
+                const unsigned short *ucs2 = comment.utf16();
+                std::string exifComment("charset=\"Unicode\" ");
+                exifComment.append((const char*)ucs2, sizeof(unsigned short) * comment.length());
+                d->exifMetadata["Exif.Photo.UserComment"] = exifComment;
+            }
+        }
         return true;
+
     }
     catch( Exiv2::Error &e )
     {
