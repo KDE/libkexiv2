@@ -149,12 +149,6 @@ public:
      */
     static QString version();
 
-    /** return true if metadata from file cannot be written by Exiv2.
-        This method is obosolete and will be removed.
-        Use canWriteComment(), canWriteExif(), canWriteIptc(), or canWriteXmp() instead.
-     */
-    KDE_DEPRECATED static bool isReadOnly(const QString& filePath);
-
     //-----------------------------------------------------------------
     //-- GENERAL methods ----------------------------------------------
     //-----------------------------------------------------------------

@@ -184,25 +184,6 @@ QString KExiv2::version()
     return QString(kexiv2_version);
 }
 
-bool KExiv2::isReadOnly(const QString& filePath)
-{
-    if (!canWriteComment(filePath))
-        return true;
-
-    if (!canWriteExif(filePath))
-        return true;
-
-    if (!canWriteIptc(filePath))
-        return true;
-
-#ifdef _XMP_SUPPORT_
-    if (!canWriteXmp(filePath))
-        return true;
-#endif // _XMP_SUPPORT_
-
-    return false;
-}
-
 //-- General methods ----------------------------------------------
 
 bool KExiv2::load(const QByteArray& imgData) const
