@@ -188,6 +188,11 @@ QString KExiv2::version()
 
 bool KExiv2::load(const QByteArray& imgData) const
 {
+    return loadFromData(imgData);
+}
+
+bool KExiv2::loadFromData(const QByteArray& imgData) const
+{
     if (imgData.isEmpty())
         return false;
 
