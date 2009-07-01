@@ -733,6 +733,7 @@ QVariant KExiv2::getXmpTagVariant(const char *xmpTagName, bool rationalAsListOfI
                 }
                 case Exiv2::xmpBag:
                 case Exiv2::xmpSeq:
+                case Exiv2::xmpAlt:
                 {
                     QStringList list;
                     for (int i=0; i < it->count(); i++)
@@ -741,7 +742,7 @@ QVariant KExiv2::getXmpTagVariant(const char *xmpTagName, bool rationalAsListOfI
                     }
                     return list;
                 }
-                case Exiv2::xmpAlt:
+                case Exiv2::langAlt:
                 {
                     // access the value directly
                     const Exiv2::LangAltValue &value = static_cast<const Exiv2::LangAltValue &>(it->value());
