@@ -56,51 +56,59 @@ bool KExiv2::getGPSLatitudeNumber(double *latitude) const
         double num, den, min, sec;
         *latitude=0.0;
 
-        // Get the reference first.
+        // Get the reference from Exif first.
 
         QByteArray latRef = getExifTagData("Exif.GPSInfo.GPSLatitudeRef");
-        if (latRef.isEmpty()) return false;
-
-        // Latitude decoding.
-
-        Exiv2::ExifKey exifKey("Exif.GPSInfo.GPSLatitude");
-        Exiv2::ExifData exifData(d->exifMetadata);
-        Exiv2::ExifData::iterator it = exifData.findKey(exifKey);
-        if (it != exifData.end() && (*it).count() == 3)
+        if (!latRef.isEmpty())
         {
-            num = (double)((*it).toRational(0).first);
-            den = (double)((*it).toRational(0).second);
-            if (den == 0)
-                return false;
-            *latitude = num/den;
+            // Latitude decoding from Exif.
 
-            num = (double)((*it).toRational(1).first);
-            den = (double)((*it).toRational(1).second);
-            if (den == 0)
-                return false;
-            min = num/den;
-            if (min != -1.0)
-                *latitude = *latitude + min/60.0;
+            Exiv2::ExifKey exifKey("Exif.GPSInfo.GPSLatitude");
+            Exiv2::ExifData exifData(d->exifMetadata);
+            Exiv2::ExifData::iterator it = exifData.findKey(exifKey);
+            if (it != exifData.end() && (*it).count() == 3)
+            {
+                num = (double)((*it).toRational(0).first);
+                den = (double)((*it).toRational(0).second);
+                if (den == 0)
+                    return false;
+                *latitude = num/den;
 
-            num = (double)((*it).toRational(2).first);
-            den = (double)((*it).toRational(2).second);
-            if (den == 0)
+                num = (double)((*it).toRational(1).first);
+                den = (double)((*it).toRational(1).second);
+                if (den == 0)
+                    return false;
+                min = num/den;
+                if (min != -1.0)
+                    *latitude = *latitude + min/60.0;
+
+                num = (double)((*it).toRational(2).first);
+                den = (double)((*it).toRational(2).second);
+                if (den == 0)
+                    return false;
+                sec = num/den;
+                if (sec != -1.0)
+                    *latitude = *latitude + sec/3600.0;
+            }
+            else
+            {
                 return false;
-            sec = num/den;
-            if (sec != -1.0)
-                *latitude = *latitude + sec/3600.0;
+            }
+
+            if (latRef[0] == 'S')
+                *latitude *= -1.0;
+
+            return true;
         }
         else
-            return false;
-
-        if (latRef[0] == 'S')
-            *latitude *= -1.0;
-
-        return true;
+        {
+            // Try XMP now.
+            return ( convertFromGPSCoordinateString(getXmpTagString("Xmp.exif.GPSLatitude"), latitude) );
+        }
     }
     catch( Exiv2::Error &e )
     {
-        d->printExiv2ExceptionError("Cannot get Exif GPS tag using Exiv2 ", e);
+        d->printExiv2ExceptionError("Cannot get GPS tag using Exiv2 ", e);
     }
 
     return false;
@@ -113,51 +121,59 @@ bool KExiv2::getGPSLongitudeNumber(double *longitude) const
         double num, den, min, sec;
         *longitude=0.0;
 
-        // Get the reference first.
+        // Get the reference from Exif first.
 
         QByteArray lngRef = getExifTagData("Exif.GPSInfo.GPSLongitudeRef");
-        if (lngRef.isEmpty()) return false;
-
-        // Longitude decoding.
-
-        Exiv2::ExifKey exifKey2("Exif.GPSInfo.GPSLongitude");
-        Exiv2::ExifData exifData(d->exifMetadata);
-        Exiv2::ExifData::iterator it = exifData.findKey(exifKey2);
-        if (it != exifData.end() && (*it).count() == 3)
+        if (!lngRef.isEmpty())
         {
-            num = (double)((*it).toRational(0).first);
-            den = (double)((*it).toRational(0).second);
-            if (den == 0)
-                return false;
-            *longitude = num/den;
+            // Longitude decoding from Exif.
 
-            num = (double)((*it).toRational(1).first);
-            den = (double)((*it).toRational(1).second);
-            if (den == 0)
-                return false;
-            min = num/den;
-            if (min != -1.0)
-                *longitude = *longitude + min/60.0;
+            Exiv2::ExifKey exifKey2("Exif.GPSInfo.GPSLongitude");
+            Exiv2::ExifData exifData(d->exifMetadata);
+            Exiv2::ExifData::iterator it = exifData.findKey(exifKey2);
+            if (it != exifData.end() && (*it).count() == 3)
+            {
+                num = (double)((*it).toRational(0).first);
+                den = (double)((*it).toRational(0).second);
+                if (den == 0)
+                    return false;
+                *longitude = num/den;
 
-            num = (double)((*it).toRational(2).first);
-            den = (double)((*it).toRational(2).second);
-            if (den == 0)
+                num = (double)((*it).toRational(1).first);
+                den = (double)((*it).toRational(1).second);
+                if (den == 0)
+                    return false;
+                min = num/den;
+                if (min != -1.0)
+                    *longitude = *longitude + min/60.0;
+
+                num = (double)((*it).toRational(2).first);
+                den = (double)((*it).toRational(2).second);
+                if (den == 0)
+                    return false;
+                sec = num/den;
+                if (sec != -1.0)
+                    *longitude = *longitude + sec/3600.0;
+            }
+            else
+            {
                 return false;
-            sec = num/den;
-            if (sec != -1.0)
-                *longitude = *longitude + sec/3600.0;
+            }
+
+            if (lngRef[0] == 'W')
+                *longitude *= -1.0;
+
+            return true;
         }
         else
-            return false;
-
-        if (lngRef[0] == 'W')
-            *longitude *= -1.0;
-
-        return true;
+        {
+            // Try XMP now.
+            return ( convertFromGPSCoordinateString(getXmpTagString("Xmp.exif.GPSLongitude"), longitude) );
+        }
     }
     catch( Exiv2::Error &e )
     {
-        d->printExiv2ExceptionError("Cannot get Exif GPS tag using Exiv2 ", e);
+        d->printExiv2ExceptionError("Cannot get GPS tag using Exiv2 ", e);
     }
 
     return false;
@@ -170,14 +186,13 @@ bool KExiv2::getGPSAltitude(double *altitude) const
         double num, den;
         *altitude=0.0;
 
-        // Get the reference first (above/below sea level)
+        // Get the reference from Exif first (above/below sea level)
 
         QByteArray altRef = getExifTagData("Exif.GPSInfo.GPSAltitudeRef");
-
-        // Altitude decoding.
-
         if (!altRef.isEmpty())
         {
+            // Altitude decoding from Exif.
+
             Exiv2::ExifKey exifKey3("Exif.GPSInfo.GPSAltitude");
             Exiv2::ExifData exifData(d->exifMetadata);
             Exiv2::ExifData::iterator it = exifData.findKey(exifKey3);
@@ -190,19 +205,41 @@ bool KExiv2::getGPSAltitude(double *altitude) const
                 *altitude = num/den;
             }
             else
+            {
                 return false;
+            }
 
             if (altRef[0] == '1')
                 *altitude *= -1.0;
+
+            return true;
         }
         else
-            return false;
+        {
+            // Try XMP now.
+            QString altRefXmp = getExifTagData("Exif.GPSInfo.GPSAltitudeRef");
+            if (!altRefXmp.isEmpty())
+            {
+                QString altXmp = getXmpTagString("Xmp.exif.GPSAltitude");
+                if (!altXmp.isEmpty())
+                {
+                    num = altXmp.section("/", 0, 0).toDouble();
+                    den = altXmp.section("/", 1, 1).toDouble();
+                    if (den == 0)
+                        return false;
+                    *altitude = num/den;
 
-        return true;
+                    if (altRefXmp == QString("1"))
+                        *altitude *= -1.0;
+
+                    return true;
+                }
+            }
+        }
     }
     catch( Exiv2::Error &e )
     {
-        d->printExiv2ExceptionError("Cannot get Exif GPS tag using Exiv2 ", e);
+        d->printExiv2ExceptionError("Cannot get GPS tag using Exiv2 ", e);
     }
 
     return false;
@@ -296,19 +333,29 @@ bool KExiv2::setGPSInfo(double altitude, double latitude, double longitude, bool
         // Datum: the datum of the measured data. If not given, we insert WGS-84.
         d->exifMetadata["Exif.GPSInfo.GPSMapDatum"] = "WGS-84";
 
+#ifdef _XMP_SUPPORT_
+        setXmpTagString("Xmp.exif.GPSVersionID", QString("2.0.0.0"), false);
+        setXmpTagString("Xmp.exif.GPSMapDatum", QString("WGS-84"), false);
+#endif // _XMP_SUPPORT_
+
         // Now start adding data.
 
         // ALTITUDE.
         // Altitude reference: byte "00" meaning "above sea level", "01" mening "behing sea level".
         value = Exiv2::Value::create(Exiv2::unsignedByte);
         if (altitude >= 0) value->read("0");
-	else               value->read("1");
+        else               value->read("1");
         d->exifMetadata.add(Exiv2::ExifKey("Exif.GPSInfo.GPSAltitudeRef"), value.get());
 
         // And the actual altitude, as absolute value..
         convertToRational(fabs(altitude), &nom, &denom, 4);
         snprintf(scratchBuf, 100, "%ld/%ld", nom, denom);
         d->exifMetadata["Exif.GPSInfo.GPSAltitude"] = scratchBuf;
+
+#ifdef _XMP_SUPPORT_
+        setXmpTagString("Xmp.exif.GPSAltitudeRef", (altitude >= 0) ? QString("0") : QString("1"), false);
+        setXmpTagString("Xmp.exif.GPSAltitude", QString(scratchBuf), false);
+#endif // _XMP_SUPPORT_
 
         // LATTITUDE
         // Latitude reference: "N" or "S".
@@ -345,6 +392,11 @@ bool KExiv2::setGPSInfo(double altitude, double latitude, double longitude, bool
         snprintf(scratchBuf, 100, "%ld/1 %ld/1000000 0/1", deg, min);
         d->exifMetadata["Exif.GPSInfo.GPSLatitude"] = scratchBuf;
 
+#ifdef _XMP_SUPPORT_
+        setXmpTagString("Xmp.exif.GPSLatitudeRef", (latitude < 0) ? QString("S") : QString("N"), false);
+        setXmpTagString("Xmp.exif.GPSLatitude", convertToGPSCoordinateString(true, latitude), false);
+#endif // _XMP_SUPPORT_
+
         // LONGITUDE
         // Longitude reference: "E" or "W".
         if (longitude < 0)
@@ -380,6 +432,11 @@ bool KExiv2::setGPSInfo(double altitude, double latitude, double longitude, bool
         snprintf(scratchBuf, 100, "%ld/1 %ld/1000000 0/1", deg, min);
         d->exifMetadata["Exif.GPSInfo.GPSLongitude"] = scratchBuf;
 
+#ifdef _XMP_SUPPORT_
+        setXmpTagString("Xmp.exif.GPSLongitudeRef", (longitude < 0) ? QString("W") : QString("E"), false);
+        setXmpTagString("Xmp.exif.GPSLongitude", convertToGPSCoordinateString(false, longitude), false);
+#endif // _XMP_SUPPORT_
+
         return true;
     }
     catch( Exiv2::Error &e )
@@ -414,6 +471,11 @@ bool KExiv2::setGPSInfo(double altitude, const QString &latitude, const QString 
         // Datum: the datum of the measured data. If not given, we insert WGS-84.
         d->exifMetadata["Exif.GPSInfo.GPSMapDatum"] = "WGS-84";
 
+#ifdef _XMP_SUPPORT_
+        setXmpTagString("Xmp.exif.GPSVersionID", QString("2.0.0.0"), false);
+        setXmpTagString("Xmp.exif.GPSMapDatum", QString("WGS-84"), false);
+#endif // _XMP_SUPPORT_
+
         // Now start adding data.
 
         // ALTITUDE.
@@ -429,6 +491,11 @@ bool KExiv2::setGPSInfo(double altitude, const QString &latitude, const QString 
         snprintf(scratchBuf, 100, "%ld/%ld", num, denom);
         d->exifMetadata["Exif.GPSInfo.GPSAltitude"] = scratchBuf;
 
+#ifdef _XMP_SUPPORT_
+        setXmpTagString("Xmp.exif.GPSAltitudeRef", (altitude >= 0) ? QString("0") : QString("1"), false);
+        setXmpTagString("Xmp.exif.GPSAltitude", QString(scratchBuf), false);
+#endif // _XMP_SUPPORT_
+
         // LATITUDE
         // Latitude reference: "N" or "S".
         convertFromGPSCoordinateString(latitude,
@@ -443,6 +510,11 @@ bool KExiv2::setGPSInfo(double altitude, const QString &latitude, const QString 
                                                              numSeconds, denomSeconds);
         d->exifMetadata["Exif.GPSInfo.GPSLatitude"] = scratchBuf;
 
+#ifdef _XMP_SUPPORT_
+        setXmpTagString("Xmp.exif.GPSLatitudeRef", QString(directionReference), false);
+        setXmpTagString("Xmp.exif.GPSLatitude", latitude, false);
+#endif // _XMP_SUPPORT_
+
         // LONGITUDE
         convertFromGPSCoordinateString(longitude,
                                        &numDegrees, &denomDegrees,
@@ -455,6 +527,11 @@ bool KExiv2::setGPSInfo(double altitude, const QString &latitude, const QString 
                                                              numMinutes, denomMinutes,
                                                              numSeconds, denomSeconds);
         d->exifMetadata["Exif.GPSInfo.GPSLongitude"] = scratchBuf;
+
+#ifdef _XMP_SUPPORT_
+        setXmpTagString("Xmp.exif.GPSLongitudeRef", QString(directionReference), false);
+        setXmpTagString("Xmp.exif.GPSLongitude", longitude, false);
+#endif // _XMP_SUPPORT_
 
         return true;
     }
@@ -491,6 +568,35 @@ bool KExiv2::removeGPSInfo(bool setProgramName) const
             if (it3 != d->exifMetadata.end())
                 d->exifMetadata.erase(it3);
         }
+
+#ifdef _XMP_SUPPORT_
+        removeXmpTag("Xmp.exif.GPSVersionID", false);
+        removeXmpTag("Xmp.exif.GPSLatitude", false);
+        removeXmpTag("Xmp.exif.GPSLongitude", false);
+        removeXmpTag("Xmp.exif.GPSAltitudeRef", false);
+        removeXmpTag("Xmp.exif.GPSAltitude", false);
+        removeXmpTag("Xmp.exif.GPSTimeStamp", false);
+        removeXmpTag("Xmp.exif.GPSSatellites", false);
+        removeXmpTag("Xmp.exif.GPSStatus", false);
+        removeXmpTag("Xmp.exif.GPSMeasureMode", false);
+        removeXmpTag("Xmp.exif.GPSDOP", false);
+        removeXmpTag("Xmp.exif.GPSSpeedRef", false);
+        removeXmpTag("Xmp.exif.GPSSpeed", false);
+        removeXmpTag("Xmp.exif.GPSTrackRef", false);
+        removeXmpTag("Xmp.exif.GPSTrack", false);
+        removeXmpTag("Xmp.exif.GPSImgDirectionRef", false);
+        removeXmpTag("Xmp.exif.GPSImgDirection", false);
+        removeXmpTag("Xmp.exif.GPSMapDatum", false);
+        removeXmpTag("Xmp.exif.GPSDestLatitude", false);
+        removeXmpTag("Xmp.exif.GPSDestLongitude", false);
+        removeXmpTag("Xmp.exif.GPSDestBearingRef", false);
+        removeXmpTag("Xmp.exif.GPSDestBearing", false);
+        removeXmpTag("Xmp.exif.GPSDestDistanceRef", false);
+        removeXmpTag("Xmp.exif.GPSDestDistance", false);
+        removeXmpTag("Xmp.exif.GPSProcessingMethod", false);
+        removeXmpTag("Xmp.exif.GPSAreaInformation", false);
+        removeXmpTag("Xmp.exif.GPSDifferential", false);
+#endif // _XMP_SUPPORT_
 
         return true;
     }
