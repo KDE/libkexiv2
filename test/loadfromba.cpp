@@ -64,7 +64,7 @@ int main (int argc, char **argv)
     file.close();
 
     KExiv2 meta;
-    meta.load(data);
+    meta.loadFromData(data);
 
     return 0;
 }
