@@ -911,4 +911,39 @@ bool KExiv2::setXmpSubjects(const QStringList& newSubjects, bool setProgramName)
     return false;
 }
 
+KExiv2::TagsMap KExiv2::getXmpTagsList() const
+{
+    try
+    {
+        TagsMap tagsMap;
+        d->getXMPTagsListFromPrefix("dc",             tagsMap);
+        d->getXMPTagsListFromPrefix("digiKam",        tagsMap);
+        d->getXMPTagsListFromPrefix("xmp",            tagsMap);
+        d->getXMPTagsListFromPrefix("xmpRights",      tagsMap);
+        d->getXMPTagsListFromPrefix("xmpMM",          tagsMap);
+        d->getXMPTagsListFromPrefix("xmpBJ",          tagsMap);
+        d->getXMPTagsListFromPrefix("xmpTPg",         tagsMap);
+        d->getXMPTagsListFromPrefix("xmpDM",          tagsMap);
+        d->getXMPTagsListFromPrefix("MicrosoftPhoto", tagsMap);
+        d->getXMPTagsListFromPrefix("pdf",            tagsMap);
+        d->getXMPTagsListFromPrefix("photoshop",      tagsMap);
+        d->getXMPTagsListFromPrefix("crs",            tagsMap);
+        d->getXMPTagsListFromPrefix("tiff",           tagsMap);
+        d->getXMPTagsListFromPrefix("exif",           tagsMap);
+        d->getXMPTagsListFromPrefix("aux",            tagsMap);
+        d->getXMPTagsListFromPrefix("iptc",           tagsMap);
+/*
+        d->getXMPTagsListFromPrefix("iptcExt",        tagsMap);
+        d->getXMPTagsListFromPrefix("plus",           tagsMap);
+*/
+        return tagsMap;
+    }
+    catch( Exiv2::Error &e )
+    {
+        d->printExiv2ExceptionError("Cannot get Xmp Tags list using Exiv2 ", e);
+    }
+
+    return TagsMap();
+}
+
 }  // NameSpace KExiv2Iface

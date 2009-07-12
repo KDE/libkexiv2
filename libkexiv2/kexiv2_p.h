@@ -24,6 +24,8 @@
 #ifndef KEXIV2PRIVATE_H
 #define KEXIV2PRIVATE_H
 
+#include "kexiv2.h"
+
  // C++ includes.
 
 #include <cstdlib>
@@ -67,6 +69,7 @@
 #include <exiv2/jpgimage.hpp>
 #include <exiv2/datasets.hpp>
 #include <exiv2/tags.hpp>
+#include <exiv2/properties.hpp>
 #include <exiv2/types.hpp>
 #include <exiv2/exif.hpp>
 #include <exiv2/canonmn.hpp>
@@ -133,6 +136,10 @@ public:
     /** Charset autodetection to convert a string to a QString.
     */
     QString detectEncodingAndDecode(const std::string &value);
+
+    /**
+     */
+    int getXMPTagsListFromPrefix(const QString& pf, KExiv2::TagsMap& tagsMap);
 
 public:
 

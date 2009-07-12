@@ -34,7 +34,7 @@ using namespace KExiv2Iface;
 int main (int /*argc*/, char** /*argv*/)
 {
     KExiv2  meta;
-
+/*
     qDebug() << "-- Standard Exif Tags -------------------------------------------------------------";
     KExiv2::TagsMap exiftags = meta.getStdExifTagsList();
     for (KExiv2::TagsMap::const_iterator it = exiftags.constBegin(); it != exiftags.constEnd(); ++it )
@@ -59,9 +59,21 @@ int main (int /*argc*/, char** /*argv*/)
         qDebug() << key << " :: " << name << " :: " << title << " :: " << desc;
     }
 
-    qDebug() << "-- Satandard Iptc Tags -----------------------------------------------------------------";
+    qDebug() << "-- Standard Iptc Tags -----------------------------------------------------------------";
     KExiv2::TagsMap iptctags = meta.getIptcTagsList();
     for (KExiv2::TagsMap::const_iterator it = iptctags.constBegin(); it != iptctags.constEnd(); ++it )
+    {
+        QString     key    = it.key();
+        QStringList values = it.value();
+        QString     name   = values[0];
+        QString     title  = values[1];
+        QString     desc   = values[2];
+        qDebug() << key << " :: " << name << " :: " << title << " :: " << desc;
+    }
+*/
+    qDebug() << "-- Standard Xmp Tags -----------------------------------------------------------------";
+    KExiv2::TagsMap xmptags = meta.getXmpTagsList();
+    for (KExiv2::TagsMap::const_iterator it = xmptags.constBegin(); it != xmptags.constEnd(); ++it )
     {
         QString     key    = it.key();
         QStringList values = it.value();

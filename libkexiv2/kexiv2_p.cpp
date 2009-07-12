@@ -138,4 +138,26 @@ QString KExiv2Priv::detectEncodingAndDecode(const std::string &value)
     //return QString::fromLatin1(value.c_str());
 }
 
+int KExiv2Priv::getXMPTagsListFromPrefix(const QString& pf, KExiv2::TagsMap& tagsMap)
+{
+    QList<const Exiv2::XmpPropertyInfo*> tags;
+    tags << Exiv2::XmpProperties::propertyList(pf.toAscii().data());
+    int i = 0;
+
+    for (QList<const Exiv2::XmpPropertyInfo*>::iterator it = tags.begin(); it != tags.end(); ++it)
+    {
+        do
+        {
+            QString     key = QLatin1String( Exiv2::XmpKey( pf.toAscii().data(), (*it)->name_ ).key().c_str() );
+            QStringList values;
+            values << (*it)->name_ << (*it)->title_ << (*it)->desc_;
+            tagsMap.insert(key, values);
+            ++(*it);
+            i++;
+        }
+        while( !QString((*it)->name_).isNull() );
+    }
+    return i;
+}
+
 }  // NameSpace KExiv2Iface

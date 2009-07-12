@@ -614,6 +614,10 @@ public:
     //-- XMP manipulation methods --------------------------------
     //------------------------------------------------------------
 
+    /** Return a map of all standard Xmp tags supported by Exiv2.
+     */
+    KExiv2::TagsMap getXmpTagsList() const;
+
     /** Return 'true' if Xmp can be written in file.
      */
     static bool canWriteXmp(const QString& filePath);
