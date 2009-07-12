@@ -388,7 +388,7 @@ bool KExiv2::setXmpTagStringListLangAlt(const char *xmpTagName, const KExiv2::Al
         {
             Exiv2::Value::AutoPtr xmpTxtVal = Exiv2::Value::create(Exiv2::langAlt);
 
-            for (AltLangMap::const_iterator it = values.begin(); it != values.end(); ++it)
+            for (AltLangMap::const_iterator it = values.constBegin(); it != values.constEnd(); ++it)
             {
                 QString lang = it.key();
                 QString text = it.value();
