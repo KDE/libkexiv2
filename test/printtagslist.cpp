@@ -23,10 +23,7 @@
 // Qt includes.
 
 #include <QStringList>
-
-// KDE includes.
-
-#include "kdebug.h"
+#include <QDebug>
 
 // Local includes.
 
@@ -37,8 +34,9 @@ using namespace KExiv2Iface;
 int main (int /*argc*/, char** /*argv*/)
 {
     KExiv2  meta;
-    KExiv2::TagsMap exiftags = meta.getStdExifTagsList();
 
+    qDebug() << "-- Standard Exif Tags -------------------------------------------------------------";
+    KExiv2::TagsMap exiftags = meta.getStdExifTagsList();
     for (KExiv2::TagsMap::const_iterator it = exiftags.constBegin(); it != exiftags.constEnd(); ++it )
     {
         QString     key    = it.key();
@@ -46,7 +44,19 @@ int main (int /*argc*/, char** /*argv*/)
         QString     name   = values[0]; 
         QString     title  = values[1];
         QString     desc   = values[2];
-        kDebug(51003) << key << " :: " << name << " :: " << title << " :: " << desc;
+        qDebug() << key << " :: " << name << " :: " << title << " :: " << desc;
+    }
+
+    qDebug() << "-- Makernote Tags -----------------------------------------------------------------";
+    KExiv2::TagsMap mntags = meta.getMakernoteTagsList();
+    for (KExiv2::TagsMap::const_iterator it = mntags.constBegin(); it != mntags.constEnd(); ++it )
+    {
+        QString     key    = it.key();
+        QStringList values = it.value();
+        QString     name   = values[0];
+        QString     title  = values[1];
+        QString     desc   = values[2];
+        qDebug() << key << " :: " << name << " :: " << title << " :: " << desc;
     }
 
     return 0;

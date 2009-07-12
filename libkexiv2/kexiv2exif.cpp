@@ -888,4 +888,72 @@ KExiv2::TagsMap KExiv2::getStdExifTagsList() const
     return TagsMap();
 }
 
+KExiv2::TagsMap KExiv2::getMakernoteTagsList() const
+{
+    try
+    {
+        QList<const Exiv2::TagInfo*> tags;
+        tags
+             // Canon Makernotes.
+             << Exiv2::CanonMakerNote::tagList()
+             << Exiv2::CanonMakerNote::tagListCs()
+             << Exiv2::CanonMakerNote::tagListSi()
+             << Exiv2::CanonMakerNote::tagListPa()
+             << Exiv2::CanonMakerNote::tagListCf()
+             << Exiv2::CanonMakerNote::tagListPi()
+             // Sigma Makernotes.
+             << Exiv2::SigmaMakerNote::tagList()
+             // Sony Makernotes.
+             << Exiv2::SonyMakerNote::tagList()
+             // Minolta Makernotes.
+             << Exiv2::MinoltaMakerNote::tagList()
+             << Exiv2::MinoltaMakerNote::tagListCsStd()
+             << Exiv2::MinoltaMakerNote::tagListCs7D()
+             << Exiv2::MinoltaMakerNote::tagListCs5D()
+             // Nikon Makernotes.
+             << Exiv2::Nikon1MakerNote::tagList()
+             << Exiv2::Nikon2MakerNote::tagList()
+             << Exiv2::Nikon3MakerNote::tagList()
+             // Olympus Makernotes.
+             << Exiv2::OlympusMakerNote::tagList()
+             << Exiv2::OlympusMakerNote::tagListCs()
+             << Exiv2::OlympusMakerNote::tagListEq()
+             << Exiv2::OlympusMakerNote::tagListRd()
+             << Exiv2::OlympusMakerNote::tagListRd2()
+             << Exiv2::OlympusMakerNote::tagListIp()
+             << Exiv2::OlympusMakerNote::tagListFi()
+             << Exiv2::OlympusMakerNote::tagListFe()
+             << Exiv2::OlympusMakerNote::tagList()
+             << Exiv2::OlympusMakerNote::tagListRi()
+             // Panasonic Makernotes.
+             << Exiv2::PanasonicMakerNote::tagList()
+             << Exiv2::PanasonicMakerNote::tagListRaw()
+             // Pentax Makernotes.
+             << Exiv2::PentaxMakerNote::tagList()
+             // Fuji Makernotes.
+             << Exiv2::FujiMakerNote::tagList();
+
+        TagsMap tagsMap;
+        for (QList<const Exiv2::TagInfo*>::iterator it = tags.begin(); it != tags.end(); ++it)
+        {
+            do
+            {
+                QString     key = QLatin1String( Exiv2::ExifKey( (*it)->tag_, Exiv2::ExifTags::ifdItem( (*it)->ifdId_ ) ).key().c_str() );
+                QStringList values;
+                values << (*it)->name_ << (*it)->title_ << (*it)->desc_;
+                tagsMap.insert(key, values);
+                ++(*it);
+            }
+            while((*it)->tag_ != 0xffff);
+        }
+        return tagsMap;
+    }
+    catch( Exiv2::Error &e )
+    {
+        d->printExiv2ExceptionError("Cannot get Makernote Tags list using Exiv2 ", e);
+    }
+
+    return TagsMap();
+}
+
 }  // NameSpace KExiv2Iface

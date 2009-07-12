@@ -69,6 +69,15 @@
 #include <exiv2/tags.hpp>
 #include <exiv2/types.hpp>
 #include <exiv2/exif.hpp>
+#include <exiv2/canonmn.hpp>
+#include <exiv2/sigmamn.hpp>
+#include <exiv2/sonymn.hpp>
+#include <exiv2/minoltamn.hpp>
+#include <exiv2/nikonmn.hpp>
+#include <exiv2/olympusmn.hpp>
+#include <exiv2/panasonicmn.hpp>
+#include <exiv2/pentaxmn.hpp>
+#include <exiv2/fujimn.hpp>
 #ifdef __GNUC__
 #pragma GCC visibility pop
 #endif

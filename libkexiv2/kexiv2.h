@@ -327,6 +327,10 @@ public:
      */
     TagsMap getStdExifTagsList() const;
 
+    /** Return a map of all non-standard Exif tags (makernotes) supported by Exiv2
+     */
+    TagsMap getMakernoteTagsList() const;
+
     /** Return 'true' if Exif can be written in file.
      */
     static bool canWriteExif(const QString& filePath);
