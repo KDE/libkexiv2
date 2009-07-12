@@ -80,8 +80,7 @@ public:
         ORIENTATION_ROT_270      = 8
     };
 
-    /** A map used by decodeExifMetadata() decodeIptcMetadata() methods
-        to store Tags Key and Tags Value. 
+    /** A map used to store Tags Key and Tags Value.
      */
     typedef QMap<QString, QString> MetaDataMap;
 
@@ -90,6 +89,13 @@ public:
         (like "fr-FR" for French), and the map value the text.
      */
     typedef QMap<QString, QString> AltLangMap; 
+
+    /** A map used to store Tags Key and a list of Tags properties :
+        - name,
+        - title,
+        - description.
+     */
+    typedef QMap<QString, QStringList> TagsMap;
 
 public:
 
@@ -316,6 +322,10 @@ public:
     //-----------------------------------------------------------------
     //-- EXIF manipulation methods ------------------------------------
     //-----------------------------------------------------------------
+
+    /** Return a map of all standard Exif tags supported by Exiv2
+     */
+    TagsMap getStdExifTagsList() const;
 
     /** Return 'true' if Exif can be written in file.
      */

@@ -855,4 +855,37 @@ bool KExiv2::setExifThumbnail(const QImage& thumb, bool setProgramName) const
     return false;
 }
 
+KExiv2::TagsMap KExiv2::getStdExifTagsList() const
+{
+    try
+    {
+        QList<const Exiv2::TagInfo*> tags;
+        tags << Exiv2::ExifTags::ifdTagList()
+             << Exiv2::ExifTags::exifTagList()
+             << Exiv2::ExifTags::iopTagList()
+             << Exiv2::ExifTags::gpsTagList();
+
+        TagsMap tagsMap;
+        for (QList<const Exiv2::TagInfo*>::iterator it = tags.begin(); it != tags.end(); ++it)
+        {
+            do
+            {
+                QString     key = QLatin1String( Exiv2::ExifKey( (*it)->tag_, Exiv2::ExifTags::ifdItem( (*it)->ifdId_ ) ).key().c_str() );
+                QStringList values;
+                values << (*it)->name_ << (*it)->title_ << (*it)->desc_;
+                tagsMap.insert(key, values);
+                ++(*it);
+            }
+            while((*it)->tag_ != 0xffff);
+        }
+        return tagsMap;
+    }
+    catch( Exiv2::Error &e )
+    {
+        d->printExiv2ExceptionError("Cannot get Exif Tags list using Exiv2 ", e);
+    }
+
+    return TagsMap();
+}
+
 }  // NameSpace KExiv2Iface
