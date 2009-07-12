@@ -716,4 +716,35 @@ bool KExiv2::setIptcSubCategories(const QStringList& oldSubCategories, const QSt
     return false;
 }
 
+KExiv2::TagsMap KExiv2::getIptcTagsList() const
+{
+    try
+    {
+        QList<const Exiv2::DataSet*> tags;
+        tags << Exiv2::IptcDataSets::envelopeRecordList()
+             << Exiv2::IptcDataSets::application2RecordList();
+
+        TagsMap tagsMap;
+        for (QList<const Exiv2::DataSet*>::iterator it = tags.begin(); it != tags.end(); ++it)
+        {
+            do
+            {
+                QString     key = QLatin1String( Exiv2::IptcKey( (*it)->number_, (*it)->recordId_ ).key().c_str() );
+                QStringList values;
+                values << (*it)->name_ << (*it)->title_ << (*it)->desc_;
+                tagsMap.insert(key, values);
+                ++(*it);
+            }
+            while((*it)->number_ != 0xffff);
+        }
+        return tagsMap;
+    }
+    catch( Exiv2::Error &e )
+    {
+        d->printExiv2ExceptionError("Cannot get Iptc Tags list using Exiv2 ", e);
+    }
+
+    return TagsMap();
+}
+
 }  // NameSpace KExiv2Iface

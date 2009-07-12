@@ -323,11 +323,11 @@ public:
     //-- EXIF manipulation methods ------------------------------------
     //-----------------------------------------------------------------
 
-    /** Return a map of all standard Exif tags supported by Exiv2
+    /** Return a map of all standard Exif tags supported by Exiv2.
      */
     TagsMap getStdExifTagsList() const;
 
-    /** Return a map of all non-standard Exif tags (makernotes) supported by Exiv2
+    /** Return a map of all non-standard Exif tags (makernotes) supported by Exiv2.
      */
     TagsMap getMakernoteTagsList() const;
 
@@ -480,6 +480,10 @@ public:
     //-------------------------------------------------------------
     //-- IPTC manipulation methods --------------------------------
     //-------------------------------------------------------------
+
+    /** Return a map of all standard Iptc tags supported by Exiv2.
+     */
+    KExiv2::TagsMap getIptcTagsList() const;
 
     /** Return 'true' if Iptc can be written in file.
      */

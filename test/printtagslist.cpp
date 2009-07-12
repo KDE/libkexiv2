@@ -59,5 +59,17 @@ int main (int /*argc*/, char** /*argv*/)
         qDebug() << key << " :: " << name << " :: " << title << " :: " << desc;
     }
 
+    qDebug() << "-- Satandard Iptc Tags -----------------------------------------------------------------";
+    KExiv2::TagsMap iptctags = meta.getIptcTagsList();
+    for (KExiv2::TagsMap::const_iterator it = iptctags.constBegin(); it != iptctags.constEnd(); ++it )
+    {
+        QString     key    = it.key();
+        QStringList values = it.value();
+        QString     name   = values[0];
+        QString     title  = values[1];
+        QString     desc   = values[2];
+        qDebug() << key << " :: " << name << " :: " << title << " :: " << desc;
+    }
+
     return 0;
 }
