@@ -890,6 +890,7 @@ KExiv2::TagsMap KExiv2::getStdExifTagsList() const
 
 KExiv2::TagsMap KExiv2::getMakernoteTagsList() const
 {
+#if (EXIV2_TEST_VERSION(0,18,1))
     try
     {
         QList<const Exiv2::TagInfo*> tags;
@@ -952,6 +953,7 @@ KExiv2::TagsMap KExiv2::getMakernoteTagsList() const
     {
         d->printExiv2ExceptionError("Cannot get Makernote Tags list using Exiv2 ", e);
     }
+#endif
 
     return TagsMap();
 }
