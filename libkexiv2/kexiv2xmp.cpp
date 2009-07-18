@@ -932,10 +932,11 @@ KExiv2::TagsMap KExiv2::getXmpTagsList() const
         d->getXMPTagsListFromPrefix("exif",           tagsMap);
         d->getXMPTagsListFromPrefix("aux",            tagsMap);
         d->getXMPTagsListFromPrefix("iptc",           tagsMap);
-/*
+
+#if (EXIV2_TEST_VERSION(0,19,0))
         d->getXMPTagsListFromPrefix("iptcExt",        tagsMap);
         d->getXMPTagsListFromPrefix("plus",           tagsMap);
-*/
+#endif
         return tagsMap;
     }
     catch( Exiv2::Error &e )
