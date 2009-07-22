@@ -1,2 +1,2 @@
 #! /bin/sh
-$XGETTEXT libkdcraw/*.cpp -o $podir/libkdcraw.pot
+$XGETTEXT libkexiv2/*.cpp -o $podir/libkexiv2.pot
