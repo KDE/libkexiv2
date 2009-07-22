@@ -18,11 +18,15 @@ SET(kexiv2_LIB_SRCS kexiv2.cpp
                     kexiv2iptc.cpp
                     kexiv2gps.cpp
                     kexiv2xmp.cpp
+                    altlangstredit.cpp
+                    msgtextedit.cpp
+                    countryselector.cpp
+                    subjectwidget.cpp
    )
 
 KDE4_ADD_LIBRARY(kexiv2 SHARED ${kexiv2_LIB_SRCS})
 
-TARGET_LINK_LIBRARIES(kexiv2 ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY} ${EXIV2_LIBRARIES})
+TARGET_LINK_LIBRARIES(kexiv2 ${KDE4_KDEUI_LIBS} ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY} ${EXIV2_LIBRARIES})
 
 IF( WIN32 )
 TARGET_LINK_LIBRARIES( kexiv2 ${EXPAT_LIBRARIES} )
@@ -33,5 +37,13 @@ SET_TARGET_PROPERTIES(kexiv2 PROPERTIES VERSION ${KEXIV2_LIB_SO_VERSION_STRING}
 
 INSTALL(TARGETS kexiv2 ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
-INSTALL(FILES kexiv2.h libkexiv2_export.h ${CMAKE_CURRENT_BINARY_DIR}/version.h 
+INSTALL(FILES kexiv2.h
+              libkexiv2_export.h
+              msgtextedit.h
+              subjectwidget.h
+              altlangstredit.h
+              countryselector.h
+              ${CMAKE_CURRENT_BINARY_DIR}/version.h
         DESTINATION ${INCLUDE_INSTALL_DIR}/libkexiv2 COMPONENT Devel)
+
+INSTALL(FILES topicset.iptc-subjectcode.xml DESTINATION ${DATA_INSTALL_DIR}/libkexiv2/data)
