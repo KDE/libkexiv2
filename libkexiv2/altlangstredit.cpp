@@ -366,8 +366,12 @@ void AltLangStrEdit::slotSelectionChanged(int index)
 {
     QString lang        = d->languageCB->currentText();
     QString langISO3066 = lang;
-    d->valueEdit->setSpellCheckingLanguage(langISO3066.replace("-", "_"));
+
+    // There are bogus signals caused by spell checking, see bug #141663.
+    // so we must block signals here.
+
     d->valueEdit->blockSignals(true);
+    d->valueEdit->setSpellCheckingLanguage(langISO3066.replace("-", "_"));
 
     if (!d->languageCB->itemIcon(index).isNull())
     {
@@ -386,6 +390,7 @@ void AltLangStrEdit::slotSelectionChanged(int index)
         d->addValueButton->setIcon(SmallIcon("list-add"));
         d->addValueButton->setToolTip(i18n("Add new item"));
     }
+
     d->valueEdit->blockSignals(false);
     d->languageCB->setToolTip(d->languageCodeMap[lang]);
 
@@ -414,9 +419,9 @@ void AltLangStrEdit::loadLangAltListEntries(const QString& currentLang)
     QStringList list = d->values.keys();
     if (!list.isEmpty())
     {
-        for (QStringList::Iterator it = list.begin(); it != list.end(); ++it)
+        foreach (QString item, list)
         {
-              d->languageCB->addItem(*it);
+              d->languageCB->addItem(item);
               d->languageCB->setItemIcon(d->languageCB->count()-1, SmallIcon("dialog-ok"));
         }
         d->languageCB->insertSeparator(d->languageCB->count());
