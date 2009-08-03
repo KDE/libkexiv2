@@ -750,9 +750,12 @@ QImage KExiv2::getExifThumbnail(bool fixOrientation) const
         {
             if (fixOrientation)
             {
-                Exiv2::ExifKey key("Exif.Thumbnail.Orientation");
+                Exiv2::ExifKey key1("Exif.Thumbnail.Orientation");
+                Exiv2::ExifKey key2("Exif.Image.Orientation");
                 Exiv2::ExifData exifData(d->exifMetadata);
-                Exiv2::ExifData::iterator it = exifData.findKey(key);
+                Exiv2::ExifData::iterator it = exifData.findKey(key1);
+                if (it == exifData.end())
+                    it = exifData.findKey(key2);
                 if (it != exifData.end())
                 {
                     long orientation = it->toLong();
