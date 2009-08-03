@@ -22,6 +22,7 @@ SET(kexiv2_LIB_SRCS kexiv2.cpp
                     msgtextedit.cpp
                     countryselector.cpp
                     subjectwidget.cpp
+                    rotationmatrix.cpp
    )
 
 KDE4_ADD_LIBRARY(kexiv2 SHARED ${kexiv2_LIB_SRCS})
