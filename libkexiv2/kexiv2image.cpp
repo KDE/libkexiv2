@@ -26,6 +26,7 @@
 
 #include "kexiv2_p.h"
 #include "kexiv2.h"
+#include "rotationmatrix.h"
 
 namespace KExiv2Iface
 {
@@ -350,6 +351,17 @@ bool KExiv2::setImageOrientation(ImageOrientation orientation, bool setProgramNa
         {
             d->exifMetadata.erase(it);
             kDebug(51003) << "Removing Exif.MinoltaCs5D.Rotation tag" << endl;
+        }
+
+        // -- Exif embedded thumbnail ----------------------------------
+
+        Exiv2::ExifKey thumbKey("Exif.Thumbnail.Orientation");
+        it = d->exifMetadata.findKey(thumbKey);
+        if (it != d->exifMetadata.end())
+        {
+            RotationMatrix operation((KExiv2Iface::KExiv2::ImageOrientation)it->toLong());
+            operation *= orientation;
+            (*it) = static_cast<uint16_t>(operation.exifOrientation());
         }
 
         return true;
