@@ -792,6 +792,27 @@ bool KExiv2::registerXmpNameSpace(const QString& uri, const QString& prefix) con
     return false;
 }
 
+bool KExiv2::unregisterXmpNameSpace(const QString& uri) const
+{
+#ifdef _XMP_SUPPORT_
+
+    try
+    {
+        QString ns = uri;
+        if (!uri.endsWith("/")) ns.append("/");
+        Exiv2::XmpProperties::unregisterNs(ns.toAscii().constData());
+        return true;
+    }
+    catch( Exiv2::Error &e )
+    {
+        d->printExiv2ExceptionError("Cannot unregister a new Xmp namespace using Exiv2 ", e);
+    }
+
+#endif // _XMP_SUPPORT_
+
+    return false;
+}
+
 bool KExiv2::removeXmpTag(const char *xmpTagName, bool setProgramName) const
 {
 #ifdef _XMP_SUPPORT_

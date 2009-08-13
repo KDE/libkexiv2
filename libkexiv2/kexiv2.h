@@ -780,6 +780,9 @@ public:
      */
     bool registerXmpNameSpace(const QString& uri, const QString& prefix) const;
 
+    /** Unregister a previously registered custom namespace */
+    bool unregisterXmpNameSpace(const QString& uri) const;
+
     /** Remove the Xmp tag 'xmpTagName' from Xmp metadata. Return true if tag is 
         removed successfully or if no tag was present.
      */
