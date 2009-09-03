@@ -306,7 +306,7 @@ bool KExiv2::removeExifTag(const char *exifTagName, bool setProgramName) const
         return false;
 
     try
-    {  
+    {
         Exiv2::ExifKey exifKey(exifTagName);
         Exiv2::ExifData::iterator it = d->exifMetadata.findKey(exifKey);
         if (it != d->exifMetadata.end())
@@ -314,8 +314,6 @@ bool KExiv2::removeExifTag(const char *exifTagName, bool setProgramName) const
             d->exifMetadata.erase(it);
             return true;
         }
-
-        return true;
     }
     catch( Exiv2::Error &e )
     {
