@@ -821,7 +821,7 @@ bool KExiv2::removeXmpTag(const char *xmpTagName, bool setProgramName) const
         return false;
 
     try
-    {  
+    {
         Exiv2::XmpKey xmpKey(xmpTagName);
         Exiv2::XmpData::iterator it = d->xmpMetadata.findKey(xmpKey);
         if (it != d->xmpMetadata.end())
@@ -829,8 +829,6 @@ bool KExiv2::removeXmpTag(const char *xmpTagName, bool setProgramName) const
             d->xmpMetadata.erase(it);
             return true;
         }
-
-        return true;
     }
     catch( Exiv2::Error &e )
     {

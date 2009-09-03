@@ -252,17 +252,24 @@ bool KExiv2::removeIptcTag(const char *iptcTagName, bool setProgramName) const
     try
     {
         Exiv2::IptcData::iterator it = d->iptcMetadata.begin();
+        int i = 0;
         while(it != d->iptcMetadata.end())
         {
             QString key = QString::fromLocal8Bit(it->key().c_str());
 
             if (key == QString(iptcTagName))
+            {
                 it = d->iptcMetadata.erase(it);
-            else 
+                ++i;
+            }
+            else
+            {
                 ++it;
+            }
         };
 
-        return true;
+        if (i > 0)
+            return true;
     }
     catch( Exiv2::Error &e )
     {
