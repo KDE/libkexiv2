@@ -396,8 +396,23 @@ KExiv2::ImageColorWorkSpace KExiv2::getImageColorWorkSpace() const
             }
             case 65535:
             {
-                // Nikon camera set Exif.Photo.ColorSpace to uncalibrated and 
-                // Exif.Nikon3.ColorMode to "MODE2" when users work in AdobRGB color space.
+                // A lot of cameras set the Exif.Iop.InteroperabilityIndex,
+                // as documented for ExifTool
+                QString interopIndex = getExifTagString("Exif.Iop.InteroperabilityIndex");
+                if (!interopIndex.isNull())
+                {
+                    if (interopIndex == "R03")
+                        return WORKSPACE_ADOBERGB;
+                    else if (interopIndex == "R98")
+                        return WORKSPACE_SRGB;
+                }
+                // Nikon camera set Exif.Photo.ColorSpace to uncalibrated
+                // and set Exif.Nikon3.ColorSpace to '2' and / or
+                // Exif.Nikon3.ColorMode to "MODE2" (but there are sometimes two ColorMode fields)
+                // when users work in AdobRGB color space.
+                long colorSpace;
+                if (getExifTagLong("Exif.Nikon3.ColorSpace", colorSpace) && colorSpace == 2)
+                    return WORKSPACE_ADOBERGB;
                 if (getExifTagString("Exif.Nikon3.ColorMode").contains("MODE2"))
                     return WORKSPACE_ADOBERGB;
 
