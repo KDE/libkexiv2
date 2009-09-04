@@ -81,6 +81,7 @@
 #include <exiv2/panasonicmn.hpp>
 #include <exiv2/pentaxmn.hpp>
 #include <exiv2/fujimn.hpp>
+//#include <exiv2/preview.hpp>
 #ifdef __GNUC__
 #pragma GCC visibility pop
 #endif

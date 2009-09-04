@@ -899,4 +899,64 @@ bool KExiv2::setImagePreview(const QImage& preview, bool setProgramName) const
     return false;
 }
 
+/*
+Prototype code
+
+    //------------------------------------------------------------
+    //-- GPS manipulation methods --------------------------------
+    //------------------------------------------------------------
+
+    class EmbeddedPreviewInfo
+    {
+        public:
+            int     width;
+            int     height;
+            QString mimeType;
+    };
+    /**
+     * Returns a list of infos about the embedded previews available.
+     * /
+    QList<EmbeddedPreviewInfo> getEmbeddedPreviewInfos() const;
+    /**
+     * Returns the data for an embedded preview. Index is the index
+     * of the corresponding EmbeddedPreviewInfo in the list retrieved from getEmbeddedPreviewInfos().
+     * /
+    QByteArray getEmbeddedPreviewData(unsigned int index) const;
+
+QList<KExiv2::EmbeddedPreviewInfo> KExiv2::getEmbeddedPreviewInfos() const
+{
+    QList<EmbeddedPreviewInfo> infos;
+#if (EXIV2_TEST_VERSION(0,18,0))
+    Exiv2::PreviewManager manager;
+
+    Exiv2::PreviewPropertiesList properties = manager.getPreviewProperties();
+    for (unsigned int i=0; i<properties.size(); i++)
+    {
+        EmbeddedPreviewInfo info;
+        Exiv2::PreviewProperties &property = properties[i];
+        info.width    = property.width_;
+        info.height   = property.height_;
+        info.mimeType = QString::fromLatin1(property.mimeType_.c_str());
+        infos << info;
+    }
+#endif
+    return infos;
+}
+
+QByteArray KExiv2::getEmbeddedPreviewData(unsigned int index) const
+{
+#if (EXIV2_TEST_VERSION(0,18,0))
+    Exiv2::PreviewManager manager;
+    Exiv2::PreviewPropertiesList properties = manager.getPreviewProperties();
+    if (index < properties.size())
+        return QByteArray();
+    Exiv2::PreviewImage image = manager.getPreviewImage(properties[index]);
+    return QByteArray((const char*)image.pData(), image.size());
+#else
+    Q_UNUSED(index)
+    return QByteArray();
+#endif
+}
+*/
+
 }  // NameSpace KExiv2Iface
