@@ -52,6 +52,9 @@ int main (int argc, char **argv)
     bool b = meta.removeExifTag("Exif.OlympusIp.BlackLevel", false);
     kDebug() << "Exif.OlympusIp.BlackLevel found = " << b;
 
+    QByteArray ba = meta.getExifTagData("Exif.OlympusIp.BlackLevel");
+    kDebug() << "Exif.OlympusIp.BlackLevel removed = " << ba.isEmpty();
+
     if (b)
     {
         meta.applyChanges();
