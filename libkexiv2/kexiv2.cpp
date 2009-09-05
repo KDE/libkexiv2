@@ -344,8 +344,9 @@ bool KExiv2::save(const QString& filePath) const
         {
             if (image->mimeType() == "image/tiff")
             {
-                Exiv2::ExifData exif = image->exifData();
-                QStringList untouchedTags;
+                Exiv2::ExifData orgExif = image->exifData();
+                Exiv2::ExifData newExif;
+                QStringList     untouchedTags;
 
                 // With tiff image we cannot overwrite whole Exif data as well, because 
                 // image data are stored in Exif container. We need to take a care about
@@ -365,15 +366,23 @@ bool KExiv2::save(const QString& filePath) const
                 untouchedTags << "Exif.Image.PlanarConfiguration";
                 untouchedTags << "Exif.Image.ResolutionUnit";
 
+                for (Exiv2::ExifData::iterator it = orgExif.begin(); it != orgExif.end(); ++it)
+                {
+                    if (untouchedTags.contains(it->key().c_str()))
+                    {
+                        newExif[it->key().c_str()] = orgExif[it->key().c_str()];
+                    }
+                }
+
                 for (Exiv2::ExifData::iterator it = d->exifMetadata.begin(); it != d->exifMetadata.end(); ++it)
                 {
                     if (!untouchedTags.contains(it->key().c_str()))
                     {
-                        exif[it->key().c_str()] = d->exifMetadata[it->key().c_str()];
+                        newExif[it->key().c_str()] = d->exifMetadata[it->key().c_str()];
                     }
                 }
 
-                image->setExifData(exif);
+                image->setExifData(newExif);
             }
             else
             {
