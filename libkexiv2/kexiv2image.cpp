@@ -378,86 +378,71 @@ KExiv2::ImageColorWorkSpace KExiv2::getImageColorWorkSpace() const
 {
     // Check Exif values.
 
-    long colorSpace = 0;
-
-    if (getExifTagLong("Exif.Photo.ColorSpace", colorSpace))
+    long exifColorSpace = -1;
+    if (!getExifTagLong("Exif.Photo.ColorSpace", exifColorSpace))
     {
-        switch (colorSpace)
-        {
-            case 1:
-            {
-                return WORKSPACE_SRGB;
-                break;
-            }
-            case 2:
-            {
-                return WORKSPACE_ADOBERGB;
-                break;
-            }
-            case 65535:
-            {
-                // A lot of cameras set the Exif.Iop.InteroperabilityIndex,
-                // as documented for ExifTool
-                QString interopIndex = getExifTagString("Exif.Iop.InteroperabilityIndex");
-                if (!interopIndex.isNull())
-                {
-                    if (interopIndex == "R03")
-                        return WORKSPACE_ADOBERGB;
-                    else if (interopIndex == "R98")
-                        return WORKSPACE_SRGB;
-                }
-                // Nikon camera set Exif.Photo.ColorSpace to uncalibrated
-                // and set Exif.Nikon3.ColorSpace to '2' and / or
-                // Exif.Nikon3.ColorMode to "MODE2" (but there are sometimes two ColorMode fields)
-                // when users work in AdobRGB color space.
-                long colorSpace;
-                if (getExifTagLong("Exif.Nikon3.ColorSpace", colorSpace) && colorSpace == 2)
-                    return WORKSPACE_ADOBERGB;
-                if (getExifTagString("Exif.Nikon3.ColorMode").contains("MODE2"))
-                    return WORKSPACE_ADOBERGB;
-
-                // TODO : add more Makernote parsing here ...
-
-                return WORKSPACE_UNCALIBRATED;
-                break;
-            }
-        }
+        #ifdef _XMP_SUPPORT_
+        QVariant var = getXmpTagVariant("Xmp.exif.ColorSpace");
+        if (!var.isNull())
+            exifColorSpace = var.toInt();
+        #endif // _XMP_SUPPORT_
     }
 
-    // Check Xmp values.
-
-#ifdef _XMP_SUPPORT_
-
-    colorSpace  = 0;
-    bool ok     = false;
-    QString str = getXmpTagString("Xmp.exif.ColorSpace");
-    if (!str.isEmpty())
+    if (exifColorSpace == 1)
+        return WORKSPACE_SRGB; // as specified by standard
+    else if (exifColorSpace == 2)
+        return WORKSPACE_ADOBERGB; // not in the standard!
+    else
     {
-        colorSpace = str.toLong(&ok);
-        if (ok)
+        if (exifColorSpace == 65535)
         {
-            switch (colorSpace)
+            // A lot of cameras set the Exif.Iop.InteroperabilityIndex,
+            // as documented for ExifTool
+            QString interopIndex = getExifTagString("Exif.Iop.InteroperabilityIndex");
+            if (!interopIndex.isNull())
             {
-                case 1:
-                {
+                if (interopIndex == "R03")
+                    return WORKSPACE_ADOBERGB;
+                else if (interopIndex == "R98")
                     return WORKSPACE_SRGB;
-                    break;
-                }
-                case 2:
-                {
-                    return WORKSPACE_ADOBERGB;
-                    break;
-                }
-                case 65535:
-                {
-                    return WORKSPACE_UNCALIBRATED;
-                    break;
-                }
             }
         }
-    }
 
-#endif // _XMP_SUPPORT_
+        // Note: Text EXIF ColorSpace tag may just not be present (NEF files)
+
+        // Nikon camera set Exif.Photo.ColorSpace to uncalibrated or just skip this field,
+        // then add additional information into the makernotes.
+        // Exif.Nikon3.ColorSpace: 1 => sRGB, 2 => AdobeRGB
+        long nikonColorSpace;
+        if (getExifTagLong("Exif.Nikon3.ColorSpace", nikonColorSpace))
+        {
+            if (nikonColorSpace == 1)
+                return WORKSPACE_SRGB;
+            else if (nikonColorSpace == 2)
+                return WORKSPACE_ADOBERGB;
+        }
+        // Exif.Nikon3.ColorMode is set to "MODE2" for AdobeRGB, but there are sometimes two ColorMode fields
+        // in a NEF, with the first one "COLOR" and the second one "MODE2"; but in this case, ColorSpace (above) was set.
+        if (getExifTagString("Exif.Nikon3.ColorMode").contains("MODE2"))
+            return WORKSPACE_ADOBERGB;
+
+        //TODO: This makernote tag (0x00b4) must be added to libexiv2
+        /*
+        long canonColorSpace;
+        if (getExifTagLong("Exif.Canon.ColorSpace", canonColorSpace))
+        {
+            if (canonColorSpace == 1)
+                return WORKSPACE_SRGB;
+            else if (canonColorSpace == 2)
+                return WORKSPACE_ADOBERGB;
+        }
+        */
+
+        // TODO : add more Makernote parsing here ...
+
+        if (exifColorSpace == 65535)
+            return WORKSPACE_UNCALIBRATED;
+    }
 
     return WORKSPACE_UNSPECIFIED;
 }
@@ -903,7 +888,7 @@ bool KExiv2::setImagePreview(const QImage& preview, bool setProgramName) const
 Prototype code
 
     //------------------------------------------------------------
-    //-- GPS manipulation methods --------------------------------
+    //-- RAW embedded preview methods --------------------------------
     //------------------------------------------------------------
 
     class EmbeddedPreviewInfo
@@ -913,11 +898,11 @@ Prototype code
             int     height;
             QString mimeType;
     };
-    /**
+    / **
      * Returns a list of infos about the embedded previews available.
      * /
     QList<EmbeddedPreviewInfo> getEmbeddedPreviewInfos() const;
-    /**
+    / **
      * Returns the data for an embedded preview. Index is the index
      * of the corresponding EmbeddedPreviewInfo in the list retrieved from getEmbeddedPreviewInfos().
      * /
