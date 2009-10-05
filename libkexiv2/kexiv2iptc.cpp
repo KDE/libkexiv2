@@ -43,7 +43,7 @@ bool KExiv2::canWriteIptc(const QString& filePath)
     catch( Exiv2::Error &e )
     {
         std::string s(e.what());
-        kDebug(51003) << "Cannot check Iptc access mode using Exiv2 (Error #" 
+        kDebug(51003) << "Cannot check Iptc access mode using Exiv2 (Error #"
                       << e.code() << ": " << s.c_str() << ")" << endl;
     }
 
@@ -79,7 +79,7 @@ QByteArray KExiv2::getIptc(bool addIrbHeader) const
             Exiv2::IptcData& iptc = d->iptcMetadata;
             Exiv2::DataBuf c2;
 
-            if (addIrbHeader) 
+            if (addIrbHeader)
             {
 #if (EXIV2_TEST_VERSION(0,10,0))
                 c2 = Exiv2::Photoshop::setIptcIrb(0, 0, iptc);
@@ -88,7 +88,7 @@ QByteArray KExiv2::getIptc(bool addIrbHeader) const
                 return QByteArray();
 #endif
             }
-            else 
+            else
             {
 #if (EXIV2_TEST_VERSION(0,17,91))
                 c2 = Exiv2::IptcParser::encode(d->iptcMetadata);
@@ -214,13 +214,13 @@ KExiv2::MetaDataMap KExiv2::getIptcTagsDataList(const QStringList &iptcKeysFilte
 
 QString KExiv2::getIptcTagTitle(const char *iptcTagName)
 {
-    try 
+    try
     {
         std::string iptckey(iptcTagName);
-        Exiv2::IptcKey ik(iptckey); 
+        Exiv2::IptcKey ik(iptckey);
         return QString::fromLocal8Bit( Exiv2::IptcDataSets::dataSetTitle(ik.tag(), ik.record()) );
     }
-    catch (Exiv2::Error& e) 
+    catch (Exiv2::Error& e)
     {
         d->printExiv2ExceptionError("Cannot get metadata tag title using Exiv2 ", e);
     }
@@ -233,10 +233,10 @@ QString KExiv2::getIptcTagDescription(const char *iptcTagName)
     try
     {
         std::string iptckey(iptcTagName);
-        Exiv2::IptcKey ik(iptckey); 
+        Exiv2::IptcKey ik(iptckey);
         return QString::fromLocal8Bit( Exiv2::IptcDataSets::dataSetDesc(ik.tag(), ik.record()) );
     }
-    catch (Exiv2::Error& e) 
+    catch (Exiv2::Error& e)
     {
         d->printExiv2ExceptionError("Cannot get metadata tag description using Exiv2 ", e);
     }
@@ -313,7 +313,7 @@ QByteArray KExiv2::getIptcTagData(const char *iptcTagName) const
             char *s = new char[(*it).size()];
             (*it).copy((Exiv2::byte*)s, Exiv2::bigEndian);
             QByteArray data(s, (*it).size());
-            delete s;
+            delete [] s;
             return data;
         }
     }
@@ -409,7 +409,7 @@ QStringList KExiv2::getIptcTagsStringList(const char* iptcTagName, bool escapeCR
 }
 
 bool KExiv2::setIptcTagsStringList(const char* iptcTagName, int maxSize,
-                                   const QStringList& oldValues, const QStringList& newValues, 
+                                   const QStringList& oldValues, const QStringList& newValues,
                                    bool setProgramName) const
 {
     if (!setProgramId(setProgramName))
@@ -420,7 +420,7 @@ bool KExiv2::setIptcTagsStringList(const char* iptcTagName, int maxSize,
         QStringList oldvals = oldValues;
         QStringList newvals = newValues;
 
-        kDebug(51003) << d->filePath.toAscii().constData() << " : " << iptcTagName 
+        kDebug(51003) << d->filePath.toAscii().constData() << " : " << iptcTagName
                       << " => " << newvals.join(",").toAscii().constData() << endl;
 
         // Remove all old values.
@@ -437,7 +437,7 @@ bool KExiv2::setIptcTagsStringList(const char* iptcTagName, int maxSize,
                  (oldvals.contains(val) || newvals.contains(val))
                )
                 it = iptcData.erase(it);
-            else 
+            else
                 ++it;
         };
 
@@ -499,7 +499,7 @@ QStringList KExiv2::getIptcKeywords() const
     return QStringList();
 }
 
-bool KExiv2::setIptcKeywords(const QStringList& oldKeywords, const QStringList& newKeywords, 
+bool KExiv2::setIptcKeywords(const QStringList& oldKeywords, const QStringList& newKeywords,
                              bool setProgramName) const
 {
     if (!setProgramId(setProgramName))
@@ -510,7 +510,7 @@ bool KExiv2::setIptcKeywords(const QStringList& oldKeywords, const QStringList& 
         QStringList oldkeys = oldKeywords;
         QStringList newkeys = newKeywords;
 
-        kDebug(51003) << d->filePath.toAscii().constData() 
+        kDebug(51003) << d->filePath.toAscii().constData()
                       << " ==> Iptc Keywords: " << newkeys.join(",").toAscii().constData() << endl;
 
         // Remove all old keywords.
@@ -526,7 +526,7 @@ bool KExiv2::setIptcKeywords(const QStringList& oldKeywords, const QStringList& 
             if ( key == QString("Iptc.Application2.Keywords") &&
                  (oldKeywords.contains(val) || newKeywords.contains(val)) )
                 it = iptcData.erase(it);
-            else 
+            else
                 ++it;
         };
 
@@ -587,7 +587,7 @@ QStringList KExiv2::getIptcSubjects() const
     return QStringList();
 }
 
-bool KExiv2::setIptcSubjects(const QStringList& oldSubjects, const QStringList& newSubjects, 
+bool KExiv2::setIptcSubjects(const QStringList& oldSubjects, const QStringList& newSubjects,
                              bool setProgramName) const
 {
     if (!setProgramId(setProgramName))
@@ -609,7 +609,7 @@ bool KExiv2::setIptcSubjects(const QStringList& oldSubjects, const QStringList& 
 
             if (key == QString("Iptc.Application2.Subject") && oldDef.contains(val))
                 it = iptcData.erase(it);
-            else 
+            else
                 ++it;
         };
 
@@ -670,7 +670,7 @@ QStringList KExiv2::getIptcSubCategories() const
     return QStringList();
 }
 
-bool KExiv2::setIptcSubCategories(const QStringList& oldSubCategories, const QStringList& newSubCategories, 
+bool KExiv2::setIptcSubCategories(const QStringList& oldSubCategories, const QStringList& newSubCategories,
                                   bool setProgramName) const
 {
     if (!setProgramId(setProgramName))
@@ -692,11 +692,11 @@ bool KExiv2::setIptcSubCategories(const QStringList& oldSubCategories, const QSt
 
             if (key == QString("Iptc.Application2.SuppCategory") && oldSubCategories.contains(val))
                 it = iptcData.erase(it);
-            else 
+            else
                 ++it;
         };
 
-        // Add new Sub Categories. Note that SubCategories Iptc tag is limited to 32 
+        // Add new Sub Categories. Note that SubCategories Iptc tag is limited to 32
         // characters but can be redondant.
 
         Exiv2::IptcKey iptcTag("Iptc.Application2.SuppCategory");
