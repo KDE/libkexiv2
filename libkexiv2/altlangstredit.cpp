@@ -333,7 +333,7 @@ void AltLangStrEdit::reset()
 void AltLangStrEdit::slotDeleteValue()
 {
     d->values.remove(d->currentLanguage);
-    loadLangAltListEntries();
+    setValues(d->values);
     emit signalValueDeleted(d->currentLanguage);
 }
 
