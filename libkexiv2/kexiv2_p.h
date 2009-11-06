@@ -128,7 +128,7 @@ public:
     /** Generic method to print the Exiv2 C++ Exception error message from 'e'.
         'msg' string is printed just before like debug header.
     */
-    void printExiv2ExceptionError(const QString& msg, Exiv2::Error& e);
+    static void printExiv2ExceptionError(const QString& msg, Exiv2::Error& e);
 
     /** Wrapper method to convert a Comments content to a QString.
     */

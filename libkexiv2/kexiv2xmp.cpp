@@ -771,7 +771,7 @@ QVariant KExiv2::getXmpTagVariant(const char *xmpTagName, bool rationalAsListOfI
     return QVariant();
 }
 
-bool KExiv2::registerXmpNameSpace(const QString& uri, const QString& prefix) const
+bool KExiv2::registerXmpNameSpace(const QString& uri, const QString& prefix)
 {
 #ifdef _XMP_SUPPORT_
 
@@ -784,7 +784,7 @@ bool KExiv2::registerXmpNameSpace(const QString& uri, const QString& prefix) con
     }
     catch( Exiv2::Error &e )
     {
-        d->printExiv2ExceptionError("Cannot register a new Xmp namespace using Exiv2 ", e);
+        KExiv2Priv::printExiv2ExceptionError("Cannot register a new Xmp namespace using Exiv2 ", e);
     }
 
 #endif // _XMP_SUPPORT_
@@ -792,7 +792,7 @@ bool KExiv2::registerXmpNameSpace(const QString& uri, const QString& prefix) con
     return false;
 }
 
-bool KExiv2::unregisterXmpNameSpace(const QString& uri) const
+bool KExiv2::unregisterXmpNameSpace(const QString& uri)
 {
 #ifdef _XMP_SUPPORT_
 
@@ -805,7 +805,7 @@ bool KExiv2::unregisterXmpNameSpace(const QString& uri) const
     }
     catch( Exiv2::Error &e )
     {
-        d->printExiv2ExceptionError("Cannot unregister a new Xmp namespace using Exiv2 ", e);
+        KExiv2Priv::printExiv2ExceptionError("Cannot unregister a new Xmp namespace using Exiv2 ", e);
     }
 
 #endif // _XMP_SUPPORT_

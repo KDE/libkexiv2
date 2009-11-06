@@ -772,21 +772,21 @@ public:
      */
     bool setXmpSubCategories(const QStringList& newSubCategories, bool setProgramName=true) const;
 
+    /** Remove the Xmp tag 'xmpTagName' from Xmp metadata. Return true if tag is
+        removed successfully or if no tag was present.
+     */
+    bool removeXmpTag(const char *xmpTagName, bool setProgramName=true) const;
+
     /** Register a namespace which Exiv2 doesn't know yet. This is only needed
         when new Xmp properties are added manually. 'uri' is the namespace url and prefix the 
         string used to construct new Xmp key (ex. "Xmp.digiKam.tagList").
         NOTE: If the Xmp metadata is read from an image, namespaces are decoded and registered 
         by Exiv2 at the same time.
      */
-    bool registerXmpNameSpace(const QString& uri, const QString& prefix) const;
+    static bool registerXmpNameSpace(const QString& uri, const QString& prefix);
 
     /** Unregister a previously registered custom namespace */
-    bool unregisterXmpNameSpace(const QString& uri) const;
-
-    /** Remove the Xmp tag 'xmpTagName' from Xmp metadata. Return true if tag is 
-        removed successfully or if no tag was present.
-     */
-    bool removeXmpTag(const char *xmpTagName, bool setProgramName=true) const;
+    static bool unregisterXmpNameSpace(const QString& uri);
 
     //------------------------------------------------------------
     //-- GPS manipulation methods --------------------------------

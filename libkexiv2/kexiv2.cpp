@@ -91,6 +91,11 @@ bool KExiv2::initializeExiv2()
 {
 #ifdef _XMP_SUPPORT_
     return (Exiv2::XmpParser::initialize());
+
+#if KEXIV2_VERSION >= 0x010000
+    registerXmpNameSpace(QString("http://ns.adobe.com/lightroom/1.0/"), QString("lr"));
+#endif
+
 #endif // _XMP_SUPPORT_
 
     return true;
@@ -101,6 +106,11 @@ bool KExiv2::cleanupExiv2()
     // Fix memory leak if Exiv2 support XMP.
 #ifdef _XMP_SUPPORT_
     Exiv2::XmpParser::terminate();
+
+#if KEXIV2_VERSION >= 0x010000
+    unregisterXmpNameSpace(QString("http://ns.adobe.com/lightroom/1.0/"));
+#endif
+
 #endif // _XMP_SUPPORT_
 
     return true;
