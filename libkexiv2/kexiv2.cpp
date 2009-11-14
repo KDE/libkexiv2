@@ -38,6 +38,27 @@ extern "C"
 namespace KExiv2Iface
 {
 
+KExiv2Data::KExiv2Data()
+    : d(0)
+{
+}
+
+KExiv2Data::KExiv2Data(const KExiv2Data& other)
+{
+    d = other.d;
+}
+
+KExiv2Data::~KExiv2Data()
+{
+}
+
+KExiv2Data& KExiv2Data::operator=(const KExiv2Data& other)
+{
+    d = other.d;
+    return *this;
+}
+
+
 KExiv2::KExiv2()
       : d(new KExiv2Priv)
 {
@@ -46,16 +67,15 @@ KExiv2::KExiv2()
 KExiv2::KExiv2(const KExiv2& metadata)
       : d(new KExiv2Priv)
 {
-    // No need to use QT containers transormations here. We can use original objects directly.
-    d->imageComments = metadata.d->imageComments;
-    d->exifMetadata  = metadata.d->exifMetadata;
-    d->iptcMetadata  = metadata.d->iptcMetadata;
-
-#ifdef _XMP_SUPPORT_
-    d->xmpMetadata   = metadata.d->xmpMetadata;
-#endif // _XMP_SUPPORT_
+    d->data = metadata.d->data;
 
     setFilePath(metadata.getFilePath());
+}
+
+KExiv2::KExiv2(const KExiv2Data& data)
+      : d(new KExiv2Priv)
+{
+    d->data = data.d;
 }
 
 KExiv2::KExiv2(const QString& filePath)
@@ -72,14 +92,7 @@ KExiv2::~KExiv2()
 
 KExiv2& KExiv2::operator=(const KExiv2& metadata)
 {
-    // No need to use QT containers transormations here. We can use original objects directly.
-    d->imageComments = metadata.d->imageComments;
-    d->exifMetadata  = metadata.d->exifMetadata;
-    d->iptcMetadata  = metadata.d->iptcMetadata;
-
-#ifdef _XMP_SUPPORT_
-    d->xmpMetadata   = metadata.d->xmpMetadata;
-#endif // _XMP_SUPPORT_
+    d->data = metadata.d->data;
 
     setFilePath(metadata.getFilePath());
     return *this;
@@ -194,6 +207,13 @@ QString KExiv2::version()
 
 //-- General methods ----------------------------------------------
 
+KExiv2Data KExiv2::data() const
+{
+    KExiv2Data data;
+    data.d = d->data;
+    return data;
+}
+
 bool KExiv2::load(const QByteArray& imgData) const
 {
     return loadFromData(imgData);
@@ -213,21 +233,21 @@ bool KExiv2::loadFromData(const QByteArray& imgData) const
 
         // Image comments ---------------------------------
 
-        d->imageComments = image->comment();
+        d->imageComments() = image->comment();
 
         // Exif metadata ----------------------------------
 
-        d->exifMetadata = image->exifData();
+        d->exifMetadata() = image->exifData();
 
         // Iptc metadata ----------------------------------
 
-        d->iptcMetadata = image->iptcData();
+        d->iptcMetadata() = image->iptcData();
 
 #ifdef _XMP_SUPPORT_
 
         // Xmp metadata -----------------------------------
 
-        d->xmpMetadata = image->xmpData();
+        d->xmpMetadata() = image->xmpData();
 
 #endif // _XMP_SUPPORT_
 
@@ -260,21 +280,21 @@ bool KExiv2::load(const QString& filePath) const
 
         // Image comments ---------------------------------
 
-        d->imageComments = image->comment();
+        d->imageComments() = image->comment();
 
         // Exif metadata ----------------------------------
 
-        d->exifMetadata = image->exifData();
+        d->exifMetadata() = image->exifData();
 
         // Iptc metadata ----------------------------------
 
-        d->iptcMetadata = image->iptcData();
+        d->iptcMetadata() = image->iptcData();
 
 #ifdef _XMP_SUPPORT_
 
         // Xmp metadata -----------------------------------
 
-        d->xmpMetadata = image->xmpData();
+        d->xmpMetadata() = image->xmpData();
 
 #endif // _XMP_SUPPORT_
 
@@ -345,7 +365,7 @@ bool KExiv2::save(const QString& filePath) const
         mode = image->checkMode(Exiv2::mdComment);
         if (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite)
         {
-            image->setComment(d->imageComments);
+            image->setComment(d->imageComments());
         }
 
         // Exif metadata ----------------------------------
@@ -385,11 +405,11 @@ bool KExiv2::save(const QString& filePath) const
                     }
                 }
 
-                for (Exiv2::ExifData::iterator it = d->exifMetadata.begin(); it != d->exifMetadata.end(); ++it)
+                for (Exiv2::ExifData::iterator it = d->exifMetadata().begin(); it != d->exifMetadata().end(); ++it)
                 {
                     if (!untouchedTags.contains(it->key().c_str()))
                     {
-                        newExif[it->key().c_str()] = d->exifMetadata[it->key().c_str()];
+                        newExif[it->key().c_str()] = d->exifMetadata()[it->key().c_str()];
                     }
                 }
 
@@ -397,7 +417,7 @@ bool KExiv2::save(const QString& filePath) const
             }
             else
             {
-                image->setExifData(d->exifMetadata);
+                image->setExifData(d->exifMetadata());
             }
         }
 
@@ -406,7 +426,7 @@ bool KExiv2::save(const QString& filePath) const
         mode = image->checkMode(Exiv2::mdIptc);
         if (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite)
         {
-            image->setIptcData(d->iptcMetadata);
+            image->setIptcData(d->iptcMetadata());
         }
 
 #ifdef _XMP_SUPPORT_
@@ -416,7 +436,7 @@ bool KExiv2::save(const QString& filePath) const
         mode = image->checkMode(Exiv2::mdXmp);
         if (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite)
         {
-            image->setXmpData(d->xmpMetadata);
+            image->setXmpData(d->xmpMetadata());
         }
 
 #endif // _XMP_SUPPORT_

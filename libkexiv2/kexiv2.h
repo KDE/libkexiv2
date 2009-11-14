@@ -38,6 +38,7 @@
 #include <QtGui/QImage>
 #include <QtCore/QDateTime>
 #include <QtCore/QMap>
+#include <QtCore/QSharedDataPointer>
 #include <QtCore/QStringList>
 #include <QtCore/QVariant>
 
@@ -49,6 +50,22 @@ namespace KExiv2Iface
 {
 
 class KExiv2Priv;
+class KExiv2DataPriv;
+
+class KEXIV2_EXPORT KExiv2Data
+{
+public:
+
+    KExiv2Data();
+    KExiv2Data(const KExiv2Data&);
+    ~KExiv2Data();
+    KExiv2Data& operator=(const KExiv2Data&);
+
+private:
+
+    friend class KExiv2;
+    QSharedDataPointer<KExiv2DataPriv> d;
+};
 
 class KEXIV2_EXPORT KExiv2
 {
@@ -107,6 +124,10 @@ public:
      */
     KExiv2(const KExiv2& metadata);
 
+    /** Constructor to load from parsed data
+     */
+    KExiv2(const KExiv2Data& data);
+
     /** Contructor to Load Metadata from image file.
      */
     KExiv2(const QString& filePath);
@@ -115,7 +136,7 @@ public:
      */
     virtual ~KExiv2();
 
-    /** Create a deep copy of container
+    /** Create a copy of container
      */
     KExiv2& operator=(const KExiv2& metadata);
 
@@ -158,6 +179,8 @@ public:
     //-----------------------------------------------------------------
     //-- GENERAL methods ----------------------------------------------
     //-----------------------------------------------------------------
+
+    KExiv2Data data() const;
 
     /** Load all metadata (Exif, Iptc, Xmp, and JFIF Comments) from a byte array. 
         Return true if metadata have been loaded successfully from image data.
@@ -346,8 +369,10 @@ public:
     /** Return a Qt byte array copy of Exif container get from current image. 
         Set true 'addExifHeader' parameter to add an Exif header to Exif metadata. 
         Return a null Qt byte array if there is no Exif metadata in memory.
+
+        Avoid using this method, passing the data is not lossless. See bug 183171.
      */
-    QByteArray getExif(bool addExifHeader=false) const;
+    KDE_DEPRECATED QByteArray getExif(bool addExifHeader=false) const;
 
     /** Set the Exif data using a Qt byte array. Return true if Exif metadata
         have been changed in memory.
