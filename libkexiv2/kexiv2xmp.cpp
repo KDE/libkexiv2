@@ -665,6 +665,58 @@ bool KExiv2::setXmpTagStringBag(const char *xmpTagName, const QStringList& bag,
     return false;
 }
 
+bool KExiv2::addToXmpTagStringBag(const char *xmpTagName, const QStringList& entriesToAdd,
+                                     bool setProgramName) const
+{
+//#ifdef _XMP_SUPPORT_
+
+    if (!setProgramId(setProgramName))
+        return false;
+
+    QStringList oldEntries = getXmpTagStringBag(xmpTagName, false);
+    QStringList newEntries = entriesToAdd;
+
+    // Create a list of keywords including old one which already exists.
+    for (QStringList::const_iterator it = oldEntries.constBegin(); it != oldEntries.constEnd(); ++it )
+    {
+        if (!newEntries.contains(*it))
+            newEntries.append(*it);
+    }
+
+    if (setXmpTagStringBag(xmpTagName, newEntries, false))
+        return true;
+
+//#endif // _XMP_SUPPORT_
+
+    return false;
+}
+
+bool KExiv2::removeFromXmpTagStringBag(const char *xmpTagName, const QStringList& entriesToRemove,
+                                          bool setProgramName) const
+{
+//#ifdef _XMP_SUPPORT_
+
+    if (!setProgramId(setProgramName))
+        return false;
+
+    QStringList currentEntries = getXmpTagStringBag(xmpTagName, false);
+    QStringList newEntries;
+
+    // Create a list of current keywords except those that shall be removed
+    for (QStringList::const_iterator it = currentEntries.constBegin(); it != currentEntries.constEnd(); ++it )
+    {
+        if (!entriesToRemove.contains(*it))
+            newEntries.append(*it);
+    }
+
+    if (setXmpTagStringBag(xmpTagName, newEntries, false))
+        return true;
+
+//#endif // _XMP_SUPPORT_
+
+    return false;
+}
+
 QVariant KExiv2::getXmpTagVariant(const char *xmpTagName, bool rationalAsListOfInts, bool stringEscapeCR) const
 {
 #ifdef _XMP_SUPPORT_
@@ -847,27 +899,12 @@ QStringList KExiv2::getXmpKeywords() const
 
 bool KExiv2::setXmpKeywords(const QStringList& newKeywords, bool setProgramName) const
 {
-#ifdef _XMP_SUPPORT_
+    return addToXmpTagStringBag("Xmp.dc.subject", newKeywords, setProgramName);
+}
 
-    if (!setProgramId(setProgramName))
-        return false;
-
-    QStringList oldkeys = getXmpKeywords();
-    QStringList newkeys = newKeywords;
-
-    // Create a list of keywords including old one which already exists.
-    for (QStringList::const_iterator it = oldkeys.constBegin(); it != oldkeys.constEnd(); ++it )
-    {
-        if (!newkeys.contains(*it))
-            newkeys.append(*it);
-    }
-
-    if (setXmpTagStringBag("Xmp.dc.subject", newkeys, false))
-        return true;
-
-#endif // _XMP_SUPPORT_
-
-    return false;
+bool KExiv2::removeXmpKeywords(const QStringList& keywordsToRemove, bool setProgramName)
+{
+    return removeFromXmpTagStringBag("Xmp.dc.subject", keywordsToRemove, setProgramName);
 }
 
 QStringList KExiv2::getXmpSubCategories() const
@@ -877,27 +914,12 @@ QStringList KExiv2::getXmpSubCategories() const
 
 bool KExiv2::setXmpSubCategories(const QStringList& newSubCategories, bool setProgramName) const
 {
-#ifdef _XMP_SUPPORT_
+    return addToXmpTagStringBag("Xmp.photoshop.SupplementalCategories", newSubCategories, setProgramName);
+}
 
-    if (!setProgramId(setProgramName))
-        return false;
-
-    const QStringList oldSubCat = getXmpSubCategories();
-    QStringList newSubCat = newSubCategories;
-
-    // Create a list of sub-categories including old one which already exists.
-    for (QStringList::const_iterator it = oldSubCat.constBegin(); it != oldSubCat.constEnd(); ++it )
-    {
-        if (!newSubCat.contains(*it))
-            newSubCat.append(*it);
-    }
-
-    if (setXmpTagStringBag("Xmp.photoshop.SupplementalCategories", newSubCat, false))
-        return true;
-
-#endif // _XMP_SUPPORT_
-
-    return false;
+bool KExiv2::removeXmpSubCategories(const QStringList& subCategoriesToRemove, bool setProgramName)
+{
+    return removeFromXmpTagStringBag("Xmp.photoshop.SupplementalCategories", subCategoriesToRemove, setProgramName);
 }
 
 QStringList KExiv2::getXmpSubjects() const
@@ -907,27 +929,12 @@ QStringList KExiv2::getXmpSubjects() const
 
 bool KExiv2::setXmpSubjects(const QStringList& newSubjects, bool setProgramName) const
 {
-#ifdef _XMP_SUPPORT_
+    return addToXmpTagStringBag("Xmp.iptc.SubjectCode", newSubjects, setProgramName);
+}
 
-    if (!setProgramId(setProgramName))
-        return false;
-
-    QStringList oldSubjectCodes = getXmpSubjects();
-    QStringList newSubjectCodes = newSubjects;
-
-    // Create a list of sub-categories including old one which already exists.
-    for (QStringList::const_iterator it = oldSubjectCodes.constBegin(); it != oldSubjectCodes.constEnd(); ++it )
-    {
-        if (!newSubjectCodes.contains(*it))
-            newSubjectCodes.append(*it);
-    }
-
-    if (setXmpTagStringBag("Xmp.iptc.SubjectCode", newSubjectCodes, false))
-        return true;
-
-#endif // _XMP_SUPPORT_
-
-    return false;
+bool KExiv2::removeXmpSubjects(const QStringList& subjectsToRemove, bool setProgramName)
+{
+    return removeFromXmpTagStringBag("Xmp.iptc.SubjectCode", subjectsToRemove, setProgramName);
 }
 
 KExiv2::TagsMap KExiv2::getXmpTagsList() const

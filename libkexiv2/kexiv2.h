@@ -751,6 +751,21 @@ public:
     bool setXmpTagStringBag(const char *xmpTagName, const QStringList& bag,
                             bool setProgramName=true) const;
 
+    /** Set an Xmp tag content using a list of strings defined by the 'entriesToAdd' parameter.
+        The existing entries are preserved. The method will compare
+        all new with all already existing entries to prevent duplicates in the image.
+        Return true if the entries have been added to metadata.
+     */
+    bool addToXmpTagStringBag(const char *xmpTagName, const QStringList& entriesToAdd,
+                              bool setProgramName) const;
+
+    /** Remove those Xmp tag entries that are listed in entriesToRemove from the entries in metadata.
+        Return true if tag entries are no longer contained in metadata.
+        All other entries are preserved.
+     */
+    bool removeFromXmpTagStringBag(const char *xmpTagName, const QStringList& entriesToRemove,
+                                   bool setProgramName) const;
+
     /** Get an Xmp tag content as a QVariant. Returns a null QVariant if the Xmp
         tag cannot be found.
         For string and integer values the matching QVariant types will be used,
@@ -774,6 +789,11 @@ public:
      */
     bool setXmpKeywords(const QStringList& newKeywords, bool setProgramName=true) const;
 
+    /** Remove those Xmp keywords that are listed in keywordsToRemove from the keywords in metadata.
+        Return true if keywords are no longer contained in metadata.
+     */
+    bool removeXmpKeywords(const QStringList& keywordsToRemove, bool setProgramName=true);
+
     /** Return a strings list of Xmp subjects from image. Return an empty list if no subject are set.
      */
     QStringList getXmpSubjects() const;
@@ -784,6 +804,11 @@ public:
         Return true if subjects have been changed in metadata.
      */
     bool setXmpSubjects(const QStringList& newSubjects, bool setProgramName=true) const;
+
+    /** Remove those Xmp subjects that are listed in subjectsToRemove from the subjects in metadata.
+        Return true if subjects are no longer contained in metadata.
+     */
+    bool removeXmpSubjects(const QStringList& subjectsToRemove, bool setProgramName=true);
 
     /** Return a strings list of Xmp sub-categories from image. Return an empty list if no sub-category 
         are set.
@@ -797,10 +822,16 @@ public:
      */
     bool setXmpSubCategories(const QStringList& newSubCategories, bool setProgramName=true) const;
 
+    /** Remove those Xmp sub-categories that are listed in categoriesToRemove from the sub-categories in metadata.
+        Return true if subjects are no longer contained in metadata.
+     */
+    bool removeXmpSubCategories(const QStringList& categoriesToRemove, bool setProgramName=true);
+
     /** Remove the Xmp tag 'xmpTagName' from Xmp metadata. Return true if tag is
         removed successfully or if no tag was present.
      */
     bool removeXmpTag(const char *xmpTagName, bool setProgramName=true) const;
+
 
     /** Register a namespace which Exiv2 doesn't know yet. This is only needed
         when new Xmp properties are added manually. 'uri' is the namespace url and prefix the 
