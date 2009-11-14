@@ -61,7 +61,7 @@ bool KExiv2::hasXmp() const
 {
 #ifdef _XMP_SUPPORT_
 
-    return !d->xmpMetadata.empty();
+    return !d->xmpMetadata().empty();
 
 #else
 
@@ -76,7 +76,7 @@ bool KExiv2::clearXmp() const
 
     try
     {
-        d->xmpMetadata.clear();
+        d->xmpMetadata().clear();
         return true;
     }
     catch( Exiv2::Error &e )
@@ -95,11 +95,11 @@ QByteArray KExiv2::getXmp() const
 
     try
     {
-        if (!d->xmpMetadata.empty())
+        if (!d->xmpMetadata().empty())
         {
 
             std::string xmpPacket;
-            Exiv2::XmpParser::encode(xmpPacket, d->xmpMetadata);
+            Exiv2::XmpParser::encode(xmpPacket, d->xmpMetadata());
             QByteArray data(xmpPacket.data(), xmpPacket.size());
             return data;
         }
@@ -128,7 +128,7 @@ bool KExiv2::setXmp(const QByteArray& data) const
 
             std::string xmpPacket;
             xmpPacket.assign(data.data(), data.size());
-            if (Exiv2::XmpParser::decode(d->xmpMetadata, xmpPacket) != 0)
+            if (Exiv2::XmpParser::decode(d->xmpMetadata(), xmpPacket) != 0)
                 return false;
             else
                 return true;
@@ -151,12 +151,12 @@ KExiv2::MetaDataMap KExiv2::getXmpTagsDataList(const QStringList &xmpKeysFilter,
 {
 #ifdef _XMP_SUPPORT_
 
-    if (d->xmpMetadata.empty())
+    if (d->xmpMetadata().empty())
        return MetaDataMap();
 
     try
     {
-        Exiv2::XmpData xmpData = d->xmpMetadata;
+        Exiv2::XmpData xmpData = d->xmpMetadata();
         xmpData.sortByKey();
 
         QString     ifDItemName;
@@ -278,7 +278,7 @@ QString KExiv2::getXmpTagString(const char* xmpTagName, bool escapeCR) const
 
     try
     {
-        Exiv2::XmpData xmpData(d->xmpMetadata);
+        Exiv2::XmpData xmpData(d->xmpMetadata());
         Exiv2::XmpKey key(xmpTagName);
         Exiv2::XmpData::iterator it = xmpData.findKey(key);
         if (it != xmpData.end())
@@ -317,7 +317,7 @@ bool KExiv2::setXmpTagString(const char *xmpTagName, const QString& value, bool 
         Exiv2::Value::AutoPtr xmpTxtVal = Exiv2::Value::create(Exiv2::xmpText);
         xmpTxtVal->read(txt);
 
-        d->xmpMetadata.add(Exiv2::XmpKey(xmpTagName), xmpTxtVal.get());
+        d->xmpMetadata().add(Exiv2::XmpKey(xmpTagName), xmpTxtVal.get());
         return true;
     }
     catch( Exiv2::Error &e )
@@ -336,7 +336,7 @@ KExiv2::AltLangMap KExiv2::getXmpTagStringListLangAlt(const char* xmpTagName, bo
 
     try
     {
-        Exiv2::XmpData xmpData = d->xmpMetadata;
+        Exiv2::XmpData xmpData = d->xmpMetadata();
 
         for (Exiv2::XmpData::iterator it = xmpData.begin(); it != xmpData.end(); ++it)
         {
@@ -398,7 +398,7 @@ bool KExiv2::setXmpTagStringListLangAlt(const char *xmpTagName, const KExiv2::Al
             }
 
             // ...and add the new one instead.
-            d->xmpMetadata.add(Exiv2::XmpKey(xmpTagName), xmpTxtVal.get());
+            d->xmpMetadata().add(Exiv2::XmpKey(xmpTagName), xmpTxtVal.get());
         }
         return true;
     }
@@ -418,7 +418,7 @@ QString KExiv2::getXmpTagStringLangAlt(const char* xmpTagName, const QString& la
 
     try
     {
-        Exiv2::XmpData xmpData(d->xmpMetadata);
+        Exiv2::XmpData xmpData(d->xmpMetadata());
         Exiv2::XmpKey key(xmpTagName);
         for (Exiv2::XmpData::iterator it = xmpData.begin(); it != xmpData.end(); ++it)
         {
@@ -491,7 +491,7 @@ bool KExiv2::setXmpTagStringLangAlt(const char *xmpTagName, const QString& value
 
         xmpTxtVal->read(txt);
         removeXmpTag(xmpTagName);
-        d->xmpMetadata.add(Exiv2::XmpKey(xmpTagName), xmpTxtVal.get());
+        d->xmpMetadata().add(Exiv2::XmpKey(xmpTagName), xmpTxtVal.get());
         return true;
     }
     catch( Exiv2::Error &e )
@@ -510,7 +510,7 @@ QStringList KExiv2::getXmpTagStringSeq(const char* xmpTagName, bool escapeCR) co
 
     try
     {
-        Exiv2::XmpData xmpData(d->xmpMetadata);
+        Exiv2::XmpData xmpData(d->xmpMetadata());
         Exiv2::XmpKey key(xmpTagName);
         Exiv2::XmpData::iterator it = xmpData.findKey(key);
         if (it != xmpData.end())
@@ -571,7 +571,7 @@ bool KExiv2::setXmpTagStringSeq(const char *xmpTagName, const QStringList& seq,
                 const std::string &txt((*it).toUtf8().constData());
                 xmpTxtSeq->read(txt);
             }
-            d->xmpMetadata[xmpTagName].setValue(xmpTxtSeq.get());
+            d->xmpMetadata()[xmpTagName].setValue(xmpTxtSeq.get());
             return true;
         }
     }
@@ -591,7 +591,7 @@ QStringList KExiv2::getXmpTagStringBag(const char* xmpTagName, bool escapeCR) co
 
     try
     {
-        Exiv2::XmpData xmpData(d->xmpMetadata);
+        Exiv2::XmpData xmpData(d->xmpMetadata());
         Exiv2::XmpKey key(xmpTagName);
         Exiv2::XmpData::iterator it = xmpData.findKey(key);
         if (it != xmpData.end())
@@ -651,7 +651,7 @@ bool KExiv2::setXmpTagStringBag(const char *xmpTagName, const QStringList& bag,
                 const std::string &txt((*it).toUtf8().constData());
                 xmpTxtBag->read(txt);
             }
-            d->xmpMetadata[xmpTagName].setValue(xmpTxtBag.get());
+            d->xmpMetadata()[xmpTagName].setValue(xmpTxtBag.get());
             return true;
         }
     }
@@ -670,7 +670,7 @@ QVariant KExiv2::getXmpTagVariant(const char *xmpTagName, bool rationalAsListOfI
 #ifdef _XMP_SUPPORT_
     try
     {
-        Exiv2::XmpData xmpData(d->xmpMetadata);
+        Exiv2::XmpData xmpData(d->xmpMetadata());
         Exiv2::XmpKey key(xmpTagName);
         Exiv2::XmpData::iterator it = xmpData.findKey(key);
         if (it != xmpData.end())
@@ -823,10 +823,10 @@ bool KExiv2::removeXmpTag(const char *xmpTagName, bool setProgramName) const
     try
     {
         Exiv2::XmpKey xmpKey(xmpTagName);
-        Exiv2::XmpData::iterator it = d->xmpMetadata.findKey(xmpKey);
-        if (it != d->xmpMetadata.end())
+        Exiv2::XmpData::iterator it = d->xmpMetadata().findKey(xmpKey);
+        if (it != d->xmpMetadata().end())
         {
-            d->xmpMetadata.erase(it);
+            d->xmpMetadata().erase(it);
             return true;
         }
     }

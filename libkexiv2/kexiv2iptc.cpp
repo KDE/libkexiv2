@@ -52,14 +52,14 @@ bool KExiv2::canWriteIptc(const QString& filePath)
 
 bool KExiv2::hasIptc() const
 {
-    return !d->iptcMetadata.empty();
+    return !d->iptcMetadata().empty();
 }
 
 bool KExiv2::clearIptc() const
 {
     try
     {
-        d->iptcMetadata.clear();
+        d->iptcMetadata().clear();
         return true;
     }
     catch( Exiv2::Error &e )
@@ -74,9 +74,9 @@ QByteArray KExiv2::getIptc(bool addIrbHeader) const
 {
     try
     {
-        if (!d->iptcMetadata.empty())
+        if (!d->iptcMetadata().empty())
         {
-            Exiv2::IptcData& iptc = d->iptcMetadata;
+            Exiv2::IptcData& iptc = d->iptcMetadata();
             Exiv2::DataBuf c2;
 
             if (addIrbHeader)
@@ -91,7 +91,7 @@ QByteArray KExiv2::getIptc(bool addIrbHeader) const
             else
             {
 #if (EXIV2_TEST_VERSION(0,17,91))
-                c2 = Exiv2::IptcParser::encode(d->iptcMetadata);
+                c2 = Exiv2::IptcParser::encode(d->iptcMetadata());
 #else
                 c2 = iptc.copy();
 #endif
@@ -120,10 +120,10 @@ bool KExiv2::setIptc(const QByteArray& data) const
         if (!data.isEmpty())
         {
 #if (EXIV2_TEST_VERSION(0,17,91))
-            Exiv2::IptcParser::decode(d->iptcMetadata, (const Exiv2::byte*)data.data(), data.size());
-            return (!d->iptcMetadata.empty());
+            Exiv2::IptcParser::decode(d->iptcMetadata(), (const Exiv2::byte*)data.data(), data.size());
+            return (!d->iptcMetadata().empty());
 #else
-            if (d->iptcMetadata.load((const Exiv2::byte*)data.data(), data.size()) != 0)
+            if (d->iptcMetadata().load((const Exiv2::byte*)data.data(), data.size()) != 0)
                 return false;
             else
                 return true;
@@ -143,12 +143,12 @@ bool KExiv2::setIptc(const QByteArray& data) const
 
 KExiv2::MetaDataMap KExiv2::getIptcTagsDataList(const QStringList &iptcKeysFilter, bool invertSelection) const
 {
-    if (d->iptcMetadata.empty())
+    if (d->iptcMetadata().empty())
        return MetaDataMap();
 
     try
     {
-        Exiv2::IptcData iptcData = d->iptcMetadata;
+        Exiv2::IptcData iptcData = d->iptcMetadata();
         iptcData.sortByKey();
 
         QString     ifDItemName;
@@ -251,15 +251,15 @@ bool KExiv2::removeIptcTag(const char *iptcTagName, bool setProgramName) const
 
     try
     {
-        Exiv2::IptcData::iterator it = d->iptcMetadata.begin();
+        Exiv2::IptcData::iterator it = d->iptcMetadata().begin();
         int i = 0;
-        while(it != d->iptcMetadata.end())
+        while(it != d->iptcMetadata().end())
         {
             QString key = QString::fromLocal8Bit(it->key().c_str());
 
             if (key == QString(iptcTagName))
             {
-                it = d->iptcMetadata.erase(it);
+                it = d->iptcMetadata().erase(it);
                 ++i;
             }
             else
@@ -290,7 +290,7 @@ bool KExiv2::setIptcTagData(const char *iptcTagName, const QByteArray& data, boo
     try
     {
         Exiv2::DataValue val((Exiv2::byte *)data.data(), data.size());
-        d->iptcMetadata[iptcTagName] = val;
+        d->iptcMetadata()[iptcTagName] = val;
         return true;
     }
     catch( Exiv2::Error &e )
@@ -306,7 +306,7 @@ QByteArray KExiv2::getIptcTagData(const char *iptcTagName) const
     try
     {
         Exiv2::IptcKey iptcKey(iptcTagName);
-        Exiv2::IptcData iptcData(d->iptcMetadata);
+        Exiv2::IptcData iptcData(d->iptcMetadata());
         Exiv2::IptcData::iterator it = iptcData.findKey(iptcKey);
         if (it != iptcData.end())
         {
@@ -331,7 +331,7 @@ QString KExiv2::getIptcTagString(const char* iptcTagName, bool escapeCR) const
     try
     {
         Exiv2::IptcKey iptcKey(iptcTagName);
-        Exiv2::IptcData iptcData(d->iptcMetadata);
+        Exiv2::IptcData iptcData(d->iptcMetadata());
         Exiv2::IptcData::iterator it = iptcData.findKey(iptcKey);
         if (it != iptcData.end())
         {
@@ -361,7 +361,7 @@ bool KExiv2::setIptcTagString(const char *iptcTagName, const QString& value, boo
 
     try
     {
-        d->iptcMetadata[iptcTagName] = std::string(value.toAscii().constData());
+        d->iptcMetadata()[iptcTagName] = std::string(value.toAscii().constData());
         return true;
     }
     catch( Exiv2::Error &e )
@@ -376,10 +376,10 @@ QStringList KExiv2::getIptcTagsStringList(const char* iptcTagName, bool escapeCR
 {
     try
     {
-        if (!d->iptcMetadata.empty())
+        if (!d->iptcMetadata().empty())
         {
             QStringList values;
-            Exiv2::IptcData iptcData(d->iptcMetadata);
+            Exiv2::IptcData iptcData(d->iptcMetadata());
 
             for (Exiv2::IptcData::iterator it = iptcData.begin(); it != iptcData.end(); ++it)
             {
@@ -424,7 +424,7 @@ bool KExiv2::setIptcTagsStringList(const char* iptcTagName, int maxSize,
                       << " => " << newvals.join(",").toAscii().constData() << endl;
 
         // Remove all old values.
-        Exiv2::IptcData iptcData(d->iptcMetadata);
+        Exiv2::IptcData iptcData(d->iptcMetadata());
         Exiv2::IptcData::iterator it = iptcData.begin();
 
         while(it != iptcData.end())
@@ -455,7 +455,7 @@ bool KExiv2::setIptcTagsStringList(const char* iptcTagName, int maxSize,
             iptcData.add(iptcTag, val.get());
         }
 
-        d->iptcMetadata = iptcData;
+        d->iptcMetadata() = iptcData;
 
         return true;
     }
@@ -472,10 +472,10 @@ QStringList KExiv2::getIptcKeywords() const
 {
     try
     {
-        if (!d->iptcMetadata.empty())
+        if (!d->iptcMetadata().empty())
         {
             QStringList keywords;
-            Exiv2::IptcData iptcData(d->iptcMetadata);
+            Exiv2::IptcData iptcData(d->iptcMetadata());
 
             for (Exiv2::IptcData::iterator it = iptcData.begin(); it != iptcData.end(); ++it)
             {
@@ -514,7 +514,7 @@ bool KExiv2::setIptcKeywords(const QStringList& oldKeywords, const QStringList& 
                       << " ==> Iptc Keywords: " << newkeys.join(",").toAscii().constData() << endl;
 
         // Remove all old keywords.
-        Exiv2::IptcData iptcData(d->iptcMetadata);
+        Exiv2::IptcData iptcData(d->iptcMetadata());
         Exiv2::IptcData::iterator it = iptcData.begin();
 
         while(it != iptcData.end())
@@ -544,7 +544,7 @@ bool KExiv2::setIptcKeywords(const QStringList& oldKeywords, const QStringList& 
             iptcData.add(iptcTag, val.get());
         }
 
-        d->iptcMetadata = iptcData;
+        d->iptcMetadata() = iptcData;
 
         return true;
     }
@@ -560,10 +560,10 @@ QStringList KExiv2::getIptcSubjects() const
 {
     try
     {
-        if (!d->iptcMetadata.empty())
+        if (!d->iptcMetadata().empty())
         {
             QStringList subjects;
-            Exiv2::IptcData iptcData(d->iptcMetadata);
+            Exiv2::IptcData iptcData(d->iptcMetadata());
 
             for (Exiv2::IptcData::iterator it = iptcData.begin(); it != iptcData.end(); ++it)
             {
@@ -599,7 +599,7 @@ bool KExiv2::setIptcSubjects(const QStringList& oldSubjects, const QStringList& 
         QStringList newDef = newSubjects;
 
         // Remove all old subjects.
-        Exiv2::IptcData iptcData(d->iptcMetadata);
+        Exiv2::IptcData iptcData(d->iptcMetadata());
         Exiv2::IptcData::iterator it = iptcData.begin();
 
         while(it != iptcData.end())
@@ -627,7 +627,7 @@ bool KExiv2::setIptcSubjects(const QStringList& oldSubjects, const QStringList& 
             iptcData.add(iptcTag, val.get());
         }
 
-        d->iptcMetadata = iptcData;
+        d->iptcMetadata() = iptcData;
 
         return true;
     }
@@ -643,10 +643,10 @@ QStringList KExiv2::getIptcSubCategories() const
 {
     try
     {
-        if (!d->iptcMetadata.empty())
+        if (!d->iptcMetadata().empty())
         {
             QStringList subCategories;
-            Exiv2::IptcData iptcData(d->iptcMetadata);
+            Exiv2::IptcData iptcData(d->iptcMetadata());
 
             for (Exiv2::IptcData::iterator it = iptcData.begin(); it != iptcData.end(); ++it)
             {
@@ -682,7 +682,7 @@ bool KExiv2::setIptcSubCategories(const QStringList& oldSubCategories, const QSt
         QStringList newkeys = newSubCategories;
 
         // Remove all old Sub Categories.
-        Exiv2::IptcData iptcData(d->iptcMetadata);
+        Exiv2::IptcData iptcData(d->iptcMetadata());
         Exiv2::IptcData::iterator it = iptcData.begin();
 
         while(it != iptcData.end())
@@ -711,7 +711,7 @@ bool KExiv2::setIptcSubCategories(const QStringList& oldSubCategories, const QSt
             iptcData.add(iptcTag, val.get());
         }
 
-        d->iptcMetadata = iptcData;
+        d->iptcMetadata() = iptcData;
 
         return true;
     }

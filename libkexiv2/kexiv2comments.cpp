@@ -52,7 +52,7 @@ bool KExiv2::canWriteComment(const QString& filePath)
 
 bool KExiv2::hasComments() const
 {
-    return !d->imageComments.empty();
+    return !d->imageComments().empty();
 }
 
 bool KExiv2::clearComments() const
@@ -62,17 +62,17 @@ bool KExiv2::clearComments() const
 
 QByteArray KExiv2::getComments() const
 {
-    return QByteArray(d->imageComments.data(), d->imageComments.size());
+    return QByteArray(d->imageComments().data(), d->imageComments().size());
 }
 
 QString KExiv2::getCommentsDecoded() const
 {
-    return d->detectEncodingAndDecode(d->imageComments);
+    return d->detectEncodingAndDecode(d->imageComments());
 }
 
 bool KExiv2::setComments(const QByteArray& data) const
 {
-    d->imageComments = std::string(data.data(), data.size());
+    d->imageComments() = std::string(data.data(), data.size());
     return true;
 }
 

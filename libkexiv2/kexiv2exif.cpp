@@ -52,14 +52,14 @@ bool KExiv2::canWriteExif(const QString& filePath)
 
 bool KExiv2::hasExif() const
 {
-    return !d->exifMetadata.empty();
+    return !d->exifMetadata().empty();
 }
 
 bool KExiv2::clearExif() const
 {
     try
     {
-        d->exifMetadata.clear();
+        d->exifMetadata().clear();
         return true;
     }
     catch( Exiv2::Error &e )
@@ -74,10 +74,10 @@ QByteArray KExiv2::getExif(bool addExifHeader) const
 {
     try
     {
-        if (!d->exifMetadata.empty())
+        if (!d->exifMetadata().empty())
         {
             QByteArray data;
-            Exiv2::ExifData& exif = d->exifMetadata;
+            Exiv2::ExifData& exif = d->exifMetadata();
 #if (EXIV2_TEST_VERSION(0,17,91))
             Exiv2::Blob blob;
             Exiv2::ExifParser::encode(blob, Exiv2::bigEndian, exif);
@@ -118,10 +118,10 @@ bool KExiv2::setExif(const QByteArray& data) const
         if (!data.isEmpty())
         {
 #if (EXIV2_TEST_VERSION(0,17,91))
-            Exiv2::ExifParser::decode(d->exifMetadata, (const Exiv2::byte*)data.data(), data.size());
-            return (!d->exifMetadata.empty());
+            Exiv2::ExifParser::decode(d->exifMetadata(), (const Exiv2::byte*)data.data(), data.size());
+            return (!d->exifMetadata().empty());
 #else
-            if (d->exifMetadata.load((const Exiv2::byte*)data.data(), data.size()) != 0)
+            if (d->exifMetadata().load((const Exiv2::byte*)data.data(), data.size()) != 0)
                 return false;
             else
                 return true;
@@ -141,12 +141,12 @@ bool KExiv2::setExif(const QByteArray& data) const
 
 KExiv2::MetaDataMap KExiv2::getExifTagsDataList(const QStringList &exifKeysFilter, bool invertSelection) const
 {
-    if (d->exifMetadata.empty())
+    if (d->exifMetadata().empty())
        return MetaDataMap();
 
     try
     {
-        Exiv2::ExifData exifData = d->exifMetadata;
+        Exiv2::ExifData exifData = d->exifMetadata();
         exifData.sortByKey();
 
         QString     ifDItemName;
@@ -200,10 +200,10 @@ QString KExiv2::getExifComment() const
 {
     try
     {
-        if (!d->exifMetadata.empty())
+        if (!d->exifMetadata().empty())
         {
             Exiv2::ExifKey key("Exif.Photo.UserComment");
-            Exiv2::ExifData exifData(d->exifMetadata);
+            Exiv2::ExifData exifData(d->exifMetadata());
             Exiv2::ExifData::iterator it = exifData.findKey(key);
 
             if (it != exifData.end())
@@ -242,7 +242,7 @@ bool KExiv2::setExifComment(const QString& comment, bool setProgramName) const
                 // write as ASCII
                 std::string exifComment("charset=\"Ascii\" ");
                 exifComment += comment.toLatin1().constData();
-                d->exifMetadata["Exif.Photo.UserComment"] = exifComment;
+                d->exifMetadata()["Exif.Photo.UserComment"] = exifComment;
             }
             else
             {
@@ -255,7 +255,7 @@ bool KExiv2::setExifComment(const QString& comment, bool setProgramName) const
                 const unsigned short *ucs2 = comment.utf16();
                 std::string exifComment("charset=\"Unicode\" ");
                 exifComment.append((const char*)ucs2, sizeof(unsigned short) * comment.length());
-                d->exifMetadata["Exif.Photo.UserComment"] = exifComment;
+                d->exifMetadata()["Exif.Photo.UserComment"] = exifComment;
             }
         }
         return true;
@@ -308,10 +308,10 @@ bool KExiv2::removeExifTag(const char *exifTagName, bool setProgramName) const
     try
     {
         Exiv2::ExifKey exifKey(exifTagName);
-        Exiv2::ExifData::iterator it = d->exifMetadata.findKey(exifKey);
-        if (it != d->exifMetadata.end())
+        Exiv2::ExifData::iterator it = d->exifMetadata().findKey(exifKey);
+        if (it != d->exifMetadata().end())
         {
-            d->exifMetadata.erase(it);
+            d->exifMetadata().erase(it);
             return true;
         }
     }
@@ -328,7 +328,7 @@ bool KExiv2::getExifTagRational(const char *exifTagName, long int &num, long int
     try
     {
         Exiv2::ExifKey exifKey(exifTagName);
-        Exiv2::ExifData exifData(d->exifMetadata);
+        Exiv2::ExifData exifData(d->exifMetadata());
         Exiv2::ExifData::iterator it = exifData.findKey(exifKey);
         if (it != exifData.end())
         {
@@ -353,7 +353,7 @@ bool KExiv2::setExifTagLong(const char *exifTagName, long val, bool setProgramNa
 
     try
     {
-        d->exifMetadata[exifTagName] = static_cast<int32_t>(val);
+        d->exifMetadata()[exifTagName] = static_cast<int32_t>(val);
         return true;
     }
     catch( Exiv2::Error &e )
@@ -371,7 +371,7 @@ bool KExiv2::setExifTagRational(const char *exifTagName, long int num, long int 
 
     try
     {
-        d->exifMetadata[exifTagName] = Exiv2::Rational(num, den);
+        d->exifMetadata()[exifTagName] = Exiv2::Rational(num, den);
         return true;
     }
     catch( Exiv2::Error &e )
@@ -393,7 +393,7 @@ bool KExiv2::setExifTagData(const char *exifTagName, const QByteArray& data, boo
     try
     {
         Exiv2::DataValue val((Exiv2::byte *)data.data(), data.size());
-        d->exifMetadata[exifTagName] = val;
+        d->exifMetadata()[exifTagName] = val;
         return true;
     }
     catch( Exiv2::Error &e )
@@ -449,7 +449,7 @@ bool KExiv2::setExifTagVariant(const char *exifTagName, const QVariant& val,
             try
             {
                 const std::string &exifdatetime(dateTime.toString(QString("yyyy:MM:dd hh:mm:ss")).toAscii().constData());
-                d->exifMetadata[exifTagName] = exifdatetime;
+                d->exifMetadata()[exifTagName] = exifdatetime;
             }
             catch( Exiv2::Error &e )
             {
@@ -555,7 +555,7 @@ bool KExiv2::getExifTagLong(const char* exifTagName, long &val) const
     try
     {
         Exiv2::ExifKey exifKey(exifTagName);
-        Exiv2::ExifData exifData(d->exifMetadata);
+        Exiv2::ExifData exifData(d->exifMetadata());
         Exiv2::ExifData::iterator it = exifData.findKey(exifKey);
         if (it != exifData.end() && it->count() > 0)
         {
@@ -577,7 +577,7 @@ QByteArray KExiv2::getExifTagData(const char* exifTagName) const
     try
     {
         Exiv2::ExifKey exifKey(exifTagName);
-        Exiv2::ExifData exifData(d->exifMetadata);
+        Exiv2::ExifData exifData(d->exifMetadata());
         Exiv2::ExifData::iterator it = exifData.findKey(exifKey);
         if (it != exifData.end())
         {
@@ -606,7 +606,7 @@ QVariant KExiv2::getExifTagVariant(const char *exifTagName, bool rationalAsListO
     try
     {
         Exiv2::ExifKey exifKey(exifTagName);
-        Exiv2::ExifData exifData(d->exifMetadata);
+        Exiv2::ExifData exifData(d->exifMetadata());
         Exiv2::ExifData::iterator it = exifData.findKey(exifKey);
         if (it != exifData.end())
         {
@@ -681,7 +681,7 @@ QString KExiv2::getExifTagString(const char* exifTagName, bool escapeCR) const
     try
     {
         Exiv2::ExifKey exifKey(exifTagName);
-        Exiv2::ExifData exifData(d->exifMetadata);
+        Exiv2::ExifData exifData(d->exifMetadata());
         Exiv2::ExifData::iterator it = exifData.findKey(exifKey);
         if (it != exifData.end())
         {
@@ -716,7 +716,7 @@ bool KExiv2::setExifTagString(const char *exifTagName, const QString& value, boo
 
     try
     {
-        d->exifMetadata[exifTagName] = std::string(value.toAscii().constData());
+        d->exifMetadata()[exifTagName] = std::string(value.toAscii().constData());
         return true;
     }
     catch( Exiv2::Error &e )
@@ -731,16 +731,16 @@ QImage KExiv2::getExifThumbnail(bool fixOrientation) const
 {
     QImage thumbnail;
 
-    if (d->exifMetadata.empty())
+    if (d->exifMetadata().empty())
        return thumbnail;
 
     try
     {
 #if (EXIV2_TEST_VERSION(0,17,91))
-        Exiv2::ExifThumbC thumb(d->exifMetadata);
+        Exiv2::ExifThumbC thumb(d->exifMetadata());
         Exiv2::DataBuf const c1 = thumb.copy();
 #else
-        Exiv2::DataBuf const c1(d->exifMetadata.copyThumbnail());
+        Exiv2::DataBuf const c1(d->exifMetadata().copyThumbnail());
 #endif
         thumbnail.loadFromData(c1.pData_, c1.size_);
 
@@ -750,7 +750,7 @@ QImage KExiv2::getExifThumbnail(bool fixOrientation) const
             {
                 Exiv2::ExifKey key1("Exif.Thumbnail.Orientation");
                 Exiv2::ExifKey key2("Exif.Image.Orientation");
-                Exiv2::ExifData exifData(d->exifMetadata);
+                Exiv2::ExifData exifData(d->exifMetadata());
                 Exiv2::ExifData::iterator it = exifData.findKey(key1);
                 if (it == exifData.end())
                     it = exifData.findKey(key2);
@@ -834,7 +834,7 @@ bool KExiv2::setExifThumbnail(const QImage& thumb, bool setProgramName) const
         QBuffer buffer(&data);
         buffer.open(QIODevice::WriteOnly);
         thumb.save(&buffer, "JPEG");
-        Exiv2::ExifThumb thumb(d->exifMetadata);
+        Exiv2::ExifThumb thumb(d->exifMetadata());
         thumb.setJpegThumbnail((Exiv2::byte *)data.data(), data.size());
 #else
         KTemporaryFile thumbFile;
@@ -844,7 +844,7 @@ bool KExiv2::setExifThumbnail(const QImage& thumb, bool setProgramName) const
         thumb.save(thumbFile.fileName(), "JPEG");
         kDebug(51003) << "Thumbnail temp file: " << thumbFile.fileName().toAscii().data() << endl;
         const std::string &fileName((const char*)(QFile::encodeName(thumbFile.fileName())));
-        d->exifMetadata.setJpegThumbnail( fileName );
+        d->exifMetadata().setJpegThumbnail( fileName );
 #endif
         return true;
     }

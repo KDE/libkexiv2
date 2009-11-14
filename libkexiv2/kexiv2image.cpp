@@ -42,28 +42,28 @@ bool KExiv2::setImageProgramId(const QString& program, const QString& version) c
         // Set program info into Exif.Image.ProcessingSoftware tag (only available with Exiv2 >= 0.14.0).
 
 #if (EXIV2_TEST_VERSION(0,14,0))
-        d->exifMetadata["Exif.Image.ProcessingSoftware"] = std::string(software.toAscii().constData());
+        d->exifMetadata()["Exif.Image.ProcessingSoftware"] = std::string(software.toAscii().constData());
 #endif
 
         // See B.K.O #142564: Check if Exif.Image.Software already exist. If yes, do not touch this tag.
 
-        if (!d->exifMetadata.empty())
+        if (!d->exifMetadata().empty())
         {
-            Exiv2::ExifData exifData(d->exifMetadata);
+            Exiv2::ExifData exifData(d->exifMetadata());
             Exiv2::ExifKey key("Exif.Image.Software");
             Exiv2::ExifData::iterator it = exifData.findKey(key);
             if (it == exifData.end())
-                d->exifMetadata["Exif.Image.Software"] = std::string(software.toAscii().constData());
+                d->exifMetadata()["Exif.Image.Software"] = std::string(software.toAscii().constData());
         }
 
         // set program info into XMP tags.
 
 #ifdef _XMP_SUPPORT_
 
-        if (!d->xmpMetadata.empty())
+        if (!d->xmpMetadata().empty())
         {
             // Only create Xmp.xmp.CreatorTool if it do not exist.
-            Exiv2::XmpData xmpData(d->xmpMetadata);
+            Exiv2::XmpData xmpData(d->xmpMetadata());
             Exiv2::XmpKey key("Xmp.xmp.CreatorTool");
             Exiv2::XmpData::iterator it = xmpData.findKey(key);
             if (it == xmpData.end())
@@ -76,8 +76,8 @@ bool KExiv2::setImageProgramId(const QString& program, const QString& version) c
 
         // Set program info into IPTC tags.
 
-        d->iptcMetadata["Iptc.Application2.Program"]        = std::string(program.toAscii().constData());
-        d->iptcMetadata["Iptc.Application2.ProgramVersion"] = std::string(version.toAscii().constData());
+        d->iptcMetadata()["Iptc.Application2.Program"]        = std::string(program.toAscii().constData());
+        d->iptcMetadata()["Iptc.Application2.ProgramVersion"] = std::string(version.toAscii().constData());
         return true;
     }
     catch( Exiv2::Error &e )
@@ -96,7 +96,7 @@ QSize KExiv2::getImageDimensions() const
 
         // Try to get Exif.Photo tags
 
-        Exiv2::ExifData exifData(d->exifMetadata);
+        Exiv2::ExifData exifData(d->exifMetadata());
         Exiv2::ExifKey key("Exif.Photo.PixelXDimension");
         Exiv2::ExifData::iterator it = exifData.findKey(key);
         if (it != exifData.end())
@@ -187,10 +187,10 @@ bool KExiv2::setImageDimensions(const QSize& size, bool setProgramName) const
         // Set Exif values.
 
         // NOTE: see B.K.O #144604: need to cast to record an unsigned integer value.
-        d->exifMetadata["Exif.Image.ImageWidth"]      = static_cast<uint32_t>(size.width());
-        d->exifMetadata["Exif.Image.ImageLength"]     = static_cast<uint32_t>(size.height());
-        d->exifMetadata["Exif.Photo.PixelXDimension"] = static_cast<uint32_t>(size.width());
-        d->exifMetadata["Exif.Photo.PixelYDimension"] = static_cast<uint32_t>(size.height());
+        d->exifMetadata()["Exif.Image.ImageWidth"]      = static_cast<uint32_t>(size.width());
+        d->exifMetadata()["Exif.Image.ImageLength"]     = static_cast<uint32_t>(size.height());
+        d->exifMetadata()["Exif.Photo.PixelXDimension"] = static_cast<uint32_t>(size.width());
+        d->exifMetadata()["Exif.Photo.PixelYDimension"] = static_cast<uint32_t>(size.height());
 
         // Set Xmp values.
 
@@ -217,7 +217,7 @@ KExiv2::ImageOrientation KExiv2::getImageOrientation() const
 {
     try
     {
-        Exiv2::ExifData exifData(d->exifMetadata);
+        Exiv2::ExifData exifData(d->exifMetadata());
         Exiv2::ExifData::iterator it;
         long orientation;
         ImageOrientation imageOrient = ORIENTATION_NORMAL;
@@ -319,7 +319,7 @@ bool KExiv2::setImageOrientation(ImageOrientation orientation, bool setProgramNa
 
         // Set Exif values.
 
-        d->exifMetadata["Exif.Image.Orientation"] = static_cast<uint16_t>(orientation);
+        d->exifMetadata()["Exif.Image.Orientation"] = static_cast<uint16_t>(orientation);
         kDebug(51003) << "Exif.Image.Orientation tag set to: " << (int)orientation << endl;
 
         // Set Xmp values.
@@ -338,26 +338,26 @@ bool KExiv2::setImageOrientation(ImageOrientation orientation, bool setProgramNa
         Exiv2::ExifData::iterator it;
 
         Exiv2::ExifKey minoltaKey1("Exif.MinoltaCs7D.Rotation");
-        it = d->exifMetadata.findKey(minoltaKey1);
-        if (it != d->exifMetadata.end())
+        it = d->exifMetadata().findKey(minoltaKey1);
+        if (it != d->exifMetadata().end())
         {
-            d->exifMetadata.erase(it);
+            d->exifMetadata().erase(it);
             kDebug(51003) << "Removing Exif.MinoltaCs7D.Rotation tag" << endl;
         }
 
         Exiv2::ExifKey minoltaKey2("Exif.MinoltaCs5D.Rotation");
-        it = d->exifMetadata.findKey(minoltaKey2);
-        if (it != d->exifMetadata.end())
+        it = d->exifMetadata().findKey(minoltaKey2);
+        if (it != d->exifMetadata().end())
         {
-            d->exifMetadata.erase(it);
+            d->exifMetadata().erase(it);
             kDebug(51003) << "Removing Exif.MinoltaCs5D.Rotation tag" << endl;
         }
 
         // -- Exif embedded thumbnail ----------------------------------
 
         Exiv2::ExifKey thumbKey("Exif.Thumbnail.Orientation");
-        it = d->exifMetadata.findKey(thumbKey);
-        if (it != d->exifMetadata.end())
+        it = d->exifMetadata().findKey(thumbKey);
+        if (it != d->exifMetadata().end())
         {
             RotationMatrix operation((KExiv2Iface::KExiv2::ImageOrientation)it->toLong());
             operation *= orientation;
@@ -456,7 +456,7 @@ bool KExiv2::setImageColorWorkSpace(ImageColorWorkSpace workspace, bool setProgr
     {
         // Set Exif value.
 
-        d->exifMetadata["Exif.Photo.ColorSpace"] = static_cast<uint16_t>(workspace);
+        d->exifMetadata()["Exif.Photo.ColorSpace"] = static_cast<uint16_t>(workspace);
 
         // Set Xmp value.
 
@@ -482,9 +482,9 @@ QDateTime KExiv2::getImageDateTime() const
     {
         // In first, trying to get Date & time from Exif tags.
 
-        if (!d->exifMetadata.empty())
+        if (!d->exifMetadata().empty())
         {
-            Exiv2::ExifData exifData(d->exifMetadata);
+            Exiv2::ExifData exifData(d->exifMetadata());
             {
                 Exiv2::ExifKey key("Exif.Photo.DateTimeOriginal");
                 Exiv2::ExifData::iterator it = exifData.findKey(key);
@@ -530,9 +530,9 @@ QDateTime KExiv2::getImageDateTime() const
 
 #ifdef _XMP_SUPPORT_
 
-        if (!d->xmpMetadata.empty())
+        if (!d->xmpMetadata().empty())
         {
-            Exiv2::XmpData xmpData(d->xmpMetadata);
+            Exiv2::XmpData xmpData(d->xmpMetadata());
             {
                 Exiv2::XmpKey key("Xmp.exif.DateTimeOriginal");
                 Exiv2::XmpData::iterator it = xmpData.findKey(key);
@@ -630,9 +630,9 @@ QDateTime KExiv2::getImageDateTime() const
 
         // In third, trying to get Date & time from Iptc tags.
 
-        if (!d->iptcMetadata.empty())
+        if (!d->iptcMetadata().empty())
         {
-            Exiv2::IptcData iptcData(d->iptcMetadata);
+            Exiv2::IptcData iptcData(d->iptcMetadata());
 
             // Try creation Iptc date & time entries.
 
@@ -707,10 +707,10 @@ bool KExiv2::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitiz
         // Reference: http://www.exif.org/Exif2-2.PDF, chapter 4.6.5, table 4, section F.
 
         const std::string &exifdatetime(dateTime.toString(QString("yyyy:MM:dd hh:mm:ss")).toAscii().constData());
-        d->exifMetadata["Exif.Image.DateTime"]         = exifdatetime;
-        d->exifMetadata["Exif.Photo.DateTimeOriginal"] = exifdatetime;
+        d->exifMetadata()["Exif.Image.DateTime"]         = exifdatetime;
+        d->exifMetadata()["Exif.Photo.DateTimeOriginal"] = exifdatetime;
         if(setDateTimeDigitized)
-            d->exifMetadata["Exif.Photo.DateTimeDigitized"] = exifdatetime;
+            d->exifMetadata()["Exif.Photo.DateTimeDigitized"] = exifdatetime;
 
 #ifdef _XMP_SUPPORT_
 
@@ -720,14 +720,14 @@ bool KExiv2::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitiz
 
         Exiv2::Value::AutoPtr xmpTxtVal = Exiv2::Value::create(Exiv2::xmpText);
         xmpTxtVal->read(xmpdatetime);
-        d->xmpMetadata.add(Exiv2::XmpKey("Xmp.exif.DateTimeOriginal"), xmpTxtVal.get());
-        d->xmpMetadata.add(Exiv2::XmpKey("Xmp.photoshop.DateCreated"), xmpTxtVal.get());
-        d->xmpMetadata.add(Exiv2::XmpKey("Xmp.tiff.DateTime"),         xmpTxtVal.get());
-        d->xmpMetadata.add(Exiv2::XmpKey("Xmp.xmp.CreateDate"),        xmpTxtVal.get());
-        d->xmpMetadata.add(Exiv2::XmpKey("Xmp.xmp.MetadataDate"),      xmpTxtVal.get());
-        d->xmpMetadata.add(Exiv2::XmpKey("Xmp.xmp.ModifyDate"),        xmpTxtVal.get());
+        d->xmpMetadata().add(Exiv2::XmpKey("Xmp.exif.DateTimeOriginal"), xmpTxtVal.get());
+        d->xmpMetadata().add(Exiv2::XmpKey("Xmp.photoshop.DateCreated"), xmpTxtVal.get());
+        d->xmpMetadata().add(Exiv2::XmpKey("Xmp.tiff.DateTime"),         xmpTxtVal.get());
+        d->xmpMetadata().add(Exiv2::XmpKey("Xmp.xmp.CreateDate"),        xmpTxtVal.get());
+        d->xmpMetadata().add(Exiv2::XmpKey("Xmp.xmp.MetadataDate"),      xmpTxtVal.get());
+        d->xmpMetadata().add(Exiv2::XmpKey("Xmp.xmp.ModifyDate"),        xmpTxtVal.get());
         if(setDateTimeDigitized)
-            d->xmpMetadata.add(Exiv2::XmpKey("Xmp.exif.DateTimeDigitized"), xmpTxtVal.get());
+            d->xmpMetadata().add(Exiv2::XmpKey("Xmp.exif.DateTimeDigitized"), xmpTxtVal.get());
 
         // Tag not updated:
         // "Xmp.dc.DateTime" is a sequence of date relevant of dublin core change. 
@@ -739,12 +739,12 @@ bool KExiv2::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitiz
 
         const std::string &iptcdate(dateTime.date().toString(Qt::ISODate).toAscii().constData());
         const std::string &iptctime(dateTime.time().toString(Qt::ISODate).toAscii().constData());
-        d->iptcMetadata["Iptc.Application2.DateCreated"] = iptcdate;
-        d->iptcMetadata["Iptc.Application2.TimeCreated"] = iptctime;
+        d->iptcMetadata()["Iptc.Application2.DateCreated"] = iptcdate;
+        d->iptcMetadata()["Iptc.Application2.TimeCreated"] = iptctime;
         if(setDateTimeDigitized)
         {
-            d->iptcMetadata["Iptc.Application2.DigitizationDate"] = iptcdate;
-            d->iptcMetadata["Iptc.Application2.DigitizationTime"] = iptctime;
+            d->iptcMetadata()["Iptc.Application2.DigitizationDate"] = iptcdate;
+            d->iptcMetadata()["Iptc.Application2.DigitizationTime"] = iptctime;
         }
 
         return true;
@@ -763,11 +763,11 @@ QDateTime KExiv2::getDigitizationDateTime(bool fallbackToCreationTime) const
     {
         // In first, trying to get Date & time from Exif tags.
 
-        if (!d->exifMetadata.empty())
+        if (!d->exifMetadata().empty())
         {
             // Try Exif date time digitized.
 
-            Exiv2::ExifData exifData(d->exifMetadata);
+            Exiv2::ExifData exifData(d->exifMetadata());
             Exiv2::ExifKey key("Exif.Photo.DateTimeDigitized");
             Exiv2::ExifData::iterator it = exifData.findKey(key);
 
@@ -786,12 +786,12 @@ QDateTime KExiv2::getDigitizationDateTime(bool fallbackToCreationTime) const
 
         // In second, trying to get Date & time from Iptc tags.
 
-        if (!d->iptcMetadata.empty())
+        if (!d->iptcMetadata().empty())
         {
 
             // Try digitization Iptc date time entries.
 
-            Exiv2::IptcData iptcData(d->iptcMetadata);
+            Exiv2::IptcData iptcData(d->iptcMetadata());
             Exiv2::IptcKey keyDigitizationDate("Iptc.Application2.DigitizationDate");
             Exiv2::IptcData::iterator it = iptcData.findKey(keyDigitizationDate);
 
@@ -868,11 +868,11 @@ bool KExiv2::setImagePreview(const QImage& preview, bool setProgramName) const
 
         Exiv2::DataValue val;
         val.read((Exiv2::byte *)data.data(), data.size());
-        d->iptcMetadata["Iptc.Application2.Preview"] = val;
+        d->iptcMetadata()["Iptc.Application2.Preview"] = val;
 
         // See http://www.iptc.org/std/IIM/4.1/specification/IIMV4.1.pdf Appendix A for details.
-        d->iptcMetadata["Iptc.Application2.PreviewFormat"]  = 11;  // JPEG 
-        d->iptcMetadata["Iptc.Application2.PreviewVersion"] = 1;
+        d->iptcMetadata()["Iptc.Application2.PreviewFormat"]  = 11;  // JPEG
+        d->iptcMetadata()["Iptc.Application2.PreviewVersion"] = 1;
 
         return true;
     }
