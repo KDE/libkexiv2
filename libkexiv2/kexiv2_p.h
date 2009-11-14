@@ -47,6 +47,7 @@
 #include <QMatrix>
 #include <QFileInfo>
 #include <QDataStream>
+#include <QSharedData>
 
 // KDE includes.
 
@@ -69,6 +70,7 @@
 #include <exiv2/jpgimage.hpp>
 #include <exiv2/datasets.hpp>
 #include <exiv2/tags.hpp>
+#include <exiv2/preview.hpp>
 #include <exiv2/properties.hpp>
 #include <exiv2/types.hpp>
 #include <exiv2/exif.hpp>
@@ -118,6 +120,21 @@ namespace Exiv2
 namespace KExiv2Iface
 {
 
+class KExiv2DataPriv : public QSharedData
+{
+public:
+
+    std::string     imageComments;
+
+    Exiv2::ExifData exifMetadata;
+
+    Exiv2::IptcData iptcMetadata;
+
+#ifdef _XMP_SUPPORT_
+    Exiv2::XmpData  xmpMetadata;
+#endif
+};
+
 class KExiv2Priv
 {
 public:
@@ -142,6 +159,16 @@ public:
      */
     int getXMPTagsListFromPrefix(const QString& pf, KExiv2::TagsMap& tagsMap);
 
+    const Exiv2::ExifData& exifMetadata() const { return data.constData()->exifMetadata; }
+    const Exiv2::IptcData& iptcMetadata() const { return data.constData()->iptcMetadata; }
+    const Exiv2::XmpData&  xmpMetadata()  const { return data.constData()->xmpMetadata;  }
+    const std::string& imageComments()    const { return data.constData()->imageComments; }
+
+    Exiv2::ExifData& exifMetadata() { return data.data()->exifMetadata; }
+    Exiv2::IptcData& iptcMetadata() { return data.data()->iptcMetadata; }
+    Exiv2::XmpData&  xmpMetadata()  { return data.data()->xmpMetadata;  }
+    std::string& imageComments()    { return data.data()->imageComments; }
+
 public:
 
     bool            writeRawFiles;
@@ -149,15 +176,7 @@ public:
 
     QString         filePath;
 
-    std::string     imageComments;
-
-    Exiv2::ExifData exifMetadata;
-
-    Exiv2::IptcData iptcMetadata;
-
-#ifdef _XMP_SUPPORT_
-    Exiv2::XmpData  xmpMetadata;
-#endif
+    QSharedDataPointer<KExiv2DataPriv> data;
 };
 
 }  // NameSpace KExiv2Iface

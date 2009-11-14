@@ -29,10 +29,10 @@ namespace KExiv2Iface
 {
 
 KExiv2Priv::KExiv2Priv()
+    : data(new KExiv2DataPriv)
 {
     writeRawFiles       = false;
     updateFileTimeStamp = false;
-    imageComments       = std::string();
 }
 
 KExiv2Priv::~KExiv2Priv()
