@@ -18,6 +18,7 @@ SET(kexiv2_LIB_SRCS kexiv2.cpp
                     kexiv2iptc.cpp
                     kexiv2gps.cpp
                     kexiv2xmp.cpp
+                    kexiv2previews.cpp
                     altlangstredit.cpp
                     msgtextedit.cpp
                     countryselector.cpp
@@ -41,6 +42,7 @@ INSTALL(TARGETS kexiv2 ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 INSTALL(FILES kexiv2.h
               kexiv2data.h
+              kexiv2previews.h
               libkexiv2_export.h
               msgtextedit.h
               subjectwidget.h
