@@ -40,6 +40,7 @@ SET_TARGET_PROPERTIES(kexiv2 PROPERTIES VERSION ${KEXIV2_LIB_SO_VERSION_STRING}
 INSTALL(TARGETS kexiv2 ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 INSTALL(FILES kexiv2.h
+              kexiv2data.h
               libkexiv2_export.h
               msgtextedit.h
               subjectwidget.h

@@ -104,7 +104,7 @@ bool KExiv2::initializeExiv2()
 {
 #ifdef _XMP_SUPPORT_
 
-    if (Exiv2::XmpParser::initialize())
+    if (!Exiv2::XmpParser::initialize())
         return false;
 
     registerXmpNameSpace(QString("http://ns.adobe.com/lightroom/1.0/"), QString("lr"));
