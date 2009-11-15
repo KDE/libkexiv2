@@ -45,27 +45,12 @@
 // Local includes.
 
 #include "libkexiv2_export.h"
+#include "kexiv2data.h"
 
 namespace KExiv2Iface
 {
 
 class KExiv2Priv;
-class KExiv2DataPriv;
-
-class KEXIV2_EXPORT KExiv2Data
-{
-public:
-
-    KExiv2Data();
-    KExiv2Data(const KExiv2Data&);
-    ~KExiv2Data();
-    KExiv2Data& operator=(const KExiv2Data&);
-
-private:
-
-    friend class KExiv2;
-    QSharedDataPointer<KExiv2DataPriv> d;
-};
 
 class KEXIV2_EXPORT KExiv2
 {
@@ -181,6 +166,7 @@ public:
     //-----------------------------------------------------------------
 
     KExiv2Data data() const;
+    void setData(const KExiv2Data& data);
 
     /** Load all metadata (Exif, Iptc, Xmp, and JFIF Comments) from a byte array. 
         Return true if metadata have been loaded successfully from image data.
@@ -366,13 +352,15 @@ public:
      */
     bool clearExif() const;
 
-    /** Return a Qt byte array copy of Exif container get from current image. 
-        Set true 'addExifHeader' parameter to add an Exif header to Exif metadata. 
-        Return a null Qt byte array if there is no Exif metadata in memory.
+    /** Returns the exif data encoded to a QByteArray in a form suitable
+        for storage in a JPEG image.
+        Note that this encoding is a lossy operation.
 
-        Avoid using this method, passing the data is not lossless. See bug 183171.
+        Set true 'addExifHeader' parameter to add an Exif header to Exif metadata.
+        Returns a null Qt byte array if there is no Exif metadata in memory.
      */
     KDE_DEPRECATED QByteArray getExif(bool addExifHeader=false) const;
+    QByteArray getExifEncoded(bool addExifHeader=false) const;
 
     /** Set the Exif data using a Qt byte array. Return true if Exif metadata
         have been changed in memory.

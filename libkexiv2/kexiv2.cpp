@@ -75,7 +75,7 @@ KExiv2::KExiv2(const KExiv2& metadata)
 KExiv2::KExiv2(const KExiv2Data& data)
       : d(new KExiv2Priv)
 {
-    d->data = data.d;
+    setData(data);
 }
 
 KExiv2::KExiv2(const QString& filePath)
@@ -104,7 +104,8 @@ bool KExiv2::initializeExiv2()
 {
 #ifdef _XMP_SUPPORT_
 
-    return (Exiv2::XmpParser::initialize());
+    if (Exiv2::XmpParser::initialize())
+        return false;
 
     registerXmpNameSpace(QString("http://ns.adobe.com/lightroom/1.0/"), QString("lr"));
 
@@ -212,6 +213,20 @@ KExiv2Data KExiv2::data() const
     KExiv2Data data;
     data.d = d->data;
     return data;
+}
+
+void KExiv2::setData(const KExiv2Data& data)
+{
+    if (data.d)
+    {
+        d->data = data.d;
+    }
+    else
+    {
+        // KExiv2Data can have a null pointer,
+        // but we never want a null pointer in KExiv2Priv.
+        d->data->clear();
+    }
 }
 
 bool KExiv2::load(const QByteArray& imgData) const

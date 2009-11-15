@@ -72,6 +72,11 @@ bool KExiv2::clearExif() const
 
 QByteArray KExiv2::getExif(bool addExifHeader) const
 {
+    return getExifEncoded(addExifHeader);
+}
+
+QByteArray KExiv2::getExifEncoded(bool addExifHeader) const
+{
     try
     {
         if (!d->exifMetadata().empty())
