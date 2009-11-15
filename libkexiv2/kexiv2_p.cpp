@@ -28,6 +28,14 @@
 namespace KExiv2Iface
 {
 
+void KExiv2DataPriv::clear()
+{
+    imageComments.clear();
+    exifMetadata.clear();
+    iptcMetadata.clear();
+    xmpMetadata.clear();
+}
+
 KExiv2Priv::KExiv2Priv()
     : data(new KExiv2DataPriv)
 {

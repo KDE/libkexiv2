@@ -124,6 +124,8 @@ class KExiv2DataPriv : public QSharedData
 {
 public:
 
+    void clear();
+
     std::string     imageComments;
 
     Exiv2::ExifData exifMetadata;
