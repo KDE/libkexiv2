@@ -909,11 +909,11 @@ KExiv2::TagsMap KExiv2::getMakernoteTagsList() const
              << Exiv2::CanonMakerNote::tagListCf()
              << Exiv2::CanonMakerNote::tagListPi()
 
-        /*
+             /*
               * Not yet officially released. I added some new tags to the
               * Canon Makernote namespace. Should be released with exiv2-0.19...
               *
-             << Exiv2::CanonMakerNote::tagListFi()
+                     << Exiv2::CanonMakerNote::tagListFi()
               */
 
              // Sigma Makernotes.
