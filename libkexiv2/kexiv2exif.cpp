@@ -43,7 +43,7 @@ bool KExiv2::canWriteExif(const QString& filePath)
     catch( Exiv2::Error &e )
     {
         std::string s(e.what());
-        kDebug(51003) << "Cannot check Exif access mode using Exiv2 (Error #" 
+        kDebug(51003) << "Cannot check Exif access mode using Exiv2 (Error #"
                       << e.code() << ": " << s.c_str() << ")" << endl;
     }
 
@@ -275,13 +275,13 @@ bool KExiv2::setExifComment(const QString& comment, bool setProgramName) const
 
 QString KExiv2::getExifTagTitle(const char *exifTagName)
 {
-    try 
+    try
     {
         std::string exifkey(exifTagName);
-        Exiv2::ExifKey ek(exifkey); 
+        Exiv2::ExifKey ek(exifkey);
         return QString::fromLocal8Bit( Exiv2::ExifTags::tagTitle(ek.tag(), ek.ifdId()) );
     }
-    catch (Exiv2::Error& e) 
+    catch (Exiv2::Error& e)
     {
         d->printExiv2ExceptionError("Cannot get metadata tag title using Exiv2 ", e);
     }
@@ -291,13 +291,13 @@ QString KExiv2::getExifTagTitle(const char *exifTagName)
 
 QString KExiv2::getExifTagDescription(const char *exifTagName)
 {
-    try 
+    try
     {
         std::string exifkey(exifTagName);
-        Exiv2::ExifKey ek(exifkey); 
+        Exiv2::ExifKey ek(exifkey);
         return QString::fromLocal8Bit( Exiv2::ExifTags::tagDesc(ek.tag(), ek.ifdId()) );
     }
-    catch (Exiv2::Error& e) 
+    catch (Exiv2::Error& e)
     {
         d->printExiv2ExceptionError("Cannot get metadata tag description using Exiv2 ", e);
     }
@@ -344,7 +344,7 @@ bool KExiv2::getExifTagRational(const char *exifTagName, long int &num, long int
     }
     catch( Exiv2::Error &e )
     {
-        d->printExiv2ExceptionError(QString("Cannot find Exif Rational value from key '%1' " 
+        d->printExiv2ExceptionError(QString("Cannot find Exif Rational value from key '%1' "
                                          "into image using Exiv2 ").arg(exifTagName), e);
     }
 
@@ -409,7 +409,7 @@ bool KExiv2::setExifTagData(const char *exifTagName, const QByteArray& data, boo
     return false;
 }
 
-bool KExiv2::setExifTagVariant(const char *exifTagName, const QVariant& val, 
+bool KExiv2::setExifTagVariant(const char *exifTagName, const QVariant& val,
                                bool rationalWantSmallDenominator, bool setProgramName) const
 {
     switch (val.type())
@@ -908,6 +908,14 @@ KExiv2::TagsMap KExiv2::getMakernoteTagsList() const
              << Exiv2::CanonMakerNote::tagListPa()
              << Exiv2::CanonMakerNote::tagListCf()
              << Exiv2::CanonMakerNote::tagListPi()
+
+        /*
+              * Not yet officially released. I added some new tags to the
+              * Canon Makernote namespace. Should be released with exiv2-0.19...
+              *
+             << Exiv2::CanonMakerNote::tagListFi()
+              */
+
              // Sigma Makernotes.
              << Exiv2::SigmaMakerNote::tagList()
              // Sony Makernotes.
