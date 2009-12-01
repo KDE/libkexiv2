@@ -21,6 +21,8 @@
  *
  * ============================================================ */
 
+#include "msgtextedit.moc"
+
 // Qt includes.
 
 #include <QColor>
@@ -30,11 +32,6 @@
 // KDE includes.
 
 #include <kdebug.h>
-
-// Local includes.
-
-#include "msgtextedit.h"
-#include "msgtextedit.moc"
 
 namespace KExiv2Iface
 {

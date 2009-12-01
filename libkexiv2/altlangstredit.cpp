@@ -20,7 +20,6 @@
  *
  * ============================================================ */
 
-#include "altlangstredit.h"
 #include "altlangstredit.moc"
 
 // Qt includes
