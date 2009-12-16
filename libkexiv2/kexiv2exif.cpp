@@ -22,6 +22,10 @@
  *
  * ============================================================ */
 
+// KDE includes
+
+#include <klocale.h>
+
 // Local includes.
 
 #include "kexiv2_p.h"
@@ -166,6 +170,10 @@ KExiv2::MetaDataMap KExiv2::getExifTagsDataList(const QStringList &exifKeysFilte
             if (key == "Exif.Photo.UserComment")
             {
                 tagValue = d->convertCommentValue(*md);
+            }
+            else if (key == "Exif.Image.0x935c")
+            {
+                tagValue = i18n("Data of size %1", md->value().size());
             }
             else
             {
