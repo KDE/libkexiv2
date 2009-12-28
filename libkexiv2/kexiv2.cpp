@@ -108,6 +108,7 @@ bool KExiv2::initializeExiv2()
         return false;
 
     registerXmpNameSpace(QString("http://ns.adobe.com/lightroom/1.0/"), QString("lr"));
+    registerXmpNameSpace(QString("http://www.digikam.org/ns/kipi/1.0/"), QString("kipi"));
 
 #endif // _XMP_SUPPORT_
 
@@ -122,6 +123,7 @@ bool KExiv2::cleanupExiv2()
     Exiv2::XmpParser::terminate();
 
     unregisterXmpNameSpace(QString("http://ns.adobe.com/lightroom/1.0/"));
+    unregisterXmpNameSpace(QString("http://www.digikam.org/ns/kipi/1.0/"));
 
 #endif // _XMP_SUPPORT_
 
@@ -371,7 +373,7 @@ bool KExiv2::save(const QString& filePath) const
         Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
                                       (QFile::encodeName(filePath)));
 
-        // We need to load target file metadata to merge with new one. It's mandatory with TIFF format: 
+        // We need to load target file metadata to merge with new one. It's mandatory with TIFF format:
         // like all tiff file structure is based on Exif.
         image->readMetadata();
 
@@ -394,7 +396,7 @@ bool KExiv2::save(const QString& filePath) const
                 Exiv2::ExifData newExif;
                 QStringList     untouchedTags;
 
-                // With tiff image we cannot overwrite whole Exif data as well, because 
+                // With tiff image we cannot overwrite whole Exif data as well, because
                 // image data are stored in Exif container. We need to take a care about
                 // to not lost image data.
                 untouchedTags << "Exif.Image.ImageWidth";
