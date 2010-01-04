@@ -344,12 +344,14 @@ bool KExiv2::save(const QString& filePath) const
         return false;
     }
 
-    // TIFF/EP Raw file based supported by Exiv2 0.18 are : DNG, NEF, PEF.
     QStringList rawTiffBasedSupported = QStringList()
+        // TIFF/EP Raw files based supported by Exiv2 0.20
+        << "orf"
+        // TIFF/EP Raw files based supported by Exiv2 0.18
         << "dng" << "nef" << "pef";
     QStringList rawTiffBasedNotSupported = QStringList()
         << "3fr" << "arw" << "cr2" << "dcr" << "erf" << "k25"
-        << "kdc" << "mos" << "orf" << "raw" << "sr2" << "srf";
+        << "kdc" << "mos" << "raw" << "sr2" << "srf";
     QString ext = finfo.suffix().toLower();
     if (rawTiffBasedNotSupported.contains(ext))
     {
