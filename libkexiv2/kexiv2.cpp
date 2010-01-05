@@ -6,8 +6,8 @@
  * Date        : 2006-09-15
  * Description : Exiv2 library interface for KDE
  *
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -179,7 +179,7 @@ bool KExiv2::supportMetadataWritting(const QString& typeMime)
     }
     else if (typeMime == QString("image/pgf"))
     {
-#if (EXIV2_TEST_VERSION(0,19,0))
+#if (EXIV2_TEST_VERSION(0,19,1))
         return true;
 #else
         return false;
@@ -345,13 +345,37 @@ bool KExiv2::save(const QString& filePath) const
     }
 
     QStringList rawTiffBasedSupported = QStringList()
-        // TIFF/EP Raw files based supported by Exiv2 0.20
-        << "orf"
-        // TIFF/EP Raw files based supported by Exiv2 0.18
+#if (EXIV2_TEST_VERSION(0,19,1))
+        // TIFF/EP Raw files based supported by Exiv2 0.19.1
+        << "dng" << "nef" << "pef" << "orf";
+#else
+#if (EXIV2_TEST_VERSION(0,17,91))
+        // TIFF/EP Raw files based supported by Exiv2 0.18.0
         << "dng" << "nef" << "pef";
+#else
+        // TIFF/EP Raw files based supported by all other Exiv2 versions
+        // NONE
+#endif
+#endif
+
     QStringList rawTiffBasedNotSupported = QStringList()
+#if (EXIV2_TEST_VERSION(0,19,1))
+        // TIFF/EP Raw files based not supported by Exiv2 0.19.1
         << "3fr" << "arw" << "cr2" << "dcr" << "erf" << "k25"
         << "kdc" << "mos" << "raw" << "sr2" << "srf";
+#else
+#if (EXIV2_TEST_VERSION(0,17,91))
+        // TIFF/EP Raw files based not supported by Exiv2 0.18.0
+        << "3fr" << "arw" << "cr2" << "dcr" << "erf" << "k25"
+        << "kdc" << "mos" << "raw" << "sr2" << "srf" << "orf";
+#else
+        // TIFF/EP Raw files based not supported by all other Exiv2 versions
+        << "dng" << "nef" << "pef"
+        << "3fr" << "arw" << "cr2" << "dcr" << "erf" << "k25"
+        << "kdc" << "mos" << "raw" << "sr2" << "srf" << "orf";
+#endif
+#endif
+
     QString ext = finfo.suffix().toLower();
     if (rawTiffBasedNotSupported.contains(ext))
     {
