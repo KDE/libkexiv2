@@ -93,10 +93,16 @@ QString KExiv2Priv::convertCommentValue(const Exiv2::Exifdatum &exifDatum)
 
         if (charset == "\"Unicode\"")
         {
+        #if (EXIV2_TEST_VERSION(0,20,0))
+            return QString::fromUtf8(comment.data());
+        #else
+            // Older versions give a UCS2-String, see bug #205824
+
             // QString expects a null-terminated UCS-2 string.
             // Is it already null terminated? In any case, add termination "\0\0" for safety.
             comment.resize(comment.length() + 2, '\0');
             return QString::fromUtf16((unsigned short *)comment.data());
+        #endif
         }
         else if (charset == "\"Jis\"")
         {

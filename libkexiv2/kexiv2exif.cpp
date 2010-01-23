@@ -261,6 +261,13 @@ bool KExiv2::setExifComment(const QString& comment, bool setProgramName) const
             {
                 // write as Unicode (UCS-2)
 
+            #if (EXIV2_TEST_VERSION(0,20,0))
+                std::string exifComment("charset=\"Unicode\" ");
+                exifComment += comment.toUtf8().constData();
+                d->exifMetadata()["Exif.Photo.UserComment"] = exifComment;
+            #else
+                // Older versions took a UCS2-String, see bug #205824
+
                 // Be aware that we are dealing with a UCS-2 string.
                 // Null termination means \0\0, strlen does not work,
                 // do not use any const-char*-only methods,
@@ -269,6 +276,7 @@ bool KExiv2::setExifComment(const QString& comment, bool setProgramName) const
                 std::string exifComment("charset=\"Unicode\" ");
                 exifComment.append((const char*)ucs2, sizeof(unsigned short) * comment.length());
                 d->exifMetadata()["Exif.Photo.UserComment"] = exifComment;
+            #endif
             }
         }
         return true;
