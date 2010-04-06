@@ -29,8 +29,9 @@
 #include <QtGui/QWidget>
 #include <QtCore/QString>
 
-// LibKExiv2 includes
+// Local includes.
 
+#include "libkexiv2_export.h"
 #include "kexiv2.h"
 
 namespace KExiv2Iface
@@ -38,7 +39,7 @@ namespace KExiv2Iface
 
 class AltLangStrEditPriv;
 
-class AltLangStrEdit : public QWidget
+class KEXIV2_EXPORT AltLangStrEdit : public QWidget
 {
     Q_OBJECT
 

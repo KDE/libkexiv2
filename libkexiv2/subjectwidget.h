@@ -36,6 +36,10 @@
 
 #include <kurl.h>
 
+// Local includes.
+
+#include "libkexiv2_export.h"
+
 class QCheckBox;
 class QLabel;
 
@@ -46,7 +50,7 @@ namespace KExiv2Iface
 
 class SubjectWidgetPriv;
 
-class SubjectData
+class KEXIV2_EXPORT SubjectData
 {
 public:
 
@@ -64,7 +68,7 @@ public:
 
 // --------------------------------------------------------------------------------
 
-class SubjectWidget : public QWidget
+class KEXIV2_EXPORT SubjectWidget : public QWidget
 {
     Q_OBJECT
 

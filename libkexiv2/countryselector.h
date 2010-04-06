@@ -33,12 +33,16 @@
 
 #include <kcombobox.h>
 
+// Local includes.
+
+#include "libkexiv2_export.h"
+
 namespace KExiv2Iface
 {
 
 class CountrySelectorPriv;
 
-class CountrySelector : public KComboBox
+class KEXIV2_EXPORT CountrySelector : public KComboBox
 {
 
 public:

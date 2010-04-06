@@ -33,12 +33,17 @@
 
 #include <ktextedit.h>
 
+// Local includes.
+
+#include "libkexiv2_export.h"
+
+
 namespace KExiv2Iface
 {
 
 class MsgTextEditPriv;
 
-class MsgTextEdit : public KTextEdit
+class KEXIV2_EXPORT MsgTextEdit : public KTextEdit
 {
     Q_OBJECT
 
