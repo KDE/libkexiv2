@@ -116,7 +116,7 @@ SubjectWidget::SubjectWidget(QWidget* parent)
     // See http://iptc.cms.apa.at/std/topicset/topicset.iptc-subjectcode.xml for details.
 
     KGlobal::dirs()->addResourceDir("iptcschema", KStandardDirs::installPath("data") +
-                                                  QString("digikam/data"));
+                                                  QString("libkexiv2/data"));
     QString path = KGlobal::dirs()->findResource("iptcschema", "topicset.iptc-subjectcode.xml");
 
     if (!loadSubjectCodesFromXML(KUrl(path)))
