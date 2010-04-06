@@ -30,8 +30,8 @@
 
 // KDE includes
 
-#include <kdebug.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 namespace KExiv2Iface
 {

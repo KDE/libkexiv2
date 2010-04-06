@@ -6,22 +6,20 @@
  * Date        : 2009-07-15
  * Description : a text edit widget with click message.
  *
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option)
  * any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * ============================================================ */
-
-#include "msgtextedit.moc"
 
 // Qt includes.
 
@@ -29,9 +27,9 @@
 #include <QPalette>
 #include <QPainter>
 
-// KDE includes.
+// Local includes.
 
-#include <kdebug.h>
+#include "msgtextedit.moc"
 
 namespace KExiv2Iface
 {
@@ -45,10 +43,9 @@ public:
     QString message;
 };
 
-MsgTextEdit::MsgTextEdit(QWidget *parent)
-           : KTextEdit(parent)
+MsgTextEdit::MsgTextEdit(QWidget* parent)
+           : KTextEdit(parent), d(new MsgTextEditPriv)
 {
-    d = new MsgTextEditPriv;
 }
 
 MsgTextEdit::~MsgTextEdit()
@@ -88,19 +85,19 @@ void MsgTextEdit::paintEvent(QPaintEvent* e)
     }
 }
 
-void MsgTextEdit::dropEvent(QDropEvent *e)
+void MsgTextEdit::dropEvent(QDropEvent* e)
 {
     viewport()->repaint();
     KTextEdit::dropEvent(e);
 }
 
-void MsgTextEdit::focusInEvent(QFocusEvent *e)
+void MsgTextEdit::focusInEvent(QFocusEvent* e)
 {
     viewport()->repaint();
     KTextEdit::focusInEvent(e);
 }
 
-void MsgTextEdit::focusOutEvent(QFocusEvent *e)
+void MsgTextEdit::focusOutEvent(QFocusEvent* e)
 {
     viewport()->repaint();
     KTextEdit::focusOutEvent(e);

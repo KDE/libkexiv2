@@ -6,12 +6,13 @@
  * Date        : 2009-06-15
  * Description : multi-languages string editor
  *
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
- * either version 2, or (at your option) any later version.
+ * either version 2, or (at your option)
+ * any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -240,27 +241,27 @@ public:
         languageCodeMap.insert( "zu-ZA", i18n("isiZulu Zulu (South Africa)") );
     }
 
-    typedef QMap<QString, QString>  LanguageCodeMap;
+    typedef QMap<QString, QString> LanguageCodeMap;
 
-    LanguageCodeMap                 languageCodeMap;
+    LanguageCodeMap                languageCodeMap;
 
-    QString                         currentLanguage;
+    QString                        currentLanguage;
 
-    QLabel                         *titleLabel;
+    QLabel*                        titleLabel;
 
-    QToolButton                    *delValueButton;
+    QToolButton*                   delValueButton;
 
-    MsgTextEdit                    *valueEdit;
+    MsgTextEdit*                   valueEdit;
 
-    KComboBox                      *languageCB;
+    KComboBox*                     languageCB;
 
-    KExiv2::AltLangMap              values;
+    KExiv2::AltLangMap             values;
 };
 
 AltLangStrEdit::AltLangStrEdit(QWidget* parent)
               : QWidget(parent), d(new AltLangStrEditPriv)
 {
-    QGridLayout *grid = new QGridLayout(this);
+    QGridLayout* grid = new QGridLayout(this);
     d->titleLabel     = new QLabel(this);
     d->delValueButton = new QToolButton(this);
     d->delValueButton->setIcon(SmallIcon("edit-clear"));
@@ -346,7 +347,7 @@ void AltLangStrEdit::slotSelectionChanged()
     d->valueEdit->blockSignals(true);
 
     QString langISO3066 = d->currentLanguage;
-    langISO3066.replace("-", "_");
+    langISO3066.replace('-', '_');
     d->valueEdit->setSpellCheckingLanguage(langISO3066);
 
     QString text = d->values.value(d->currentLanguage);
@@ -390,7 +391,7 @@ void AltLangStrEdit::loadLangAltListEntries()
     QStringList list = d->values.keys();
     if (!list.isEmpty())
     {
-        foreach (QString item, list)
+        foreach (const QString &item, list)
         {
               d->languageCB->addItem(item);
               d->languageCB->setItemIcon(d->languageCB->count()-1, SmallIcon("dialog-ok"));

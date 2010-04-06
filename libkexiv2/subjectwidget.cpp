@@ -6,7 +6,7 @@
  * Date        : 2006-10-15
  * Description : IPTC subjects editor.
  *
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009      by Andi Clemens <andi dot clemens at gmx dot net>
  *
  * This program is free software; you can redistribute it
@@ -38,7 +38,6 @@
 // KDE includes
 
 #include <kcombobox.h>
-#include <kdebug.h>
 #include <kdialog.h>
 #include <kglobal.h>
 #include <khbox.h>
@@ -47,6 +46,7 @@
 #include <klistwidget.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
+#include <kdebug.h>
 
 namespace KExiv2Iface
 {
@@ -79,32 +79,32 @@ public:
         optionsBox       = 0;
     }
 
-    typedef QMap<QString, SubjectData>  SubjectCodesMap;
+    typedef QMap<QString, SubjectData> SubjectCodesMap;
 
-    SubjectCodesMap                     subMap;
+    SubjectCodesMap                    subMap;
 
-    QStringList                         subjectsList;
+    QStringList                        subjectsList;
 
-    QWidget                            *optionsBox;
+    QWidget*                           optionsBox;
 
-    QPushButton                        *addSubjectButton;
-    QPushButton                        *delSubjectButton;
-    QPushButton                        *repSubjectButton;
+    QPushButton*                       addSubjectButton;
+    QPushButton*                       delSubjectButton;
+    QPushButton*                       repSubjectButton;
 
-    QLabel                             *iprLabel;
-    QLabel                             *refLabel;
-    QLabel                             *nameLabel;
-    QLabel                             *matterLabel;
-    QLabel                             *detailLabel;
+    QLabel*                            iprLabel;
+    QLabel*                            refLabel;
+    QLabel*                            nameLabel;
+    QLabel*                            matterLabel;
+    QLabel*                            detailLabel;
 
-    QButtonGroup                       *btnGroup;
+    QButtonGroup*                      btnGroup;
 
-    QRadioButton                       *stdBtn;
-    QRadioButton                       *customBtn;
+    QRadioButton*                      stdBtn;
+    QRadioButton*                      customBtn;
 
-    KComboBox                          *refCB;
+    KComboBox*                         refCB;
 
-    KListWidget                        *subjectsBox;
+    KListWidget*                       subjectsBox;
 };
 
 // --------------------------------------------------------------------------------
@@ -116,11 +116,11 @@ SubjectWidget::SubjectWidget(QWidget* parent)
     // See http://iptc.cms.apa.at/std/topicset/topicset.iptc-subjectcode.xml for details.
 
     KGlobal::dirs()->addResourceDir("iptcschema", KStandardDirs::installPath("data") +
-                                                  QString("libkexiv2/data"));
+                                                  QString("digikam/data"));
     QString path = KGlobal::dirs()->findResource("iptcschema", "topicset.iptc-subjectcode.xml");
 
     if (!loadSubjectCodesFromXML(KUrl(path)))
-        kDebug(51001) << "Cannot load IPTC/NAA subject codes XML database";
+        kDebug() << "Cannot load IPTC/NAA subject codes XML database";
 
     // --------------------------------------------------------
 
@@ -135,13 +135,13 @@ SubjectWidget::SubjectWidget(QWidget* parent)
     d->stdBtn        = new QRadioButton;
     d->customBtn     = new QRadioButton;
     d->refCB         = new KComboBox;
-    QLabel *codeLink = new QLabel(i18n("Use standard "
+    QLabel* codeLink = new QLabel(i18n("Use standard "
                                        "<b><a href='http://www.iptc.org/NewsCodes'>"
                                        "reference code</a></b>"));
     codeLink->setOpenExternalLinks(true);
     codeLink->setWordWrap(false);
 
-    QLabel *customLabel = new QLabel(i18n("Use custom definition"));
+    QLabel* customLabel = new QLabel(i18n("Use custom definition"));
 
     d->btnGroup->addButton(d->stdBtn,    SubjectWidgetPriv::STANDARD);
     d->btnGroup->addButton(d->customBtn, SubjectWidgetPriv::CUSTOM);
@@ -219,7 +219,7 @@ SubjectWidget::SubjectWidget(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QGridLayout *optionsBoxLayout = new QGridLayout;
+    QGridLayout* optionsBoxLayout = new QGridLayout;
     optionsBoxLayout->addWidget(d->stdBtn,      0, 0, 1, 1);
     optionsBoxLayout->addWidget(codeLink,       0, 1, 1, 2);
     optionsBoxLayout->addWidget(d->refCB,       0, 3, 1, 1);
@@ -242,7 +242,7 @@ SubjectWidget::SubjectWidget(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QGridLayout *mainLayout = new QGridLayout;
+    QGridLayout* mainLayout = new QGridLayout;
     mainLayout->setAlignment( Qt::AlignTop );
     mainLayout->addWidget(d->optionsBox,       0, 0, 1, 4);
     mainLayout->addWidget(d->subjectsBox,      1, 0, 5, 3);
@@ -358,7 +358,7 @@ QString SubjectWidget::buildSubject() const
 
 void SubjectWidget::slotDelSubject()
 {
-    QListWidgetItem *item = d->subjectsBox->currentItem();
+    QListWidgetItem* item = d->subjectsBox->currentItem();
     if (!item) return;
     d->subjectsBox->takeItem(d->subjectsBox->row(item));
     delete item;
@@ -408,7 +408,7 @@ void SubjectWidget::slotAddSubject()
     bool found = false;
     for (int i = 0 ; i < d->subjectsBox->count(); i++)
     {
-        QListWidgetItem *item = d->subjectsBox->item(i);
+        QListWidgetItem* item = d->subjectsBox->item(i);
         if (newSubject == item->text())
         {
             found = true;
@@ -499,7 +499,7 @@ bool SubjectWidget::loadSubjectCodesFromXML(const KUrl& url)
          it != d->subMap.end(); ++it)
     {
         QString name, keyPrefix;
-        if (it.key().endsWith("00000"))
+        if (it.key().endsWith(QLatin1String("00000")))
         {
             keyPrefix = it.key().left(3);
             name      = it.value().name;
@@ -508,7 +508,7 @@ bool SubjectWidget::loadSubjectCodesFromXML(const KUrl& url)
                 it2 != d->subMap.end(); ++it2)
             {
                 if (it2.key().startsWith(keyPrefix) &&
-                    !it2.key().endsWith("00000"))
+                    !it2.key().endsWith(QLatin1String("00000")))
                 {
                     it2.value().name = name;
                 }
@@ -522,7 +522,7 @@ bool SubjectWidget::loadSubjectCodesFromXML(const KUrl& url)
          it != d->subMap.end(); ++it)
     {
         QString matter, keyPrefix;
-        if (it.key().endsWith("000"))
+        if (it.key().endsWith(QLatin1String("000")))
         {
             keyPrefix = it.key().left(5);
             matter    = it.value().matter;
@@ -531,7 +531,7 @@ bool SubjectWidget::loadSubjectCodesFromXML(const KUrl& url)
                 it2 != d->subMap.end(); ++it2)
             {
                 if (it2.key().startsWith(keyPrefix) &&
-                    !it2.key().endsWith("000"))
+                    !it2.key().endsWith(QLatin1String("000")))
                 {
                     it2.value().matter = matter;
                 }
@@ -560,7 +560,7 @@ QStringList SubjectWidget::subjectsList() const
 
     for (int i = 0 ; i < d->subjectsBox->count(); i++)
     {
-        QListWidgetItem *item = d->subjectsBox->item(i);
+        QListWidgetItem* item = d->subjectsBox->item(i);
         newSubjects.append(item->text());
     }
 
