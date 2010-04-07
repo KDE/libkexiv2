@@ -31,19 +31,17 @@
 #include <QtCore/QMap>
 #include <QtCore/QStringList>
 #include <QtGui/QWidget>
+#include <QtGui/QCheckBox>
+#include <QtGui/QLabel>
 
 // KDE includes
 
 #include <kurl.h>
+#include <klineedit.h>
 
 // Local includes.
 
 #include "libkexiv2_export.h"
-
-class QCheckBox;
-class QLabel;
-
-class KLineEdit;
 
 namespace KExiv2Iface
 {
