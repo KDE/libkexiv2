@@ -6,8 +6,8 @@
  * Date        : 2009-08-03
  * Description : Tools for combining rotation operations
  *
- * Copyright (C) 2004-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,8 +20,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
-// Qt includes
 
 // KDE includes
 
@@ -64,7 +62,7 @@ namespace KExiv2Iface
    matrices defined below.
    (I did not proof that mathematically, but empirically)
 
-   static const RotationMatrix identity;                   //( 1,  0,  0,  1)
+   static const RotationMatrix identity;               //( 1,  0,  0,  1)
    static const RotationMatrix rotate90;               //( 0, -1,  1,  0)
    static const RotationMatrix rotate180;              //(-1,  0,  0, -1)
    static const RotationMatrix rotate270;              //( 0,  1, -1,  0)
@@ -77,6 +75,7 @@ namespace KExiv2Iface
 
 namespace Matrix
 {
+
 static const RotationMatrix identity               ( 1,  0,  0,  1);
 static const RotationMatrix rotate90               ( 0, -1,  1,  0);
 static const RotationMatrix rotate180              (-1,  0,  0, -1);
@@ -133,7 +132,7 @@ RotationMatrix matrix(KExiv2::ImageOrientation exifOrientation)
 }
 
 
-}
+} // namespace Matrix
 
 RotationMatrix::RotationMatrix()
 {
@@ -168,14 +167,14 @@ bool RotationMatrix::isNoTransform() const
     return *this == Matrix::identity;
 }
 
-RotationMatrix &RotationMatrix::operator*=(const RotationMatrix &ma)
+RotationMatrix& RotationMatrix::operator*=(const RotationMatrix& ma)
 {
     set( ma.m[0][0]*m[0][0] + ma.m[0][1]*m[1][0],  ma.m[0][0]*m[0][1] + ma.m[0][1]*m[1][1],
          ma.m[1][0]*m[0][0] + ma.m[1][1]*m[1][0],  ma.m[1][0]*m[0][1] + ma.m[1][1]*m[1][1] );
          return *this;
 }
 
-bool RotationMatrix::operator==(const RotationMatrix &ma) const
+bool RotationMatrix::operator==(const RotationMatrix& ma) const
 {
     return m[0][0]==ma.m[0][0] &&
     m[0][1]==ma.m[0][1] &&
@@ -183,24 +182,24 @@ bool RotationMatrix::operator==(const RotationMatrix &ma) const
     m[1][1]==ma.m[1][1];
 }
 
-bool RotationMatrix::operator!=(const RotationMatrix &ma) const
+bool RotationMatrix::operator!=(const RotationMatrix& ma) const
 {
     return !(*this==ma);
 }
 
-RotationMatrix &RotationMatrix::operator*=(TransformationAction action)
+RotationMatrix& RotationMatrix::operator*=(TransformationAction action)
 {
     return (*this *= Matrix::matrix(action));
 }
 
-RotationMatrix &RotationMatrix::operator*=(QList<TransformationAction> actions)
+RotationMatrix& RotationMatrix::operator*=(QList<TransformationAction> actions)
 {
     foreach (TransformationAction action, actions)
         *this *= Matrix::matrix(action);
     return *this;
 }
 
-RotationMatrix &RotationMatrix::operator*=(KExiv2::ImageOrientation exifOrientation)
+RotationMatrix& RotationMatrix::operator*=(KExiv2::ImageOrientation exifOrientation)
 {
     return (*this *= Matrix::matrix(exifOrientation));
 }
