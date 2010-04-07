@@ -130,6 +130,7 @@ SubjectWidget::SubjectWidget(QWidget* parent)
 
     // --------------------------------------------------------
 
+    m_subjectsCheck  = new QCheckBox(i18n("Use structured definition of the subject matter:"), this);
     d->optionsBox    = new QWidget;
     d->btnGroup      = new QButtonGroup(this);
     d->stdBtn        = new QRadioButton;
@@ -140,6 +141,9 @@ SubjectWidget::SubjectWidget(QWidget* parent)
                                        "reference code</a></b>"));
     codeLink->setOpenExternalLinks(true);
     codeLink->setWordWrap(false);
+
+    // By default, check box is not visible. (digiKam do not use it, kipi-plugins yes).
+    m_subjectsCheck->setVisible(false);
 
     QLabel* customLabel = new QLabel(i18n("Use custom definition"));
 
@@ -244,13 +248,14 @@ SubjectWidget::SubjectWidget(QWidget* parent)
 
     QGridLayout* mainLayout = new QGridLayout;
     mainLayout->setAlignment( Qt::AlignTop );
-    mainLayout->addWidget(d->optionsBox,       0, 0, 1, 4);
-    mainLayout->addWidget(d->subjectsBox,      1, 0, 5, 3);
-    mainLayout->addWidget(d->addSubjectButton, 1, 3, 1, 1);
-    mainLayout->addWidget(d->delSubjectButton, 2, 3, 1, 1);
-    mainLayout->addWidget(d->repSubjectButton, 3, 3, 1, 1);
-    mainLayout->addWidget(m_note,              4, 3, 1, 1);
-    mainLayout->setRowStretch(5, 10);
+    mainLayout->addWidget(m_subjectsCheck,     0, 0, 1, 4);
+    mainLayout->addWidget(d->optionsBox,       1, 0, 1, 4);
+    mainLayout->addWidget(d->subjectsBox,      2, 0, 5, 3);
+    mainLayout->addWidget(d->addSubjectButton, 2, 3, 1, 1);
+    mainLayout->addWidget(d->delSubjectButton, 3, 3, 1, 1);
+    mainLayout->addWidget(d->repSubjectButton, 4, 3, 1, 1);
+    mainLayout->addWidget(m_note,              5, 3, 1, 1);
+    mainLayout->setRowStretch(6, 10);
     mainLayout->setColumnStretch(2, 1);
     mainLayout->setMargin(0);
     mainLayout->setSpacing(KDialog::spacingHint());
@@ -278,6 +283,14 @@ SubjectWidget::SubjectWidget(QWidget* parent)
 
     // --------------------------------------------------------
 
+    connect(m_subjectsCheck, SIGNAL(toggled(bool)),
+            this, SLOT(slotSubjectsToggled(bool)));
+
+    // --------------------------------------------------------
+
+    connect(m_subjectsCheck, SIGNAL(toggled(bool)),
+            this, SIGNAL(signalModified()));
+
     connect(d->addSubjectButton, SIGNAL(clicked()),
             this, SIGNAL(signalModified()));
 
@@ -295,6 +308,16 @@ SubjectWidget::SubjectWidget(QWidget* parent)
 SubjectWidget::~SubjectWidget()
 {
     delete d;
+}
+
+void SubjectWidget::slotSubjectsToggled(bool b)
+{
+    d->optionsBox->setEnabled(b);
+    d->subjectsBox->setEnabled(b);
+    d->addSubjectButton->setEnabled(b);
+    d->delSubjectButton->setEnabled(b);
+    d->repSubjectButton->setEnabled(b);
+    slotEditOptionChanged(d->btnGroup->id(d->btnGroup->checkedButton()));
 }
 
 void SubjectWidget::slotEditOptionChanged(int b)
@@ -542,16 +565,21 @@ bool SubjectWidget::loadSubjectCodesFromXML(const KUrl& url)
     return true;
 }
 
-void SubjectWidget::setSubjectList(const QStringList& list)
+void SubjectWidget::setSubjectsList(const QStringList& list)
 {
     d->subjectsList = list;
 
     blockSignals(true);
     d->subjectsBox->clear();
+    m_subjectsCheck->setChecked(false);
     if (!d->subjectsList.isEmpty())
+    {
         d->subjectsBox->insertItems(0, d->subjectsList);
+        m_subjectsCheck->setChecked(true);
+    }
 
     blockSignals(false);
+    slotSubjectsToggled(m_subjectsCheck->isChecked());
 }
 
 QStringList SubjectWidget::subjectsList() const

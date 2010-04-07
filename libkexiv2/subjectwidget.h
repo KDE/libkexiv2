@@ -77,7 +77,7 @@ public:
     SubjectWidget(QWidget* parent);
     ~SubjectWidget();
 
-    void setSubjectList(const QStringList& list);
+    void setSubjectsList(const QStringList& list);
     QStringList subjectsList() const;
 
 Q_SIGNALS:
@@ -86,6 +86,7 @@ Q_SIGNALS:
 
 protected Q_SLOTS:
 
+    virtual void slotSubjectsToggled(bool);
     virtual void slotRefChanged();
     virtual void slotEditOptionChanged(int);
     virtual void slotSubjectSelectionChanged();
@@ -101,6 +102,8 @@ protected:
 protected:
 
     QLabel*    m_note;
+
+    QCheckBox* m_subjectsCheck;
 
     KLineEdit* m_iprEdit;
     KLineEdit* m_refEdit;
