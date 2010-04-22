@@ -265,6 +265,46 @@ KExiv2::ImageOrientation KExiv2::getImageOrientation() const
             return imageOrient;
         }
 
+        // -- Sony Cameras ----------------------------------
+
+        Exiv2::ExifKey sonyKey1("Exif.SonyCs.Rotation");
+        it = exifData.findKey(sonyKey1);
+
+        if (it != exifData.end())
+        {
+            orientation = it->toLong();
+            kDebug(51003) << "Orientation => Exif.SonyCs.Rotation => " << (int)orientation << endl;
+            switch(orientation)
+            {
+                case 1:
+                    imageOrient = ORIENTATION_ROT_90;
+                    break;
+                case 2:
+                    imageOrient = ORIENTATION_ROT_270;
+                    break;
+            }
+            return imageOrient;
+        }
+
+        Exiv2::ExifKey sonyKey2("Exif.SonyCs2.Rotation");
+        it = exifData.findKey(sonyKey2);
+
+        if (it != exifData.end())
+        {
+            orientation = it->toLong();
+            kDebug(51003) << "Orientation => Exif.SonyCs2.Rotation => " << (int)orientation << endl;
+            switch(orientation)
+            {
+                case 1:
+                    imageOrient = ORIENTATION_ROT_90;
+                    break;
+                case 2:
+                    imageOrient = ORIENTATION_ROT_270;
+                    break;
+            }
+            return imageOrient;
+        }
+
         // -- Standard Exif tag --------------------------------
 
         Exiv2::ExifKey keyStd("Exif.Image.Orientation");
