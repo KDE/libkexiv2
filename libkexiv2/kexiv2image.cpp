@@ -267,13 +267,13 @@ KExiv2::ImageOrientation KExiv2::getImageOrientation() const
 
         // -- Sony Cameras ----------------------------------
 
-        Exiv2::ExifKey sonyKey1("Exif.SonyCs.Rotation");
+        Exiv2::ExifKey sonyKey1("Exif.Sony1Cs.Rotation");
         it = exifData.findKey(sonyKey1);
 
         if (it != exifData.end())
         {
             orientation = it->toLong();
-            kDebug(51003) << "Orientation => Exif.SonyCs.Rotation => " << (int)orientation << endl;
+            kDebug(51003) << "Orientation => Exif.Sony1Cs.Rotation => " << (int)orientation << endl;
             switch(orientation)
             {
                 case 1:
@@ -286,13 +286,13 @@ KExiv2::ImageOrientation KExiv2::getImageOrientation() const
             return imageOrient;
         }
 
-        Exiv2::ExifKey sonyKey2("Exif.SonyCs2.Rotation");
+        Exiv2::ExifKey sonyKey2("Exif.Sony2Cs.Rotation");
         it = exifData.findKey(sonyKey2);
 
         if (it != exifData.end())
         {
             orientation = it->toLong();
-            kDebug(51003) << "Orientation => Exif.SonyCs2.Rotation => " << (int)orientation << endl;
+            kDebug(51003) << "Orientation => Exif.Sony2Cs.Rotation => " << (int)orientation << endl;
             switch(orientation)
             {
                 case 1:
