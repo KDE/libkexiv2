@@ -201,6 +201,22 @@ public:
      */
     QString getFilePath() const;
 
+    /** Returns the pixel size of the current image. This information is read from the file,
+     *  not from the metadata. The returned QSize is valid if the KExiv2 object was _constructed_
+     *  by reading a file or image data; the information is not available when the object
+     *  was created from KExiv2Data.
+     *  Note that in the Exif or XMP metadata, there may be fields describing the image size.
+     *  These fields are not accessed by this method.
+     *  When replacing the metadata with setData(), the metadata may change; this information
+     *  always keeps referring to the file it was initially read from.
+     */
+    QSize getPixelSize() const;
+
+    /** Returns the mime type of this image. The information is read from the file;
+     *  see the docs for pixelSize() to know when it is available.
+     */
+    QString getMimeType() const;
+
     /** Enable or disable writing metadata operations to RAW tiff based files.
         It's require Exiv2 0.18. By default RAW files are untouched.
      */
@@ -383,7 +399,13 @@ public:
      */
     bool setExifThumbnail(const QImage& thumb, bool setProgramName=true) const;
 
-    /** Return a QString copy of Exif user comments. Return a null string if user comments cannot 
+    /** Remove the Exif Thumbnail from the image */
+    bool removeExifThumbnail() const;
+
+    /** Adds a JPEG thumbnail to a TIFF images. Use this instead of setExifThumbnail for TIFF images. */
+    bool setTiffThumbnail(const QImage& thumb, bool setProgramName=true) const;
+
+    /** Return a QString copy of Exif user comments. Return a null string if user comments cannot
         be found.
      */
     QString getExifComment() const;
