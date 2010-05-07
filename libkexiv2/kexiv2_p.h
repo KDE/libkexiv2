@@ -177,6 +177,8 @@ public:
     bool            updateFileTimeStamp;
 
     QString         filePath;
+    QSize           pixelSize;
+    QString         mimeType;
 
     QSharedDataPointer<KExiv2DataPriv> data;
 };

@@ -26,8 +26,9 @@
 
 // Qt includes
 
-#include <QtCore/QString>
-#include <QtCore/QByteArray>
+#include <QByteArray>
+#include <QSize>
+#include <QString>
 
 // Local includes.
 
@@ -54,6 +55,11 @@ public:
      */
     KExiv2Previews(const QByteArray& imgData);
     ~KExiv2Previews();
+
+    /// Returns the pixel size of the original image, as read from the file (not the metadata).
+    QSize originalSize() const;
+    /// Returns the mimeType of the original image, detected from the file's content.
+    QString originalMimeType() const;
 
     /// Returns if there are any preview images available
     bool       isEmpty();

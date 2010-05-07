@@ -105,6 +105,20 @@ bool KExiv2Previews::isEmpty()
     return d->properties.isEmpty();
 }
 
+QSize KExiv2Previews::originalSize() const
+{
+    if (d->image.get())
+        return QSize(d->image->pixelWidth(), d->image->pixelHeight());
+    return QSize();
+}
+
+QString KExiv2Previews::originalMimeType() const
+{
+    if (d->image.get())
+        return d->image->mimeType().c_str();
+    return QString();
+}
+
 int KExiv2Previews::count()
 {
     return d->properties.size();

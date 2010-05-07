@@ -245,7 +245,9 @@ bool KExiv2::loadFromData(const QByteArray& imgData) const
     {
         Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((Exiv2::byte*)imgData.data(), imgData.size());
 
-        d->filePath = QString();
+        d->filePath  = QString();
+        d->pixelSize = QSize(image->pixelWidth(), image->pixelHeight());
+        d->mimeType  = image->mimeType().c_str();
         image->readMetadata();
 
         // Image comments ---------------------------------
@@ -293,6 +295,8 @@ bool KExiv2::load(const QString& filePath) const
                                       (QFile::encodeName(filePath)));
 
         d->filePath = filePath;
+        d->pixelSize = QSize(image->pixelWidth(), image->pixelHeight());
+        d->mimeType  = image->mimeType().c_str();
         image->readMetadata();
 
         // Image comments ---------------------------------
@@ -540,6 +544,16 @@ void KExiv2::setFilePath(const QString& path)
 QString KExiv2::getFilePath() const
 {
     return d->filePath;
+}
+
+QSize KExiv2::getPixelSize() const
+{
+    return d->pixelSize;
+}
+
+QString KExiv2::getMimeType() const
+{
+    return d->mimeType;
 }
 
 void KExiv2::setWriteRawFiles(bool on)
