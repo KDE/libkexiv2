@@ -7,8 +7,8 @@
  * Description : Exiv2 library interface for KDE
  *               Exif manipulation methods
  *
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -44,7 +44,7 @@ bool KExiv2::canWriteExif(const QString& filePath)
         Exiv2::AccessMode mode = image->checkMode(Exiv2::mdExif);
         return (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite);
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         std::string s(e.what());
         kDebug(51003) << "Cannot check Exif access mode using Exiv2 (Error #"
@@ -66,7 +66,7 @@ bool KExiv2::clearExif() const
         d->exifMetadata().clear();
         return true;
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot clear Exif data using Exiv2 ", e);
     }
@@ -109,7 +109,7 @@ QByteArray KExiv2::getExifEncoded(bool addExifHeader) const
             return data;
         }
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         if (!d->filePath.isEmpty())
             kDebug(51003) << "From file " << d->filePath.toAscii().constData() << endl;
@@ -137,7 +137,7 @@ bool KExiv2::setExif(const QByteArray& data) const
 #endif
         }
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         if (!d->filePath.isEmpty())
             kDebug(51003) << "From file " << d->filePath.toAscii().constData() << endl;
@@ -229,7 +229,7 @@ QString KExiv2::getExifComment() const
             }
         }
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot find Exif User Comment using Exiv2 ", e);
     }
@@ -261,11 +261,11 @@ bool KExiv2::setExifComment(const QString& comment, bool setProgramName) const
             {
                 // write as Unicode (UCS-2)
 
-            #if (EXIV2_TEST_VERSION(0,20,0))
+#if (EXIV2_TEST_VERSION(0,20,0))
                 std::string exifComment("charset=\"Unicode\" ");
                 exifComment += comment.toUtf8().constData();
                 d->exifMetadata()["Exif.Photo.UserComment"] = exifComment;
-            #else
+#else
                 // Older versions took a UCS2-String, see bug #205824
 
                 // Be aware that we are dealing with a UCS-2 string.
@@ -276,12 +276,12 @@ bool KExiv2::setExifComment(const QString& comment, bool setProgramName) const
                 std::string exifComment("charset=\"Unicode\" ");
                 exifComment.append((const char*)ucs2, sizeof(unsigned short) * comment.length());
                 d->exifMetadata()["Exif.Photo.UserComment"] = exifComment;
-            #endif
+#endif
             }
         }
         return true;
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot set Exif Comment using Exiv2 ", e);
     }
@@ -289,7 +289,7 @@ bool KExiv2::setExifComment(const QString& comment, bool setProgramName) const
     return false;
 }
 
-QString KExiv2::getExifTagTitle(const char *exifTagName)
+QString KExiv2::getExifTagTitle(const char* exifTagName)
 {
     try
     {
@@ -305,7 +305,7 @@ QString KExiv2::getExifTagTitle(const char *exifTagName)
     return QString();
 }
 
-QString KExiv2::getExifTagDescription(const char *exifTagName)
+QString KExiv2::getExifTagDescription(const char* exifTagName)
 {
     try
     {
@@ -321,7 +321,7 @@ QString KExiv2::getExifTagDescription(const char *exifTagName)
     return QString();
 }
 
-bool KExiv2::removeExifTag(const char *exifTagName, bool setProgramName) const
+bool KExiv2::removeExifTag(const char* exifTagName, bool setProgramName) const
 {
     if (!setProgramId(setProgramName))
         return false;
@@ -344,7 +344,7 @@ bool KExiv2::removeExifTag(const char *exifTagName, bool setProgramName) const
     return false;
 }
 
-bool KExiv2::getExifTagRational(const char *exifTagName, long int &num, long int &den, int component) const
+bool KExiv2::getExifTagRational(const char* exifTagName, long int& num, long int& den, int component) const
 {
     try
     {
@@ -367,7 +367,7 @@ bool KExiv2::getExifTagRational(const char *exifTagName, long int &num, long int
     return false;
 }
 
-bool KExiv2::setExifTagLong(const char *exifTagName, long val, bool setProgramName) const
+bool KExiv2::setExifTagLong(const char* exifTagName, long val, bool setProgramName) const
 {
     if (!setProgramId(setProgramName))
         return false;
@@ -385,7 +385,7 @@ bool KExiv2::setExifTagLong(const char *exifTagName, long val, bool setProgramNa
     return false;
 }
 
-bool KExiv2::setExifTagRational(const char *exifTagName, long int num, long int den, bool setProgramName) const
+bool KExiv2::setExifTagRational(const char* exifTagName, long int num, long int den, bool setProgramName) const
 {
     if (!setProgramId(setProgramName))
         return false;
@@ -403,7 +403,7 @@ bool KExiv2::setExifTagRational(const char *exifTagName, long int num, long int 
     return false;
 }
 
-bool KExiv2::setExifTagData(const char *exifTagName, const QByteArray& data, bool setProgramName) const
+bool KExiv2::setExifTagData(const char* exifTagName, const QByteArray& data, bool setProgramName) const
 {
     if (data.isEmpty())
         return false;
@@ -425,7 +425,7 @@ bool KExiv2::setExifTagData(const char *exifTagName, const QByteArray& data, boo
     return false;
 }
 
-bool KExiv2::setExifTagVariant(const char *exifTagName, const QVariant& val,
+bool KExiv2::setExifTagVariant(const char* exifTagName, const QVariant& val,
                                bool rationalWantSmallDenominator, bool setProgramName) const
 {
     switch (val.type())
@@ -491,7 +491,7 @@ bool KExiv2::setExifTagVariant(const char *exifTagName, const QVariant& val,
     return false;
 }
 
-QString KExiv2::createExifUserStringFromValue(const char *exifTagName, const QVariant &val, bool escapeCR)
+QString KExiv2::createExifUserStringFromValue(const char* exifTagName, const QVariant& val, bool escapeCR)
 {
     try
     {
@@ -571,7 +571,7 @@ QString KExiv2::createExifUserStringFromValue(const char *exifTagName, const QVa
     return QString();
 }
 
-bool KExiv2::getExifTagLong(const char* exifTagName, long &val) const
+bool KExiv2::getExifTagLong(const char* exifTagName, long& val) const
 {
     try
     {
@@ -622,7 +622,7 @@ QByteArray KExiv2::getExifTagData(const char* exifTagName) const
     return QByteArray();
 }
 
-QVariant KExiv2::getExifTagVariant(const char *exifTagName, bool rationalAsListOfInts, bool stringEscapeCR, int component) const
+QVariant KExiv2::getExifTagVariant(const char* exifTagName, bool rationalAsListOfInts, bool stringEscapeCR, int component) const
 {
     try
     {
@@ -730,7 +730,7 @@ QString KExiv2::getExifTagString(const char* exifTagName, bool escapeCR) const
     return QString();
 }
 
-bool KExiv2::setExifTagString(const char *exifTagName, const QString& value, bool setProgramName) const
+bool KExiv2::setExifTagString(const char* exifTagName, const QString& value, bool setProgramName) const
 {
     if (!setProgramId(setProgramName))
         return false;
@@ -786,7 +786,7 @@ QImage KExiv2::getExifThumbnail(bool fixOrientation) const
             }
         }
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot get Exif Thumbnail using Exiv2 ", e);
     }
@@ -794,7 +794,7 @@ QImage KExiv2::getExifThumbnail(bool fixOrientation) const
     return thumbnail;
 }
 
-bool KExiv2::rotateExifQImage(QImage &image, ImageOrientation orientation) const
+bool KExiv2::rotateExifQImage(QImage& image, ImageOrientation orientation) const
 {
     QMatrix matrix;
 
@@ -869,7 +869,7 @@ bool KExiv2::setExifThumbnail(const QImage& thumbImage, bool setProgramName) con
 #endif
         return true;
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot set Exif Thumbnail using Exiv2 ", e);
     }
@@ -918,7 +918,7 @@ bool KExiv2::setTiffThumbnail(const QImage& thumbImage, bool setProgramName) con
         return true;
 #endif
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot set TIFF Thumbnail using Exiv2 ", e);
     }
@@ -937,7 +937,7 @@ bool KExiv2::removeExifThumbnail() const
         return true;
 #endif
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot remove Exif Thumbnail using Exiv2 ", e);
     }
@@ -960,7 +960,7 @@ KExiv2::TagsMap KExiv2::getStdExifTagsList() const
         {
             do
             {
-                QString     key = QLatin1String( Exiv2::ExifKey( (*it)->tag_, Exiv2::ExifTags::ifdItem( (*it)->ifdId_ ) ).key().c_str() );
+                QString key = QLatin1String( Exiv2::ExifKey( (*it)->tag_, Exiv2::ExifTags::ifdItem( (*it)->ifdId_ ) ).key().c_str() );
                 QStringList values;
                 values << (*it)->name_ << (*it)->title_ << (*it)->desc_;
                 tagsMap.insert(key, values);
@@ -970,7 +970,7 @@ KExiv2::TagsMap KExiv2::getStdExifTagsList() const
         }
         return tagsMap;
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot get Exif Tags list using Exiv2 ", e);
     }
@@ -1047,7 +1047,7 @@ KExiv2::TagsMap KExiv2::getMakernoteTagsList() const
         }
         return tagsMap;
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot get Makernote Tags list using Exiv2 ", e);
     }

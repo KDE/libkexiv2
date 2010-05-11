@@ -7,7 +7,7 @@
  * Description : Exiv2 library interface for KDE
  *               Embedded preview loading
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -97,8 +97,7 @@ private:
     KExiv2PreviewsPriv* const d;
 };
 
-
-} // end of namespace
+} // namespace KExiv2Iface
 
 #endif // KEXIV2PREVIEWS
 

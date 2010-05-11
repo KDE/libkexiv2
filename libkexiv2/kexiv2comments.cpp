@@ -7,8 +7,8 @@
  * Description : Exiv2 library interface for KDE
  *               Comments manipulation methods
  *
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -40,7 +40,7 @@ bool KExiv2::canWriteComment(const QString& filePath)
         Exiv2::AccessMode mode = image->checkMode(Exiv2::mdComment);
         return (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite);
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         std::string s(e.what());
         kDebug(51003) << "Cannot check Comment access mode using Exiv2 (Error #" 
@@ -76,7 +76,7 @@ bool KExiv2::setComments(const QByteArray& data) const
     return true;
 }
 
-QString KExiv2::detectLanguageAlt(const QString &value, QString& lang)
+QString KExiv2::detectLanguageAlt(const QString& value, QString& lang)
 {
     // Ex. from an Xmp tag Xmp.tiff.copyright: "lang="x-default" (c) Gilles Caulier 2007"
 

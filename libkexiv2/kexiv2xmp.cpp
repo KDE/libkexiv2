@@ -7,8 +7,8 @@
  * Description : Exiv2 library interface for KDE
  *               Xmp manipulation methods
  *
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -41,7 +41,7 @@ bool KExiv2::canWriteXmp(const QString& filePath)
         Exiv2::AccessMode mode = image->checkMode(Exiv2::mdXmp);
         return (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite);
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         std::string s(e.what());
         kDebug(51003) << "Cannot check Xmp access mode using Exiv2 (Error #" 
@@ -79,7 +79,7 @@ bool KExiv2::clearXmp() const
         d->xmpMetadata().clear();
         return true;
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot clear Xmp data using Exiv2 ", e);
     }
@@ -104,7 +104,7 @@ QByteArray KExiv2::getXmp() const
             return data;
         }
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         if (!d->filePath.isEmpty())
 
@@ -134,7 +134,7 @@ bool KExiv2::setXmp(const QByteArray& data) const
                 return true;
         }
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         if (!d->filePath.isEmpty())
             kDebug(51003) << "From file " << d->filePath.toAscii().constData() << endl;
@@ -147,7 +147,7 @@ bool KExiv2::setXmp(const QByteArray& data) const
     return false;
 }
 
-KExiv2::MetaDataMap KExiv2::getXmpTagsDataList(const QStringList &xmpKeysFilter, bool invertSelection) const
+KExiv2::MetaDataMap KExiv2::getXmpTagsDataList(const QStringList& xmpKeysFilter, bool invertSelection) const
 {
 #ifdef _XMP_SUPPORT_
 
@@ -234,7 +234,7 @@ KExiv2::MetaDataMap KExiv2::getXmpTagsDataList(const QStringList &xmpKeysFilter,
     return MetaDataMap();
 }
 
-QString KExiv2::getXmpTagTitle(const char *xmpTagName)
+QString KExiv2::getXmpTagTitle(const char* xmpTagName)
 {
 #ifdef _XMP_SUPPORT_
 
@@ -254,7 +254,7 @@ QString KExiv2::getXmpTagTitle(const char *xmpTagName)
     return QString();
 }
 
-QString KExiv2::getXmpTagDescription(const char *xmpTagName)
+QString KExiv2::getXmpTagDescription(const char* xmpTagName)
 {
 #ifdef _XMP_SUPPORT_
     try 
@@ -293,7 +293,7 @@ QString KExiv2::getXmpTagString(const char* xmpTagName, bool escapeCR) const
             return tagValue;
         }
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError(QString("Cannot find Xmp key '%1' into image using Exiv2 ")
                                     .arg(xmpTagName), e);
@@ -304,7 +304,7 @@ QString KExiv2::getXmpTagString(const char* xmpTagName, bool escapeCR) const
     return QString();
 }
 
-bool KExiv2::setXmpTagString(const char *xmpTagName, const QString& value, bool setProgramName) const
+bool KExiv2::setXmpTagString(const char* xmpTagName, const QString& value, bool setProgramName) const
 {
 #ifdef _XMP_SUPPORT_
 
@@ -320,7 +320,7 @@ bool KExiv2::setXmpTagString(const char *xmpTagName, const QString& value, bool 
         d->xmpMetadata().add(Exiv2::XmpKey(xmpTagName), xmpTxtVal.get());
         return true;
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot set Xmp tag string into image using Exiv2 ", e);
     }
@@ -360,7 +360,7 @@ KExiv2::AltLangMap KExiv2::getXmpTagStringListLangAlt(const char* xmpTagName, bo
             }
         }
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError(QString("Cannot find Xmp key '%1' into image using Exiv2 ")
                                     .arg(xmpTagName), e);
@@ -371,7 +371,7 @@ KExiv2::AltLangMap KExiv2::getXmpTagStringListLangAlt(const char* xmpTagName, bo
     return AltLangMap();
 }
 
-bool KExiv2::setXmpTagStringListLangAlt(const char *xmpTagName, const KExiv2::AltLangMap& values, 
+bool KExiv2::setXmpTagStringListLangAlt(const char* xmpTagName, const KExiv2::AltLangMap& values, 
                                         bool setProgramName) const
 {
 #ifdef _XMP_SUPPORT_
@@ -402,7 +402,7 @@ bool KExiv2::setXmpTagStringListLangAlt(const char *xmpTagName, const KExiv2::Al
         }
         return true;
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot set Xmp tag string lang-alt into image using Exiv2 ", e);
     }
@@ -442,7 +442,7 @@ QString KExiv2::getXmpTagStringLangAlt(const char* xmpTagName, const QString& la
             }
         }
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError(QString("Cannot find Xmp key '%1' into image using Exiv2 ")
                                     .arg(xmpTagName), e);
@@ -453,7 +453,7 @@ QString KExiv2::getXmpTagStringLangAlt(const char* xmpTagName, const QString& la
     return QString();
 }
 
-bool KExiv2::setXmpTagStringLangAlt(const char *xmpTagName, const QString& value, 
+bool KExiv2::setXmpTagStringLangAlt(const char* xmpTagName, const QString& value, 
                                     const QString& langAlt, bool setProgramName) const
 {
 #ifdef _XMP_SUPPORT_
@@ -494,7 +494,7 @@ bool KExiv2::setXmpTagStringLangAlt(const char *xmpTagName, const QString& value
         d->xmpMetadata().add(Exiv2::XmpKey(xmpTagName), xmpTxtVal.get());
         return true;
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot set Xmp tag string lang-alt into image using Exiv2 ", e);
     }
@@ -536,7 +536,7 @@ QStringList KExiv2::getXmpTagStringSeq(const char* xmpTagName, bool escapeCR) co
             }
         }
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError(QString("Cannot find Xmp key '%1' into image using Exiv2 ")
                                     .arg(xmpTagName), e);
@@ -547,7 +547,7 @@ QStringList KExiv2::getXmpTagStringSeq(const char* xmpTagName, bool escapeCR) co
     return QStringList();
 }
 
-bool KExiv2::setXmpTagStringSeq(const char *xmpTagName, const QStringList& seq,
+bool KExiv2::setXmpTagStringSeq(const char* xmpTagName, const QStringList& seq,
                                 bool setProgramName) const
 {
 #ifdef _XMP_SUPPORT_
@@ -575,7 +575,7 @@ bool KExiv2::setXmpTagStringSeq(const char *xmpTagName, const QStringList& seq,
             return true;
         }
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot set Xmp tag string Seq into image using Exiv2 ", e);
     }
@@ -616,7 +616,7 @@ QStringList KExiv2::getXmpTagStringBag(const char* xmpTagName, bool escapeCR) co
             }
         }
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError(QString("Cannot find Xmp key '%1' into image using Exiv2 ")
                                     .arg(xmpTagName), e);
@@ -627,7 +627,7 @@ QStringList KExiv2::getXmpTagStringBag(const char* xmpTagName, bool escapeCR) co
     return QStringList();
 }
 
-bool KExiv2::setXmpTagStringBag(const char *xmpTagName, const QStringList& bag,
+bool KExiv2::setXmpTagStringBag(const char* xmpTagName, const QStringList& bag,
                                 bool setProgramName) const
 {
 #ifdef _XMP_SUPPORT_
@@ -655,7 +655,7 @@ bool KExiv2::setXmpTagStringBag(const char *xmpTagName, const QStringList& bag,
             return true;
         }
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot set Xmp tag string Bag into image using Exiv2 ", e);
     }
@@ -665,7 +665,7 @@ bool KExiv2::setXmpTagStringBag(const char *xmpTagName, const QStringList& bag,
     return false;
 }
 
-bool KExiv2::addToXmpTagStringBag(const char *xmpTagName, const QStringList& entriesToAdd,
+bool KExiv2::addToXmpTagStringBag(const char* xmpTagName, const QStringList& entriesToAdd,
                                      bool setProgramName) const
 {
 //#ifdef _XMP_SUPPORT_
@@ -691,8 +691,8 @@ bool KExiv2::addToXmpTagStringBag(const char *xmpTagName, const QStringList& ent
     return false;
 }
 
-bool KExiv2::removeFromXmpTagStringBag(const char *xmpTagName, const QStringList& entriesToRemove,
-                                          bool setProgramName) const
+bool KExiv2::removeFromXmpTagStringBag(const char* xmpTagName, const QStringList& entriesToRemove,
+                                       bool setProgramName) const
 {
 //#ifdef _XMP_SUPPORT_
 
@@ -717,7 +717,7 @@ bool KExiv2::removeFromXmpTagStringBag(const char *xmpTagName, const QStringList
     return false;
 }
 
-QVariant KExiv2::getXmpTagVariant(const char *xmpTagName, bool rationalAsListOfInts, bool stringEscapeCR) const
+QVariant KExiv2::getXmpTagVariant(const char* xmpTagName, bool rationalAsListOfInts, bool stringEscapeCR) const
 {
 #ifdef _XMP_SUPPORT_
     try
@@ -812,7 +812,7 @@ QVariant KExiv2::getXmpTagVariant(const char *xmpTagName, bool rationalAsListOfI
             }
         }
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError(QString("Cannot find Xmp key '%1' into image using Exiv2 ")
                                     .arg(xmpTagName), e);
@@ -834,7 +834,7 @@ bool KExiv2::registerXmpNameSpace(const QString& uri, const QString& prefix)
         Exiv2::XmpProperties::registerNs(ns.toAscii().constData(), prefix.toAscii().constData());
         return true;
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         KExiv2Priv::printExiv2ExceptionError("Cannot register a new Xmp namespace using Exiv2 ", e);
     }
@@ -855,7 +855,7 @@ bool KExiv2::unregisterXmpNameSpace(const QString& uri)
         Exiv2::XmpProperties::unregisterNs(ns.toAscii().constData());
         return true;
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         KExiv2Priv::printExiv2ExceptionError("Cannot unregister a new Xmp namespace using Exiv2 ", e);
     }
@@ -865,7 +865,7 @@ bool KExiv2::unregisterXmpNameSpace(const QString& uri)
     return false;
 }
 
-bool KExiv2::removeXmpTag(const char *xmpTagName, bool setProgramName) const
+bool KExiv2::removeXmpTag(const char* xmpTagName, bool setProgramName) const
 {
 #ifdef _XMP_SUPPORT_
 
@@ -882,7 +882,7 @@ bool KExiv2::removeXmpTag(const char *xmpTagName, bool setProgramName) const
             return true;
         }
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot remove Xmp tag using Exiv2 ", e);
     }
@@ -965,7 +965,7 @@ KExiv2::TagsMap KExiv2::getXmpTagsList() const
 #endif
         return tagsMap;
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot get Xmp Tags list using Exiv2 ", e);
     }

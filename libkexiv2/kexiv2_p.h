@@ -6,8 +6,8 @@
  * Date        : 2007-09-03
  * Description : Exiv2 library interface for KDE
  *
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -151,37 +151,38 @@ public:
 
     /** Wrapper method to convert a Comments content to a QString.
     */
-    QString convertCommentValue(const Exiv2::Exifdatum &exifDatum);
+    QString convertCommentValue(const Exiv2::Exifdatum& exifDatum);
 
     /** Charset autodetection to convert a string to a QString.
     */
-    QString detectEncodingAndDecode(const std::string &value);
+    QString detectEncodingAndDecode(const std::string& value);
 
     /**
      */
     int getXMPTagsListFromPrefix(const QString& pf, KExiv2::TagsMap& tagsMap);
 
-    const Exiv2::ExifData& exifMetadata() const { return data.constData()->exifMetadata; }
-    const Exiv2::IptcData& iptcMetadata() const { return data.constData()->iptcMetadata; }
-    const Exiv2::XmpData&  xmpMetadata()  const { return data.constData()->xmpMetadata;  }
+    const Exiv2::ExifData& exifMetadata() const { return data.constData()->exifMetadata;  }
+    const Exiv2::IptcData& iptcMetadata() const { return data.constData()->iptcMetadata;  }
+    const Exiv2::XmpData&  xmpMetadata()  const { return data.constData()->xmpMetadata;   }
     const std::string& imageComments()    const { return data.constData()->imageComments; }
 
-    Exiv2::ExifData& exifMetadata() { return data.data()->exifMetadata; }
-    Exiv2::IptcData& iptcMetadata() { return data.data()->iptcMetadata; }
-    Exiv2::XmpData&  xmpMetadata()  { return data.data()->xmpMetadata;  }
+    Exiv2::ExifData& exifMetadata() { return data.data()->exifMetadata;  }
+    Exiv2::IptcData& iptcMetadata() { return data.data()->iptcMetadata;  }
+    Exiv2::XmpData&  xmpMetadata()  { return data.data()->xmpMetadata;   }
     std::string& imageComments()    { return data.data()->imageComments; }
 
 public:
 
-    bool            writeRawFiles;
-    bool            updateFileTimeStamp;
+    bool                               writeRawFiles;
+    bool                               updateFileTimeStamp;
 
-    QString         filePath;
-    QSize           pixelSize;
-    QString         mimeType;
+    QString                            filePath;
+    QSize                              pixelSize;
+    QString                            mimeType;
 
     QSharedDataPointer<KExiv2DataPriv> data;
 };
 
 }  // NameSpace KExiv2Iface
-#endif
+
+#endif // KEXIV2PRIVATE_H

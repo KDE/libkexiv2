@@ -6,8 +6,8 @@
  * Date        : 2007-09-03
  * Description : Exiv2 library interface for KDE
  *
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -54,7 +54,7 @@ void KExiv2Priv::printExiv2ExceptionError(const QString& msg, Exiv2::Error& e)
                   << e.code() << ": " << s.c_str() << endl;
 }
 
-QString KExiv2Priv::convertCommentValue(const Exiv2::Exifdatum &exifDatum)
+QString KExiv2Priv::convertCommentValue(const Exiv2::Exifdatum& exifDatum)
 {
     try
     {
@@ -93,16 +93,16 @@ QString KExiv2Priv::convertCommentValue(const Exiv2::Exifdatum &exifDatum)
 
         if (charset == "\"Unicode\"")
         {
-        #if (EXIV2_TEST_VERSION(0,20,0))
+#if (EXIV2_TEST_VERSION(0,20,0))
             return QString::fromUtf8(comment.data());
-        #else
+#else
             // Older versions give a UCS2-String, see bug #205824
 
             // QString expects a null-terminated UCS-2 string.
             // Is it already null terminated? In any case, add termination "\0\0" for safety.
             comment.resize(comment.length() + 2, '\0');
             return QString::fromUtf16((unsigned short *)comment.data());
-        #endif
+#endif
         }
         else if (charset == "\"Jis\"")
         {
@@ -118,7 +118,7 @@ QString KExiv2Priv::convertCommentValue(const Exiv2::Exifdatum &exifDatum)
             return detectEncodingAndDecode(comment);
         }
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         printExiv2ExceptionError("Cannot convert Comment using Exiv2 ", e);
     }
@@ -126,7 +126,7 @@ QString KExiv2Priv::convertCommentValue(const Exiv2::Exifdatum &exifDatum)
     return QString();
 }
 
-QString KExiv2Priv::detectEncodingAndDecode(const std::string &value)
+QString KExiv2Priv::detectEncodingAndDecode(const std::string& value)
 {
     // For charset autodetection, we could use sophisticated code
     // (Mozilla chardet, KHTML's autodetection, QTextCodec::codecForContent),

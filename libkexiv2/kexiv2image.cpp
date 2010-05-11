@@ -7,8 +7,8 @@
  * Description : Exiv2 library interface for KDE
  *               Common metadata image information manipulation methods
  *
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -80,7 +80,7 @@ bool KExiv2::setImageProgramId(const QString& program, const QString& version) c
         d->iptcMetadata()["Iptc.Application2.ProgramVersion"] = std::string(version.toAscii().constData());
         return true;
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot set Program identity into image using Exiv2 ", e);
     }
@@ -169,7 +169,7 @@ QSize KExiv2::getImageDimensions() const
 #endif // _XMP_SUPPORT_
 
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot parse image dimensions tag using Exiv2 ", e);
     }
@@ -205,7 +205,7 @@ bool KExiv2::setImageDimensions(const QSize& size, bool setProgramName) const
 
         return true;
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot set image dimensions using Exiv2 ", e);
     }
@@ -265,6 +265,7 @@ KExiv2::ImageOrientation KExiv2::getImageOrientation() const
             return imageOrient;
         }
 
+#if (EXIV2_TEST_VERSION(0,19,1))
         // -- Sony Cameras ----------------------------------
 
         Exiv2::ExifKey sonyKey1("Exif.Sony1Cs.Rotation");
@@ -304,6 +305,7 @@ KExiv2::ImageOrientation KExiv2::getImageOrientation() const
             }
             return imageOrient;
         }
+#endif
 
         // -- Standard Exif tag --------------------------------
 
@@ -336,7 +338,7 @@ KExiv2::ImageOrientation KExiv2::getImageOrientation() const
 #endif // _XMP_SUPPORT_
 
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot parse Exif Orientation tag using Exiv2 ", e);
     }
@@ -370,10 +372,10 @@ bool KExiv2::setImageOrientation(ImageOrientation orientation, bool setProgramNa
 
 #endif // _XMP_SUPPORT_
 
-        // -- Minolta Cameras ----------------------------------
+        // -- Minolta/Sony Cameras ----------------------------------
 
-        // Minolta camera store image rotation in Makernote.
-        // We remove these information to prevent duplicate values. 
+        // Minolta and Sony camera store image rotation in Makernote.
+        // We remove these information to prevent duplicate values.
 
         Exiv2::ExifData::iterator it;
 
@@ -393,6 +395,24 @@ bool KExiv2::setImageOrientation(ImageOrientation orientation, bool setProgramNa
             kDebug(51003) << "Removing Exif.MinoltaCs5D.Rotation tag" << endl;
         }
 
+#if (EXIV2_TEST_VERSION(0,19,1))
+        Exiv2::ExifKey sonyKey1("Exif.Sony1Cs.Rotation");
+        it = d->exifMetadata().findKey(sonyKey1);
+        if (it != d->exifMetadata().end())
+        {
+            d->exifMetadata().erase(it);
+            kDebug(51003) << "Removing Exif.Sony1Cs.Rotation tag" << endl;
+        }
+
+        Exiv2::ExifKey sonyKey2("Exif.Sony2Cs.Rotation");
+        it = d->exifMetadata().findKey(sonyKey2);
+        if (it != d->exifMetadata().end())
+        {
+            d->exifMetadata().erase(it);
+            kDebug(51003) << "Removing Exif.Sony2Cs.Rotation tag" << endl;
+        }
+#endif
+
         // -- Exif embedded thumbnail ----------------------------------
 
         Exiv2::ExifKey thumbKey("Exif.Thumbnail.Orientation");
@@ -406,7 +426,7 @@ bool KExiv2::setImageOrientation(ImageOrientation orientation, bool setProgramNa
 
         return true;
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot set Exif Orientation tag using Exiv2 ", e);
     }
@@ -508,7 +528,7 @@ bool KExiv2::setImageColorWorkSpace(ImageColorWorkSpace workspace, bool setProgr
 
         return true;
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot set Exif color workspace tag using Exiv2 ", e);
     }
@@ -721,7 +741,7 @@ QDateTime KExiv2::getImageDateTime() const
             }
         }
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot parse Exif date & time tag using Exiv2 ", e);
     }
@@ -789,7 +809,7 @@ bool KExiv2::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitiz
 
         return true;
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot set Date & Time into image using Exiv2 ", e);
     }
@@ -859,7 +879,7 @@ QDateTime KExiv2::getDigitizationDateTime(bool fallbackToCreationTime) const
             }
         }
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot parse Exif digitization date & time tag using Exiv2 ", e);
     }
@@ -882,7 +902,7 @@ bool KExiv2::getImagePreview(QImage& preview) const
 
         // TODO : Added here Makernotes preview extraction when Exiv2 will be fixed for that.
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot get image preview using Exiv2 ", e);
     }
@@ -916,7 +936,7 @@ bool KExiv2::setImagePreview(const QImage& preview, bool setProgramName) const
 
         return true;
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot get image preview using Exiv2 ", e);
     }

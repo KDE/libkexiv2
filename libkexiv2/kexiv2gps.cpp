@@ -7,8 +7,8 @@
  * Description : Exiv2 library interface for KDE
  *               GPS manipulation methods
  *
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -49,7 +49,7 @@ bool KExiv2::getGPSInfo(double& altitude, double& latitude, double& longitude) c
     return true;
 }
 
-bool KExiv2::getGPSLatitudeNumber(double *latitude) const
+bool KExiv2::getGPSLatitudeNumber(double* latitude) const
 {
     try
     {
@@ -106,7 +106,7 @@ bool KExiv2::getGPSLatitudeNumber(double *latitude) const
             return ( convertFromGPSCoordinateString(getXmpTagString("Xmp.exif.GPSLatitude"), latitude) );
         }
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot get GPS tag using Exiv2 ", e);
     }
@@ -114,7 +114,7 @@ bool KExiv2::getGPSLatitudeNumber(double *latitude) const
     return false;
 }
 
-bool KExiv2::getGPSLongitudeNumber(double *longitude) const
+bool KExiv2::getGPSLongitudeNumber(double* longitude) const
 {
     try
     {
@@ -171,7 +171,7 @@ bool KExiv2::getGPSLongitudeNumber(double *longitude) const
             return ( convertFromGPSCoordinateString(getXmpTagString("Xmp.exif.GPSLongitude"), longitude) );
         }
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot get GPS tag using Exiv2 ", e);
     }
@@ -179,7 +179,7 @@ bool KExiv2::getGPSLongitudeNumber(double *longitude) const
     return false;
 }
 
-bool KExiv2::getGPSAltitude(double *altitude) const
+bool KExiv2::getGPSAltitude(double* altitude) const
 {
     try
     {
@@ -237,7 +237,7 @@ bool KExiv2::getGPSAltitude(double *altitude) const
             }
         }
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot get GPS tag using Exiv2 ", e);
     }
@@ -269,7 +269,7 @@ QString KExiv2::getGPSLatitudeString() const
         else
             return QString();
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot get Exif GPS tag using Exiv2 ", e);
     }
@@ -301,7 +301,7 @@ QString KExiv2::getGPSLongitudeString() const
         else
             return QString();
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot get Exif GPS tag using Exiv2 ", e);
     }
@@ -439,7 +439,7 @@ bool KExiv2::setGPSInfo(double altitude, double latitude, double longitude, bool
 
         return true;
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot set Exif GPS tag using Exiv2 ", e);
     }
@@ -447,7 +447,7 @@ bool KExiv2::setGPSInfo(double altitude, double latitude, double longitude, bool
     return false;
 }
 
-bool KExiv2::setGPSInfo(double altitude, const QString &latitude, const QString &longitude, bool setProgramName)
+bool KExiv2::setGPSInfo(double altitude, const QString& latitude, const QString& longitude, bool setProgramName)
 {
     if (!setProgramId(setProgramName))
         return false;
@@ -535,7 +535,7 @@ bool KExiv2::setGPSInfo(double altitude, const QString &latitude, const QString 
 
         return true;
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot set Exif GPS tag using Exiv2 ", e);
     }
@@ -600,7 +600,7 @@ bool KExiv2::removeGPSInfo(bool setProgramName) const
 
         return true;
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot remove Exif GPS tag using Exiv2 ", e);
     }
@@ -704,13 +704,15 @@ void KExiv2::convertToRationalSmallDenominator(double number, long int* numerato
     }
 
     criterion = 2 * value * DBL_EPSILON;
-    for (leasterr = value, num = 1; num < lastnum; num++) {
+    for (leasterr = value, num = 1; num < lastnum; num++)
+    {
         approx = (int)(num / value + 0.5);
         error  = fabs((double)num / approx - value);
-        if (error < leasterr) {
-            bestnum = num;
+        if (error < leasterr)
+        {
+            bestnum   = num;
             bestdenom = approx;
-            leasterr = error;
+            leasterr  = error;
             if (leasterr <= criterion) break;
         }
     }
@@ -831,11 +833,11 @@ QString KExiv2::convertToGPSCoordinateString(bool isLatitude, double coordinate)
     return coordinateString;
 }
 
-bool KExiv2::convertFromGPSCoordinateString(const QString &gpsString,
-                                            long int *numeratorDegrees, long int *denominatorDegrees,
-                                            long int *numeratorMinutes, long int *denominatorMinutes,
-                                            long int *numeratorSeconds, long int *denominatorSeconds,
-                                            char *directionReference)
+bool KExiv2::convertFromGPSCoordinateString(const QString& gpsString,
+                                            long int* numeratorDegrees, long int* denominatorDegrees,
+                                            long int* numeratorMinutes, long int* denominatorMinutes,
+                                            long int* numeratorSeconds, long int* denominatorSeconds,
+                                            char* directionReference)
 {
     if (gpsString.isEmpty())
         return false;
@@ -876,13 +878,13 @@ bool KExiv2::convertFromGPSCoordinateString(const QString &gpsString,
         return false;
 }
 
-bool KExiv2::convertFromGPSCoordinateString(const QString &gpsString, double *degrees)
+bool KExiv2::convertFromGPSCoordinateString(const QString& gpsString, double* degrees)
 {
     if (gpsString.isEmpty())
         return false;
 
     char directionReference = gpsString.at(gpsString.length() - 1).toUpper().toLatin1();
-    QString coordinate = gpsString.left(gpsString.length() - 1);
+    QString coordinate      = gpsString.left(gpsString.length() - 1);
 
     QStringList parts = coordinate.split(',');
     if (parts.size() == 2)
@@ -913,8 +915,8 @@ bool KExiv2::convertFromGPSCoordinateString(const QString &gpsString, double *de
         return false;
 }
 
-bool KExiv2::convertToUserPresentableNumbers(const QString &gpsString,
-                                             int *degrees, int *minutes, double *seconds, char *directionReference)
+bool KExiv2::convertToUserPresentableNumbers(const QString& gpsString,
+                                             int* degrees, int* minutes, double* seconds, char* directionReference)
 {
     if (gpsString.isEmpty())
         return false;
@@ -942,11 +944,13 @@ bool KExiv2::convertToUserPresentableNumbers(const QString &gpsString,
         return true;
     }
     else
+    {
         return false;
+    }
 }
 
 void KExiv2::convertToUserPresentableNumbers(bool isLatitude, double coordinate,
-                                             int *degrees, int *minutes, double *seconds, char *directionReference)
+                                             int* degrees, int* minutes, double* seconds, char* directionReference)
 {
     if (isLatitude)
     {

@@ -272,7 +272,7 @@ bool KExiv2::loadFromData(const QByteArray& imgData) const
 
         return true;
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot load metadata using Exiv2 ", e);
     }
@@ -321,7 +321,7 @@ bool KExiv2::load(const QString& filePath) const
 
         return true;
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot load metadata using Exiv2 ", e);
     }
@@ -509,7 +509,7 @@ bool KExiv2::save(const QString& filePath) const
 
         return true;
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot save metadata using Exiv2 ", e);
     }

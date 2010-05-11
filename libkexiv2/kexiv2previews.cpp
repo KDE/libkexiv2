@@ -7,7 +7,7 @@
  * Description : Exiv2 library interface for KDE
  *               Embedded preview loading
  *
- * Copyright (C) 2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -62,20 +62,20 @@ public:
         }
     }
 
-    Exiv2::Image::AutoPtr            image;
-    Exiv2::PreviewManager           *manager;
-    QList<Exiv2::PreviewProperties>  properties;
+    Exiv2::Image::AutoPtr           image;
+    Exiv2::PreviewManager*          manager;
+    QList<Exiv2::PreviewProperties> properties;
 };
 
 KExiv2Previews::KExiv2Previews(const QString& filePath)
-    : d(new KExiv2PreviewsPriv)
+              : d(new KExiv2PreviewsPriv)
 {
     try
     {
         Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)(QFile::encodeName(filePath)));
         d->load(image);
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         KExiv2Priv::printExiv2ExceptionError("Cannot load metadata using Exiv2 ", e);
     }
@@ -89,7 +89,7 @@ KExiv2Previews::KExiv2Previews(const QByteArray& imgData)
         Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((Exiv2::byte*)imgData.data(), imgData.size());
         d->load(image);
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         KExiv2Priv::printExiv2ExceptionError("Cannot load metadata using Exiv2 ", e);
     }
@@ -156,7 +156,7 @@ QByteArray KExiv2Previews::data(int index)
         Exiv2::PreviewImage image = d->manager->getPreviewImage(d->properties[index]);
         return QByteArray((const char*)image.pData(), image.size());
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         KExiv2Priv::printExiv2ExceptionError("Cannot load metadata using Exiv2 ", e);
         return QByteArray();
@@ -169,8 +169,8 @@ QImage KExiv2Previews::image(int index)
     QImage image;
     if (!image.loadFromData(previewData))
         return QImage();
+
     return image;
 }
 
-}
-
+} // namespace KExiv2Iface
