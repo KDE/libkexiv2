@@ -992,18 +992,17 @@ KExiv2::TagsMap KExiv2::getMakernoteTagsList() const
              << Exiv2::CanonMakerNote::tagListPa()
              << Exiv2::CanonMakerNote::tagListCf()
              << Exiv2::CanonMakerNote::tagListPi()
-
-             /*
-              * Not yet officially released. I added some new tags to the
-              * Canon Makernote namespace. Should be released with exiv2-0.19...
-              *
-                     << Exiv2::CanonMakerNote::tagListFi()
-              */
-
+#if (EXIV2_TEST_VERSION(0,19,1))
+             << Exiv2::CanonMakerNote::tagListFi()
+#endif
              // Sigma Makernotes.
              << Exiv2::SigmaMakerNote::tagList()
              // Sony Makernotes.
              << Exiv2::SonyMakerNote::tagList()
+#if (EXIV2_TEST_VERSION(0,19,1))
+             << Exiv2::SonyMakerNote::tagListCs()
+             << Exiv2::SonyMakerNote::tagListCs2()
+#endif
              // Minolta Makernotes.
              << Exiv2::MinoltaMakerNote::tagList()
              << Exiv2::MinoltaMakerNote::tagListCsStd()
