@@ -265,48 +265,6 @@ KExiv2::ImageOrientation KExiv2::getImageOrientation() const
             return imageOrient;
         }
 
-#if (EXIV2_TEST_VERSION(0,19,1))
-        // -- Sony Cameras ----------------------------------
-
-        Exiv2::ExifKey sonyKey1("Exif.Sony1Cs.Rotation");
-        it = exifData.findKey(sonyKey1);
-
-        if (it != exifData.end())
-        {
-            orientation = it->toLong();
-            kDebug(51003) << "Orientation => Exif.Sony1Cs.Rotation => " << (int)orientation << endl;
-            switch(orientation)
-            {
-                case 1:
-                    imageOrient = ORIENTATION_ROT_90;
-                    break;
-                case 2:
-                    imageOrient = ORIENTATION_ROT_270;
-                    break;
-            }
-            return imageOrient;
-        }
-
-        Exiv2::ExifKey sonyKey2("Exif.Sony2Cs.Rotation");
-        it = exifData.findKey(sonyKey2);
-
-        if (it != exifData.end())
-        {
-            orientation = it->toLong();
-            kDebug(51003) << "Orientation => Exif.Sony2Cs.Rotation => " << (int)orientation << endl;
-            switch(orientation)
-            {
-                case 1:
-                    imageOrient = ORIENTATION_ROT_90;
-                    break;
-                case 2:
-                    imageOrient = ORIENTATION_ROT_270;
-                    break;
-            }
-            return imageOrient;
-        }
-#endif
-
         // -- Standard Exif tag --------------------------------
 
         Exiv2::ExifKey keyStd("Exif.Image.Orientation");
@@ -394,24 +352,6 @@ bool KExiv2::setImageOrientation(ImageOrientation orientation, bool setProgramNa
             d->exifMetadata().erase(it);
             kDebug(51003) << "Removing Exif.MinoltaCs5D.Rotation tag" << endl;
         }
-
-#if (EXIV2_TEST_VERSION(0,19,1))
-        Exiv2::ExifKey sonyKey1("Exif.Sony1Cs.Rotation");
-        it = d->exifMetadata().findKey(sonyKey1);
-        if (it != d->exifMetadata().end())
-        {
-            d->exifMetadata().erase(it);
-            kDebug(51003) << "Removing Exif.Sony1Cs.Rotation tag" << endl;
-        }
-
-        Exiv2::ExifKey sonyKey2("Exif.Sony2Cs.Rotation");
-        it = d->exifMetadata().findKey(sonyKey2);
-        if (it != d->exifMetadata().end())
-        {
-            d->exifMetadata().erase(it);
-            kDebug(51003) << "Removing Exif.Sony2Cs.Rotation tag" << endl;
-        }
-#endif
 
         // -- Exif embedded thumbnail ----------------------------------
 
