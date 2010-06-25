@@ -296,6 +296,22 @@ bool KExiv2::load(const QString& filePath) const
     {
         Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
                                       (QFile::encodeName(filePath)));
+        if (d->useXMPSidecar)
+        {
+            QString xmpSidecarPath(filePath);
+            xmpSidecarPath.replace(QRegExp("[^\\.]+$"), "xmp");
+            kDebug(51003) << "File path" << filePath << endl;
+            kDebug(51003) << "XMP sidecar path" << xmpSidecarPath << endl;
+            QFileInfo xmpSidecarFileInfo(xmpSidecarPath);
+            
+            if (xmpSidecarFileInfo.exists() && xmpSidecarFileInfo.isReadable())
+            {
+                // TODO: We should rather read both image and sidecar metadata
+                // and merge the two, with sidecar taking precedence
+                image = Exiv2::ImageFactory::open((const char*)
+                        (QFile::encodeName(xmpSidecarPath)));
+            }
+        }
 
         d->filePath = filePath;
         image->readMetadata();
@@ -335,15 +351,22 @@ bool KExiv2::load(const QString& filePath) const
     return false;
 }
 
-bool KExiv2::save(const QString& filePath) const
+bool KExiv2::save(const QString& imageFilePath) const
 {
-    if (filePath.isEmpty())
+    if (imageFilePath.isEmpty())
         return false;
+    QString filePath(imageFilePath);
 
+    if (d->useXMPSidecar)
+    {
+        // Write metadata to XMP sidecar file instead
+        filePath.replace(QRegExp("[^\\.]+$"), "xmp");
+    }
+    
     // NOTE: see B.K.O #137770 & #138540 : never touch the file if is read only.
     QFileInfo finfo(filePath);
     QFileInfo dinfo(finfo.path());
-    if (!finfo.isWritable())
+    if (!finfo.isWritable() && !(d->useXMPSidecar && !finfo.exists()))
     {
         kDebug(51003) << "File '" << finfo.fileName().toAscii().constData() << "' is read-only. Metadata not saved." << endl;
         return false;
@@ -406,8 +429,13 @@ bool KExiv2::save(const QString& filePath) const
     try
     {
         Exiv2::AccessMode mode;
-        Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
-                                      (QFile::encodeName(filePath)));
+        Exiv2::Image::AutoPtr image;
+        if (d->useXMPSidecar && !finfo.exists())
+            image = Exiv2::ImageFactory::create(Exiv2::ImageType::xmp, // XMPSidecar image type
+                                          (const char*) (QFile::encodeName(filePath)));
+        else
+            image = Exiv2::ImageFactory::open((const char*)
+                                          (QFile::encodeName(filePath)));
 
         // We need to load target file metadata to merge with new one. It's mandatory with TIFF format:
         // like all tiff file structure is based on Exif.
@@ -570,6 +598,16 @@ void KExiv2::setWriteRawFiles(bool on)
 bool KExiv2::writeRawFiles() const
 {
     return d->writeRawFiles;
+}
+
+void KExiv2::setUseXMPSidecar(bool on)
+{
+    d->useXMPSidecar = on;
+}
+
+bool KExiv2::useXMPSidecar() const
+{
+    return d->useXMPSidecar;
 }
 
 void KExiv2::setUpdateFileTimeStamp(bool on)

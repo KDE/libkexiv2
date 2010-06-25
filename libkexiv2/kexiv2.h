@@ -41,6 +41,7 @@
 #include <QtCore/QSharedDataPointer>
 #include <QtCore/QStringList>
 #include <QtCore/QVariant>
+#include <QtCore/QRegExp>
 
 // Local includes.
 
@@ -226,6 +227,14 @@ public:
         It's require Exiv2 0.18.
      */
     bool writeRawFiles() const;
+
+    /** Enable or disable using XMP sidecar for reading and writing metadata
+     */
+    void setUseXMPSidecar(bool on);
+
+    /** Return true if using XMP sidecar for reading and writing metadata is enabled.
+     */
+    bool useXMPSidecar() const;
 
     /** Enable or disable file timestamp updating when metadata are saved.
         By default files timestamp are untouched.
