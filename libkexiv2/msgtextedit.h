@@ -1,12 +1,13 @@
-/* ============================================================
+/** ===========================================================
  *
- * This file is a part of kipi-plugins project
- * http://www.kipi-plugins.org
+ * This file is a part of digiKam project
+ * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
- * Date        : 2009-07-15
- * Description : a text edit widget with click message.
+ * @date   2009-07-15
+ * @brief  a text edit widget with click message.
  *
- * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * @author Copyright (C) 2009-2010 by Gilles Caulier
+ *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -16,7 +17,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * ============================================================ */
@@ -36,7 +37,6 @@
 // Local includes.
 
 #include "libkexiv2_export.h"
-
 
 namespace KExiv2Iface
 {

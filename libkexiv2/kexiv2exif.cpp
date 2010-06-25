@@ -1,23 +1,25 @@
-/* ============================================================
+/** ===========================================================
  *
- * This file is a part of kipi-plugins project
- * http://www.kipi-plugins.org
+ * This file is a part of digiKam project
+ * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
- * Date        : 2006-09-15
- * Description : Exiv2 library interface for KDE
- *               Exif manipulation methods
+ * @date   2006-09-15
+ * @brief  Exif manipulation methods
  *
- * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * @author Copyright (C) 2006-2010 by Gilles Caulier
+ *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
+ * @author Copyright (C) 2006-2010 by Marcel Wiesweg
+ *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
- * either version 2, or (at your option) any later version.
+ * either version 2, or (at your option)
+ * any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * ============================================================ */
@@ -336,7 +338,7 @@ bool KExiv2::removeExifTag(const char* exifTagName, bool setProgramName) const
             return true;
         }
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot remove Exif tag using Exiv2 ", e);
     }
@@ -358,7 +360,7 @@ bool KExiv2::getExifTagRational(const char* exifTagName, long int& num, long int
             return true;
         }
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError(QString("Cannot find Exif Rational value from key '%1' "
                                          "into image using Exiv2 ").arg(exifTagName), e);
@@ -377,7 +379,7 @@ bool KExiv2::setExifTagLong(const char* exifTagName, long val, bool setProgramNa
         d->exifMetadata()[exifTagName] = static_cast<int32_t>(val);
         return true;
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot set Exif tag long value into image using Exiv2 ", e);
     }
@@ -395,7 +397,7 @@ bool KExiv2::setExifTagRational(const char* exifTagName, long int num, long int 
         d->exifMetadata()[exifTagName] = Exiv2::Rational(num, den);
         return true;
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot set Exif tag rational value into image using Exiv2 ", e);
     }
@@ -417,7 +419,7 @@ bool KExiv2::setExifTagData(const char* exifTagName, const QByteArray& data, boo
         d->exifMetadata()[exifTagName] = val;
         return true;
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot set Exif tag data into image using Exiv2 ", e);
     }
@@ -563,7 +565,7 @@ QString KExiv2::createExifUserStringFromValue(const char* exifTagName, const QVa
 
         return tagValue;
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot set Iptc tag string into image using Exiv2 ", e);
     }
@@ -584,7 +586,7 @@ bool KExiv2::getExifTagLong(const char* exifTagName, long& val) const
             return true;
         }
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError(QString("Cannot find Exif key '%1' into image using Exiv2 ")
                                     .arg(exifTagName), e);
@@ -613,7 +615,7 @@ QByteArray KExiv2::getExifTagData(const char* exifTagName) const
             return data;
         }
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError(QString("Cannot find Exif key '%1' into image using Exiv2 ")
                                  .arg(exifTagName), e);
@@ -688,7 +690,7 @@ QVariant KExiv2::getExifTagVariant(const char* exifTagName, bool rationalAsListO
             }
         }
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError(QString("Cannot find Exif key '%1' in the image using Exiv2 ")
                                  .arg(exifTagName), e);
@@ -721,7 +723,7 @@ QString KExiv2::getExifTagString(const char* exifTagName, bool escapeCR) const
             return tagValue;
         }
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError(QString("Cannot find Exif key '%1' into image using Exiv2 ")
                                  .arg(exifTagName), e);
@@ -740,7 +742,7 @@ bool KExiv2::setExifTagString(const char* exifTagName, const QString& value, boo
         d->exifMetadata()[exifTagName] = std::string(value.toAscii().constData());
         return true;
     }
-    catch( Exiv2::Error &e )
+    catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot set Exif tag string into image using Exiv2 ", e);
     }
