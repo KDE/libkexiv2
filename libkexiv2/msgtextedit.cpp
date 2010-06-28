@@ -47,6 +47,7 @@ public:
 MsgTextEdit::MsgTextEdit(QWidget* parent)
            : KTextEdit(parent), d(new MsgTextEditPriv)
 {
+    setAcceptRichText(false);
 }
 
 MsgTextEdit::~MsgTextEdit()
