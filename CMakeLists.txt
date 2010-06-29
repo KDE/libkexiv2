@@ -1,3 +1,27 @@
+# ===========================================================
+#
+# This file is a part of digiKam project
+# <a href="http://www.digikam.org">http://www.digikam.org</a>
+#
+# @date   2006-09-15
+# @brief  Exiv2 library interface for KDE
+#
+# @author Copyright (C) 2006-2010 by Gilles Caulier
+#         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
+#
+# This program is free software; you can redistribute it
+# and/or modify it under the terms of the GNU General
+# Public License as published by the Free Software Foundation;
+# either version 2, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# ============================================================
+
 PROJECT(libkexiv2)
 
 FIND_PACKAGE(KDE4 REQUIRED)
@@ -11,7 +35,7 @@ INCLUDE(FindPackageHandleStandardArgs)
 ADD_DEFINITIONS (${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS} ${KDE4_DEFINITIONS})
 INCLUDE_DIRECTORIES (${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES})
 
-SET(EXIV2_MIN_VERSION "0.18") # Preview acess was added in 0.18
+SET(EXIV2_MIN_VERSION "0.20")
 MACRO_OPTIONAL_FIND_PACKAGE(Exiv2)
 MACRO_LOG_FEATURE(EXIV2_FOUND "Exiv2" "A library to access image metadata" "http://www.exiv2.org"
                   FALSE ${EXIV2_MIN_VERSION} "Required to build libkexiv2.")
