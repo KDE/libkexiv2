@@ -19,10 +19,10 @@ The library documentation is available on header files.
 
 -- DEPENDENCIES -------------------------------------------------------
 
-CMake      >= 2.4.x                    http://www.cmake.org
-libqt      >= 4.2.x                    http://www.qtsoftware.com
-libkde     >= 4.0.x                    http://www.kde.org
-libexiv2   >= 0.13  (0.18 recommended) http://www.exiv2.org
+CMake      >= 2.8.x                    http://www.cmake.org
+libqt      >= 4.6.x                    http://www.qtsoftware.com
+libkde     >= 4.4.x                    http://www.kde.org
+libexiv2   >= 0.20.0                   http://www.exiv2.org
 
 Note: Exiv2 >= 0.16 is require to handle XMP metadata.
 
