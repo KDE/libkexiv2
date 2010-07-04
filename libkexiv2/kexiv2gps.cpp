@@ -311,7 +311,12 @@ QString KExiv2::getGPSLongitudeString() const
     return QString();
 }
 
-bool KExiv2::setGPSInfo(double altitude, double latitude, double longitude, bool setProgramName) const
+bool KExiv2::setGPSInfo(const double altitude, const double latitude, const double longitude, const bool setProgramName) const
+{
+    return setGPSInfo(&altitude, latitude, longitude, setProgramName);
+}
+
+bool KExiv2::setGPSInfo(const double* const altitude, const double latitude, const double longitude, const bool setProgramName) const
 {
     if (!setProgramId(setProgramName))
         return false;
@@ -343,21 +348,24 @@ bool KExiv2::setGPSInfo(double altitude, double latitude, double longitude, bool
         // Now start adding data.
 
         // ALTITUDE.
-        // Altitude reference: byte "00" meaning "above sea level", "01" mening "behing sea level".
-        value = Exiv2::Value::create(Exiv2::unsignedByte);
-        if (altitude >= 0) value->read("0");
-        else               value->read("1");
-        d->exifMetadata().add(Exiv2::ExifKey("Exif.GPSInfo.GPSAltitudeRef"), value.get());
+        if (altitude)
+        {
+            // Altitude reference: byte "00" meaning "above sea level", "01" mening "behing sea level".
+            value = Exiv2::Value::create(Exiv2::unsignedByte);
+            if ((*altitude) >= 0) value->read("0");
+            else               value->read("1");
+            d->exifMetadata().add(Exiv2::ExifKey("Exif.GPSInfo.GPSAltitudeRef"), value.get());
 
-        // And the actual altitude, as absolute value..
-        convertToRational(fabs(altitude), &nom, &denom, 4);
-        snprintf(scratchBuf, 100, "%ld/%ld", nom, denom);
-        d->exifMetadata()["Exif.GPSInfo.GPSAltitude"] = scratchBuf;
+            // And the actual altitude, as absolute value..
+            convertToRational(fabs(*altitude), &nom, &denom, 4);
+            snprintf(scratchBuf, 100, "%ld/%ld", nom, denom);
+            d->exifMetadata()["Exif.GPSInfo.GPSAltitude"] = scratchBuf;
 
 #ifdef _XMP_SUPPORT_
-        setXmpTagString("Xmp.exif.GPSAltitudeRef", (altitude >= 0) ? QString("0") : QString("1"), false);
-        setXmpTagString("Xmp.exif.GPSAltitude", QString(scratchBuf), false);
+            setXmpTagString("Xmp.exif.GPSAltitudeRef", ((*altitude) >= 0) ? QString("0") : QString("1"), false);
+            setXmpTagString("Xmp.exif.GPSAltitude", QString(scratchBuf), false);
 #endif // _XMP_SUPPORT_
+        }
 
         // LATTITUDE
         // Latitude reference: "N" or "S".

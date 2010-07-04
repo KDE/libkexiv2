@@ -893,7 +893,12 @@ public:
     /** Set all GPS location information into image. Return true if all information have been 
         changed in metadata.
      */
-    bool setGPSInfo(double altitude, double latitude, double longitude, bool setProgramName=true) const;
+    bool setGPSInfo(const double altitude, const double latitude, const double longitude, const bool setProgramName=true) const;
+
+    /** Set all GPS location information into image. Return true if all information have been
+        changed in metadata. If you do not want altitude to be set, pass a null pointer.
+     */
+    bool setGPSInfo(const double* const altitude, const double latitude, const double longitude, const bool setProgramName=true) const;
 
     /** Set all GPS location information into image. Return true if all information have been 
         changed in metadata.
