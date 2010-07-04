@@ -44,6 +44,7 @@ KExiv2Priv::KExiv2Priv()
 {
     writeRawFiles       = false;
     updateFileTimeStamp = false;
+    useXMPSidecar       = false;
 }
 
 KExiv2Priv::~KExiv2Priv()
@@ -73,8 +74,7 @@ QString KExiv2Priv::convertCommentValue(const Exiv2::Exifdatum& exifDatum)
         value.copy(data, Exiv2::invalidByteOrder);
         Exiv2::CommentValue commentValue;
         // this read method is hidden in CommentValue
-        static_cast<Exiv2::Value &>(commentValue).read(data, value.size(),
-                                                    Exiv2::invalidByteOrder);
+        static_cast<Exiv2::Value &>(commentValue).read(data, value.size(), Exiv2::invalidByteOrder);
         comment = commentValue.toString();
         delete [] data;
 #endif
@@ -109,7 +109,7 @@ QString KExiv2Priv::convertCommentValue(const Exiv2::Exifdatum& exifDatum)
         }
         else if (charset == "\"Jis\"")
         {
-            QTextCodec *codec = QTextCodec::codecForName("JIS7");
+            QTextCodec* codec = QTextCodec::codecForName("JIS7");
             return codec->toUnicode(comment.c_str());
         }
         else if (charset == "\"Ascii\"")
