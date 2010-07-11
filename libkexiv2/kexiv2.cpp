@@ -290,7 +290,7 @@ bool KExiv2::load(const QString& filePath) const
     QFileInfo finfo(filePath);
     if (filePath.isEmpty() || !finfo.isReadable())
     {
-        kDebug(51003) << "File '" << finfo.fileName().toAscii().constData() << "' is not readable." << endl;
+        kDebug() << "File '" << finfo.fileName().toAscii().constData() << "' is not readable.";
         return false;
     }
 
@@ -302,8 +302,8 @@ bool KExiv2::load(const QString& filePath) const
         {
             QString xmpSidecarPath(filePath);
             xmpSidecarPath.replace(QRegExp("[^\\.]+$"), "xmp");
-            kDebug(51003) << "File path" << filePath << endl;
-            kDebug(51003) << "XMP sidecar path" << xmpSidecarPath << endl;
+            kDebug() << "File path" << filePath;
+            kDebug() << "XMP sidecar path" << xmpSidecarPath;
             QFileInfo xmpSidecarFileInfo(xmpSidecarPath);
 
             if (xmpSidecarFileInfo.exists() && xmpSidecarFileInfo.isReadable())
@@ -370,12 +370,12 @@ bool KExiv2::save(const QString& imageFilePath) const
     QFileInfo dinfo(finfo.path());
     if (!finfo.isWritable() && !(d->useXMPSidecar && !finfo.exists()))
     {
-        kDebug(51003) << "File '" << finfo.fileName().toAscii().constData() << "' is read-only. Metadata not saved." << endl;
+        kDebug() << "File '" << finfo.fileName().toAscii().constData() << "' is read-only. Metadata not saved.";
         return false;
     }
     if (!dinfo.isWritable())
     {
-        kDebug(51003) << "Dir '" << dinfo.filePath().toAscii().constData() << "' is read-only. Metadata not saved." << endl;
+        kDebug() << "Dir '" << dinfo.filePath().toAscii().constData() << "' is read-only. Metadata not saved.";
         return false;
     }
 
@@ -414,19 +414,19 @@ bool KExiv2::save(const QString& imageFilePath) const
     QString ext = finfo.suffix().toLower();
     if (rawTiffBasedNotSupported.contains(ext))
     {
-        kDebug(51003) << finfo.fileName()
-                      << "is TIFF based RAW file not yet supported. Metadata not saved." << endl;
+        kDebug() << finfo.fileName()
+                      << "is TIFF based RAW file not yet supported. Metadata not saved.";
         return false;
     }
 
     if (rawTiffBasedSupported.contains(ext) && !d->writeRawFiles)
     {
-        kDebug(51003) << finfo.fileName()
+        kDebug() << finfo.fileName()
                       << "is TIFF based RAW file supported but writing mode is disabled. "
-                      << "Metadata not saved." << endl;
+                      << "Metadata not saved.";
         return false;
     }
-    kDebug(51003) << "File Extension: " << ext << " is supported for writing mode" << endl;
+    kDebug() << "File Extension: " << ext << " is supported for writing mode";
 
     try
     {
@@ -557,7 +557,7 @@ bool KExiv2::applyChanges() const
 {
     if (d->filePath.isEmpty())
     {
-        kDebug(51003) << "Failed to apply changes: file path is empty!" << endl;
+        kDebug() << "Failed to apply changes: file path is empty!";
         return false;
     }
 

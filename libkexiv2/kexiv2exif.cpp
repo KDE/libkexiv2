@@ -49,8 +49,8 @@ bool KExiv2::canWriteExif(const QString& filePath)
     catch( Exiv2::Error& e )
     {
         std::string s(e.what());
-        kDebug(51003) << "Cannot check Exif access mode using Exiv2 (Error #"
-                      << e.code() << ": " << s.c_str() << ")" << endl;
+        kDebug() << "Cannot check Exif access mode using Exiv2 (Error #"
+                      << e.code() << ": " << s.c_str() << ")";
     }
 
     return false;
@@ -114,7 +114,7 @@ QByteArray KExiv2::getExifEncoded(bool addExifHeader) const
     catch( Exiv2::Error& e )
     {
         if (!d->filePath.isEmpty())
-            kDebug(51003) << "From file " << d->filePath.toAscii().constData() << endl;
+            kDebug() << "From file " << d->filePath.toAscii().constData();
 
         d->printExiv2ExceptionError("Cannot get Exif data using Exiv2 ", e);
     }
@@ -142,7 +142,7 @@ bool KExiv2::setExif(const QByteArray& data) const
     catch( Exiv2::Error& e )
     {
         if (!d->filePath.isEmpty())
-            kDebug(51003) << "From file " << d->filePath.toAscii().constData() << endl;
+            kDebug() << "From file " << d->filePath.toAscii().constData();
 
         d->printExiv2ExceptionError("Cannot set Exif data using Exiv2 ", e);
     }
@@ -780,7 +780,7 @@ QImage KExiv2::getExifThumbnail(bool fixOrientation) const
                 if (it != exifData.end())
                 {
                     long orientation = it->toLong();
-                    kDebug(51003) << "Exif Thumbnail Orientation: " << (int)orientation << endl;
+                    kDebug() << "Exif Thumbnail Orientation: " << (int)orientation;
                     rotateExifQImage(thumbnail, (ImageOrientation)orientation);
                 }
 
@@ -865,7 +865,7 @@ bool KExiv2::setExifThumbnail(const QImage& thumbImage, bool setProgramName) con
         thumbFile.setAutoRemove(true);
         thumbFile.open();
         thumb.save(thumbFile.fileName(), "JPEG");
-        kDebug(51003) << "Thumbnail temp file: " << thumbFile.fileName().toAscii().data() << endl;
+        kDebug() << "Thumbnail temp file: " << thumbFile.fileName().toAscii().data();
         const std::string &fileName((const char*)(QFile::encodeName(thumbFile.fileName())));
         d->exifMetadata().setJpegThumbnail( fileName );
 #endif

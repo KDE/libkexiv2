@@ -39,10 +39,10 @@ using namespace KExiv2Iface;
 
 int main (int argc, char **argv)
 {
-    if(argc != 2) 
+    if(argc != 2)
     {
-        kDebug(51003) << "erasetag - erase tag from from image" << endl;
-        kDebug(51003) << "Usage: <image>" << endl;
+        kDebug() << "erasetag - erase tag from from image";
+        kDebug() << "Usage: <image>";
         return -1;
     }
 

@@ -45,8 +45,8 @@ bool KExiv2::canWriteIptc(const QString& filePath)
     catch( Exiv2::Error& e )
     {
         std::string s(e.what());
-        kDebug(51003) << "Cannot check Iptc access mode using Exiv2 (Error #"
-                      << e.code() << ": " << s.c_str() << ")" << endl;
+        kDebug() << "Cannot check Iptc access mode using Exiv2 (Error #"
+                      << e.code() << ": " << s.c_str() << ")";
     }
 
     return false;
@@ -86,7 +86,7 @@ QByteArray KExiv2::getIptc(bool addIrbHeader) const
 #if (EXIV2_TEST_VERSION(0,10,0))
                 c2 = Exiv2::Photoshop::setIptcIrb(0, 0, iptc);
 #else
-                kDebug(51003) << "Exiv2 version is to old. Cannot add Irb header to Iptc metadata" << endl;
+                kDebug() << "Exiv2 version is to old. Cannot add Irb header to Iptc metadata";
                 return QByteArray();
 #endif
             }
@@ -107,7 +107,7 @@ QByteArray KExiv2::getIptc(bool addIrbHeader) const
     catch( Exiv2::Error& e )
     {
         if (!d->filePath.isEmpty())
-            kDebug(51003) << "From file " << d->filePath.toAscii().constData() << endl;
+            kDebug() << "From file " << d->filePath.toAscii().constData();
 
         d->printExiv2ExceptionError("Cannot get Iptc data using Exiv2 ",e);
     }
@@ -135,7 +135,7 @@ bool KExiv2::setIptc(const QByteArray& data) const
     catch( Exiv2::Error& e )
     {
         if (!d->filePath.isEmpty())
-            kDebug(51003) << "From file " << d->filePath.toAscii().constData() << endl;
+            kDebug() << "From file " << d->filePath.toAscii().constData();
 
         d->printExiv2ExceptionError("Cannot set Iptc data using Exiv2 ", e);
     }
@@ -422,8 +422,8 @@ bool KExiv2::setIptcTagsStringList(const char* iptcTagName, int maxSize,
         QStringList oldvals = oldValues;
         QStringList newvals = newValues;
 
-        kDebug(51003) << d->filePath.toAscii().constData() << " : " << iptcTagName
-                      << " => " << newvals.join(",").toAscii().constData() << endl;
+        kDebug() << d->filePath.toAscii().constData() << " : " << iptcTagName
+                      << " => " << newvals.join(",").toAscii().constData();
 
         // Remove all old values.
         Exiv2::IptcData iptcData(d->iptcMetadata());
@@ -512,8 +512,8 @@ bool KExiv2::setIptcKeywords(const QStringList& oldKeywords, const QStringList& 
         QStringList oldkeys = oldKeywords;
         QStringList newkeys = newKeywords;
 
-        kDebug(51003) << d->filePath.toAscii().constData()
-                      << " ==> Iptc Keywords: " << newkeys.join(",").toAscii().constData() << endl;
+        kDebug() << d->filePath.toAscii().constData()
+                      << " ==> Iptc Keywords: " << newkeys.join(",").toAscii().constData();
 
         // Remove all old keywords.
         Exiv2::IptcData iptcData(d->iptcMetadata());

@@ -42,10 +42,10 @@ using namespace KExiv2Iface;
 
 int main (int argc, char **argv)
 {
-    if(argc != 2) 
+    if(argc != 2)
     {
-        kDebug(51003) << "loadfromba - test to load metadata from image as byte array" << endl;
-        kDebug(51003) << "Usage: <image>" << endl;
+        kDebug() << "loadfromba - test to load metadata from image as byte array";
+        kDebug() << "Usage: <image>";
         return -1;
     }
 

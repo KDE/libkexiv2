@@ -35,6 +35,9 @@ INCLUDE(FindPackageHandleStandardArgs)
 ADD_DEFINITIONS (${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS} ${KDE4_DEFINITIONS})
 INCLUDE_DIRECTORIES (${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES})
 
+SET(LIBKEXIV2_AREA_CODE_GENERAL 51003)
+ADD_DEFINITIONS(-DKDE_DEFAULT_DEBUG_AREA=${LIBKEXIV2_AREA_CODE_GENERAL})
+
 SET(EXIV2_MIN_VERSION "0.20")
 MACRO_OPTIONAL_FIND_PACKAGE(Exiv2)
 MACRO_LOG_FEATURE(EXIV2_FOUND "Exiv2" "A library to access image metadata" "http://www.exiv2.org"
@@ -61,7 +64,7 @@ MACRO_LOG_FEATURE(EXIV2_FOUND "Exiv2" "A library to access image metadata" "http
 # 0.6.0 => 7.3.0     (Released with KDE 4.3.0)
 # 1.0.0 => 8.0.0     (Released with KDE 4.4.0)
 # 1.1.0 => 8.1.0     (Released with KDE 4.5.0)
-# 1.2.0 => 8.2.0     (Released with KDE 4.6.0 - Including XMP sidecar support) 
+# 1.2.0 => 8.2.0     (Released with KDE 4.6.0 - Including XMP sidecar support)
 
 # Library API version
 SET(KEXIV2_LIB_MAJOR_VERSION "1")

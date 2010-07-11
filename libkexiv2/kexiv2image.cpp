@@ -224,7 +224,7 @@ KExiv2::ImageOrientation KExiv2::getImageOrientation() const
         long orientation;
         ImageOrientation imageOrient = ORIENTATION_NORMAL;
 
-        // Because some camera set a wrong standard exif orientation tag, 
+        // Because some camera set a wrong standard exif orientation tag,
         // We need to check makernote tags in first!
 
         // -- Minolta Cameras ----------------------------------
@@ -235,7 +235,7 @@ KExiv2::ImageOrientation KExiv2::getImageOrientation() const
         if (it != exifData.end())
         {
             orientation = it->toLong();
-            kDebug(51003) << "Orientation => Exif.MinoltaCs7D.Rotation => " << (int)orientation << endl;
+            kDebug() << "Orientation => Exif.MinoltaCs7D.Rotation => " << (int)orientation;
             switch(orientation)
             {
                 case 76:
@@ -254,7 +254,7 @@ KExiv2::ImageOrientation KExiv2::getImageOrientation() const
         if (it != exifData.end())
         {
             orientation = it->toLong();
-            kDebug(51003) << "Orientation => Exif.MinoltaCs5D.Rotation => " << (int)orientation << endl;
+            kDebug() << "Orientation => Exif.MinoltaCs5D.Rotation => " << (int)orientation;
             switch(orientation)
             {
                 case 76:
@@ -275,7 +275,7 @@ KExiv2::ImageOrientation KExiv2::getImageOrientation() const
         if (it != exifData.end())
         {
             orientation = it->toLong();
-            kDebug(51003) << "Orientation => Exif.Image.Orientation => " << (int)orientation << endl;
+            kDebug() << "Orientation => Exif.Image.Orientation => " << (int)orientation;
             return (ImageOrientation)orientation;
         }
 
@@ -290,7 +290,7 @@ KExiv2::ImageOrientation KExiv2::getImageOrientation() const
             orientation = str.toLong(&ok);
             if (ok)
             {
-                kDebug(51003) << "Orientation => Xmp.tiff.Orientation => " << (int)orientation << endl;
+                kDebug() << "Orientation => Xmp.tiff.Orientation => " << (int)orientation;
                 return (ImageOrientation)orientation;
             }
         }
@@ -315,14 +315,14 @@ bool KExiv2::setImageOrientation(ImageOrientation orientation, bool setProgramNa
     {
         if (orientation < ORIENTATION_UNSPECIFIED || orientation > ORIENTATION_ROT_270)
         {
-            kDebug(51003) << "Image orientation value is not correct!" << endl;
+            kDebug() << "Image orientation value is not correct!";
             return false;
         }
 
         // Set Exif values.
 
         d->exifMetadata()["Exif.Image.Orientation"] = static_cast<uint16_t>(orientation);
-        kDebug(51003) << "Exif.Image.Orientation tag set to: " << (int)orientation << endl;
+        kDebug() << "Exif.Image.Orientation tag set to: " << (int)orientation;
 
         // Set Xmp values.
 
@@ -344,7 +344,7 @@ bool KExiv2::setImageOrientation(ImageOrientation orientation, bool setProgramNa
         if (it != d->exifMetadata().end())
         {
             d->exifMetadata().erase(it);
-            kDebug(51003) << "Removing Exif.MinoltaCs7D.Rotation tag" << endl;
+            kDebug() << "Removing Exif.MinoltaCs7D.Rotation tag";
         }
 
         Exiv2::ExifKey minoltaKey2("Exif.MinoltaCs5D.Rotation");
@@ -352,7 +352,7 @@ bool KExiv2::setImageOrientation(ImageOrientation orientation, bool setProgramNa
         if (it != d->exifMetadata().end())
         {
             d->exifMetadata().erase(it);
-            kDebug(51003) << "Removing Exif.MinoltaCs5D.Rotation tag" << endl;
+            kDebug() << "Removing Exif.MinoltaCs5D.Rotation tag";
         }
 
         // -- Exif embedded thumbnail ----------------------------------
@@ -495,7 +495,7 @@ QDateTime KExiv2::getImageDateTime() const
                     QDateTime dateTime = QDateTime::fromString(it->toString().c_str(), Qt::ISODate);
                     if (dateTime.isValid())
                     {
-                        kDebug(51003) << "DateTime => Exif.Photo.DateTimeOriginal => " << dateTime << endl;
+                        kDebug() << "DateTime => Exif.Photo.DateTimeOriginal => " << dateTime;
                         return dateTime;
                     }
                 }
@@ -508,7 +508,7 @@ QDateTime KExiv2::getImageDateTime() const
                     QDateTime dateTime = QDateTime::fromString(it->toString().c_str(), Qt::ISODate);
                     if (dateTime.isValid())
                     {
-                        kDebug(51003) << "DateTime => Exif.Photo.DateTimeDigitized => " << dateTime << endl;
+                        kDebug() << "DateTime => Exif.Photo.DateTimeDigitized => " << dateTime;
                         return dateTime;
                     }
                 }
@@ -521,7 +521,7 @@ QDateTime KExiv2::getImageDateTime() const
                     QDateTime dateTime = QDateTime::fromString(it->toString().c_str(), Qt::ISODate);
                     if (dateTime.isValid())
                     {
-                        kDebug(51003) << "DateTime => Exif.Image.DateTime => " << dateTime << endl;
+                        kDebug() << "DateTime => Exif.Image.DateTime => " << dateTime;
                         return dateTime;
                     }
                 }
@@ -543,7 +543,7 @@ QDateTime KExiv2::getImageDateTime() const
                     QDateTime dateTime = QDateTime::fromString(it->toString().c_str(), Qt::ISODate);
                     if (dateTime.isValid())
                     {
-                        kDebug(51003) << "DateTime => Xmp.exif.DateTimeOriginal => " << dateTime << endl;
+                        kDebug() << "DateTime => Xmp.exif.DateTimeOriginal => " << dateTime;
                         return dateTime;
                     }
                 }
@@ -556,7 +556,7 @@ QDateTime KExiv2::getImageDateTime() const
                     QDateTime dateTime = QDateTime::fromString(it->toString().c_str(), Qt::ISODate);
                     if (dateTime.isValid())
                     {
-                        kDebug(51003) << "DateTime => Xmp.exif.DateTimeDigitized => " << dateTime << endl;
+                        kDebug() << "DateTime => Xmp.exif.DateTimeDigitized => " << dateTime;
                         return dateTime;
                     }
                 }
@@ -569,7 +569,7 @@ QDateTime KExiv2::getImageDateTime() const
                     QDateTime dateTime = QDateTime::fromString(it->toString().c_str(), Qt::ISODate);
                     if (dateTime.isValid())
                     {
-                        kDebug(51003) << "DateTime => Xmp.photoshop.DateCreated => " << dateTime << endl;
+                        kDebug() << "DateTime => Xmp.photoshop.DateCreated => " << dateTime;
                         return dateTime;
                     }
                 }
@@ -582,7 +582,7 @@ QDateTime KExiv2::getImageDateTime() const
                     QDateTime dateTime = QDateTime::fromString(it->toString().c_str(), Qt::ISODate);
                     if (dateTime.isValid())
                     {
-                        kDebug(51003) << "DateTime => Xmp.xmp.CreateDate => " << dateTime << endl;
+                        kDebug() << "DateTime => Xmp.xmp.CreateDate => " << dateTime;
                         return dateTime;
                     }
                 }
@@ -595,7 +595,7 @@ QDateTime KExiv2::getImageDateTime() const
                     QDateTime dateTime = QDateTime::fromString(it->toString().c_str(), Qt::ISODate);
                     if (dateTime.isValid())
                     {
-                        kDebug(51003) << "DateTime => Xmp.tiff.DateTime => " << dateTime << endl;
+                        kDebug() << "DateTime => Xmp.tiff.DateTime => " << dateTime;
                         return dateTime;
                     }
                 }
@@ -608,7 +608,7 @@ QDateTime KExiv2::getImageDateTime() const
                     QDateTime dateTime = QDateTime::fromString(it->toString().c_str(), Qt::ISODate);
                     if (dateTime.isValid())
                     {
-                        kDebug(51003) << "DateTime => Xmp.xmp.ModifyDate => " << dateTime << endl;
+                        kDebug() << "DateTime => Xmp.xmp.ModifyDate => " << dateTime;
                         return dateTime;
                     }
                 }
@@ -621,7 +621,7 @@ QDateTime KExiv2::getImageDateTime() const
                     QDateTime dateTime = QDateTime::fromString(it->toString().c_str(), Qt::ISODate);
                     if (dateTime.isValid())
                     {
-                        kDebug(51003) << "DateTime => Xmp.xmp.MetadataDate => " << dateTime << endl;
+                        kDebug() << "DateTime => Xmp.xmp.MetadataDate => " << dateTime;
                         return dateTime;
                     }
                 }
@@ -653,7 +653,7 @@ QDateTime KExiv2::getImageDateTime() const
                     QDateTime dateTime = QDateTime(date, time);
                     if (dateTime.isValid())
                     {
-                        kDebug(51003) << "DateTime => Iptc.Application2.DateCreated => " << dateTime << endl;
+                        kDebug() << "DateTime => Iptc.Application2.DateCreated => " << dateTime;
                         return dateTime;
                     }
                 }
@@ -676,7 +676,7 @@ QDateTime KExiv2::getImageDateTime() const
                     QDateTime dateTime = QDateTime(date, time);
                     if (dateTime.isValid())
                     {
-                        kDebug(51003) << "DateTime => Iptc.Application2.DigitizationDate => " << dateTime << endl;
+                        kDebug() << "DateTime => Iptc.Application2.DigitizationDate => " << dateTime;
                         return dateTime;
                     }
                 }
@@ -732,7 +732,7 @@ bool KExiv2::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitiz
             d->xmpMetadata().add(Exiv2::XmpKey("Xmp.exif.DateTimeDigitized"), xmpTxtVal.get());
 
         // Tag not updated:
-        // "Xmp.dc.DateTime" is a sequence of date relevant of dublin core change. 
+        // "Xmp.dc.DateTime" is a sequence of date relevant of dublin core change.
         //                   This is not the picture date as well
 
 #endif // _XMP_SUPPORT_
@@ -779,7 +779,7 @@ QDateTime KExiv2::getDigitizationDateTime(bool fallbackToCreationTime) const
 
                 if (dateTime.isValid())
                 {
-                    kDebug(51003) << "DateTime (Exif digitalized): " << dateTime.toString().toAscii().constData() << endl;
+                    kDebug() << "DateTime (Exif digitalized): " << dateTime.toString().toAscii().constData();
                     return dateTime;
                 }
             }
@@ -814,7 +814,7 @@ QDateTime KExiv2::getDigitizationDateTime(bool fallbackToCreationTime) const
 
                     if (dateTime.isValid())
                     {
-                        kDebug(51003) << "Date (IPTC digitalized): " << dateTime.toString().toAscii().constData() << endl;
+                        kDebug() << "Date (IPTC digitalized): " << dateTime.toString().toAscii().constData();
                         return dateTime;
                     }
                 }
@@ -865,8 +865,8 @@ bool KExiv2::setImagePreview(const QImage& preview, bool setProgramName) const
 
         // A little bit compressed preview jpeg image to limit IPTC size.
         preview.save(&buffer, "JPEG");
-        kDebug(51003) << "JPEG image preview size: (" << preview.width() << " x " 
-                      << preview.height() << ") pixels - " << data.size() << " bytes" << endl;
+        kDebug() << "JPEG image preview size: (" << preview.width() << " x "
+                      << preview.height() << ") pixels - " << data.size() << " bytes";
 
         Exiv2::DataValue val;
         val.read((Exiv2::byte *)data.data(), data.size());
