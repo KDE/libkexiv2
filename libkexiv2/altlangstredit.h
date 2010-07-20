@@ -38,8 +38,6 @@
 namespace KExiv2Iface
 {
 
-class AltLangStrEditPriv;
-
 class KEXIV2_EXPORT AltLangStrEdit : public QWidget
 {
     Q_OBJECT
@@ -98,6 +96,7 @@ protected:
 
 private:
 
+    class AltLangStrEditPriv;
     AltLangStrEditPriv* const d;
 };
 

@@ -54,7 +54,7 @@
 namespace KExiv2Iface
 {
 
-class SubjectWidgetPriv
+class SubjectWidget::SubjectWidgetPriv
 {
 public:
 

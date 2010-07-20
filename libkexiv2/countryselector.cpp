@@ -37,7 +37,7 @@
 namespace KExiv2Iface
 {
 
-class CountrySelectorPriv
+class CountrySelector::CountrySelectorPriv
 {
 public:
 

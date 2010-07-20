@@ -35,7 +35,7 @@
 namespace KExiv2Iface
 {
 
-class MsgTextEditPriv
+class MsgTextEdit::MsgTextEditPriv
 {
 public:
 

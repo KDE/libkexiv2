@@ -41,8 +41,6 @@
 namespace KExiv2Iface
 {
 
-class CountrySelectorPriv;
-
 class KEXIV2_EXPORT CountrySelector : public KComboBox
 {
 
@@ -58,6 +56,7 @@ public:
 
 private:
 
+    class CountrySelectorPriv;
     CountrySelectorPriv* const d;
 };
 

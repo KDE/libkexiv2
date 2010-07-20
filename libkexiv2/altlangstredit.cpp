@@ -48,7 +48,7 @@
 namespace KExiv2Iface
 {
 
-class AltLangStrEditPriv
+class AltLangStrEdit::AltLangStrEditPriv
 {
 public:
 

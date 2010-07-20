@@ -49,8 +49,6 @@
 namespace KExiv2Iface
 {
 
-class SubjectWidgetPriv;
-
 class KEXIV2_EXPORT SubjectData
 {
 public:
@@ -114,6 +112,7 @@ protected:
 
 private:
 
+    class SubjectWidgetPriv;
     SubjectWidgetPriv* const d;
 };
 

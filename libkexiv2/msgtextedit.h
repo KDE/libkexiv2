@@ -41,8 +41,6 @@
 namespace KExiv2Iface
 {
 
-class MsgTextEditPriv;
-
 class KEXIV2_EXPORT MsgTextEdit : public KTextEdit
 {
     Q_OBJECT
@@ -66,6 +64,7 @@ protected:
 
 private:
 
+    class MsgTextEditPriv;
     MsgTextEditPriv* const d;
 };
 
