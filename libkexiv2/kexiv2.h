@@ -53,14 +53,12 @@
 namespace KExiv2Iface
 {
 
-class KExiv2Priv;
-
 class KEXIV2_EXPORT KExiv2
 {
 
 public:
 
-    /** The image color workspace values given by Exif metadata. 
+    /** The image color workspace values given by Exif metadata.
      */
     enum ImageColorWorkSpace
     {
@@ -70,7 +68,7 @@ public:
         WORKSPACE_UNCALIBRATED = 65535
     };
 
-    /** The image orientation values given by Exif metadata. 
+    /** The image orientation values given by Exif metadata.
      */
     enum ImageOrientation
     {
@@ -89,11 +87,11 @@ public:
      */
     typedef QMap<QString, QString> MetaDataMap;
 
-    /** A map used to store a list of Alternative Language values. 
-        The map key is the language code following RFC3066 notation 
+    /** A map used to store a list of Alternative Language values.
+        The map key is the language code following RFC3066 notation
         (like "fr-FR" for French), and the map value the text.
      */
-    typedef QMap<QString, QString> AltLangMap; 
+    typedef QMap<QString, QString> AltLangMap;
 
     /** A map used to store Tags Key and a list of Tags properties :
         - name,
@@ -136,14 +134,14 @@ public:
 
     /** Return true if Exiv2 library initialization is done properlly.
         This method must be call before to use multithreading with libkexiv2.
-        It initialize several non re-entrancy code from Adobe XMP SDK 
+        It initialize several non re-entrancy code from Adobe XMP SDK
         See B.K.O #166424 for details.
      */
     static bool initializeExiv2();
 
     /** Return true if Exiv2 library memory allocations are cleaned properlly.
         This method must be call after to use multithreading with libkexiv2.
-        It cleanup memory used by Adobe XMP SDK 
+        It cleanup memory used by Adobe XMP SDK
         See B.K.O #166424 for details.
      */
     static bool cleanupExiv2();
@@ -171,7 +169,7 @@ public:
     KExiv2Data data() const;
     void setData(const KExiv2Data& data);
 
-    /** Load all metadata (Exif, Iptc, Xmp, and JFIF Comments) from a byte array. 
+    /** Load all metadata (Exif, Iptc, Xmp, and JFIF Comments) from a byte array.
         Return true if metadata have been loaded successfully from image data.
      */
     bool loadFromData(const QByteArray& imgData) const;
@@ -182,12 +180,12 @@ public:
      */
     virtual bool load(const QString& filePath) const;
 
-    /** Save all metadata to a file. This one can be different than original picture to perform 
+    /** Save all metadata to a file. This one can be different than original picture to perform
         transfert operation Return true if metadata have been saved into file.
      */
     bool save(const QString& filePath) const;
 
-    /** The same than save() method, but it apply on current image. Return true if metadata 
+    /** The same than save() method, but it apply on current image. Return true if metadata
         have been saved into file.
      */
     bool applyChanges() const;
@@ -256,37 +254,37 @@ public:
      */
     bool setImageProgramId(const QString& program, const QString& version) const;
 
-    /** Return the size of image in pixels using Exif tags. Return a null dimmension if size cannot 
+    /** Return the size of image in pixels using Exif tags. Return a null dimmension if size cannot
         be found.
      */
     QSize getImageDimensions() const;
 
-    /** Set the size of image in pixels in Exif tags. Return true if size have been changed 
+    /** Set the size of image in pixels in Exif tags. Return true if size have been changed
         in metadata.
      */
     bool setImageDimensions(const QSize& size, bool setProgramName=true) const;
 
-    /** Return the image orientation set in Exif metadata. The makernotes of image are also parsed to 
+    /** Return the image orientation set in Exif metadata. The makernotes of image are also parsed to
         get this information. See ImageOrientation values for details.
      */
     KExiv2::ImageOrientation getImageOrientation() const;
 
-    /** Set the Exif orientation tag of image. See ImageOrientation values for details 
+    /** Set the Exif orientation tag of image. See ImageOrientation values for details
         Return true if orientation have been changed in metadata.
      */
     bool setImageOrientation(ImageOrientation orientation, bool setProgramName=true) const;
 
-    /** Return the image color-space set in Exif metadata. The makernotes of image are also parsed to 
+    /** Return the image color-space set in Exif metadata. The makernotes of image are also parsed to
         get this information. See ImageColorWorkSpace values for details.
      */
     KExiv2::ImageColorWorkSpace getImageColorWorkSpace() const;
 
-    /** Set the Exif color-space tag of image. See ImageColorWorkSpace values for details 
+    /** Set the Exif color-space tag of image. See ImageColorWorkSpace values for details
         Return true if work-space have been changed in metadata.
      */
     bool setImageColorWorkSpace(ImageColorWorkSpace workspace, bool setProgramName=true) const;
 
-    /** Return the time stamp of image. Exif information are check in first, IPTC in second 
+    /** Return the time stamp of image. Exif information are check in first, IPTC in second
         if image don't have Exif information. If no time stamp is found, a null date is returned.
      */
     QDateTime getImageDateTime() const;
@@ -308,10 +306,10 @@ public:
      */
     bool getImagePreview(QImage& preview) const;
 
-    /** Set the Iptc preview image. The thumbnail image must have the right size before (64Kb max 
-        with JPEG file, else 256Kb). Look Iptc specification for details. Return true if preview 
-        have been changed in metadata. 
-        Re-implemente this method if you want to use another image file format than JPEG to 
+    /** Set the Iptc preview image. The thumbnail image must have the right size before (64Kb max
+        with JPEG file, else 256Kb). Look Iptc specification for details. Return true if preview
+        have been changed in metadata.
+        Re-implemente this method if you want to use another image file format than JPEG to
         save preview.
     */
     virtual bool setImagePreview(const QImage& preview, bool setProgramName=true) const;
@@ -332,14 +330,14 @@ public:
      */
     bool clearComments() const;
 
-    /** Return a Qt byte array copy of Comments container get from current image. 
+    /** Return a Qt byte array copy of Comments container get from current image.
         Comments are JFIF section of JPEG images. Look Exiv2 API for more information.
         Return a null Qt byte array if there is no Comments metadata in memory.
      */
     QByteArray getComments() const;
 
-    /** Return a Qt string object of Comments from current image decoded using 
-        the 'detectEncodingAndDecode()' method. Return a null string if there is no 
+    /** Return a Qt string object of Comments from current image decoded using
+        the 'detectEncodingAndDecode()' method. Return a null string if there is no
         Comments metadata available.
      */
     QString getCommentsDecoded() const;
@@ -349,8 +347,8 @@ public:
      */
     bool setComments(const QByteArray& data) const;
 
-    /** Language Alternative autodetection. Return a QString without language alternative 
-        header. Header is saved into 'lang'. If no language alternative is founf, value is returned 
+    /** Language Alternative autodetection. Return a QString without language alternative
+        header. Header is saved into 'lang'. If no language alternative is founf, value is returned
         as well and 'lang' is set to a null string.
      */
     static QString detectLanguageAlt(const QString& value, QString& lang);
@@ -394,8 +392,8 @@ public:
      */
     bool setExif(const QByteArray& data) const;
 
-    /** Return a QImage copy of Exif thumbnail image. Return a null image if thumbnail cannot 
-        be found. The 'fixOrientation' parameter will rotate automatically the thumbnail if Exif 
+    /** Return a QImage copy of Exif thumbnail image. Return a null image if thumbnail cannot
+        be found. The 'fixOrientation' parameter will rotate automatically the thumbnail if Exif
         orientation tags information are attached with thumbnail.
      */
     QImage getExifThumbnail(bool fixOrientation) const;
@@ -405,7 +403,7 @@ public:
      */
     bool rotateExifQImage(QImage& image, ImageOrientation orientation) const;
 
-    /** Set the Exif Thumbnail image. The thumbnail image must have the right dimensions before. 
+    /** Set the Exif Thumbnail image. The thumbnail image must have the right dimensions before.
         Look Exif specification for details. Return true if thumbnail have been changed in metadata.
      */
     bool setExifThumbnail(const QImage& thumb, bool setProgramName=true) const;
@@ -421,7 +419,7 @@ public:
      */
     QString getExifComment() const;
 
-    /** Set the Exif user comments from image. Look Exif specification for more details about this tag. 
+    /** Set the Exif user comments from image. Look Exif specification for more details about this tag.
         Return true if Exif user comments have been changed in metadata.
      */
     bool setExifComment(const QString& comment, bool setProgramName=true) const;
@@ -443,19 +441,19 @@ public:
      */
     bool setExifTagLong(const char* exifTagName, long val, bool setProgramName=true) const;
 
-    /** Get the 'component' index of an Exif tags content like a rational value. 
-        'num' and 'den' are the numerator and the denominator of the rational value. 
+    /** Get the 'component' index of an Exif tags content like a rational value.
+        'num' and 'den' are the numerator and the denominator of the rational value.
         Return true if Exif tag be found.
      */
     bool getExifTagRational(const char* exifTagName, long int& num, long int& den, int component=0) const;
 
-    /** Set an Exif tag content using a rational value. 
-        'num' and 'den' are the numerator and the denominator of the rational value. 
+    /** Set an Exif tag content using a rational value.
+        'num' and 'den' are the numerator and the denominator of the rational value.
         Return true if tag is set successfully.
      */
     bool setExifTagRational(const char* exifTagName, long int num, long int den, bool setProgramName=true) const;
 
-    /** Get an Exif tag content like a bytes array. Return an empty bytes array if Exif 
+    /** Get an Exif tag content like a bytes array. Return an empty bytes array if Exif
         tag cannot be found.
      */
     QByteArray getExifTagData(const char* exifTagName) const;
@@ -483,7 +481,7 @@ public:
     bool setExifTagVariant(const char* exifTagName, const QVariant& data,
                            bool rationalWantSmallDenominator=true, bool setProgramName=true) const;
 
-    /** Remove the Exif tag 'exifTagName' from Exif metadata. Return true if tag is 
+    /** Remove the Exif tag 'exifTagName' from Exif metadata. Return true if tag is
         removed successfully or if no tag was present.
      */
     bool removeExifTag(const char* exifTagName, bool setProgramName=true) const;
@@ -503,10 +501,10 @@ public:
      */
     QString createExifUserStringFromValue(const char* exifTagName, const QVariant& val, bool escapeCR=true);
 
-    /** Return a map of Exif tags name/value found in metadata sorted by 
-        Exif keys given by 'exifKeysFilter'. 
+    /** Return a map of Exif tags name/value found in metadata sorted by
+        Exif keys given by 'exifKeysFilter'.
 
-        'exifKeysFilter' is a QStringList of Exif keys. 
+        'exifKeysFilter' is a QStringList of Exif keys.
         For example, if you use the string list given below:
 
         "Iop"
@@ -516,9 +514,9 @@ public:
 
         ... this method will return a map of all Exif tags witch :
 
-        - include "Iop", or "Thumbnail", or "Image", or "Photo" in the Exif tag keys 
+        - include "Iop", or "Thumbnail", or "Image", or "Photo" in the Exif tag keys
           if 'inverSelection' is false.
-        - not include "Iop", or "Thumbnail", or "Image", or "Photo" in the Exif tag keys 
+        - not include "Iop", or "Thumbnail", or "Image", or "Photo" in the Exif tag keys
           if 'inverSelection' is true.
      */
     KExiv2::MetaDataMap getExifTagsDataList(const QStringList& exifKeysFilter, bool invertSelection=false) const;
@@ -572,11 +570,11 @@ public:
      */
     QStringList getIptcTagsStringList(const char* iptcTagName, bool escapeCR=true) const;
 
-    /** Set multiple Iptc tags contents using a strings list. 'maxSize' is the max characters size 
+    /** Set multiple Iptc tags contents using a strings list. 'maxSize' is the max characters size
         of one entry. Return true if all tags have been set successfully.
      */
     bool setIptcTagsStringList(const char* iptcTagName, int maxSize,
-                               const QStringList& oldValues, const QStringList& newValues, 
+                               const QStringList& oldValues, const QStringList& newValues,
                                bool setProgramName=true) const;
 
     /** Get an Iptc tag content as a bytes array. Return an empty bytes array if Iptc
@@ -588,7 +586,7 @@ public:
      */
     bool setIptcTagData(const char* iptcTagName, const QByteArray& data, bool setProgramName=true) const;
 
-    /** Remove the all instance of Iptc tags 'iptcTagName' from Iptc metadata. Return true if all 
+    /** Remove the all instance of Iptc tags 'iptcTagName' from Iptc metadata. Return true if all
         tags have been removed successfully (or none were present).
      */
     bool removeIptcTag(const char* iptcTagName, bool setProgramName=true) const;
@@ -602,9 +600,9 @@ public:
     QString getIptcTagDescription(const char* iptcTagName);
 
     /** Return a map of Iptc tags name/value found in metadata sorted by
-        Iptc keys given by 'iptcKeysFilter'. 
+        Iptc keys given by 'iptcKeysFilter'.
 
-        'iptcKeysFilter' is a QStringList of Iptc keys. 
+        'iptcKeysFilter' is a QStringList of Iptc keys.
         For example, if you use the string list given below:
 
         "Envelope"
@@ -612,9 +610,9 @@ public:
 
         ... this method will return a map of all Iptc tags witch :
 
-        - include "Envelope", or "Application2" in the Iptc tag keys 
+        - include "Envelope", or "Application2" in the Iptc tag keys
           if 'inverSelection' is false.
-        - not include "Envelope", or "Application2" in the Iptc tag keys 
+        - not include "Envelope", or "Application2" in the Iptc tag keys
           if 'inverSelection' is true.
      */
     KExiv2::MetaDataMap getIptcTagsDataList(const QStringList& iptcKeysFilter, bool invertSelection=false) const;
@@ -624,11 +622,11 @@ public:
     QStringList getIptcKeywords() const;
 
     /** Set Iptc keywords using a list of strings defined by 'newKeywords' parameter. Use 'getImageKeywords()'
-        method to set 'oldKeywords' parameter with existing keywords from image. The method will compare 
+        method to set 'oldKeywords' parameter with existing keywords from image. The method will compare
         all new keywords with all old keywords to prevent duplicate entries in image. Return true if keywords
         have been changed in metadata.
      */
-    bool setIptcKeywords(const QStringList& oldKeywords, const QStringList& newKeywords, 
+    bool setIptcKeywords(const QStringList& oldKeywords, const QStringList& newKeywords,
                          bool setProgramName=true) const;
 
     /** Return a strings list of Iptc subjects from image. Return an empty list if no subject are set.
@@ -636,14 +634,14 @@ public:
     QStringList getIptcSubjects() const;
 
     /** Set Iptc subjects using a list of strings defined by 'newSubjects' parameter. Use 'getImageSubjects()'
-        method to set 'oldSubjects' parameter with existing subjects from image. The method will compare 
+        method to set 'oldSubjects' parameter with existing subjects from image. The method will compare
         all new subjects with all old subjects to prevent duplicate entries in image. Return true if subjects
         have been changed in metadata.
      */
-    bool setIptcSubjects(const QStringList& oldSubjects, const QStringList& newSubjects, 
+    bool setIptcSubjects(const QStringList& oldSubjects, const QStringList& newSubjects,
                          bool setProgramName=true) const;
 
-    /** Return a strings list of Iptc sub-categories from image. Return an empty list if no sub-category 
+    /** Return a strings list of Iptc sub-categories from image. Return an empty list if no sub-category
         are set.
      */
     QStringList getIptcSubCategories() const;
@@ -676,7 +674,7 @@ public:
      */
     bool clearXmp() const;
 
-    /** Return a Qt byte array copy of XMp container get from current image. 
+    /** Return a Qt byte array copy of XMp container get from current image.
         Return a null Qt byte array if there is no Xmp metadata in memory.
      */
     QByteArray getXmp() const;
@@ -703,7 +701,7 @@ public:
      */
     QString getXmpTagDescription(const char* xmpTagName);
 
-    /** Return a map of Xmp tags name/value found in metadata sorted by 
+    /** Return a map of Xmp tags name/value found in metadata sorted by
         Xmp keys given by 'xmpKeysFilter'.
 
         'xmpKeysFilter' is a QStringList of Xmp keys.
@@ -714,21 +712,21 @@ public:
 
         ... this method will return a map of all Xmp tags witch :
 
-        - include "dc", or "xmp" in the Xmp tag keys 
+        - include "dc", or "xmp" in the Xmp tag keys
           if 'inverSelection' is false.
-        - not include "dc", or "xmp" in the Xmp tag keys 
+        - not include "dc", or "xmp" in the Xmp tag keys
           if 'inverSelection' is true.
      */
     KExiv2::MetaDataMap getXmpTagsDataList(const QStringList& xmpKeysFilter, bool invertSelection=false) const;
 
-    /** Get all redondant Alternative Language Xmp tags content like a map. 
+    /** Get all redondant Alternative Language Xmp tags content like a map.
         See AltLangMap class description for details.
-        If 'escapeCR' parameter is true, the CR characters will be removed from strings. 
+        If 'escapeCR' parameter is true, the CR characters will be removed from strings.
         If Xmp tag cannot be found a null string list is returned.
      */
     KExiv2::AltLangMap getXmpTagStringListLangAlt(const char* xmpTagName, bool escapeCR=true) const;
 
-    /** Set an Alternative Language Xmp tag content using a map. See AltLangMap class 
+    /** Set an Alternative Language Xmp tag content using a map. See AltLangMap class
         description for details. If tag already exist, it wil be removed before.
         Return true if tag is set successfully.
      */
@@ -743,11 +741,11 @@ public:
     QString getXmpTagStringLangAlt(const char* xmpTagName, const QString& langAlt, bool escapeCR) const;
 
     /** Set a Xmp tag content using a string with an alternative language header. 'langAlt' contain the
-        language alternative information (like "fr-FR" for French - RFC3066 notation) or is null to 
+        language alternative information (like "fr-FR" for French - RFC3066 notation) or is null to
         set alternative language to default settings ("x-default").
         Return true if tag is set successfully.
      */
-    bool setXmpTagStringLangAlt(const char* xmpTagName, const QString& value, 
+    bool setXmpTagStringLangAlt(const char* xmpTagName, const QString& value,
                                 const QString& langAlt, bool setProgramName=true) const;
 
     /** Get a Xmp tag content like a sequence of strings. If 'escapeCR' parameter is true, the CR characters
@@ -819,9 +817,9 @@ public:
      */
     QStringList getXmpSubjects() const;
 
-    /** Set Xmp subjects using a list of strings defined by 'newSubjects' parameter. 
-        The existing subjects from image are preserved. The method will compare 
-        all new subject with all already existing subject to prevent duplicate entries in image. 
+    /** Set Xmp subjects using a list of strings defined by 'newSubjects' parameter.
+        The existing subjects from image are preserved. The method will compare
+        all new subject with all already existing subject to prevent duplicate entries in image.
         Return true if subjects have been changed in metadata.
      */
     bool setXmpSubjects(const QStringList& newSubjects, bool setProgramName=true) const;
@@ -831,7 +829,7 @@ public:
      */
     bool removeXmpSubjects(const QStringList& subjectsToRemove, bool setProgramName=true);
 
-    /** Return a strings list of Xmp sub-categories from image. Return an empty list if no sub-category 
+    /** Return a strings list of Xmp sub-categories from image. Return an empty list if no sub-category
         are set.
      */
     QStringList getXmpSubCategories() const;
@@ -855,9 +853,9 @@ public:
 
 
     /** Register a namespace which Exiv2 doesn't know yet. This is only needed
-        when new Xmp properties are added manually. 'uri' is the namespace url and prefix the 
+        when new Xmp properties are added manually. 'uri' is the namespace url and prefix the
         string used to construct new Xmp key (ex. "Xmp.digiKam.tagList").
-        NOTE: If the Xmp metadata is read from an image, namespaces are decoded and registered 
+        NOTE: If the Xmp metadata is read from an image, namespaces are decoded and registered
         by Exiv2 at the same time.
      */
     static bool registerXmpNameSpace(const QString& uri, const QString& prefix);
@@ -890,7 +888,7 @@ public:
      */
     bool getGPSAltitude(double* altitude) const;
 
-    /** Set all GPS location information into image. Return true if all information have been 
+    /** Set all GPS location information into image. Return true if all information have been
         changed in metadata.
      */
     bool setGPSInfo(const double altitude, const double latitude, const double longitude, const bool setProgramName=true) const;
@@ -900,12 +898,12 @@ public:
      */
     bool setGPSInfo(const double* const altitude, const double latitude, const double longitude, const bool setProgramName=true) const;
 
-    /** Set all GPS location information into image. Return true if all information have been 
+    /** Set all GPS location information into image. Return true if all information have been
         changed in metadata.
      */
     bool setGPSInfo(double altitude, const QString &latitude, const QString &longitude, bool setProgramName=true);
 
-    /** Remove all Exif tags relevant of GPS location information. Return true if all tags have been 
+    /** Remove all Exif tags relevant of GPS location information. Return true if all tags have been
         removed successfully in metadata.
      */
     bool removeGPSInfo(bool setProgramName=true) const;
@@ -991,9 +989,12 @@ protected:
 
 private:
 
-    /** Internal class to store private members. Used to improve binary compatibility
+    /** Internal container to store private members. Used to improve binary compatibility
      */
+    class KExiv2Priv;
     KExiv2Priv* const d;
+
+    friend class KExiv2Previews;
 };
 
 }  // NameSpace KExiv2Iface

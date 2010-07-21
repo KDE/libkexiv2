@@ -31,7 +31,7 @@
 namespace KExiv2Iface
 {
 
-void KExiv2DataPriv::clear()
+void KExiv2Data::KExiv2DataPriv::clear()
 {
     imageComments.clear();
     exifMetadata.clear();
@@ -39,26 +39,26 @@ void KExiv2DataPriv::clear()
     xmpMetadata.clear();
 }
 
-KExiv2Priv::KExiv2Priv()
-          : data(new KExiv2DataPriv)
+KExiv2::KExiv2Priv::KExiv2Priv()
+                  : data(new KExiv2Data::KExiv2DataPriv)
 {
     writeRawFiles       = false;
     updateFileTimeStamp = false;
     useXMPSidecar       = false;
 }
 
-KExiv2Priv::~KExiv2Priv()
+KExiv2::KExiv2Priv::~KExiv2Priv()
 {
 }
 
-void KExiv2Priv::printExiv2ExceptionError(const QString& msg, Exiv2::Error& e)
+void KExiv2::KExiv2Priv::printExiv2ExceptionError(const QString& msg, Exiv2::Error& e)
 {
     std::string s(e.what());
     kDebug() << msg.toAscii().constData() << " (Error #"
-                  << e.code() << ": " << s.c_str();
+             << e.code() << ": " << s.c_str();
 }
 
-QString KExiv2Priv::convertCommentValue(const Exiv2::Exifdatum& exifDatum)
+QString KExiv2::KExiv2Priv::convertCommentValue(const Exiv2::Exifdatum& exifDatum)
 {
     try
     {
@@ -129,7 +129,7 @@ QString KExiv2Priv::convertCommentValue(const Exiv2::Exifdatum& exifDatum)
     return QString();
 }
 
-QString KExiv2Priv::detectEncodingAndDecode(const std::string& value)
+QString KExiv2::KExiv2Priv::detectEncodingAndDecode(const std::string& value)
 {
     // For charset autodetection, we could use sophisticated code
     // (Mozilla chardet, KHTML's autodetection, QTextCodec::codecForContent),
@@ -155,7 +155,7 @@ QString KExiv2Priv::detectEncodingAndDecode(const std::string& value)
     //return QString::fromLatin1(value.c_str());
 }
 
-int KExiv2Priv::getXMPTagsListFromPrefix(const QString& pf, KExiv2::TagsMap& tagsMap)
+int KExiv2::KExiv2Priv::getXMPTagsListFromPrefix(const QString& pf, KExiv2::TagsMap& tagsMap)
 {
     QList<const Exiv2::XmpPropertyInfo*> tags;
     tags << Exiv2::XmpProperties::propertyList(pf.toAscii().data());

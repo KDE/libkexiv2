@@ -80,7 +80,7 @@ KExiv2Previews::KExiv2Previews(const QString& filePath)
     }
     catch( Exiv2::Error& e )
     {
-        KExiv2Priv::printExiv2ExceptionError("Cannot load metadata using Exiv2 ", e);
+        KExiv2::KExiv2Priv::printExiv2ExceptionError("Cannot load metadata using Exiv2 ", e);
     }
 }
 
@@ -94,7 +94,7 @@ KExiv2Previews::KExiv2Previews(const QByteArray& imgData)
     }
     catch( Exiv2::Error& e )
     {
-        KExiv2Priv::printExiv2ExceptionError("Cannot load metadata using Exiv2 ", e);
+        KExiv2::KExiv2Priv::printExiv2ExceptionError("Cannot load metadata using Exiv2 ", e);
     }
 }
 
@@ -161,7 +161,7 @@ QByteArray KExiv2Previews::data(int index)
     }
     catch( Exiv2::Error& e )
     {
-        KExiv2Priv::printExiv2ExceptionError("Cannot load metadata using Exiv2 ", e);
+        KExiv2::KExiv2Priv::printExiv2ExceptionError("Cannot load metadata using Exiv2 ", e);
         return QByteArray();
     }
 }

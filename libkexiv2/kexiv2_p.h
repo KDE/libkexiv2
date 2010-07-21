@@ -60,7 +60,10 @@
 #include <kdeversion.h>
 #include <kdebug.h>
 
-// Exiv2 includes.
+// Exiv2 includes
+
+// NOTE: All Exiv2 header must be stay there to not expose external source code to Exiv2 API
+//       and reduce Exiv2 dependency to client code.
 
 // The pragmas are required to be able to catch exceptions thrown by libexiv2:
 // See http://gcc.gnu.org/wiki/Visibility, the section about c++ exceptions.
@@ -113,7 +116,7 @@
 
 #ifndef _XMP_SUPPORT_
 
-// Dummy redifinition of XmpData class to compile fine 
+// Dummy redifinition of XmpData class to compile fine
 // if XMP metadata support is not available from Exiv2
 namespace Exiv2
 {
@@ -124,7 +127,7 @@ namespace Exiv2
 namespace KExiv2Iface
 {
 
-class KExiv2DataPriv : public QSharedData
+class KExiv2Data::KExiv2DataPriv : public QSharedData
 {
 public:
 
@@ -141,7 +144,7 @@ public:
 #endif
 };
 
-class KExiv2Priv
+class KExiv2::KExiv2Priv
 {
 public:
 
@@ -177,15 +180,15 @@ public:
 
 public:
 
-    bool                               writeRawFiles;
-    bool                               useXMPSidecar;
-    bool                               updateFileTimeStamp;
+    bool                                           writeRawFiles;
+    bool                                           useXMPSidecar;
+    bool                                           updateFileTimeStamp;
 
-    QString                            filePath;
-    QSize                              pixelSize;
-    QString                            mimeType;
+    QString                                        filePath;
+    QSize                                          pixelSize;
+    QString                                        mimeType;
 
-    QSharedDataPointer<KExiv2DataPriv> data;
+    QSharedDataPointer<KExiv2Data::KExiv2DataPriv> data;
 };
 
 }  // NameSpace KExiv2Iface

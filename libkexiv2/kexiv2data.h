@@ -38,8 +38,6 @@
 namespace KExiv2Iface
 {
 
-class KExiv2DataPriv;
-
 class KEXIV2_EXPORT KExiv2Data
 {
 public:
@@ -47,12 +45,15 @@ public:
     KExiv2Data();
     KExiv2Data(const KExiv2Data&);
     ~KExiv2Data();
+
     KExiv2Data& operator=(const KExiv2Data&);
 
 private:
 
-    friend class KExiv2;
+    class KExiv2DataPriv;
     QSharedDataPointer<KExiv2DataPriv> d;
+
+    friend class KExiv2;
 };
 
 }  // NameSpace KExiv2Iface
