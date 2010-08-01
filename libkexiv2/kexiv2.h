@@ -915,7 +915,7 @@ public:
      */
     static void convertToRational(double number, long int* numerator,
                                   long int* denominator, int rounding);
-    /** This method convert a'number' to a rational value, returned in 'numerator' and
+    /** This method convert a 'number' to a rational value, returned in 'numerator' and
         'denominator' parameters.
         This method will be able to retrieve a rational number from a double - if you
         constructed your double with 1.0 / 4786.0, this method will retrieve 1 / 4786.
@@ -970,9 +970,9 @@ public:
 
 protected:
 
-    /** Re-implemente this method to set automatically the Program Name and Program Version
-        information in Exif and Iptc metadata if 'on' argument is true. This method is called by all methods witch
-        change tags in metadata. By default this method do nothing and return true.
+    /** Re-implement this method to set automatically the Program Name and Program Version
+        information in Exif and Iptc metadata if 'on' argument is true. This method is called by all methods which
+        change tags in metadata. By default this method does nothing and returns true.
 
         In digiKam this method is re-implementated like this:
 
