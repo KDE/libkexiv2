@@ -87,7 +87,13 @@ bool KExiv2::getGPSLatitudeNumber(double* latitude) const
                 num = (double)((*it).toRational(2).first);
                 den = (double)((*it).toRational(2).second);
                 if (den == 0)
-                    return false;
+                {
+                    // be relaxed and accept 0/0 seconds. See #246077.
+                    if (num == 0)
+                        den = 1;
+                    else
+                        return false;
+                }
                 sec = num/den;
                 if (sec != -1.0)
                     *latitude = *latitude + sec/3600.0;
@@ -152,7 +158,13 @@ bool KExiv2::getGPSLongitudeNumber(double* longitude) const
                 num = (double)((*it).toRational(2).first);
                 den = (double)((*it).toRational(2).second);
                 if (den == 0)
-                    return false;
+                {
+                    // be relaxed and accept 0/0 seconds. See #246077.
+                    if (num == 0)
+                        den = 1;
+                    else
+                        return false;
+                }
                 sec = num/den;
                 if (sec != -1.0)
                     *longitude = *longitude + sec/3600.0;
@@ -757,6 +769,10 @@ QString KExiv2::convertToGPSCoordinateString(long int numeratorDegrees, long int
      */
 
     QString coordinate;
+
+    // be relaxed with seconds of 0/0
+    if (denominatorSeconds == 0 && numeratorSeconds == 0)
+        denominatorSeconds = 1;
 
     if (denominatorDegrees == 1 &&
         denominatorMinutes == 1 &&
