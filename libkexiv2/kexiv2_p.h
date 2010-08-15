@@ -65,6 +65,7 @@
 #ifdef __GNUC__
 #pragma GCC visibility push(default)
 #endif
+#include <exiv2/exv_conf.h>
 #include <exiv2/error.hpp>
 #include <exiv2/image.hpp>
 #include <exiv2/jpgimage.hpp>
@@ -90,9 +91,7 @@
 
 // Check if Exiv2 support XMP
 
-#if (EXIV2_MAJOR_VERSION ==0 && EXIV2_MINOR_VERSION ==15 && EXIV2_PATCH_VERSION >=99) || \
-    (EXIV2_MAJOR_VERSION ==0 && EXIV2_MINOR_VERSION >15 ) || \
-    (EXIV2_MAJOR_VERSION >0)
+#ifdef EXV_HAVE_XMP_TOOLKIT
 #   define _XMP_SUPPORT_ 1
 #endif
 
@@ -109,12 +108,13 @@
 
 #ifndef _XMP_SUPPORT_
 
-// Dummy redifinition of XmpData class to compile fine 
+// Dummy redifinition of XmpData class to compile fine
 // if XMP metadata support is not available from Exiv2
 namespace Exiv2
 {
     class XmpData{};
 }
+
 #endif // _XMP_SUPPORT_
 
 namespace KExiv2Iface
