@@ -982,10 +982,17 @@ KExiv2::TagsMap KExiv2::getStdExifTagsList() const
 
 KExiv2::TagsMap KExiv2::getMakernoteTagsList() const
 {
-#if (EXIV2_TEST_VERSION(0,18,1))
     try
     {
         QList<const Exiv2::TagInfo*> tags;
+
+#if (EXIV2_TEST_VERSION(0,21,0))
+
+        tags << Exiv2::ExifTags::mnTagList();
+
+#else
+
+#if (EXIV2_TEST_VERSION(0,18,1))
         tags
              // Canon Makernotes.
              << Exiv2::CanonMakerNote::tagList()
@@ -996,7 +1003,7 @@ KExiv2::TagsMap KExiv2::getMakernoteTagsList() const
              << Exiv2::CanonMakerNote::tagListPi()
 #if (EXIV2_TEST_VERSION(0,19,1))
              << Exiv2::CanonMakerNote::tagListFi()
-#endif
+#endif // (EXIV2_TEST_VERSION(0,19,1))
              // Sigma Makernotes.
              << Exiv2::SigmaMakerNote::tagList()
              // Sony Makernotes.
@@ -1004,7 +1011,7 @@ KExiv2::TagsMap KExiv2::getMakernoteTagsList() const
 #if (EXIV2_TEST_VERSION(0,19,1))
              << Exiv2::SonyMakerNote::tagListCs()
              << Exiv2::SonyMakerNote::tagListCs2()
-#endif
+#endif // (EXIV2_TEST_VERSION(0,19,1))
              // Minolta Makernotes.
              << Exiv2::MinoltaMakerNote::tagList()
              << Exiv2::MinoltaMakerNote::tagListCsStd()
@@ -1033,6 +1040,10 @@ KExiv2::TagsMap KExiv2::getMakernoteTagsList() const
              // Fuji Makernotes.
              << Exiv2::FujiMakerNote::tagList();
 
+#endif // (EXIV2_TEST_VERSION(0,18,1))
+
+#endif // (EXIV2_TEST_VERSION(0,21,0))
+
         TagsMap tagsMap;
         for (QList<const Exiv2::TagInfo*>::iterator it = tags.begin(); it != tags.end(); ++it)
         {
@@ -1052,7 +1063,6 @@ KExiv2::TagsMap KExiv2::getMakernoteTagsList() const
     {
         d->printExiv2ExceptionError("Cannot get Makernote Tags list using Exiv2 ", e);
     }
-#endif
 
     return TagsMap();
 }
