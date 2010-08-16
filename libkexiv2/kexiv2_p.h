@@ -26,7 +26,7 @@
 
 #include "kexiv2.h"
 
- // C++ includes.
+ // C++ includes
 
 #include <cstdlib>
 #include <cstdio>
@@ -37,7 +37,7 @@
 #include <iomanip>
 #include <string>
 
-// Qt includes.
+// Qt includes
 
 #include <QBuffer>
 #include <QFile>
@@ -49,7 +49,7 @@
 #include <QDataStream>
 #include <QSharedData>
 
-// KDE includes.
+// KDE includes
 
 #include <ktemporaryfile.h>
 #include <kencodingdetector.h>
@@ -57,7 +57,10 @@
 #include <kdeversion.h>
 #include <kdebug.h>
 
-// Exiv2 includes.
+// Exiv2 includes -------------------------------------------------------
+
+// NOTE: All Exiv2 header must be stay there to not expose external source code to Exiv2 API
+//       and reduce Exiv2 dependency to client code.
 
 // The pragmas are required to be able to catch exceptions thrown by libexiv2:
 // See http://gcc.gnu.org/wiki/Visibility, the section about c++ exceptions.
@@ -65,6 +68,7 @@
 #ifdef __GNUC__
 #pragma GCC visibility push(default)
 #endif
+
 #include <exiv2/exv_conf.h>
 #include <exiv2/error.hpp>
 #include <exiv2/image.hpp>
@@ -75,19 +79,7 @@
 #include <exiv2/properties.hpp>
 #include <exiv2/types.hpp>
 #include <exiv2/exif.hpp>
-#include <exiv2/canonmn.hpp>
-#include <exiv2/sigmamn.hpp>
-#include <exiv2/sonymn.hpp>
-#include <exiv2/minoltamn.hpp>
-#include <exiv2/nikonmn.hpp>
-#include <exiv2/olympusmn.hpp>
-#include <exiv2/panasonicmn.hpp>
-#include <exiv2/pentaxmn.hpp>
-#include <exiv2/fujimn.hpp>
-//#include <exiv2/preview.hpp>
-#ifdef __GNUC__
-#pragma GCC visibility pop
-#endif
+#include <exiv2/xmpsidecar.hpp>
 
 // Check if Exiv2 support XMP
 
@@ -106,6 +98,28 @@
 #    define EXIV2_TEST_VERSION(major,minor,patch) (false)
 #endif
 
+#if (EXIV2_TEST_VERSION(0,21,0))
+
+// With exiv2 > 0.20.0, all makernote header files have been removed to increase binary compatibility.
+// See Exiv2 bugzilla entry http://dev.exiv2.org/issues/719
+// and wiki topic           http://dev.exiv2.org/boards/3/topics/583
+#else
+#include <exiv2/canonmn.hpp>
+#include <exiv2/sigmamn.hpp>
+#include <exiv2/sonymn.hpp>
+#include <exiv2/minoltamn.hpp>
+#include <exiv2/nikonmn.hpp>
+#include <exiv2/olympusmn.hpp>
+#include <exiv2/panasonicmn.hpp>
+#include <exiv2/pentaxmn.hpp>
+#include <exiv2/fujimn.hpp>
+#endif
+
+#ifdef __GNUC__
+#pragma GCC visibility pop
+#endif
+
+// End of Exiv2 headers ------------------------------------------------------
 #ifndef _XMP_SUPPORT_
 
 // Dummy redifinition of XmpData class to compile fine
