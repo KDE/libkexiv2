@@ -29,7 +29,7 @@
 
 #include "kexiv2.h"
 
- // C++ includes.
+ // C++ includes
 
 #include <cstdlib>
 #include <cstdio>
@@ -40,7 +40,7 @@
 #include <iomanip>
 #include <string>
 
-// Qt includes.
+// Qt includes
 
 #include <QBuffer>
 #include <QFile>
@@ -52,7 +52,7 @@
 #include <QDataStream>
 #include <QSharedData>
 
-// KDE includes.
+// KDE includes
 
 #include <ktemporaryfile.h>
 #include <kencodingdetector.h>
@@ -60,7 +60,7 @@
 #include <kdeversion.h>
 #include <kdebug.h>
 
-// Exiv2 includes
+// Exiv2 includes -------------------------------------------------------
 
 // NOTE: All Exiv2 header must be stay there to not expose external source code to Exiv2 API
 //       and reduce Exiv2 dependency to client code.
@@ -71,6 +71,7 @@
 #ifdef __GNUC__
 #pragma GCC visibility push(default)
 #endif
+
 #include <exiv2/exv_conf.h>
 #include <exiv2/error.hpp>
 #include <exiv2/image.hpp>
@@ -82,7 +83,6 @@
 #include <exiv2/types.hpp>
 #include <exiv2/exif.hpp>
 #include <exiv2/xmpsidecar.hpp>
-//#include <exiv2/preview.hpp>
 
 // Check if Exiv2 support XMP
 
@@ -121,6 +121,8 @@
 #ifdef __GNUC__
 #pragma GCC visibility pop
 #endif
+
+// End of Exiv2 headers ------------------------------------------------------
 
 #ifndef _XMP_SUPPORT_
 
