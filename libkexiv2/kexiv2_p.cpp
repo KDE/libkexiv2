@@ -36,7 +36,9 @@ void KExiv2Data::KExiv2DataPriv::clear()
     imageComments.clear();
     exifMetadata.clear();
     iptcMetadata.clear();
+#ifdef _XMP_SUPPORT_    
     xmpMetadata.clear();
+#endif    
 }
 
 KExiv2::KExiv2Priv::KExiv2Priv()
