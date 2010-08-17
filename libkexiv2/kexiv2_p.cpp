@@ -33,7 +33,9 @@ void KExiv2DataPriv::clear()
     imageComments.clear();
     exifMetadata.clear();
     iptcMetadata.clear();
+#ifdef _XMP_SUPPORT_
     xmpMetadata.clear();
+#endif
 }
 
 KExiv2Priv::KExiv2Priv()
@@ -50,7 +52,7 @@ KExiv2Priv::~KExiv2Priv()
 void KExiv2Priv::printExiv2ExceptionError(const QString& msg, Exiv2::Error& e)
 {
     std::string s(e.what());
-    kDebug(51003) << msg.toAscii().constData() << " (Error #" 
+    kDebug(51003) << msg.toAscii().constData() << " (Error #"
                   << e.code() << ": " << s.c_str() << endl;
 }
 

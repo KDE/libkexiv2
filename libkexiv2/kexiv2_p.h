@@ -120,16 +120,6 @@
 #endif
 
 // End of Exiv2 headers ------------------------------------------------------
-#ifndef _XMP_SUPPORT_
-
-// Dummy redifinition of XmpData class to compile fine
-// if XMP metadata support is not available from Exiv2
-namespace Exiv2
-{
-    class XmpData{};
-}
-
-#endif // _XMP_SUPPORT_
 
 namespace KExiv2Iface
 {
@@ -177,13 +167,19 @@ public:
 
     const Exiv2::ExifData& exifMetadata() const { return data.constData()->exifMetadata;  }
     const Exiv2::IptcData& iptcMetadata() const { return data.constData()->iptcMetadata;  }
-    const Exiv2::XmpData&  xmpMetadata()  const { return data.constData()->xmpMetadata;   }
     const std::string& imageComments()    const { return data.constData()->imageComments; }
+
+#ifdef _XMP_SUPPORT_
+    const Exiv2::XmpData&  xmpMetadata()  const { return data.constData()->xmpMetadata;   }
+#endif
 
     Exiv2::ExifData& exifMetadata() { return data.data()->exifMetadata;  }
     Exiv2::IptcData& iptcMetadata() { return data.data()->iptcMetadata;  }
-    Exiv2::XmpData&  xmpMetadata()  { return data.data()->xmpMetadata;   }
     std::string& imageComments()    { return data.data()->imageComments; }
+
+#ifdef _XMP_SUPPORT_
+    Exiv2::XmpData&  xmpMetadata()  { return data.data()->xmpMetadata;   }
+#endif
 
 public:
 
