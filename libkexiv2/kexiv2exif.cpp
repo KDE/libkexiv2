@@ -986,7 +986,23 @@ KExiv2::TagsMap KExiv2::getMakernoteTagsList() const
 
 #if (EXIV2_TEST_VERSION(0,21,0))
 
-        tags << Exiv2::ExifTags::mnTagList();
+        const Exiv2::GroupInfo* gi = Exiv2::ExifTags::groupList();
+
+        while (gi->ifdId_ != Exiv2::lastIfdId)
+        {
+            if (QString(gi->name_) == QString("Makernote"))
+            {
+                Exiv2::TagListFct tl     = gi->tagList_;
+                const Exiv2::TagInfo* ti = tl();
+
+                while (ti->tag_ != 0xFFFF)
+                {
+                    tags << ti;
+                    ++ti;
+                }
+            }
+            ++gi;
+        }
 
 #else
 
