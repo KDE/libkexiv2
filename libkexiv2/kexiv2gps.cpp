@@ -266,7 +266,8 @@ QString KExiv2::getGPSLatitudeString() const
         // Get the reference first.
 
         QByteArray latRef = getExifTagData("Exif.GPSInfo.GPSLatitudeRef");
-        if (latRef.isEmpty()) return false;
+        if (latRef.isEmpty())
+            return QString();
 
         // Latitude decoding.
 
@@ -298,7 +299,8 @@ QString KExiv2::getGPSLongitudeString() const
         // Get the reference first.
 
         QByteArray latRef = getExifTagData("Exif.GPSInfo.GPSLongitudeRef");
-        if (latRef.isEmpty()) return false;
+        if (latRef.isEmpty())
+            return QString();
 
         // Latitude decoding.
 
