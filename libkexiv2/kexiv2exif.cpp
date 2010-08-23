@@ -777,7 +777,7 @@ QImage KExiv2::getExifThumbnail(bool fixOrientation) const
                 Exiv2::ExifData::iterator it = exifData.findKey(key1);
                 if (it == exifData.end())
                     it = exifData.findKey(key2);
-                if (it != exifData.end())
+                if (it != exifData.end() && it->count())
                 {
                     long orientation = it->toLong();
                     kDebug() << "Exif Thumbnail Orientation: " << (int)orientation;

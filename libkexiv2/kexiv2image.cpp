@@ -101,12 +101,12 @@ QSize KExiv2::getImageDimensions() const
         Exiv2::ExifData exifData(d->exifMetadata());
         Exiv2::ExifKey key("Exif.Photo.PixelXDimension");
         Exiv2::ExifData::iterator it = exifData.findKey(key);
-        if (it != exifData.end())
+        if (it != exifData.end() && it->count())
             width = it->toLong();
 
         Exiv2::ExifKey key2("Exif.Photo.PixelYDimension");
         Exiv2::ExifData::iterator it2 = exifData.findKey(key2);
-        if (it2 != exifData.end())
+        if (it2 != exifData.end() && it2->count())
             height = it2->toLong();
 
         if (width != -1 && height != -1)
@@ -119,12 +119,12 @@ QSize KExiv2::getImageDimensions() const
 
         Exiv2::ExifKey key3("Exif.Image.ImageWidth");
         Exiv2::ExifData::iterator it3 = exifData.findKey(key3);
-        if (it3 != exifData.end())
+        if (it3 != exifData.end() && it3->count())
             width = it3->toLong();
 
         Exiv2::ExifKey key4("Exif.Image.ImageLength");
         Exiv2::ExifData::iterator it4 = exifData.findKey(key4);
-        if (it4 != exifData.end())
+        if (it4 != exifData.end() && it4->count())
             height = it4->toLong();
 
         if (width != -1 && height != -1)
@@ -232,7 +232,7 @@ KExiv2::ImageOrientation KExiv2::getImageOrientation() const
         Exiv2::ExifKey minoltaKey1("Exif.MinoltaCs7D.Rotation");
         it = exifData.findKey(minoltaKey1);
 
-        if (it != exifData.end())
+        if (it != exifData.end() && it->count())
         {
             orientation = it->toLong();
             kDebug() << "Orientation => Exif.MinoltaCs7D.Rotation => " << (int)orientation;
@@ -251,7 +251,7 @@ KExiv2::ImageOrientation KExiv2::getImageOrientation() const
         Exiv2::ExifKey minoltaKey2("Exif.MinoltaCs5D.Rotation");
         it = exifData.findKey(minoltaKey2);
 
-        if (it != exifData.end())
+        if (it != exifData.end() && it->count())
         {
             orientation = it->toLong();
             kDebug() << "Orientation => Exif.MinoltaCs5D.Rotation => " << (int)orientation;
@@ -272,7 +272,7 @@ KExiv2::ImageOrientation KExiv2::getImageOrientation() const
         Exiv2::ExifKey keyStd("Exif.Image.Orientation");
         it = exifData.findKey(keyStd);
 
-        if (it != exifData.end())
+        if (it != exifData.end() && it->count())
         {
             orientation = it->toLong();
             kDebug() << "Orientation => Exif.Image.Orientation => " << (int)orientation;
@@ -359,7 +359,7 @@ bool KExiv2::setImageOrientation(ImageOrientation orientation, bool setProgramNa
 
         Exiv2::ExifKey thumbKey("Exif.Thumbnail.Orientation");
         it = d->exifMetadata().findKey(thumbKey);
-        if (it != d->exifMetadata().end())
+        if (it != d->exifMetadata().end() && it->count())
         {
             RotationMatrix operation((KExiv2Iface::KExiv2::ImageOrientation)it->toLong());
             operation *= orientation;
