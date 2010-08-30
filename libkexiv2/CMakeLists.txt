@@ -74,6 +74,7 @@ INSTALL(FILES kexiv2.h
               subjectwidget.h
               altlangstredit.h
               countryselector.h
+              rotationmatrix.h
               ${CMAKE_CURRENT_BINARY_DIR}/version.h
         DESTINATION ${INCLUDE_INSTALL_DIR}/libkexiv2 COMPONENT Devel)
 

@@ -27,14 +27,19 @@
 #ifndef LIBKEXIV2_ROTATIONMATRIX_H
 #define LIBKEXIV2_ROTATIONMATRIX_H
 
+// Qt includes
+
+#include <QMatrix>
+
 // Local includes
 
 #include "kexiv2.h"
+#include "libkexiv2_export.h"
 
 namespace KExiv2Iface
 {
 
-class RotationMatrix
+class KEXIV2_EXPORT RotationMatrix
 {
 
 public:
@@ -89,6 +94,12 @@ public:
      *  Returns ORIENTATION_UNSPECIFIED if no flag matches this matrix.
      */
     KExiv2::ImageOrientation exifOrientation() const;
+
+    /// Returns a QMatrix representing this matrix
+    QMatrix toMatrix() const;
+
+    /// Returns a QMatrix for the given Exif orientation
+    static QMatrix toMatrix(KExiv2::ImageOrientation orienation);
 
     RotationMatrix(int m11, int m12, int m21, int m22);
 
