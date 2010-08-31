@@ -151,6 +151,10 @@ public:
     KExiv2Priv();
     ~KExiv2Priv();
 
+    bool saveToXMPSidecar(const QFileInfo& finfo) const;
+    bool saveToFile(const QFileInfo& finfo) const;
+    bool saveOperations(Exiv2::Image::AutoPtr image) const;
+
     /** Generic method to print the Exiv2 C++ Exception error message from 'e'.
         'msg' string is printed just before like debug header.
     */
@@ -168,12 +172,12 @@ public:
      */
     int getXMPTagsListFromPrefix(const QString& pf, KExiv2::TagsMap& tagsMap);
 
-    const Exiv2::ExifData& exifMetadata() const { return data.constData()->exifMetadata;  }
-    const Exiv2::IptcData& iptcMetadata() const { return data.constData()->iptcMetadata;  }
-    const std::string& imageComments()    const { return data.constData()->imageComments; }
+    const Exiv2::ExifData& exifMetadata()  const { return data.constData()->exifMetadata;  }
+    const Exiv2::IptcData& iptcMetadata()  const { return data.constData()->iptcMetadata;  }
+    const std::string&     imageComments() const { return data.constData()->imageComments; }
 
 #ifdef _XMP_SUPPORT_
-    const Exiv2::XmpData&  xmpMetadata()  const { return data.constData()->xmpMetadata;   }
+    const Exiv2::XmpData&  xmpMetadata()   const { return data.constData()->xmpMetadata;   }
 #endif
 
     Exiv2::ExifData& exifMetadata() { return data.data()->exifMetadata;  }
@@ -187,8 +191,10 @@ public:
 public:
 
     bool                                           writeRawFiles;
-    bool                                           useXMPSidecar;
     bool                                           updateFileTimeStamp;
+
+    bool                                           useXMPSidecar4Reading;
+    int                                            metadataWritingMode;         // A mode from KExiv2::MetadataWritingMode enum.
 
     QString                                        filePath;
     QSize                                          pixelSize;

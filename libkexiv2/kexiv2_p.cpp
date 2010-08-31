@@ -24,6 +24,14 @@
  *
  * ============================================================ */
 
+// C ANSI includes.
+
+extern "C"
+{
+#include <sys/stat.h>
+#include <utime.h>
+}
+
 // Local includes.
 
 #include "kexiv2_p.h"
@@ -31,26 +39,245 @@
 namespace KExiv2Iface
 {
 
+KExiv2::KExiv2Priv::KExiv2Priv()
+                  : data(new KExiv2Data::KExiv2DataPriv)
+{
+    writeRawFiles         = false;
+    updateFileTimeStamp   = false;
+    useXMPSidecar4Reading = false;
+    metadataWritingMode   = WRITETOIMAGEONLY;
+}
+
+KExiv2::KExiv2Priv::~KExiv2Priv()
+{
+}
+
+bool KExiv2::KExiv2Priv::saveToXMPSidecar(const QFileInfo& finfo) const
+{
+    if (finfo.filePath().isEmpty())
+        return false;
+
+    QString filePath(finfo.filePath());
+    filePath.replace(QRegExp("[^\\.]+$"), "xmp");
+
+    bool ret = false;
+
+    try
+    {
+        Exiv2::Image::AutoPtr image;
+        image = Exiv2::ImageFactory::create(Exiv2::ImageType::xmp, (const char*)(QFile::encodeName(filePath)));
+        ret   = saveOperations(image);
+    }
+    catch( Exiv2::Error& e )
+    {
+        printExiv2ExceptionError("Cannot save metadata to XMP sidecar using Exiv2 ", e);
+    }
+
+    return ret;
+}
+
+bool KExiv2::KExiv2Priv::saveToFile(const QFileInfo& finfo) const
+{
+    if (!finfo.isWritable())
+    {
+        kDebug() << "File '" << finfo.fileName().toAscii().constData() << "' is read only. Metadata not written.";
+        return false;
+    }
+
+    QStringList rawTiffBasedSupported = QStringList()
+#if (EXIV2_TEST_VERSION(0,19,1))
+        // TIFF/EP Raw files based supported by Exiv2 0.19.1
+        << "dng" << "nef" << "pef" << "orf";
+#else
+#if (EXIV2_TEST_VERSION(0,17,91))
+        // TIFF/EP Raw files based supported by Exiv2 0.18.0
+        << "dng" << "nef" << "pef";
+#else
+        // TIFF/EP Raw files based supported by all other Exiv2 versions
+        // NONE
+#endif
+#endif
+
+    QStringList rawTiffBasedNotSupported = QStringList()
+#if (EXIV2_TEST_VERSION(0,19,1))
+        // TIFF/EP Raw files based not supported by Exiv2 0.19.1
+        << "3fr" << "arw" << "cr2" << "dcr" << "erf" << "k25"
+        << "kdc" << "mos" << "raw" << "sr2" << "srf";
+#else
+#if (EXIV2_TEST_VERSION(0,17,91))
+        // TIFF/EP Raw files based not supported by Exiv2 0.18.0
+        << "3fr" << "arw" << "cr2" << "dcr" << "erf" << "k25"
+        << "kdc" << "mos" << "raw" << "sr2" << "srf" << "orf";
+#else
+        // TIFF/EP Raw files based not supported by all other Exiv2 versions
+        << "dng" << "nef" << "pef"
+        << "3fr" << "arw" << "cr2" << "dcr" << "erf" << "k25"
+        << "kdc" << "mos" << "raw" << "sr2" << "srf" << "orf";
+#endif
+#endif
+
+    QString ext = finfo.suffix().toLower();
+    if (rawTiffBasedNotSupported.contains(ext))
+    {
+        kDebug() << finfo.fileName()
+                 << "is TIFF based RAW file not yet supported. Metadata not saved.";
+        return false;
+    }
+
+    if (rawTiffBasedSupported.contains(ext) && !writeRawFiles)
+    {
+        kDebug() << finfo.fileName()
+                 << "is TIFF based RAW file supported but writing mode is disabled. "
+                 << "Metadata not saved.";
+        return false;
+    }
+    kDebug() << "File Extension: " << ext << " is supported for writing mode";
+
+    bool ret = false;
+
+    try
+    {
+        Exiv2::Image::AutoPtr image;
+        image = Exiv2::ImageFactory::open((const char*)(QFile::encodeName(finfo.filePath())));
+        ret   = saveOperations(image);
+    }
+    catch( Exiv2::Error& e )
+    {
+        printExiv2ExceptionError("Cannot save metadata to image using Exiv2 ", e);
+    }
+
+    return ret;
+}
+
+bool KExiv2::KExiv2Priv::saveOperations(Exiv2::Image::AutoPtr image) const
+{
+    try
+    {
+        Exiv2::AccessMode mode;
+
+        // We need to load target file metadata to merge with new one. It's mandatory with TIFF format:
+        // like all tiff file structure is based on Exif.
+        image->readMetadata();
+
+        // Image Comments ---------------------------------
+
+        mode = image->checkMode(Exiv2::mdComment);
+        if (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite)
+        {
+            image->setComment(imageComments());
+        }
+
+        // Exif metadata ----------------------------------
+
+        mode = image->checkMode(Exiv2::mdExif);
+        if (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite)
+        {
+            if (image->mimeType() == "image/tiff")
+            {
+                Exiv2::ExifData orgExif = image->exifData();
+                Exiv2::ExifData newExif;
+                QStringList     untouchedTags;
+
+                // With tiff image we cannot overwrite whole Exif data as well, because
+                // image data are stored in Exif container. We need to take a care about
+                // to not lost image data.
+                untouchedTags << "Exif.Image.ImageWidth";
+                untouchedTags << "Exif.Image.ImageLength";
+                untouchedTags << "Exif.Image.BitsPerSample";
+                untouchedTags << "Exif.Image.Compression";
+                untouchedTags << "Exif.Image.PhotometricInterpretation";
+                untouchedTags << "Exif.Image.FillOrder";
+                untouchedTags << "Exif.Image.SamplesPerPixel";
+                untouchedTags << "Exif.Image.StripOffsets";
+                untouchedTags << "Exif.Image.RowsPerStrip";
+                untouchedTags << "Exif.Image.StripByteCounts";
+                untouchedTags << "Exif.Image.XResolution";
+                untouchedTags << "Exif.Image.YResolution";
+                untouchedTags << "Exif.Image.PlanarConfiguration";
+                untouchedTags << "Exif.Image.ResolutionUnit";
+
+                for (Exiv2::ExifData::iterator it = orgExif.begin(); it != orgExif.end(); ++it)
+                {
+                    if (untouchedTags.contains(it->key().c_str()))
+                    {
+                        newExif[it->key().c_str()] = orgExif[it->key().c_str()];
+                    }
+                }
+
+                Exiv2::ExifData readedExif = exifMetadata();
+                for (Exiv2::ExifData::iterator it = readedExif.begin(); it != readedExif.end(); ++it)
+                {
+                    if (!untouchedTags.contains(it->key().c_str()))
+                    {
+                        newExif[it->key().c_str()] = readedExif[it->key().c_str()];
+                    }
+                }
+
+                image->setExifData(newExif);
+            }
+            else
+            {
+                image->setExifData(exifMetadata());
+            }
+        }
+
+        // Iptc metadata ----------------------------------
+
+        mode = image->checkMode(Exiv2::mdIptc);
+        if (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite)
+        {
+            image->setIptcData(iptcMetadata());
+        }
+
+#ifdef _XMP_SUPPORT_
+
+        // Xmp metadata -----------------------------------
+
+        mode = image->checkMode(Exiv2::mdXmp);
+        if (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite)
+        {
+            image->setXmpData(xmpMetadata());
+        }
+
+#endif // _XMP_SUPPORT_
+
+        if (!updateFileTimeStamp)
+        {
+            // NOTE: Don't touch access and modification timestamp of file.
+            struct stat st;
+            ::stat(QFile::encodeName(filePath), &st);
+
+            struct utimbuf ut;
+            ut.modtime = st.st_mtime;
+            ut.actime  = st.st_atime;
+
+            image->writeMetadata();
+
+            ::utime(QFile::encodeName(filePath), &ut);
+        }
+        else
+        {
+            image->writeMetadata();
+        }
+
+        return true;
+    }
+    catch( Exiv2::Error& e )
+    {
+        printExiv2ExceptionError("Cannot save metadata using Exiv2 ", e);
+    }
+
+    return false;
+}
+
 void KExiv2Data::KExiv2DataPriv::clear()
 {
     imageComments.clear();
     exifMetadata.clear();
     iptcMetadata.clear();
-#ifdef _XMP_SUPPORT_    
+#ifdef _XMP_SUPPORT_
     xmpMetadata.clear();
-#endif    
-}
-
-KExiv2::KExiv2Priv::KExiv2Priv()
-                  : data(new KExiv2Data::KExiv2DataPriv)
-{
-    writeRawFiles       = false;
-    updateFileTimeStamp = false;
-    useXMPSidecar       = false;
-}
-
-KExiv2::KExiv2Priv::~KExiv2Priv()
-{
+#endif
 }
 
 void KExiv2::KExiv2Priv::printExiv2ExceptionError(const QString& msg, Exiv2::Error& e)

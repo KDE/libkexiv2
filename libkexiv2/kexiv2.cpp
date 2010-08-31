@@ -24,14 +24,6 @@
  *
  * ============================================================ */
 
-// C ANSI includes.
-
-extern "C"
-{
-#include <sys/stat.h>
-#include <utime.h>
-}
-
 // Local includes.
 
 #include "version.h"
@@ -122,10 +114,10 @@ bool KExiv2::cleanupExiv2()
     // Fix memory leak if Exiv2 support XMP.
 #ifdef _XMP_SUPPORT_
 
-    Exiv2::XmpParser::terminate();
-
     unregisterXmpNameSpace(QString("http://ns.adobe.com/lightroom/1.0/"));
     unregisterXmpNameSpace(QString("http://www.digikam.org/ns/kipi/1.0/"));
+
+    Exiv2::XmpParser::terminate();
 
 #endif // _XMP_SUPPORT_
 
@@ -287,18 +279,15 @@ bool KExiv2::loadFromData(const QByteArray& imgData) const
 
 bool KExiv2::load(const QString& filePath) const
 {
-    QFileInfo finfo(filePath);
-    if (filePath.isEmpty() || !finfo.isReadable())
-    {
-        kDebug() << "File '" << finfo.fileName().toAscii().constData() << "' is not readable.";
+    if (filePath.isEmpty())
         return false;
-    }
 
     try
     {
-        Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
-                                      (QFile::encodeName(filePath)));
-        if (d->useXMPSidecar)
+        Exiv2::Image::AutoPtr image;
+
+        // If XMP sidecar exist and if we want manage it, parse it instead the image.
+        if (d->useXMPSidecar4Reading)
         {
             QString xmpSidecarPath(filePath);
             xmpSidecarPath.replace(QRegExp("[^\\.]+$"), "xmp");
@@ -313,6 +302,18 @@ bool KExiv2::load(const QString& filePath) const
                 image = Exiv2::ImageFactory::open((const char*)
                         (QFile::encodeName(xmpSidecarPath)));
             }
+        }
+
+        // No XMP sidecar file managed. We load image file metadata instead.
+        if (!image.get())
+        {
+            QFileInfo finfo(filePath);
+            if (!finfo.isReadable())
+            {
+                kDebug() << "File '" << finfo.fileName().toAscii().constData() << "' is not readable.";
+                return false;
+            }
+            image = Exiv2::ImageFactory::open((const char*)(QFile::encodeName(filePath)));
         }
 
         d->filePath = filePath;
@@ -355,202 +356,49 @@ bool KExiv2::load(const QString& filePath) const
 
 bool KExiv2::save(const QString& imageFilePath) const
 {
-    if (imageFilePath.isEmpty())
-        return false;
-    QString filePath(imageFilePath);
-
-    if (d->useXMPSidecar)
-    {
-        // Write metadata to XMP sidecar file instead
-        filePath.replace(QRegExp("[^\\.]+$"), "xmp");
-    }
-
     // NOTE: see B.K.O #137770 & #138540 : never touch the file if is read only.
-    QFileInfo finfo(filePath);
+    QFileInfo finfo(imageFilePath);
     QFileInfo dinfo(finfo.path());
-    if (!finfo.isWritable() && !(d->useXMPSidecar && !finfo.exists()))
-    {
-        kDebug() << "File '" << finfo.fileName().toAscii().constData() << "' is read-only. Metadata not saved.";
-        return false;
-    }
     if (!dinfo.isWritable())
     {
         kDebug() << "Dir '" << dinfo.filePath().toAscii().constData() << "' is read-only. Metadata not saved.";
         return false;
     }
 
-    QStringList rawTiffBasedSupported = QStringList()
-#if (EXIV2_TEST_VERSION(0,19,1))
-        // TIFF/EP Raw files based supported by Exiv2 0.19.1
-        << "dng" << "nef" << "pef" << "orf";
-#else
-#if (EXIV2_TEST_VERSION(0,17,91))
-        // TIFF/EP Raw files based supported by Exiv2 0.18.0
-        << "dng" << "nef" << "pef";
-#else
-        // TIFF/EP Raw files based supported by all other Exiv2 versions
-        // NONE
-#endif
-#endif
+    int ret = false;
 
-    QStringList rawTiffBasedNotSupported = QStringList()
-#if (EXIV2_TEST_VERSION(0,19,1))
-        // TIFF/EP Raw files based not supported by Exiv2 0.19.1
-        << "3fr" << "arw" << "cr2" << "dcr" << "erf" << "k25"
-        << "kdc" << "mos" << "raw" << "sr2" << "srf";
-#else
-#if (EXIV2_TEST_VERSION(0,17,91))
-        // TIFF/EP Raw files based not supported by Exiv2 0.18.0
-        << "3fr" << "arw" << "cr2" << "dcr" << "erf" << "k25"
-        << "kdc" << "mos" << "raw" << "sr2" << "srf" << "orf";
-#else
-        // TIFF/EP Raw files based not supported by all other Exiv2 versions
-        << "dng" << "nef" << "pef"
-        << "3fr" << "arw" << "cr2" << "dcr" << "erf" << "k25"
-        << "kdc" << "mos" << "raw" << "sr2" << "srf" << "orf";
-#endif
-#endif
-
-    QString ext = finfo.suffix().toLower();
-    if (rawTiffBasedNotSupported.contains(ext))
+    switch(d->metadataWritingMode)
     {
-        kDebug() << finfo.fileName()
-                      << "is TIFF based RAW file not yet supported. Metadata not saved.";
-        return false;
-    }
+        case WRITETOSIDECARONLY:
+            ret = d->saveToXMPSidecar(imageFilePath);
+            if (ret) kDebug() << "Metadata for file '" << finfo.fileName().toAscii().constData() << "' written to XMP sidecar.";
+            break;
 
-    if (rawTiffBasedSupported.contains(ext) && !d->writeRawFiles)
-    {
-        kDebug() << finfo.fileName()
-                      << "is TIFF based RAW file supported but writing mode is disabled. "
-                      << "Metadata not saved.";
-        return false;
-    }
-    kDebug() << "File Extension: " << ext << " is supported for writing mode";
+        case WRITETOSIDECARANDIMAGE:
+            ret = d->saveToFile(finfo);
+            if (ret) kDebug() << "Metadata for file '" << finfo.fileName().toAscii().constData() << "' written to file.";
 
-    try
-    {
-        Exiv2::AccessMode mode;
-        Exiv2::Image::AutoPtr image;
-        if (d->useXMPSidecar && !finfo.exists())
-            image = Exiv2::ImageFactory::create(Exiv2::ImageType::xmp, // XMPSidecar image type
-                                          (const char*) (QFile::encodeName(filePath)));
-        else
-            image = Exiv2::ImageFactory::open((const char*)
-                                          (QFile::encodeName(filePath)));
+            ret |=  d->saveToXMPSidecar(imageFilePath);
+            if (ret) kDebug() << "Metadata for file '" << finfo.fileName().toAscii().constData() << "' written to XMP sidecar.";
+            break;
 
-        // We need to load target file metadata to merge with new one. It's mandatory with TIFF format:
-        // like all tiff file structure is based on Exif.
-        image->readMetadata();
-
-        // Image Comments ---------------------------------
-
-        mode = image->checkMode(Exiv2::mdComment);
-        if (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite)
-        {
-            image->setComment(d->imageComments());
-        }
-
-        // Exif metadata ----------------------------------
-
-        mode = image->checkMode(Exiv2::mdExif);
-        if (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite)
-        {
-            if (image->mimeType() == "image/tiff")
+        case WRITETOSIDECARONLY4READONLYFILES:
+            ret = d->saveToFile(finfo);
+            if (ret) kDebug() << "Metadata for file '" << finfo.fileName().toAscii().constData() << "' written to file.";
+            if (!ret)
             {
-                Exiv2::ExifData orgExif = image->exifData();
-                Exiv2::ExifData newExif;
-                QStringList     untouchedTags;
-
-                // With tiff image we cannot overwrite whole Exif data as well, because
-                // image data are stored in Exif container. We need to take a care about
-                // to not lost image data.
-                untouchedTags << "Exif.Image.ImageWidth";
-                untouchedTags << "Exif.Image.ImageLength";
-                untouchedTags << "Exif.Image.BitsPerSample";
-                untouchedTags << "Exif.Image.Compression";
-                untouchedTags << "Exif.Image.PhotometricInterpretation";
-                untouchedTags << "Exif.Image.FillOrder";
-                untouchedTags << "Exif.Image.SamplesPerPixel";
-                untouchedTags << "Exif.Image.StripOffsets";
-                untouchedTags << "Exif.Image.RowsPerStrip";
-                untouchedTags << "Exif.Image.StripByteCounts";
-                untouchedTags << "Exif.Image.XResolution";
-                untouchedTags << "Exif.Image.YResolution";
-                untouchedTags << "Exif.Image.PlanarConfiguration";
-                untouchedTags << "Exif.Image.ResolutionUnit";
-
-                for (Exiv2::ExifData::iterator it = orgExif.begin(); it != orgExif.end(); ++it)
-                {
-                    if (untouchedTags.contains(it->key().c_str()))
-                    {
-                        newExif[it->key().c_str()] = orgExif[it->key().c_str()];
-                    }
-                }
-
-                for (Exiv2::ExifData::iterator it = d->exifMetadata().begin(); it != d->exifMetadata().end(); ++it)
-                {
-                    if (!untouchedTags.contains(it->key().c_str()))
-                    {
-                        newExif[it->key().c_str()] = d->exifMetadata()[it->key().c_str()];
-                    }
-                }
-
-                image->setExifData(newExif);
+                ret |= d->saveToXMPSidecar(imageFilePath);
+                if (ret) kDebug() << "Metadata for file '" << finfo.fileName().toAscii().constData() << "' written to XMP sidecar.";
             }
-            else
-            {
-                image->setExifData(d->exifMetadata());
-            }
-        }
+            break;
 
-        // Iptc metadata ----------------------------------
-
-        mode = image->checkMode(Exiv2::mdIptc);
-        if (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite)
-        {
-            image->setIptcData(d->iptcMetadata());
-        }
-
-#ifdef _XMP_SUPPORT_
-
-        // Xmp metadata -----------------------------------
-
-        mode = image->checkMode(Exiv2::mdXmp);
-        if (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite)
-        {
-            image->setXmpData(d->xmpMetadata());
-        }
-
-#endif // _XMP_SUPPORT_
-
-        if (!d->updateFileTimeStamp)
-        {
-            // NOTE: Don't touch access and modification timestamp of file.
-            struct stat st;
-            ::stat(QFile::encodeName(filePath), &st);
-
-            struct utimbuf ut;
-            ut.modtime = st.st_mtime;
-            ut.actime  = st.st_atime;
-
-            image->writeMetadata();
-
-            ::utime(QFile::encodeName(filePath), &ut);
-        }
-        else
-        {
-            image->writeMetadata();
-        }
-
-        return true;
-    }
-    catch( Exiv2::Error& e )
-    {
-        d->printExiv2ExceptionError("Cannot save metadata using Exiv2 ", e);
+        default:          // WRITETOIMAGEONLY:
+            ret = d->saveToFile(finfo);
+            if (ret) kDebug() << "Metadata for file '" << finfo.fileName().toAscii().constData() << "' written to file.";
+            break;
     }
 
-    return false;
+    return ret;
 }
 
 bool KExiv2::applyChanges() const
@@ -602,14 +450,24 @@ bool KExiv2::writeRawFiles() const
     return d->writeRawFiles;
 }
 
-void KExiv2::setUseXMPSidecar(bool on)
+void KExiv2::setUseXMPSidecar4Reading(bool on)
 {
-    d->useXMPSidecar = on;
+    d->useXMPSidecar4Reading = on;
 }
 
-bool KExiv2::useXMPSidecar() const
+bool KExiv2::useXMPSidecar4Reading() const
 {
-    return d->useXMPSidecar;
+    return d->useXMPSidecar4Reading;
+}
+
+void KExiv2::setMetadataWritingMode(int mode)
+{
+    d->metadataWritingMode = mode;
+}
+
+int KExiv2::metadataWritingMode() const
+{
+    return d->metadataWritingMode;
 }
 
 void KExiv2::setUpdateFileTimeStamp(bool on)

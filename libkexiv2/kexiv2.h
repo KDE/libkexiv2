@@ -58,6 +58,16 @@ class KEXIV2_EXPORT KExiv2
 
 public:
 
+    /** The image metadata writing mode, between image file metadata and XMP sidecar file, depending of the context.
+     */
+    enum MetadataWritingMode
+    {
+        WRITETOIMAGEONLY                 = 0,    /// Write metadata to image file only.
+        WRITETOSIDECARONLY               = 1,    /// Write metadata to sidecar file only.
+        WRITETOSIDECARANDIMAGE           = 2,    /// Write metadata to image and sidecar files.
+        WRITETOSIDECARONLY4READONLYFILES = 3     /// Write metadata to sidecar file only for read only image as RAW files for ex.
+    };
+
     /** The image color workspace values given by Exif metadata.
      */
     enum ImageColorWorkSpace
@@ -228,13 +238,21 @@ public:
      */
     bool writeRawFiles() const;
 
-    /** Enable or disable using XMP sidecar for reading and writing metadata
+    /** Enable or disable using XMP sidecar for reading metadata
      */
-    void setUseXMPSidecar(bool on);
+    void setUseXMPSidecar4Reading(bool on);
 
-    /** Return true if using XMP sidecar for reading and writing metadata is enabled.
+    /** Return true if using XMP sidecar for reading metadata is enabled.
      */
-    bool useXMPSidecar() const;
+    bool useXMPSidecar4Reading() const;
+
+    /** Set writing metadata mode.
+     */
+    void setMetadataWritingMode(int mode);
+
+    /** Return mode to write metadata.
+     */
+    int metadataWritingMode() const;
 
     /** Enable or disable file timestamp updating when metadata are saved.
         By default files timestamp are untouched.
