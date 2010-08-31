@@ -120,10 +120,10 @@ bool KExiv2::cleanupExiv2()
     // Fix memory leak if Exiv2 support XMP.
 #ifdef _XMP_SUPPORT_
 
-    Exiv2::XmpParser::terminate();
-
     unregisterXmpNameSpace(QString("http://ns.adobe.com/lightroom/1.0/"));
     unregisterXmpNameSpace(QString("http://www.digikam.org/ns/kipi/1.0/"));
+
+    Exiv2::XmpParser::terminate();
 
 #endif // _XMP_SUPPORT_
 
