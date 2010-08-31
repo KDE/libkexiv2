@@ -51,11 +51,11 @@ int main (int argc, char **argv)
     KExiv2 meta;
 
     // Read metadata from the image
-    meta.setUseXMPSidecar(false);
+    meta.setUseXMPSidecar4Reading(false);
     meta.load(filePath);
 
     // Write metadata to XMP sidecar
-    meta.setUseXMPSidecar(true);
+    meta.setMetadataWritingMode(KExiv2::WRITETOSIDECARONLY);
     meta.save(filePath);
 
     return 0;

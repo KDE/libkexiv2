@@ -49,7 +49,7 @@ int main (int argc, char **argv)
     QString filePath(argv[1]);
 
     KExiv2 meta;
-    meta.setUseXMPSidecar(true);
+    meta.setUseXMPSidecar4Reading(true);
     meta.load(filePath);
     // print some metadata
     // add some metadata
