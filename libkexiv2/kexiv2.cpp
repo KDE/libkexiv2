@@ -365,7 +365,7 @@ bool KExiv2::save(const QString& imageFilePath) const
         return false;
     }
 
-    int ret = false;
+    bool ret = false;
 
     switch(d->metadataWritingMode)
     {
