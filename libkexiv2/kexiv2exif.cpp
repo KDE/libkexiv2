@@ -50,7 +50,7 @@ bool KExiv2::canWriteExif(const QString& filePath)
     {
         std::string s(e.what());
         kDebug() << "Cannot check Exif access mode using Exiv2 (Error #"
-                      << e.code() << ": " << s.c_str() << ")";
+                 << e.code() << ": " << s.c_str() << ")";
     }
 
     return false;
@@ -297,7 +297,11 @@ QString KExiv2::getExifTagTitle(const char* exifTagName)
     {
         std::string exifkey(exifTagName);
         Exiv2::ExifKey ek(exifkey);
+#if (EXIV2_TEST_VERSION(0,21,0))
+        return QString::fromLocal8Bit( ek.tagLabel().c_str() );
+#else
         return QString::fromLocal8Bit( Exiv2::ExifTags::tagTitle(ek.tag(), ek.ifdId()) );
+#endif
     }
     catch (Exiv2::Error& e)
     {
@@ -313,7 +317,11 @@ QString KExiv2::getExifTagDescription(const char* exifTagName)
     {
         std::string exifkey(exifTagName);
         Exiv2::ExifKey ek(exifkey);
+#if (EXIV2_TEST_VERSION(0,21,0))
+        return QString::fromLocal8Bit( ek.tagDesc().c_str() );
+#else
         return QString::fromLocal8Bit( Exiv2::ExifTags::tagDesc(ek.tag(), ek.ifdId()) );
+#endif
     }
     catch (Exiv2::Error& e)
     {
@@ -952,12 +960,45 @@ KExiv2::TagsMap KExiv2::getStdExifTagsList() const
     try
     {
         QList<const Exiv2::TagInfo*> tags;
+        TagsMap                      tagsMap;
+
+#if (EXIV2_TEST_VERSION(0,21,0))
+        const Exiv2::GroupInfo* gi = Exiv2::ExifTags::groupList();
+        while (gi->tagList_ != 0)
+        {
+            if (QString(gi->ifdName_) != QString("Makernote"))
+            {
+                Exiv2::TagListFct tl     = gi->tagList_;
+                const Exiv2::TagInfo* ti = tl();
+
+                while (ti->tag_ != 0xFFFF)
+                {
+                    tags << ti;
+                    ++ti;
+                }
+            }
+            ++gi;
+        }
+
+        for (QList<const Exiv2::TagInfo*>::iterator it = tags.begin(); it != tags.end(); ++it)
+        {
+            do
+            {
+                const Exiv2::TagInfo* ti = *it;
+                QString key              = QLatin1String( Exiv2::ExifKey(*ti).key().c_str() );
+                QStringList values;
+                values << ti->name_ << ti->title_ << ti->desc_;
+                tagsMap.insert(key, values);
+                ++(*it);
+            }
+            while((*it)->tag_ != 0xffff);
+        }
+#else
         tags << Exiv2::ExifTags::ifdTagList()
              << Exiv2::ExifTags::exifTagList()
              << Exiv2::ExifTags::iopTagList()
              << Exiv2::ExifTags::gpsTagList();
 
-        TagsMap tagsMap;
         for (QList<const Exiv2::TagInfo*>::iterator it = tags.begin(); it != tags.end(); ++it)
         {
             do
@@ -970,6 +1011,7 @@ KExiv2::TagsMap KExiv2::getStdExifTagsList() const
             }
             while((*it)->tag_ != 0xffff);
         }
+#endif
         return tagsMap;
     }
     catch( Exiv2::Error& e )
@@ -985,14 +1027,15 @@ KExiv2::TagsMap KExiv2::getMakernoteTagsList() const
     try
     {
         QList<const Exiv2::TagInfo*> tags;
+        TagsMap                      tagsMap;
 
 #if (EXIV2_TEST_VERSION(0,21,0))
 
         const Exiv2::GroupInfo* gi = Exiv2::ExifTags::groupList();
 
-        while (gi->ifdId_ != Exiv2::lastIfdId)
+        while (gi->tagList_ != 0)
         {
-            if (QString(gi->name_) == QString("Makernote"))
+            if (QString(gi->ifdName_) == QString("Makernote"))
             {
                 Exiv2::TagListFct tl     = gi->tagList_;
                 const Exiv2::TagInfo* ti = tl();
@@ -1004,6 +1047,20 @@ KExiv2::TagsMap KExiv2::getMakernoteTagsList() const
                 }
             }
             ++gi;
+        }
+
+        for (QList<const Exiv2::TagInfo*>::iterator it = tags.begin(); it != tags.end(); ++it)
+        {
+            do
+            {
+                const Exiv2::TagInfo* ti = *it;
+                QString key              = QLatin1String( Exiv2::ExifKey(*ti).key().c_str() );
+                QStringList values;
+                values << ti->name_ << ti->title_ << ti->desc_;
+                tagsMap.insert(key, values);
+                ++(*it);
+            }
+            while((*it)->tag_ != 0xffff);
         }
 
 #else
@@ -1058,9 +1115,6 @@ KExiv2::TagsMap KExiv2::getMakernoteTagsList() const
 
 #endif // (EXIV2_TEST_VERSION(0,18,1))
 
-#endif // (EXIV2_TEST_VERSION(0,21,0))
-
-        TagsMap tagsMap;
         for (QList<const Exiv2::TagInfo*>::iterator it = tags.begin(); it != tags.end(); ++it)
         {
             do
@@ -1073,6 +1127,9 @@ KExiv2::TagsMap KExiv2::getMakernoteTagsList() const
             }
             while((*it)->tag_ != 0xffff);
         }
+
+#endif // (EXIV2_TEST_VERSION(0,21,0))
+
         return tagsMap;
     }
     catch( Exiv2::Error& e )
