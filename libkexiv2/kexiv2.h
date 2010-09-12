@@ -139,8 +139,8 @@ public:
 public:
 
     //-----------------------------------------------------------------
-    //-- STATICS methods ----------------------------------------------
-    //-----------------------------------------------------------------
+    /// @name Static methods
+    //@{
 
     /** Return true if Exiv2 library initialization is done properlly.
         This method must be call before to use multithreading with libkexiv2.
@@ -172,9 +172,11 @@ public:
      */
     static QString version();
 
+    //@}
+
     //-----------------------------------------------------------------
-    //-- GENERAL methods ----------------------------------------------
-    //-----------------------------------------------------------------
+    /// @name General methods
+    //@{
 
     KExiv2Data data() const;
     void setData(const KExiv2Data& data);
@@ -263,9 +265,11 @@ public:
      */
     bool updateFileTimeStamp() const;
 
+    //@}
+
     //-------------------------------------------------------------------
-    //-- Metadata IMAGE INFORMATION manipulation methods ----------------
-    //-------------------------------------------------------------------
+    /// @name Metadata image information manipulation methods
+    //@{
 
     /** Set Program name and program version in Exif and Iptc Metadata. Return true if information
         have been changed in metadata.
@@ -332,9 +336,11 @@ public:
     */
     virtual bool setImagePreview(const QImage& preview, bool setProgramName=true) const;
 
+    //@}
+
     //-----------------------------------------------------------------
-    //-- COMMENTS manipulation methods --------------------------------
-    //-----------------------------------------------------------------
+    /// @name Comments manipulation methods
+    //@{
 
     /** Return 'true' if Comments can be written in file.
      */
@@ -371,9 +377,11 @@ public:
      */
     static QString detectLanguageAlt(const QString& value, QString& lang);
 
+    //@}
+
     //-----------------------------------------------------------------
-    //-- EXIF manipulation methods ------------------------------------
-    //-----------------------------------------------------------------
+    /// @name Exif manipulation methods
+    //@{
 
     /** Return a map of all standard Exif tags supported by Exiv2.
      */
@@ -539,9 +547,11 @@ public:
      */
     KExiv2::MetaDataMap getExifTagsDataList(const QStringList& exifKeysFilter, bool invertSelection=false) const;
 
+    //@}
+
     //-------------------------------------------------------------
-    //-- IPTC manipulation methods --------------------------------
-    //-------------------------------------------------------------
+    /// @name IPTC manipulation methods
+    //@{
 
     /** Return a map of all standard Iptc tags supported by Exiv2.
      */
@@ -672,9 +682,11 @@ public:
     bool setIptcSubCategories(const QStringList& oldSubCategories, const QStringList& newSubCategories,
                               bool setProgramName=true) const;
 
+    //@}
+
     //------------------------------------------------------------
-    //-- XMP manipulation methods --------------------------------
-    //------------------------------------------------------------
+    /// @name XMP manipulation methods
+    //@{
 
     /** Return a map of all standard Xmp tags supported by Exiv2.
      */
@@ -881,9 +893,11 @@ public:
     /** Unregister a previously registered custom namespace */
     static bool unregisterXmpNameSpace(const QString& uri);
 
+    //@}
+
     //------------------------------------------------------------
-    //-- GPS manipulation methods --------------------------------
-    //------------------------------------------------------------
+    /// @name GPS manipulation methods
+    //@{
 
     /** Get all GPS location information set in image. Return true if all information can be found.
      */
@@ -985,6 +999,8 @@ public:
      */
     static void convertToUserPresentableNumbers(bool isLatitude, double coordinate,
                                                 int* degrees, int* minutes, double* seconds, char* directionReference);
+
+    //@}
 
 protected:
 
