@@ -985,7 +985,7 @@ KExiv2::TagsMap KExiv2::getStdExifTagsList() const
             do
             {
                 const Exiv2::TagInfo* ti = *it;
-                QString key              = QLatin1String( Exiv2::ExifKey(*ti).key().c_str() );
+                QString key              = QLatin1String(Exiv2::ExifKey(*ti).key().c_str());
                 QStringList values;
                 values << ti->name_ << ti->title_ << ti->desc_;
                 tagsMap.insert(key, values);
@@ -1054,7 +1054,7 @@ KExiv2::TagsMap KExiv2::getMakernoteTagsList() const
             do
             {
                 const Exiv2::TagInfo* ti = *it;
-                QString key              = QLatin1String( Exiv2::ExifKey(*ti).key().c_str() );
+                QString key              = QLatin1String(Exiv2::ExifKey(*ti).key().c_str());
                 QStringList values;
                 values << ti->name_ << ti->title_ << ti->desc_;
                 tagsMap.insert(key, values);
