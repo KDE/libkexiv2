@@ -46,6 +46,9 @@ KExiv2::KExiv2Priv::KExiv2Priv()
     updateFileTimeStamp   = false;
     useXMPSidecar4Reading = false;
     metadataWritingMode   = WRITETOIMAGEONLY;
+#if (EXIV2_TEST_VERSION(0,21,0))
+    Exiv2::LogMsg::setHandler(KExiv2::KExiv2Priv::printExiv2MessageHandler);
+#endif
 }
 
 KExiv2::KExiv2Priv::~KExiv2Priv()
@@ -285,6 +288,11 @@ void KExiv2::KExiv2Priv::printExiv2ExceptionError(const QString& msg, Exiv2::Err
     std::string s(e.what());
     kDebug() << msg.toAscii().constData() << " (Error #"
              << e.code() << ": " << s.c_str();
+}
+
+void KExiv2::KExiv2Priv::printExiv2MessageHandler(int lvl, const char* msg)
+{
+    kDebug() << "Exiv2 (" << lvl << ") : " << msg;
 }
 
 QString KExiv2::KExiv2Priv::convertCommentValue(const Exiv2::Exifdatum& exifDatum)

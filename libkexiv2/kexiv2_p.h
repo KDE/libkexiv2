@@ -156,9 +156,14 @@ public:
     bool saveOperations(Exiv2::Image::AutoPtr image) const;
 
     /** Generic method to print the Exiv2 C++ Exception error message from 'e'.
-        'msg' string is printed just before like debug header.
+        'msg' string is printed using kDebug rules..
     */
     static void printExiv2ExceptionError(const QString& msg, Exiv2::Error& e);
+
+    /** Generic method to print debug message from Exiv2.
+        'msg' string is printed using kDebug rules. 'lvl' is the debug level of Exiv2 message.
+    */
+    static void printExiv2MessageHandler(int lvl, const char* msg);
 
     /** Wrapper method to convert a Comments content to a QString.
     */
