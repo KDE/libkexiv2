@@ -1,0 +1,14 @@
+/** @mainpage libKExiv2
+
+libKExiv2 is a wrapper around <a href="http://exiv2.org/">exiv2</a>, providing read/write access to EXIF, IPTC and XMP metadata. The main differences to <a href="http://exiv2.org/">exiv2</a> are:
+<ul>
+<li> Functions take standard Qt containers as parameters
+<li> Helper functions for GPS data
+<li> Transparent XMP sidecar support
+</ul>
+
+To get started, have a look at the KExiv2Iface::KExiv2 class.
+
+@see KExiv2Iface::KExiv2
+
+ */
