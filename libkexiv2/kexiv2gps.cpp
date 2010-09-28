@@ -325,24 +325,14 @@ QString KExiv2::getGPSLongitudeString() const
     return QString();
 }
 
-bool KExiv2::setGPSInfo(const double altitude, const double latitude, const double longitude, const bool setProgramName) const
-{
-    return setGPSInfo(&altitude, latitude, longitude, setProgramName);
-}
-
-bool KExiv2::setGPSInfo(const double* const altitude, const double latitude, const double longitude, const bool setProgramName) const
+bool KExiv2::initializeGPSInfo(const bool setProgramName)
 {
     if (!setProgramId(setProgramName))
         return false;
 
     try
     {
-        // In first, we need to clean up all existing GPS info.
-        removeGPSInfo();
-
-        char scratchBuf[100];
-        long int nom, denom;
-        long int deg, min;
+        // TODO: what happens if these already exist?
 
         // Do all the easy constant ones first.
         // GPSVersionID tag: standard says is should be four bytes: 02 00 00 00
@@ -358,6 +348,38 @@ bool KExiv2::setGPSInfo(const double* const altitude, const double latitude, con
         setXmpTagString("Xmp.exif.GPSVersionID", QString("2.0.0.0"), false);
         setXmpTagString("Xmp.exif.GPSMapDatum", QString("WGS-84"), false);
 #endif // _XMP_SUPPORT_
+        return true;
+    }
+    catch( Exiv2::Error& e )
+    {
+        d->printExiv2ExceptionError("Cannot initialize GPS data using Exiv2 ", e);
+    }
+
+    return false;
+}
+
+bool KExiv2::setGPSInfo(const double altitude, const double latitude, const double longitude, const bool setProgramName)
+{
+    return setGPSInfo(&altitude, latitude, longitude, setProgramName);
+}
+
+bool KExiv2::setGPSInfo(const double* const altitude, const double latitude, const double longitude, const bool setProgramName)
+{
+    if (!setProgramId(setProgramName))
+        return false;
+
+    try
+    {
+        // In first, we need to clean up all existing GPS info.
+        removeGPSInfo();
+
+        // now re-initialize the GPS info:
+        if (!initializeGPSInfo(setProgramName))
+            return false;
+
+        char scratchBuf[100];
+        long int nom, denom;
+        long int deg, min;
 
         // Now start adding data.
 
@@ -365,7 +387,7 @@ bool KExiv2::setGPSInfo(const double* const altitude, const double latitude, con
         if (altitude)
         {
             // Altitude reference: byte "00" meaning "above sea level", "01" mening "behing sea level".
-            value = Exiv2::Value::create(Exiv2::unsignedByte);
+            Exiv2::Value::AutoPtr value = Exiv2::Value::create(Exiv2::unsignedByte);
             if ((*altitude) >= 0) value->read("0");
             else               value->read("1");
             d->exifMetadata().add(Exiv2::ExifKey("Exif.GPSInfo.GPSAltitudeRef"), value.get());
@@ -481,30 +503,19 @@ bool KExiv2::setGPSInfo(double altitude, const QString& latitude, const QString&
         // In first, we need to clean up all existing GPS info.
         removeGPSInfo();
 
+        // now re-initialize the GPS info:
+        if (!initializeGPSInfo(setProgramName))
+            return false;
+
         char scratchBuf[100];
         long int numDegrees, denomDegrees, numMinutes, denomMinutes, numSeconds, denomSeconds;
         char directionReference;
-
-        // Do all the easy constant ones first.
-        // GPSVersionID tag: standard says is should be four bytes: 02 00 00 00
-        // (and, must be present).
-        Exiv2::Value::AutoPtr value = Exiv2::Value::create(Exiv2::unsignedByte);
-        value->read("2 0 0 0");
-        d->exifMetadata().add(Exiv2::ExifKey("Exif.GPSInfo.GPSVersionID"), value.get());
-
-        // Datum: the datum of the measured data. If not given, we insert WGS-84.
-        d->exifMetadata()["Exif.GPSInfo.GPSMapDatum"] = "WGS-84";
-
-#ifdef _XMP_SUPPORT_
-        setXmpTagString("Xmp.exif.GPSVersionID", QString("2.0.0.0"), false);
-        setXmpTagString("Xmp.exif.GPSMapDatum", QString("WGS-84"), false);
-#endif // _XMP_SUPPORT_
 
         // Now start adding data.
 
         // ALTITUDE.
         // Altitude reference: byte "00" meaning "above sea level", "01" mening "behing sea level".
-        value = Exiv2::Value::create(Exiv2::unsignedByte);
+        Exiv2::Value::AutoPtr value = Exiv2::Value::create(Exiv2::unsignedByte);
         if (altitude >= 0) value->read("0");
         else               value->read("1");
         d->exifMetadata().add(Exiv2::ExifKey("Exif.GPSInfo.GPSAltitudeRef"), value.get());
@@ -567,7 +578,7 @@ bool KExiv2::setGPSInfo(double altitude, const QString& latitude, const QString&
     return false;
 }
 
-bool KExiv2::removeGPSInfo(bool setProgramName) const
+bool KExiv2::removeGPSInfo(bool setProgramName)
 {
     if (!setProgramId(setProgramName))
         return false;

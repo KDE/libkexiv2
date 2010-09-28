@@ -899,6 +899,10 @@ public:
     /// @name GPS manipulation methods
     //@{
 
+    /** Make sure all static required GPS EXIF and XMP tags exist
+     */
+    bool initializeGPSInfo(const bool setProgramName);
+
     /** Get all GPS location information set in image. Return true if all information can be found.
      */
     bool getGPSInfo(double& altitude, double& latitude, double& longitude) const;
@@ -923,12 +927,12 @@ public:
     /** Set all GPS location information into image. Return true if all information have been
         changed in metadata.
      */
-    bool setGPSInfo(const double altitude, const double latitude, const double longitude, const bool setProgramName=true) const;
+    bool setGPSInfo(const double altitude, const double latitude, const double longitude, const bool setProgramName=true);
 
     /** Set all GPS location information into image. Return true if all information have been
         changed in metadata. If you do not want altitude to be set, pass a null pointer.
      */
-    bool setGPSInfo(const double* const altitude, const double latitude, const double longitude, const bool setProgramName=true) const;
+    bool setGPSInfo(const double* const altitude, const double latitude, const double longitude, const bool setProgramName=true);
 
     /** Set all GPS location information into image. Return true if all information have been
         changed in metadata.
@@ -938,7 +942,7 @@ public:
     /** Remove all Exif tags relevant of GPS location information. Return true if all tags have been
         removed successfully in metadata.
      */
-    bool removeGPSInfo(bool setProgramName=true) const;
+    bool removeGPSInfo(bool setProgramName=true);
 
     /** This method converts 'number' to a rational value, returned in the 'numerator' and
         'denominator' parameters. Set the precision using 'rounding' parameter.
