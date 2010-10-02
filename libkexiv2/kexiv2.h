@@ -64,10 +64,17 @@ public:
      */
     enum MetadataWritingMode
     {
-        WRITETOIMAGEONLY                 = 0,    /// Write metadata to image file only.
-        WRITETOSIDECARONLY               = 1,    /// Write metadata to sidecar file only.
-        WRITETOSIDECARANDIMAGE           = 2,    /// Write metadata to image and sidecar files.
-        WRITETOSIDECARONLY4READONLYFILES = 3     /// Write metadata to sidecar file only for read only image such as RAW files for example.
+        /// Write metadata to image file only.
+        WRITETOIMAGEONLY                 = 0,
+
+        /// Write metadata to sidecar file only.
+        WRITETOSIDECARONLY               = 1,
+
+        /// Write metadata to image and sidecar files.
+        WRITETOSIDECARANDIMAGE           = 2,
+
+        /// Write metadata to sidecar file only for read only images such as RAW files for example.
+        WRITETOSIDECARONLY4READONLYFILES = 3
     };
 
     /** The image color workspace values given by Exif metadata.
