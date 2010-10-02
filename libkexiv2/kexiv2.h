@@ -930,12 +930,12 @@ public:
         where the sign determines the direction ref (North + / South - ; East + / West -).
         Returns true if the information is available.
     */
-    bool getGPSLatitudeNumber(double* latitude) const;
-    bool getGPSLongitudeNumber(double* longitude) const;
+    bool getGPSLatitudeNumber(double* const latitude) const;
+    bool getGPSLongitudeNumber(double* const longitude) const;
 
     /** Get GPS altitude information, in meters, relative to sea level (positive sign above sea level)
      */
-    bool getGPSAltitude(double* altitude) const;
+    bool getGPSAltitude(double* const altitude) const;
 
     /** Set all GPS location information into image. Return true if all information have been
         changed in metadata.
@@ -950,20 +950,21 @@ public:
     /** Set all GPS location information into image. Return true if all information have been
         changed in metadata.
      */
-    bool setGPSInfo(double altitude, const QString &latitude, const QString &longitude, bool setProgramName=true);
+    bool setGPSInfo(const double altitude, const QString &latitude, const QString &longitude, const bool setProgramName=true);
 
     /** Remove all Exif tags relevant of GPS location information. Return true if all tags have been
         removed successfully in metadata.
      */
-    bool removeGPSInfo(bool setProgramName=true);
+    bool removeGPSInfo(const bool setProgramName=true);
 
     /** This method converts 'number' to a rational value, returned in the 'numerator' and
         'denominator' parameters. Set the precision using 'rounding' parameter.
         Use this method if you want to retrieve a most exact rational for a number
         without further properties, without any requirements to the denominator.
      */
-    static void convertToRational(double number, long int* numerator,
-                                  long int* denominator, int rounding);
+    static void convertToRational(const double number, long int* const numerator,
+                                  long int* const denominator, const int rounding);
+
     /** This method convert a 'number' to a rational value, returned in 'numerator' and
         'denominator' parameters.
         This method will be able to retrieve a rational number from a double - if you
@@ -971,51 +972,53 @@ public:
         If your number is not expected to be rational, use the method above which is just as
         exact with rounding = 4 and more exact with rounding > 4.
      */
-    static void convertToRationalSmallDenominator(double number, long int* numerator,
-                                                  long int* denominator);
+    static void convertToRationalSmallDenominator(const double number, long int* const numerator,
+                                                  long int* const denominator);
 
     /** Converts a GPS position stored as rationals in Exif to the form described
         as GPSCoordinate in the XMP specification, either in the from "256,45,34N" or "256,45.566667N"
      */
-    static QString convertToGPSCoordinateString(long int numeratorDegrees, long int denominatorDegrees,
-                                                long int numeratorMinutes, long int denominatorMinutes,
-                                                long int numeratorSeconds, long int denominatorSeconds,
-                                                char directionReference);
+    static QString convertToGPSCoordinateString(const long int numeratorDegrees, const long int denominatorDegrees,
+                                                const long int numeratorMinutes, const long int denominatorMinutes,
+                                                const long int numeratorSeconds, long int denominatorSeconds,
+                                                const char directionReference);
 
     /** Converts a GPS position stored as double floating point number in degrees to the form described
         as GPSCoordinate in the XMP specification.
      */
-    static QString convertToGPSCoordinateString(bool isLatitude, double coordinate);
+    static QString convertToGPSCoordinateString(const bool isLatitude, double coordinate);
 
     /** Converts a GPSCoordinate string as defined by XMP to three rationals and the direction reference.
         Returns true if the conversion was successful.
         If minutes is given in the fractional form, a denominator of 1000000 for the minutes will be used.
      */
     static bool convertFromGPSCoordinateString(const QString& coordinate,
-                                               long int* numeratorDegrees, long int* denominatorDegrees,
-                                               long int* numeratorMinutes, long int* denominatorMinutes,
-                                               long int* numeratorSeconds, long int* denominatorSeconds,
-                                               char* directionReference);
+                                               long int* const numeratorDegrees, long int* const denominatorDegrees,
+                                               long int* const numeratorMinutes, long int* const denominatorMinutes,
+                                               long int* const numeratorSeconds, long int* const denominatorSeconds,
+                                               char* const directionReference);
 
     /** Convert a GPSCoordinate string as defined by XMP to a double floating point number in degrees
         where the sign determines the direction ref (North + / South - ; East + / West -).
         Returns true if the conversion was successful.
      */
-    static bool convertFromGPSCoordinateString(const QString& gpsString, double* coordinate);
+    static bool convertFromGPSCoordinateString(const QString& gpsString, double* const coordinate);
 
     /** Converts a GPSCoordinate string to user presentable numbers, integer degrees and minutes and
         double floating point seconds, and a direction reference ('N' or 'S', 'E' or 'W')
      */
     static bool convertToUserPresentableNumbers(const QString& coordinate,
-                                                int* degrees, int* minutes, double* seconds, char* directionReference);
+                                                int* const degrees, int* const minutes,
+                                                double* const seconds, char* const directionReference);
 
     /** Converts a double floating point number to user presentable numbers, integer degrees and minutes and
         double floating point seconds, and a direction reference ('N' or 'S', 'E' or 'W').
         The method needs to know for the direction reference
         if the latitude or the longitude is meant by the double parameter.
      */
-    static void convertToUserPresentableNumbers(bool isLatitude, double coordinate,
-                                                int* degrees, int* minutes, double* seconds, char* directionReference);
+    static void convertToUserPresentableNumbers(const bool isLatitude, double coordinate,
+                                                int* const degrees, int* const minutes,
+                                                double* const seconds, char* const directionReference);
 
     //@}
 

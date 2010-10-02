@@ -11,6 +11,8 @@
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  * @author Copyright (C) 2006-2010 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
+ * @author Copyright (C) 2010 by Michael G. Hansen
+ *         <a href="mailto:mike at mghansen dot de">mike at mghansen dot de</a>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -52,19 +54,22 @@ bool KExiv2::getGPSInfo(double& altitude, double& latitude, double& longitude) c
     return true;
 }
 
-bool KExiv2::getGPSLatitudeNumber(double* latitude) const
+bool KExiv2::getGPSLatitudeNumber(double* const latitude) const
 {
     try
     {
-        double num, den, min, sec;
         *latitude=0.0;
 
-        // Get the reference from Exif first.
+        // Try XMP first. Reason: XMP in sidecar may be more up-to-date than EXIF in original image.
+        if ( convertFromGPSCoordinateString(getXmpTagString("Xmp.exif.GPSLatitude"), latitude) )
+            return true;
 
-        QByteArray latRef = getExifTagData("Exif.GPSInfo.GPSLatitudeRef");
+        // Now try to get the reference from Exif.
+        const QByteArray latRef = getExifTagData("Exif.GPSInfo.GPSLatitudeRef");
         if (!latRef.isEmpty())
         {
             // Latitude decoding from Exif.
+            double num, den, min, sec;
 
             Exiv2::ExifKey exifKey("Exif.GPSInfo.GPSLatitude");
             Exiv2::ExifData exifData(d->exifMetadata());
@@ -109,11 +114,6 @@ bool KExiv2::getGPSLatitudeNumber(double* latitude) const
 
             return true;
         }
-        else
-        {
-            // Try XMP now.
-            return ( convertFromGPSCoordinateString(getXmpTagString("Xmp.exif.GPSLatitude"), latitude) );
-        }
     }
     catch( Exiv2::Error& e )
     {
@@ -123,19 +123,22 @@ bool KExiv2::getGPSLatitudeNumber(double* latitude) const
     return false;
 }
 
-bool KExiv2::getGPSLongitudeNumber(double* longitude) const
+bool KExiv2::getGPSLongitudeNumber(double* const longitude) const
 {
     try
     {
-        double num, den, min, sec;
         *longitude=0.0;
 
-        // Get the reference from Exif first.
+        // Try XMP first. Reason: XMP in sidecar may be more up-to-date than EXIF in original image.
+        if ( convertFromGPSCoordinateString(getXmpTagString("Xmp.exif.GPSLongitude"), longitude) )
+            return true;
 
-        QByteArray lngRef = getExifTagData("Exif.GPSInfo.GPSLongitudeRef");
+        // Now try to get the reference from Exif.
+        const QByteArray lngRef = getExifTagData("Exif.GPSInfo.GPSLongitudeRef");
         if (!lngRef.isEmpty())
         {
             // Longitude decoding from Exif.
+            double num, den, min, sec;
 
             Exiv2::ExifKey exifKey2("Exif.GPSInfo.GPSLongitude");
             Exiv2::ExifData exifData(d->exifMetadata());
@@ -180,11 +183,6 @@ bool KExiv2::getGPSLongitudeNumber(double* longitude) const
 
             return true;
         }
-        else
-        {
-            // Try XMP now.
-            return ( convertFromGPSCoordinateString(getXmpTagString("Xmp.exif.GPSLongitude"), longitude) );
-        }
     }
     catch( Exiv2::Error& e )
     {
@@ -194,16 +192,35 @@ bool KExiv2::getGPSLongitudeNumber(double* longitude) const
     return false;
 }
 
-bool KExiv2::getGPSAltitude(double* altitude) const
+bool KExiv2::getGPSAltitude(double* const altitude) const
 {
     try
     {
         double num, den;
         *altitude=0.0;
 
-        // Get the reference from Exif first (above/below sea level)
+        // Try XMP first. Reason: XMP in sidecar may be more up-to-date than EXIF in original image.
+        const QString altRefXmp = getXmpTagString("Xmp.exif.GPSAltitudeRef");
+        if (!altRefXmp.isEmpty())
+        {
+            const QString altXmp = getXmpTagString("Xmp.exif.GPSAltitude");
+            if (!altXmp.isEmpty())
+            {
+                num = altXmp.section("/", 0, 0).toDouble();
+                den = altXmp.section("/", 1, 1).toDouble();
+                if (den == 0)
+                    return false;
+                *altitude = num/den;
 
-        QByteArray altRef = getExifTagData("Exif.GPSInfo.GPSAltitudeRef");
+                if (altRefXmp == QString("1"))
+                    *altitude *= -1.0;
+
+                return true;
+            }
+        }
+
+        // Get the reference from Exif (above/below sea level)
+        const QByteArray altRef = getExifTagData("Exif.GPSInfo.GPSAltitudeRef");
         if (!altRef.isEmpty())
         {
             // Altitude decoding from Exif.
@@ -229,28 +246,6 @@ bool KExiv2::getGPSAltitude(double* altitude) const
 
             return true;
         }
-        else
-        {
-            // Try XMP now.
-            QString altRefXmp = getExifTagData("Exif.GPSInfo.GPSAltitudeRef");
-            if (!altRefXmp.isEmpty())
-            {
-                QString altXmp = getXmpTagString("Xmp.exif.GPSAltitude");
-                if (!altXmp.isEmpty())
-                {
-                    num = altXmp.section("/", 0, 0).toDouble();
-                    den = altXmp.section("/", 1, 1).toDouble();
-                    if (den == 0)
-                        return false;
-                    *altitude = num/den;
-
-                    if (altRefXmp == QString("1"))
-                        *altitude *= -1.0;
-
-                    return true;
-                }
-            }
-        }
     }
     catch( Exiv2::Error& e )
     {
@@ -262,68 +257,20 @@ bool KExiv2::getGPSAltitude(double* altitude) const
 
 QString KExiv2::getGPSLatitudeString() const
 {
-    try
-    {
-        // Get the reference first.
+    double latitude;
+    if (!getGPSLatitudeNumber(&latitude))
+        return QString();
 
-        QByteArray latRef = getExifTagData("Exif.GPSInfo.GPSLatitudeRef");
-        if (latRef.isEmpty())
-            return QString();
-
-        // Latitude decoding.
-
-        Exiv2::ExifKey exifKey("Exif.GPSInfo.GPSLatitude");
-        Exiv2::ExifData exifData(d->exifMetadata());
-        Exiv2::ExifData::iterator it = exifData.findKey(exifKey);
-        if (it != exifData.end() && (*it).count() == 3)
-        {
-            return convertToGPSCoordinateString((*it).toRational(0).first, (*it).toRational(0).second,
-                                                (*it).toRational(1).first, (*it).toRational(1).second,
-                                                (*it).toRational(2).first, (*it).toRational(2).second,
-                                                latRef[0]);
-        }
-        else
-            return QString();
-    }
-    catch( Exiv2::Error& e )
-    {
-        d->printExiv2ExceptionError("Cannot get Exif GPS tag using Exiv2 ", e);
-    }
-
-    return QString();
+    return convertToGPSCoordinateString(true, latitude);
 }
 
 QString KExiv2::getGPSLongitudeString() const
 {
-    try
-    {
-        // Get the reference first.
+    double longitude;
+    if (!getGPSLongitudeNumber(&longitude))
+        return QString();
 
-        QByteArray latRef = getExifTagData("Exif.GPSInfo.GPSLongitudeRef");
-        if (latRef.isEmpty())
-            return QString();
-
-        // Latitude decoding.
-
-        Exiv2::ExifKey exifKey("Exif.GPSInfo.GPSLongitude");
-        Exiv2::ExifData exifData(d->exifMetadata());
-        Exiv2::ExifData::iterator it = exifData.findKey(exifKey);
-        if (it != exifData.end() && (*it).count() == 3)
-        {
-            return convertToGPSCoordinateString((*it).toRational(0).first, (*it).toRational(0).second,
-                                                (*it).toRational(1).first, (*it).toRational(1).second,
-                                                (*it).toRational(2).first, (*it).toRational(2).second,
-                                                latRef[0]);
-        }
-        else
-            return QString();
-    }
-    catch( Exiv2::Error& e )
-    {
-        d->printExiv2ExceptionError("Cannot get Exif GPS tag using Exiv2 ", e);
-    }
-
-    return QString();
+    return convertToGPSCoordinateString(false, longitude);
 }
 
 bool KExiv2::initializeGPSInfo(const bool setProgramName)
@@ -404,22 +351,14 @@ bool KExiv2::setGPSInfo(const double* const altitude, const double latitude, con
 #endif // _XMP_SUPPORT_
         }
 
-        // LATTITUDE
-        // Latitude reference: "N" or "S".
-        if (latitude < 0)
-        {
-            // Less than Zero: ie, minus: means
-            // Southern hemisphere. Where I live.
-            d->exifMetadata()["Exif.GPSInfo.GPSLatitudeRef"] = "S";
-        }
-        else
-        {
-            // More than Zero: ie, plus: means
-            // Northern hemisphere.
-            d->exifMetadata()["Exif.GPSInfo.GPSLatitudeRef"] = "N";
-        }
+        // LATITUDE
+        // Latitude reference:
+        // latitude < 0 : "S"
+        // latitude > 0 : "N"
+        //
+        d->exifMetadata()["Exif.GPSInfo.GPSLatitudeRef"] = (latitude < 0 ) ? "S" : "N";
 
-        // Now the actual lattitude itself.
+        // Now the actual latitude itself.
         // This is done as three rationals.
         // I choose to do it as:
         //   dd/1 - degrees.
@@ -440,24 +379,19 @@ bool KExiv2::setGPSInfo(const double* const altitude, const double latitude, con
         d->exifMetadata()["Exif.GPSInfo.GPSLatitude"] = scratchBuf;
 
 #ifdef _XMP_SUPPORT_
+        /** @todo The XMP spec does not mention Xmp.exif.GPSLatitudeRef,
+         * because the reference is included in Xmp.exif.GPSLatitude.
+         * Is there a historic reason for writing it anyway?
+         */
         setXmpTagString("Xmp.exif.GPSLatitudeRef", (latitude < 0) ? QString("S") : QString("N"), false);
         setXmpTagString("Xmp.exif.GPSLatitude", convertToGPSCoordinateString(true, latitude), false);
 #endif // _XMP_SUPPORT_
 
         // LONGITUDE
-        // Longitude reference: "E" or "W".
-        if (longitude < 0)
-        {
-            // Less than Zero: ie, minus: means
-            // Western hemisphere.
-            d->exifMetadata()["Exif.GPSInfo.GPSLongitudeRef"] = "W";
-        }
-        else
-        {
-            // More than Zero: ie, plus: means
-            // Eastern hemisphere. Where I live.
-            d->exifMetadata()["Exif.GPSInfo.GPSLongitudeRef"] = "E";
-        }
+        // Longitude reference:
+        // longitude < 0 : "W"
+        // longitude > 0 : "E"
+        d->exifMetadata()["Exif.GPSInfo.GPSLongitudeRef"] = (longitude < 0 ) ? "W" : "E";
 
         // Now the actual longitude itself.
         // This is done as three rationals.
@@ -480,6 +414,10 @@ bool KExiv2::setGPSInfo(const double* const altitude, const double latitude, con
         d->exifMetadata()["Exif.GPSInfo.GPSLongitude"] = scratchBuf;
 
 #ifdef _XMP_SUPPORT_
+        /** @todo The XMP spec does not mention Xmp.exif.GPSLongitudeRef,
+         * because the reference is included in Xmp.exif.GPSLongitude.
+         * Is there a historic reason for writing it anyway?
+         */
         setXmpTagString("Xmp.exif.GPSLongitudeRef", (longitude < 0) ? QString("W") : QString("E"), false);
         setXmpTagString("Xmp.exif.GPSLongitude", convertToGPSCoordinateString(false, longitude), false);
 #endif // _XMP_SUPPORT_
@@ -494,92 +432,18 @@ bool KExiv2::setGPSInfo(const double* const altitude, const double latitude, con
     return false;
 }
 
-bool KExiv2::setGPSInfo(double altitude, const QString& latitude, const QString& longitude, bool setProgramName)
+bool KExiv2::setGPSInfo(const double altitude, const QString& latitude, const QString& longitude, const bool setProgramName)
 {
-    if (!setProgramId(setProgramName))
+    double longitudeValue, latitudeValue;
+    if (!convertFromGPSCoordinateString(latitude, &latitudeValue))
+        return false;
+    if (!convertFromGPSCoordinateString(longitude, &longitudeValue))
         return false;
 
-    try
-    {
-        // In first, we need to clean up all existing GPS info.
-        removeGPSInfo();
-
-        // now re-initialize the GPS info:
-        if (!initializeGPSInfo(setProgramName))
-            return false;
-
-        char scratchBuf[100];
-        long int numDegrees, denomDegrees, numMinutes, denomMinutes, numSeconds, denomSeconds;
-        char directionReference;
-
-        // Now start adding data.
-
-        // ALTITUDE.
-        // Altitude reference: byte "00" meaning "above sea level", "01" mening "behing sea level".
-        Exiv2::Value::AutoPtr value = Exiv2::Value::create(Exiv2::unsignedByte);
-        if (altitude >= 0) value->read("0");
-        else               value->read("1");
-        d->exifMetadata().add(Exiv2::ExifKey("Exif.GPSInfo.GPSAltitudeRef"), value.get());
-
-        // And the actual altitude, as absolute value..
-        long num, denom;
-        convertToRational(fabs(altitude), &num, &denom, 4);
-        snprintf(scratchBuf, 100, "%ld/%ld", num, denom);
-        d->exifMetadata()["Exif.GPSInfo.GPSAltitude"] = scratchBuf;
-
-#ifdef _XMP_SUPPORT_
-        setXmpTagString("Xmp.exif.GPSAltitudeRef", (altitude >= 0) ? QString("0") : QString("1"), false);
-        setXmpTagString("Xmp.exif.GPSAltitude", QString(scratchBuf), false);
-#endif // _XMP_SUPPORT_
-
-        // LATITUDE
-        // Latitude reference: "N" or "S".
-        convertFromGPSCoordinateString(latitude,
-                                       &numDegrees, &denomDegrees,
-                                       &numMinutes, &denomMinutes,
-                                       &numSeconds, &denomSeconds,
-                                       &directionReference);
-
-        d->exifMetadata()["Exif.GPSInfo.GPSLatitudeRef"] = directionReference;
-        snprintf(scratchBuf, 100, "%ld/%ld %ld/%ld %ld/%ld", numDegrees, denomDegrees,
-                                                             numMinutes, denomMinutes,
-                                                             numSeconds, denomSeconds);
-        d->exifMetadata()["Exif.GPSInfo.GPSLatitude"] = scratchBuf;
-
-#ifdef _XMP_SUPPORT_
-        setXmpTagString("Xmp.exif.GPSLatitudeRef", QString(directionReference), false);
-        setXmpTagString("Xmp.exif.GPSLatitude", latitude, false);
-#endif // _XMP_SUPPORT_
-
-        // LONGITUDE
-        convertFromGPSCoordinateString(longitude,
-                                       &numDegrees, &denomDegrees,
-                                       &numMinutes, &denomMinutes,
-                                       &numSeconds, &denomSeconds,
-                                       &directionReference);
-
-        d->exifMetadata()["Exif.GPSInfo.GPSLongitudeRef"] = directionReference;
-        snprintf(scratchBuf, 100, "%ld/%ld %ld/%ld %ld/%ld", numDegrees, denomDegrees,
-                                                             numMinutes, denomMinutes,
-                                                             numSeconds, denomSeconds);
-        d->exifMetadata()["Exif.GPSInfo.GPSLongitude"] = scratchBuf;
-
-#ifdef _XMP_SUPPORT_
-        setXmpTagString("Xmp.exif.GPSLongitudeRef", QString(directionReference), false);
-        setXmpTagString("Xmp.exif.GPSLongitude", longitude, false);
-#endif // _XMP_SUPPORT_
-
-        return true;
-    }
-    catch( Exiv2::Error& e )
-    {
-        d->printExiv2ExceptionError("Cannot set Exif GPS tag using Exiv2 ", e);
-    }
-
-    return false;
+    return setGPSInfo(&altitude, latitudeValue, longitudeValue, setProgramName);
 }
 
-bool KExiv2::removeGPSInfo(bool setProgramName)
+bool KExiv2::removeGPSInfo(const bool setProgramName)
 {
     if (!setProgramId(setProgramName))
         return false;
@@ -606,6 +470,12 @@ bool KExiv2::removeGPSInfo(bool setProgramName)
         }
 
 #ifdef _XMP_SUPPORT_
+        /** @todo The XMP spec does not mention Xmp.exif.GPSLongitudeRef,
+         * and Xmp.exif.GPSLatitudeRef. But because we write them in setGPSInfo(),
+         * we should also remove them here.
+         */
+        removeXmpTag("Xmp.exif.GPSLatitudeRef", false);
+        removeXmpTag("Xmp.exif.GPSLongitudeRef", false);
         removeXmpTag("Xmp.exif.GPSVersionID", false);
         removeXmpTag("Xmp.exif.GPSLatitude", false);
         removeXmpTag("Xmp.exif.GPSLongitude", false);
@@ -644,8 +514,8 @@ bool KExiv2::removeGPSInfo(bool setProgramName)
     return false;
 }
 
-void KExiv2::convertToRational(double number, long int* numerator, 
-                               long int* denominator, int rounding)
+void KExiv2::convertToRational(const double number, long int* const numerator, 
+                               long int* const denominator, const int rounding)
 {
     // This function converts the given decimal number
     // to a rational (fractional) number.
@@ -704,7 +574,7 @@ void KExiv2::convertToRational(double number, long int* numerator,
     *denominator = (int)denTemp;
 }
 
-void KExiv2::convertToRationalSmallDenominator(double number, long int* numerator, long int* denominator)
+void KExiv2::convertToRationalSmallDenominator(const double number, long int* const numerator, long int* const denominator)
 {
     // This function converts the given decimal number
     // to a rational (fractional) number.
@@ -769,10 +639,10 @@ void KExiv2::convertToRationalSmallDenominator(double number, long int* numerato
     }
 }
 
-QString KExiv2::convertToGPSCoordinateString(long int numeratorDegrees, long int denominatorDegrees,
-                                             long int numeratorMinutes, long int denominatorMinutes,
-                                             long int numeratorSeconds, long int denominatorSeconds,
-                                             char directionReference)
+QString KExiv2::convertToGPSCoordinateString(const long int numeratorDegrees, const long int denominatorDegrees,
+                                             const long int numeratorMinutes, const long int denominatorMinutes,
+                                             const long int numeratorSeconds, long int denominatorSeconds,
+                                             const char directionReference)
 {
     /**
      * Precision:
@@ -833,7 +703,7 @@ QString KExiv2::convertToGPSCoordinateString(long int numeratorDegrees, long int
     return coordinate;
 }
 
-QString KExiv2::convertToGPSCoordinateString(bool isLatitude, double coordinate)
+QString KExiv2::convertToGPSCoordinateString(const bool isLatitude, double coordinate)
 {
     if (coordinate < -360.0 || coordinate > 360.0)
         return QString();
@@ -874,10 +744,10 @@ QString KExiv2::convertToGPSCoordinateString(bool isLatitude, double coordinate)
 }
 
 bool KExiv2::convertFromGPSCoordinateString(const QString& gpsString,
-                                            long int* numeratorDegrees, long int* denominatorDegrees,
-                                            long int* numeratorMinutes, long int* denominatorMinutes,
-                                            long int* numeratorSeconds, long int* denominatorSeconds,
-                                            char* directionReference)
+                                            long int* const numeratorDegrees, long int* const denominatorDegrees,
+                                            long int* const numeratorMinutes, long int* const denominatorMinutes,
+                                            long int* const numeratorSeconds, long int* const denominatorSeconds,
+                                            char* const directionReference)
 {
     if (gpsString.isEmpty())
         return false;
@@ -918,7 +788,7 @@ bool KExiv2::convertFromGPSCoordinateString(const QString& gpsString,
         return false;
 }
 
-bool KExiv2::convertFromGPSCoordinateString(const QString& gpsString, double* degrees)
+bool KExiv2::convertFromGPSCoordinateString(const QString& gpsString, double* const degrees)
 {
     if (gpsString.isEmpty())
         return false;
@@ -956,7 +826,8 @@ bool KExiv2::convertFromGPSCoordinateString(const QString& gpsString, double* de
 }
 
 bool KExiv2::convertToUserPresentableNumbers(const QString& gpsString,
-                                             int* degrees, int* minutes, double* seconds, char* directionReference)
+                                             int* const degrees, int* const minutes,
+                                             double* const seconds, char* const directionReference)
 {
     if (gpsString.isEmpty())
         return false;
@@ -989,8 +860,9 @@ bool KExiv2::convertToUserPresentableNumbers(const QString& gpsString,
     }
 }
 
-void KExiv2::convertToUserPresentableNumbers(bool isLatitude, double coordinate,
-                                             int* degrees, int* minutes, double* seconds, char* directionReference)
+void KExiv2::convertToUserPresentableNumbers(const bool isLatitude, double coordinate,
+                                             int* const degrees, int* const minutes,
+                                             double* const seconds, char* const directionReference)
 {
     if (isLatitude)
     {
