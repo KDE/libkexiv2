@@ -441,7 +441,7 @@ QString KExiv2::getMimeType() const
     return d->mimeType;
 }
 
-void KExiv2::setWriteRawFiles(bool on)
+void KExiv2::setWriteRawFiles(const bool on)
 {
     d->writeRawFiles = on;
 }
@@ -451,7 +451,7 @@ bool KExiv2::writeRawFiles() const
     return d->writeRawFiles;
 }
 
-void KExiv2::setUseXMPSidecar4Reading(bool on)
+void KExiv2::setUseXMPSidecar4Reading(const bool on)
 {
     d->useXMPSidecar4Reading = on;
 }
@@ -461,7 +461,7 @@ bool KExiv2::useXMPSidecar4Reading() const
     return d->useXMPSidecar4Reading;
 }
 
-void KExiv2::setMetadataWritingMode(int mode)
+void KExiv2::setMetadataWritingMode(const int mode)
 {
     d->metadataWritingMode = mode;
 }

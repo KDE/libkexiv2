@@ -200,7 +200,9 @@ public:
     bool                                           updateFileTimeStamp;
 
     bool                                           useXMPSidecar4Reading;
-    int                                            metadataWritingMode;         // A mode from KExiv2::MetadataWritingMode enum.
+
+    /// A mode from #MetadataWritingMode enum.
+    int                                            metadataWritingMode;         
 
     QString                                        filePath;
     QSize                                          pixelSize;

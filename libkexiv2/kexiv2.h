@@ -59,14 +59,15 @@ class KEXIV2_EXPORT KExiv2
 
 public:
 
-    /** The image metadata writing mode, between image file metadata and XMP sidecar file, depending of the context.
+    /** The image metadata writing mode, between image file metadata and XMP sidecar file, depending on the context.
+     * @sa MetadataWritingMode(), metadataWritingMode()
      */
     enum MetadataWritingMode
     {
         WRITETOIMAGEONLY                 = 0,    /// Write metadata to image file only.
         WRITETOSIDECARONLY               = 1,    /// Write metadata to sidecar file only.
         WRITETOSIDECARANDIMAGE           = 2,    /// Write metadata to image and sidecar files.
-        WRITETOSIDECARONLY4READONLYFILES = 3     /// Write metadata to sidecar file only for read only image as RAW files for ex.
+        WRITETOSIDECARONLY4READONLYFILES = 3     /// Write metadata to sidecar file only for read only image such as RAW files for example.
     };
 
     /** The image color workspace values given by Exif metadata.
@@ -121,7 +122,7 @@ public:
      */
     KExiv2(const KExiv2& metadata);
 
-    /** Constructor to load from parsed data
+    /** Constructor to load from parsed data.
      */
     KExiv2(const KExiv2Data& data);
 
@@ -143,16 +144,16 @@ public:
     /// @name Static methods
     //@{
 
-    /** Return true if Exiv2 library initialization is done properlly.
-        This method must be call before to use multithreading with libkexiv2.
+    /** Return true if Exiv2 library initialization is done properly.
+        This method must be called before using libkexiv2 with multithreading.
         It initialize several non re-entrancy code from Adobe XMP SDK
-        See B.K.O #166424 for details.
+        See B.K.O #166424 for details. Call cleanupExiv2() to clean things up later.
      */
     static bool initializeExiv2();
 
-    /** Return true if Exiv2 library memory allocations are cleaned properlly.
-        This method must be call after to use multithreading with libkexiv2.
-        It cleanup memory used by Adobe XMP SDK
+    /** Return true if Exiv2 library memory allocations are cleaned properly.
+        This method must be called after using libkexiv2 with multithreading.
+        It cleans up memory used by Adobe XMP SDK
         See B.K.O #166424 for details.
      */
     static bool cleanupExiv2();
@@ -227,14 +228,14 @@ public:
     QSize getPixelSize() const;
 
     /** Returns the mime type of this image. The information is read from the file;
-     *  see the docs for pixelSize() to know when it is available.
+     *  see the docs for getPixelSize() to know when it is available.
      */
     QString getMimeType() const;
 
     /** Enable or disable writing metadata operations to RAW tiff based files.
-        It's require Exiv2 0.18. By default RAW files are untouched.
+        It requires Exiv2 0.18. By default RAW files are untouched.
      */
-    void setWriteRawFiles(bool on);
+    void setWriteRawFiles(const bool on);
 
     /** Return true if writing metadata operations on RAW tiff based files is enabled.
         It's require Exiv2 0.18.
@@ -243,17 +244,21 @@ public:
 
     /** Enable or disable using XMP sidecar for reading metadata
      */
-    void setUseXMPSidecar4Reading(bool on);
+    void setUseXMPSidecar4Reading(const bool on);
 
     /** Return true if using XMP sidecar for reading metadata is enabled.
      */
     bool useXMPSidecar4Reading() const;
 
-    /** Set writing metadata mode.
+    /** Set metadata writing mode.
+     * @param mode Metadata writing mode as defined by the #MetadataWritingMode enum.
+     * @sa MetadataWritingMode, metadataWritingMode()
      */
-    void setMetadataWritingMode(int mode);
+    void setMetadataWritingMode(const int mode);
 
-    /** Return mode to write metadata.
+    /** Return the metadata writing mode.
+     * @returns Metadata writing mode as defined by the #MetadataWritingMode enum.
+     * @sa MetadataWritingMode, setMetadataWritingMode()
      */
     int metadataWritingMode() const;
 
