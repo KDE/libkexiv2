@@ -512,7 +512,7 @@ public:
     QVariant getExifTagVariant(const char* exifTagName, bool rationalAsListOfInts=true, bool escapeCR=true, int component=0) const;
 
     /** Set an Exif tag content using a QVariant. Returns true if tag is set successfully.
-        All types described for the above method are supported.
+        All types described for the getExifTagVariant() method are supported.
         Calling with a QVariant of type ByteArray is equivalent to calling setExifTagData.
         For the meaning of rationalWantSmallDenominator, see the documentation of the convertToRational methods.
         Setting a value with multiple components is currently not supported.
