@@ -384,11 +384,11 @@ KExiv2::ImageColorWorkSpace KExiv2::getImageColorWorkSpace() const
     long exifColorSpace = -1;
     if (!getExifTagLong("Exif.Photo.ColorSpace", exifColorSpace))
     {
-        #ifdef _XMP_SUPPORT_
+#ifdef _XMP_SUPPORT_
         QVariant var = getXmpTagVariant("Xmp.exif.ColorSpace");
         if (!var.isNull())
             exifColorSpace = var.toInt();
-        #endif // _XMP_SUPPORT_
+#endif // _XMP_SUPPORT_
     }
 
     if (exifColorSpace == 1)
