@@ -281,7 +281,18 @@ bool KExiv2::loadFromData(const QByteArray& imgData) const
 bool KExiv2::load(const QString& filePath) const
 {
     if (filePath.isEmpty())
+    {
         return false;
+    }
+
+    // ensure that symlinks are used correctly
+    QString fileName = filePath;
+    QFileInfo info(fileName);
+    if (info.isSymLink()) {
+        kDebug() << "filePath" << filePath << "is a symlink."
+                 << "Using target" << info.symLinkTarget();
+        fileName = info.symLinkTarget();
+    }
 
     try
     {
@@ -290,9 +301,9 @@ bool KExiv2::load(const QString& filePath) const
         // If XMP sidecar exist and if we want manage it, parse it instead the image.
         if (d->useXMPSidecar4Reading)
         {
-            QString xmpSidecarPath(filePath);
+            QString xmpSidecarPath(fileName);
             xmpSidecarPath.replace(QRegExp("[^\\.]+$"), "xmp");
-            kDebug() << "File path" << filePath;
+            kDebug() << "File path" << fileName;
             kDebug() << "XMP sidecar path" << xmpSidecarPath;
             QFileInfo xmpSidecarFileInfo(xmpSidecarPath);
 
@@ -308,16 +319,15 @@ bool KExiv2::load(const QString& filePath) const
         // No XMP sidecar file managed. We load image file metadata instead.
         if (!image.get())
         {
-            QFileInfo finfo(filePath);
-            if (!finfo.isReadable())
+            if (!info.isReadable())
             {
-                kDebug() << "File '" << finfo.fileName().toAscii().constData() << "' is not readable.";
+                kDebug() << "File '" << info.fileName().toAscii().constData() << "' is not readable.";
                 return false;
             }
-            image = Exiv2::ImageFactory::open((const char*)(QFile::encodeName(filePath)));
+            image = Exiv2::ImageFactory::open((const char*)(QFile::encodeName(fileName)));
         }
 
-        d->filePath = filePath;
+        d->filePath = fileName;
         image->readMetadata();
 
         // Size and mimetype ---------------------------------
