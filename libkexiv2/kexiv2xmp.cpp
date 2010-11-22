@@ -343,7 +343,7 @@ bool KExiv2::setXmpTagString(const char* xmpTagName, const QString& value, bool 
         Exiv2::Value::AutoPtr xmpTxtVal = Exiv2::Value::create(Exiv2::xmpText);
         xmpTxtVal->read(txt);
 
-        d->xmpMetadata().add(Exiv2::XmpKey(xmpTagName), xmpTxtVal.get());
+        d->xmpMetadata()[xmpTagName].setValue(xmpTxtVal.get());
         return true;
     }
     catch( Exiv2::Error& e )
