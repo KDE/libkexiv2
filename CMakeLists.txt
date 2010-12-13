@@ -106,3 +106,8 @@ IF (EXIV2_FOUND)
     INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/libkexiv2.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig )
   ENDIF(NOT WIN32)
 ENDIF (EXIV2_FOUND)
+
+# Install find cmake script to the system for client applications.
+
+INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/FindKexiv2.cmake
+        DESTINATION ${DATA_INSTALL_DIR}/cmake/modules)
