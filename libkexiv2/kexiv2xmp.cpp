@@ -632,8 +632,8 @@ bool KExiv2::setXmpTagStringSeq(const char* xmpTagName, const QStringList& seq,
                 xmpTxtSeq->read(txt);
             }
             d->xmpMetadata()[xmpTagName].setValue(xmpTxtSeq.get());
-            return true;
         }
+        return true;
     }
     catch( Exiv2::Error& e )
     {
@@ -723,8 +723,8 @@ bool KExiv2::setXmpTagStringBag(const char* xmpTagName, const QStringList& bag,
                 xmpTxtBag->read(txt);
             }
             d->xmpMetadata()[xmpTagName].setValue(xmpTxtBag.get());
-            return true;
         }
+        return true;
     }
     catch( Exiv2::Error& e )
     {
