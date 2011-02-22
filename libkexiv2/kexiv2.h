@@ -475,6 +475,10 @@ public:
     /** Get an Exif tag content like a long value. Return true if Exif tag be found.
      */
     bool getExifTagLong(const char* exifTagName, long &val) const;
+    
+    /** Get an Exif tag content like a long value. Return true if Exif tag be found.
+     */
+    bool getExifTagLong(const char* exifTagName, long &val, int component) const;
 
     /** Set an Exif tag content using a long value. Return true if tag is set successfully.
      */

@@ -584,6 +584,11 @@ QString KExiv2::createExifUserStringFromValue(const char* exifTagName, const QVa
 
 bool KExiv2::getExifTagLong(const char* exifTagName, long& val) const
 {
+    return getExifTagLong(exifTagName, val, 0);
+}
+
+bool KExiv2::getExifTagLong(const char* exifTagName, long& val, int component) const
+{
     try
     {
         Exiv2::ExifKey exifKey(exifTagName);
@@ -591,7 +596,7 @@ bool KExiv2::getExifTagLong(const char* exifTagName, long& val) const
         Exiv2::ExifData::iterator it = exifData.findKey(exifKey);
         if (it != exifData.end() && it->count() > 0)
         {
-            val = it->toLong();
+            val = it->toLong(component);
             return true;
         }
     }
