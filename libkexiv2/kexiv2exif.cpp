@@ -25,14 +25,12 @@
  *
  * ============================================================ */
 
+#include "kexiv2.h"
+#include "kexiv2_p.h"
+
 // KDE includes
 
 #include <klocale.h>
-
-// Local includes.
-
-#include "kexiv2_p.h"
-#include "kexiv2.h"
 
 namespace KExiv2Iface
 {

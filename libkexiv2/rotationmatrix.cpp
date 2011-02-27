@@ -25,17 +25,15 @@
  *
  * ============================================================ */
 
+#include "rotationmatrix.h"
+
 // KDE includes
 
 #include <kdebug.h>
 
-// LibKExiv2 includes
+// local includes
 
 #include "version.h"
-
-// Local includes
-
-#include "rotationmatrix.h"
 
 namespace KExiv2Iface
 {

@@ -27,17 +27,15 @@
  *
  * ============================================================ */
 
+#include "kexiv2.h"
+#include "kexiv2_p.h"
+
 // C++ includes.
 
 #include <climits>
 #include <cmath>
 
 #include <math.h>
-
-// Local includes.
-
-#include "kexiv2_p.h"
-#include "kexiv2.h"
 
 namespace KExiv2Iface
 {
