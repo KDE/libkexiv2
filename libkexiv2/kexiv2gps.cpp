@@ -206,8 +206,8 @@ bool KExiv2::getGPSAltitude(double* const altitude) const
             const QString altXmp = getXmpTagString("Xmp.exif.GPSAltitude");
             if (!altXmp.isEmpty())
             {
-                num = altXmp.section("/", 0, 0).toDouble();
-                den = altXmp.section("/", 1, 1).toDouble();
+                num = altXmp.section('/', 0, 0).toDouble();
+                den = altXmp.section('/', 1, 1).toDouble();
                 if (den == 0)
                     return false;
                 *altitude = num/den;
@@ -457,7 +457,7 @@ bool KExiv2::removeGPSInfo(const bool setProgramName)
         {
             QString key = QString::fromLocal8Bit(it->key().c_str());
 
-            if (key.section(".", 1, 1) == QString("GPSInfo"))
+            if (key.section('.', 1, 1) == QString("GPSInfo"))
                 gpsTagsKeys.append(key);
         }
 
