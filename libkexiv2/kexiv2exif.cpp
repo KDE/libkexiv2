@@ -901,7 +901,7 @@ bool KExiv2::setTiffThumbnail(const QImage& thumbImage, bool setProgramName) con
     try
     {
 #if (EXIV2_TEST_VERSION(0,17,91))
-        // Make sure IFD0 is explicitely marked as a main image
+        // Make sure IFD0 is explicitly marked as a main image
         Exiv2::ExifData::const_iterator pos = d->exifMetadata().findKey(Exiv2::ExifKey("Exif.Image.NewSubfileType"));
         if (pos == d->exifMetadata().end() || pos->count() != 1 || pos->toLong() != 0) {
             throw Exiv2::Error(1, "Exif.Image.NewSubfileType missing or not set as main image");

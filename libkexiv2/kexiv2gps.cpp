@@ -608,7 +608,7 @@ void KExiv2::convertToRationalSmallDenominator(const double number, long int* co
     }
 
     criterion = 2 * value * DBL_EPSILON;
-    for (leasterr = value, num = 1; num < lastnum; num++)
+    for (leasterr = value, num = 1; num < lastnum; ++num)
     {
         approx = (int)(num / value + 0.5);
         error  = fabs((double)num / approx - value);
