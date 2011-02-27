@@ -192,12 +192,12 @@ KExiv2::MetaDataMap KExiv2::getExifTagsDataList(const QStringList &exifKeysFilte
 
             if (!invertSelection)
             {
-                if (exifKeysFilter.contains(key.section(".", 1, 1)))
+                if (exifKeysFilter.contains(key.section('.', 1, 1)))
                     metaDataMap.insert(key, tagValue);
             }
             else
             {
-                if (!exifKeysFilter.contains(key.section(".", 1, 1)))
+                if (!exifKeysFilter.contains(key.section('.', 1, 1)))
                     metaDataMap.insert(key, tagValue);
             }
         }

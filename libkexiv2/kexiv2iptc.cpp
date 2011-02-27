@@ -175,7 +175,7 @@ KExiv2::MetaDataMap KExiv2::getIptcTagsDataList(const QStringList& iptcKeysFilte
 
             if (!invertSelection)
             {
-                if (iptcKeysFilter.contains(key.section(".", 1, 1)))
+                if (iptcKeysFilter.contains(key.section('.', 1, 1)))
                 {
                     if (it == metaDataMap.end())
                         metaDataMap.insert(key, value);
@@ -190,7 +190,7 @@ KExiv2::MetaDataMap KExiv2::getIptcTagsDataList(const QStringList& iptcKeysFilte
             }
             else
             {
-                if (!iptcKeysFilter.contains(key.section(".", 1, 1)))
+                if (!iptcKeysFilter.contains(key.section('.', 1, 1)))
                 {
                     if (it == metaDataMap.end())
                         metaDataMap.insert(key, value);

@@ -199,7 +199,7 @@ KExiv2::MetaDataMap KExiv2::getXmpTagsDataList(const QStringList& xmpKeysFilter,
 
             if (!invertSelection)
             {
-                if (xmpKeysFilter.contains(key.section(".", 1, 1)))
+                if (xmpKeysFilter.contains(key.section('.', 1, 1)))
                 {
                     if (it == metaDataMap.end())
                         metaDataMap.insert(key, value);
@@ -214,7 +214,7 @@ KExiv2::MetaDataMap KExiv2::getXmpTagsDataList(const QStringList& xmpKeysFilter,
             }
             else
             {
-                if (!xmpKeysFilter.contains(key.section(".", 1, 1)))
+                if (!xmpKeysFilter.contains(key.section('.', 1, 1)))
                 {
                     if (it == metaDataMap.end())
                         metaDataMap.insert(key, value);
@@ -905,7 +905,7 @@ bool KExiv2::registerXmpNameSpace(const QString& uri, const QString& prefix)
     try
     {
         QString ns = uri;
-        if (!uri.endsWith("/")) ns.append("/");
+        if (!uri.endsWith('/')) ns.append('/');
         Exiv2::XmpProperties::registerNs(ns.toAscii().constData(), prefix.toAscii().constData());
         return true;
     }
@@ -931,7 +931,7 @@ bool KExiv2::unregisterXmpNameSpace(const QString& uri)
     try
     {
         QString ns = uri;
-        if (!uri.endsWith("/")) ns.append("/");
+        if (!uri.endsWith('/')) ns.append('/');
         Exiv2::XmpProperties::unregisterNs(ns.toAscii().constData());
         return true;
     }
