@@ -93,7 +93,7 @@ QString KExiv2::detectLanguageAlt(const QString& value, QString& lang)
         }
     }
 
-    lang = QString();
+    lang.clear();
     return value;
 }
 
