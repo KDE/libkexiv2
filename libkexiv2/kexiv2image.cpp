@@ -25,10 +25,11 @@
  *
  * ============================================================ */
 
+#include "kexiv2.h"
+#include "kexiv2_p.h"
+
 // Local includes.
 
-#include "kexiv2_p.h"
-#include "kexiv2.h"
 #include "rotationmatrix.h"
 
 namespace KExiv2Iface

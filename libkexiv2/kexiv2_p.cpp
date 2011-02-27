@@ -25,6 +25,8 @@
  *
  * ============================================================ */
 
+#include "kexiv2_p.h"
+
 // C ANSI includes.
 
 extern "C"
@@ -32,10 +34,6 @@ extern "C"
 #include <sys/stat.h>
 #include <utime.h>
 }
-
-// Local includes.
-
-#include "kexiv2_p.h"
 
 namespace KExiv2Iface
 {

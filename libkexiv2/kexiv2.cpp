@@ -25,11 +25,13 @@
  *
  * ============================================================ */
 
+#include "kexiv2.h"
+#include "kexiv2_p.h"
+
 // Local includes.
 
 #include "version.h"
-#include "kexiv2_p.h"
-#include "kexiv2.h"
+
 
 namespace KExiv2Iface
 {
