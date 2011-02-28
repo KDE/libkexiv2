@@ -188,7 +188,7 @@ KExiv2::MetaDataMap KExiv2::getXmpTagsDataList(const QStringList& xmpKeysFilter,
             }
 
             // To make a string just on one line.
-            value.replace("\n", " ");
+            value.replace('\n', ' ');
 
             // Some XMP key are redondancy. check if already one exist...
             MetaDataMap::iterator it = metaDataMap.find(key);
@@ -307,7 +307,7 @@ QString KExiv2::getXmpTagString(const char* xmpTagName, bool escapeCR) const
             QString tagValue = QString::fromUtf8(os.str().c_str());
 
             if (escapeCR)
-                tagValue.replace("\n", " ");
+                tagValue.replace('\n', ' ');
 
             return tagValue;
         }
@@ -380,7 +380,7 @@ KExiv2::AltLangMap KExiv2::getXmpTagStringListLangAlt(const char* xmpTagName, bo
                     QString lang = QString::fromUtf8(it2->first.c_str());
                     QString text = QString::fromUtf8(it2->second.c_str());
                     if (escapeCR)
-                        text.replace("\n", " ");
+                        text.replace('\n', ' ');
 
                     map.insert(lang, text);
                 }
@@ -474,7 +474,7 @@ QString KExiv2::getXmpTagStringLangAlt(const char* xmpTagName, const QString& la
                     if (langAlt == lang)
                     {
                         if (escapeCR)
-                            tagValue.replace("\n", " ");
+                            tagValue.replace('\n', ' ');
 
                         return tagValue;
                     }
@@ -579,7 +579,7 @@ QStringList KExiv2::getXmpTagStringSeq(const char* xmpTagName, bool escapeCR) co
                     QString seqValue = QString::fromUtf8(os.str().c_str());
 
                     if (escapeCR)
-                        seqValue.replace("\n", " ");
+                        seqValue.replace('\n', ' ');
 
                     seq.append(seqValue);
                 }
@@ -671,7 +671,7 @@ QStringList KExiv2::getXmpTagStringBag(const char* xmpTagName, bool escapeCR) co
                     QString bagValue = QString::fromUtf8(os.str().c_str());
 
                     if (escapeCR)
-                        bagValue.replace("\n", " ");
+                        bagValue.replace('\n', ' ');
 
                     bag.append(bagValue);
                 }
@@ -835,7 +835,7 @@ QVariant KExiv2::getXmpTagVariant(const char* xmpTagName, bool rationalAsListOfI
                     QString tagValue = QString::fromLocal8Bit(os.str().c_str());
 
                     if (stringEscapeCR)
-                        tagValue.replace("\n", " ");
+                        tagValue.replace('\n', ' ');
 
                     return QVariant(tagValue);
                 }
@@ -846,7 +846,7 @@ QVariant KExiv2::getXmpTagVariant(const char* xmpTagName, bool rationalAsListOfI
                     QString tagValue = QString::fromUtf8(os.str().c_str());
 
                     if (stringEscapeCR)
-                        tagValue.replace("\n", " ");
+                        tagValue.replace('\n', ' ');
 
                     return tagValue;
                 }

@@ -164,7 +164,7 @@ KExiv2::MetaDataMap KExiv2::getIptcTagsDataList(const QStringList& iptcKeysFilte
             os << *md;
             QString value = QString(os.str().c_str());
             // To make a string just on one line.
-            value.replace("\n", " ");
+            value.replace('\n', ' ');
 
             // Some Iptc key are redondancy. check if already one exist...
             MetaDataMap::iterator it = metaDataMap.find(key);
@@ -341,7 +341,7 @@ QString KExiv2::getIptcTagString(const char* iptcTagName, bool escapeCR) const
             QString tagValue(os.str().c_str());
 
             if (escapeCR)
-                tagValue.replace("\n", " ");
+                tagValue.replace('\n', ' ');
 
             return tagValue;
         }
@@ -391,7 +391,7 @@ QStringList KExiv2::getIptcTagsStringList(const char* iptcTagName, bool escapeCR
                     QString tagValue(it->toString().c_str());
 
                     if (escapeCR)
-                        tagValue.replace("\n", " ");
+                        tagValue.replace('\n', ' ');
 
                     values.append(tagValue);
                 }

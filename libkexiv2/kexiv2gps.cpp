@@ -674,7 +674,9 @@ QString KExiv2::convertToGPSCoordinateString(const long int numeratorDegrees, co
         minutes += (double)numeratorSeconds / 60.0;
         QString minutesString = QString::number(minutes, 'f', 8);
         while (minutesString.endsWith('0') && !minutesString.endsWith(".0"))
+        {
             minutesString.chop(1);
+        }
         coordinate = coordinate.arg(numeratorDegrees).arg(minutesString).arg(directionReference);
     }
     else if (denominatorDegrees == 0 ||
@@ -695,7 +697,9 @@ QString KExiv2::convertToGPSCoordinateString(const long int numeratorDegrees, co
         minutes += ((double)numeratorSeconds / (double)denominatorSeconds) / 60.0;
         QString minutesString = QString::number(minutes, 'f', 8);
         while (minutesString.endsWith('0') && !minutesString.endsWith(".0"))
+        {
             minutesString.chop(1);
+        }
         coordinate = coordinate.arg((int)wholeDegrees).arg(minutesString).arg(directionReference);
     }
     return coordinate;
