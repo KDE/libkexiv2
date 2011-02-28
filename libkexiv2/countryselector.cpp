@@ -324,7 +324,7 @@ CountrySelector::CountrySelector(QWidget* parent)
     model()->sort(0);
 
     insertSeparator(count());
-    addItem(i18n("Unknown"));
+    addItem(i18nc("Unknown country", "Unknown"));
 }
 
 CountrySelector::~CountrySelector()

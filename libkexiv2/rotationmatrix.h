@@ -30,7 +30,7 @@
 
 // Qt includes
 
-#include <QMatrix>
+#include <QtGui/QMatrix>
 
 // Local includes
 

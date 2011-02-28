@@ -184,7 +184,7 @@ KExiv2::MetaDataMap KExiv2::getExifTagsDataList(const QStringList &exifKeysFilte
                 // Exif tag contents can be an i18n strings, no only simple ascii.
                 tagValue = QString::fromLocal8Bit(os.str().c_str());
             }
-            tagValue.replace("\n", " ");
+            tagValue.replace('\n', ' ');
 
             // We apply a filter to get only the Exif tags that we need.
 
@@ -568,7 +568,7 @@ QString KExiv2::createExifUserStringFromValue(const char* exifTagName, const QVa
         QString tagValue = QString::fromLocal8Bit(os.str().c_str());
 
         if (escapeCR)
-            tagValue.replace("\n", " ");
+            tagValue.replace('\n', ' ');
 
         return tagValue;
     }
@@ -688,7 +688,7 @@ QVariant KExiv2::getExifTagVariant(const char* exifTagName, bool rationalAsListO
                     QString tagValue = QString::fromLocal8Bit(os.str().c_str());
 
                     if (stringEscapeCR)
-                        tagValue.replace("\n", " ");
+                        tagValue.replace('\n', ' ');
 
                     return QVariant(tagValue);
                 }
@@ -725,7 +725,7 @@ QString KExiv2::getExifTagString(const char* exifTagName, bool escapeCR) const
             QString tagValue = QString::fromLocal8Bit(os.str().c_str());
 #endif
             if (escapeCR)
-                tagValue.replace("\n", " ");
+                tagValue.replace('\n', ' ');
 
             return tagValue;
         }

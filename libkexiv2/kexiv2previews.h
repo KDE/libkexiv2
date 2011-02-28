@@ -30,9 +30,9 @@
 
 // Qt includes
 
-#include <QByteArray>
-#include <QSize>
-#include <QString>
+#include <QtCore/QByteArray>
+#include <QtCore/QSize>
+#include <QtCore/QString>
 
 // Local includes.
 
