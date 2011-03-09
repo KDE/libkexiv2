@@ -399,7 +399,7 @@ int KExiv2::KExiv2Priv::getXMPTagsListFromPrefix(const QString& pf, KExiv2::Tags
 
     for (QList<const Exiv2::XmpPropertyInfo*>::iterator it = tags.begin(); it != tags.end(); ++it)
     {
-        do
+        while ( (*it) && !QString((*it)->name_).isNull() )
         {
             QString     key = QLatin1String( Exiv2::XmpKey( pf.toAscii().data(), (*it)->name_ ).key().c_str() );
             QStringList values;
@@ -408,7 +408,6 @@ int KExiv2::KExiv2Priv::getXMPTagsListFromPrefix(const QString& pf, KExiv2::Tags
             ++(*it);
             i++;
         }
-        while( !QString((*it)->name_).isNull() );
     }
     return i;
 }
