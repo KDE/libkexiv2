@@ -6,7 +6,7 @@
 # @date   2006-09-15
 # @brief  Exiv2 library interface for KDE
 #
-# @author Copyright (C) 2006-2010 by Gilles Caulier
+# @author Copyright (C) 2006-2011 by Gilles Caulier
 #         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
 #
 # This program is free software; you can redistribute it
@@ -23,6 +23,9 @@
 # ============================================================
 
 PROJECT(libkexiv2)
+
+MESSAGE(STATUS "----------------------------------------------------------------------------------")
+MESSAGE(STATUS "Starting CMake configuration for: libkexiv2")
 
 FIND_PACKAGE(KDE4 REQUIRED)
 
