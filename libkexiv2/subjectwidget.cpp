@@ -7,9 +7,9 @@
  * @date   2006-10-15
  * @brief  IPTC subjects editor.
  *
- * @author Copyright (C) 2006-2010 by Gilles Caulier
+ * @author Copyright (C) 2006-2011 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
- * @author Copyright (C) 2009 by Andi Clemens
+ * @author Copyright (C) 2009-2011 by Andi Clemens
  *         <a href="mailto:andi dot clemens at gmx dot net">andi dot clemens at gmx dot net</a>
  *
  * This program is free software; you can redistribute it
