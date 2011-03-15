@@ -7,9 +7,9 @@
  * @date   2006-09-15
  * @brief  Exif manipulation methods
  *
- * @author Copyright (C) 2006-2010 by Gilles Caulier
+ * @author Copyright (C) 2006-2011 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
- * @author Copyright (C) 2006-2010 by Marcel Wiesweg
+ * @author Copyright (C) 2006-2011 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
  *
  * This program is free software; you can redistribute it
@@ -216,13 +216,25 @@ QString KExiv2::getExifComment() const
     {
         if (!d->exifMetadata().empty())
         {
-            Exiv2::ExifKey key("Exif.Photo.UserComment");
             Exiv2::ExifData exifData(d->exifMetadata());
+            Exiv2::ExifKey key("Exif.Photo.UserComment");
             Exiv2::ExifData::iterator it = exifData.findKey(key);
 
             if (it != exifData.end())
             {
                 QString exifComment = d->convertCommentValue(*it);
+
+                // some cameras fill the UserComment with whitespace
+                if (!exifComment.isEmpty() && !exifComment.trimmed().isEmpty())
+                    return exifComment;
+            }
+
+            Exiv2::ExifKey key2("Exif.Image.ImageDescription");
+            Exiv2::ExifData::iterator it2 = exifData.findKey(key2);
+
+            if (it2 != exifData.end())
+            {
+                QString exifComment = d->convertCommentValue(*it2);
 
                 // some cameras fill the UserComment with whitespace
                 if (!exifComment.isEmpty() && !exifComment.trimmed().isEmpty())
