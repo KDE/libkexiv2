@@ -204,6 +204,19 @@ QString KExiv2::version()
     return QString(kexiv2_version);
 }
 
+QString KExiv2::sidecarFilePathForFile(const QString& path)
+{
+    if (!path.isEmpty() && !QFileInfo(path).fileName().isEmpty())
+    {
+        QString sidecar(path + QString(".xmp"));
+        kDebug() << "File path: " << path << " => " << "XMP sidecar path: " << sidecar;
+        return sidecar;
+    }
+
+    kDebug() << "XMP sidecar path is null";
+    return QString();
+}
+
 //-- General methods ----------------------------------------------
 
 KExiv2Data KExiv2::data() const
@@ -289,7 +302,8 @@ bool KExiv2::load(const QString& filePath) const
     // ensure that symlinks are used correctly
     QString fileName = filePath;
     QFileInfo info(fileName);
-    if (info.isSymLink()) {
+    if (info.isSymLink())
+    {
         kDebug() << "filePath" << filePath << "is a symlink."
                  << "Using target" << info.symLinkTarget();
         fileName = info.symLinkTarget();
@@ -302,10 +316,7 @@ bool KExiv2::load(const QString& filePath) const
         // If XMP sidecar exist and if we want manage it, parse it instead the image.
         if (d->useXMPSidecar4Reading)
         {
-            QString xmpSidecarPath(fileName);
-            xmpSidecarPath.replace(QRegExp("[^\\.]+$"), "xmp");
-            kDebug() << "File path" << fileName;
-            kDebug() << "XMP sidecar path" << xmpSidecarPath;
+            QString xmpSidecarPath = sidecarFilePathForFile(fileName);
             QFileInfo xmpSidecarFileInfo(xmpSidecarPath);
 
             if (xmpSidecarFileInfo.exists() && xmpSidecarFileInfo.isReadable())

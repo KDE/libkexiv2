@@ -56,11 +56,9 @@ KExiv2::KExiv2Priv::~KExiv2Priv()
 
 bool KExiv2::KExiv2Priv::saveToXMPSidecar(const QFileInfo& finfo) const
 {
-    if (finfo.filePath().isEmpty())
+    QString filePath = KExiv2::sidecarFilePathForFile(finfo.filePath());
+    if (filePath.isEmpty())
         return false;
-
-    QString filePath(finfo.filePath());
-    filePath.replace(QRegExp("[^\\.]+$"), "xmp");
 
     bool ret = false;
 

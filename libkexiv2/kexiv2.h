@@ -181,6 +181,12 @@ public:
      */
     static QString version();
 
+    /** Return the XMP Sidecar file path for a image file path.
+     *  If image file path do not include a file name or is empty, this function return a null string.
+     */
+    static QString sidecarFilePathForFile(const QString& path);
+
+
     //@}
 
     //-----------------------------------------------------------------
