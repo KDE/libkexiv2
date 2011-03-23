@@ -100,8 +100,8 @@ SET(KEXIV2_LIB_SO_VERSION_STRING "${KEXIV2_LIB_SO_CUR_VERSION}.${KEXIV2_LIB_SO_R
 # =======================================================
 
 IF (EXIV2_FOUND)
-  SUBDIRS(libkexiv2)
-  SUBDIRS(test)
+  ADD_SUBDIRECTORY(libkexiv2)
+  ADD_SUBDIRECTORY(test)
 
   IF(NOT WIN32)
     CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/libkexiv2.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/libkexiv2.pc)
