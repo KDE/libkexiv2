@@ -42,9 +42,9 @@ SET(LIBKEXIV2_AREA_CODE_GENERAL 51003)
 ADD_DEFINITIONS(-DKDE_DEFAULT_DEBUG_AREA=${LIBKEXIV2_AREA_CODE_GENERAL})
 
 SET(EXIV2_MIN_VERSION "0.20")
-MACRO_OPTIONAL_FIND_PACKAGE(Exiv2)
+FIND_PACKAGE(Exiv2)
 MACRO_LOG_FEATURE(EXIV2_FOUND "Exiv2" "A library to access image metadata" "http://www.exiv2.org"
-                  FALSE ${EXIV2_MIN_VERSION} "Required to build libkexiv2.")
+                  TRUE ${EXIV2_MIN_VERSION} "Required to build libkexiv2.")
 
 # =======================================================
 # Information to update before to release this library.
@@ -109,3 +109,5 @@ IF (EXIV2_FOUND)
     INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/libkexiv2.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig )
   ENDIF(NOT WIN32)
 ENDIF (EXIV2_FOUND)
+
+MACRO_DISPLAY_FEATURE_LOG()
