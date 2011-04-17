@@ -236,8 +236,14 @@ QString KExiv2::getExifComment() const
             {
                 QString exifComment = d->convertCommentValue(*it2);
 
+                // Some cameras fill in nonsense default values
+                QStringList blackList;
+                blackList << "SONY DSC"; // + whitespace
+
+                QString trimmedComment = exifComment.trimmed();
+
                 // some cameras fill the UserComment with whitespace
-                if (!exifComment.isEmpty() && !exifComment.trimmed().isEmpty())
+                if (!exifComment.isEmpty() && !trimmedComment.isEmpty() && !blackList.contains(trimmedComment))
                     return exifComment;
             }
         }
