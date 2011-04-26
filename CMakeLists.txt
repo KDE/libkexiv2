@@ -43,8 +43,8 @@ ADD_DEFINITIONS(-DKDE_DEFAULT_DEBUG_AREA=${LIBKEXIV2_AREA_CODE_GENERAL})
 
 SET(EXIV2_MIN_VERSION "0.20")
 FIND_PACKAGE(Exiv2)
-MACRO_LOG_FEATURE(EXIV2_FOUND "Exiv2" "A library to access image metadata" "http://www.exiv2.org"
-                  TRUE ${EXIV2_MIN_VERSION} "Required to build libkexiv2.")
+MACRO_LOG_FEATURE(EXIV2_FOUND "Exiv2" "Required to build libkexiv2." "http://www.exiv2.org"
+                  TRUE ${EXIV2_MIN_VERSION} "")
 
 # =======================================================
 # Information to update before to release this library.
