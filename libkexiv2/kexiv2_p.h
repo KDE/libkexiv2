@@ -156,6 +156,34 @@ public:
     bool saveToFile(const QFileInfo& finfo) const;
     bool saveOperations(Exiv2::Image::AutoPtr image) const;
 
+    /** Wrapper method to convert a Comments content to a QString.
+    */
+    QString convertCommentValue(const Exiv2::Exifdatum& exifDatum);
+
+    /** Charset autodetection to convert a string to a QString.
+    */
+    QString detectEncodingAndDecode(const std::string& value) const;
+
+    int getXMPTagsListFromPrefix(const QString& pf, KExiv2::TagsMap& tagsMap) const;
+
+    const Exiv2::ExifData& exifMetadata()  const { return data.constData()->exifMetadata;  }
+    const Exiv2::IptcData& iptcMetadata()  const { return data.constData()->iptcMetadata;  }
+    const std::string&     imageComments() const { return data.constData()->imageComments; }
+
+#ifdef _XMP_SUPPORT_
+    const Exiv2::XmpData&  xmpMetadata()   const { return data.constData()->xmpMetadata;   }
+#endif
+
+    Exiv2::ExifData& exifMetadata()              { return data.data()->exifMetadata;  }
+    Exiv2::IptcData& iptcMetadata()              { return data.data()->iptcMetadata;  }
+    std::string& imageComments()                 { return data.data()->imageComments; }
+
+#ifdef _XMP_SUPPORT_
+    Exiv2::XmpData&  xmpMetadata()               { return data.data()->xmpMetadata;   }
+#endif
+
+public:
+
     /** Generic method to print the Exiv2 C++ Exception error message from 'e'.
         'msg' string is printed using kDebug rules..
     */
@@ -166,34 +194,6 @@ public:
     */
     static void printExiv2MessageHandler(int lvl, const char* msg);
 
-    /** Wrapper method to convert a Comments content to a QString.
-    */
-    QString convertCommentValue(const Exiv2::Exifdatum& exifDatum);
-
-    /** Charset autodetection to convert a string to a QString.
-    */
-    QString detectEncodingAndDecode(const std::string& value);
-
-    /**
-     */
-    int getXMPTagsListFromPrefix(const QString& pf, KExiv2::TagsMap& tagsMap);
-
-    const Exiv2::ExifData& exifMetadata()  const { return data.constData()->exifMetadata;  }
-    const Exiv2::IptcData& iptcMetadata()  const { return data.constData()->iptcMetadata;  }
-    const std::string&     imageComments() const { return data.constData()->imageComments; }
-
-#ifdef _XMP_SUPPORT_
-    const Exiv2::XmpData&  xmpMetadata()   const { return data.constData()->xmpMetadata;   }
-#endif
-
-    Exiv2::ExifData& exifMetadata() { return data.data()->exifMetadata;  }
-    Exiv2::IptcData& iptcMetadata() { return data.data()->iptcMetadata;  }
-    std::string& imageComments()    { return data.data()->imageComments; }
-
-#ifdef _XMP_SUPPORT_
-    Exiv2::XmpData&  xmpMetadata()  { return data.data()->xmpMetadata;   }
-#endif
-
 public:
 
     bool                                           writeRawFiles;
@@ -202,7 +202,7 @@ public:
     bool                                           useXMPSidecar4Reading;
 
     /// A mode from #MetadataWritingMode enum.
-    int                                            metadataWritingMode;         
+    int                                            metadataWritingMode;
 
     QString                                        filePath;
     QSize                                          pixelSize;

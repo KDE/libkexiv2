@@ -303,12 +303,12 @@ QString KExiv2::KExiv2Priv::convertCommentValue(const Exiv2::Exifdatum& exifDatu
         comment = exifDatum.toString();
 #else
         // workaround for bug in TIFF parser: CommentValue is loaded as DataValue
-        const Exiv2::Value &value = exifDatum.value();
-        Exiv2::byte *data = new Exiv2::byte[value.size()];
+        const Exiv2::Value& value = exifDatum.value();
+        Exiv2::byte* data         = new Exiv2::byte[value.size()];
         value.copy(data, Exiv2::invalidByteOrder);
         Exiv2::CommentValue commentValue;
         // this read method is hidden in CommentValue
-        static_cast<Exiv2::Value &>(commentValue).read(data, value.size(), Exiv2::invalidByteOrder);
+        static_cast<Exiv2::Value&>(commentValue).read(data, value.size(), Exiv2::invalidByteOrder);
         comment = commentValue.toString();
         delete [] data;
 #endif
@@ -363,7 +363,7 @@ QString KExiv2::KExiv2Priv::convertCommentValue(const Exiv2::Exifdatum& exifDatu
     return QString();
 }
 
-QString KExiv2::KExiv2Priv::detectEncodingAndDecode(const std::string& value)
+QString KExiv2::KExiv2Priv::detectEncodingAndDecode(const std::string& value) const
 {
     // For charset autodetection, we could use sophisticated code
     // (Mozilla chardet, KHTML's autodetection, QTextCodec::codecForContent),
@@ -389,7 +389,7 @@ QString KExiv2::KExiv2Priv::detectEncodingAndDecode(const std::string& value)
     //return QString::fromLatin1(value.c_str());
 }
 
-int KExiv2::KExiv2Priv::getXMPTagsListFromPrefix(const QString& pf, KExiv2::TagsMap& tagsMap)
+int KExiv2::KExiv2Priv::getXMPTagsListFromPrefix(const QString& pf, KExiv2::TagsMap& tagsMap) const
 {
     QList<const Exiv2::XmpPropertyInfo*> tags;
     tags << Exiv2::XmpProperties::propertyList(pf.toAscii().data());
