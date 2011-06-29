@@ -68,7 +68,7 @@ MACRO_LOG_FEATURE(EXIV2_FOUND "Exiv2" "Required to build libkexiv2." "http://www
 # 1.0.0 => 8.0.0     (Released with KDE 4.4.0)
 # 1.1.0 => 8.1.0     (Released with KDE 4.5.0)
 # 1.2.0 => 9.0.0     (Released with KDE 4.6.0 - Including XMP sidecar support)
-# 2.0.0 => 10.0.0    (included into digiKam 2.0.0 collection)
+# 2.0.0 => 10.0.0    (Released with KDE 4.7.0)
 
 # Library API version
 SET(KEXIV2_LIB_MAJOR_VERSION "2")
