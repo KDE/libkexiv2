@@ -35,7 +35,7 @@
 namespace KExiv2Iface
 {
 
-class KExiv2PreviewsPriv
+class KExiv2Previews::KExiv2PreviewsPriv
 {
 public:
 
@@ -66,13 +66,15 @@ public:
         }
     }
 
+public:
+
     Exiv2::Image::AutoPtr           image;
     Exiv2::PreviewManager*          manager;
     QList<Exiv2::PreviewProperties> properties;
 };
 
 KExiv2Previews::KExiv2Previews(const QString& filePath)
-              : d(new KExiv2PreviewsPriv)
+    : d(new KExiv2PreviewsPriv)
 {
     try
     {
@@ -86,7 +88,7 @@ KExiv2Previews::KExiv2Previews(const QString& filePath)
 }
 
 KExiv2Previews::KExiv2Previews(const QByteArray& imgData)
-              : d(new KExiv2PreviewsPriv)
+    : d(new KExiv2PreviewsPriv)
 {
     try
     {

@@ -43,8 +43,6 @@ class QImage;
 namespace KExiv2Iface
 {
 
-class KExiv2PreviewsPriv;
-
 class KEXIV2_EXPORT KExiv2Previews
 {
 public:
@@ -62,6 +60,7 @@ public:
 
     /// Returns the pixel size of the original image, as read from the file (not the metadata).
     QSize originalSize() const;
+
     /// Returns the mimeType of the original image, detected from the file's content.
     QString originalMimeType() const;
 
@@ -98,6 +97,7 @@ public:
 
 private:
 
+    class KExiv2PreviewsPriv;
     KExiv2PreviewsPriv* const d;
 };
 
