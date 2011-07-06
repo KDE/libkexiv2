@@ -393,9 +393,13 @@ KExiv2::ImageColorWorkSpace KExiv2::getImageColorWorkSpace() const
     }
 
     if (exifColorSpace == 1)
+    {
         return WORKSPACE_SRGB; // as specified by standard
+    }
     else if (exifColorSpace == 2)
+    {
         return WORKSPACE_ADOBERGB; // not in the standard!
+    }
     else
     {
         if (exifColorSpace == 65535)
@@ -785,14 +789,12 @@ QDateTime KExiv2::getDigitizationDateTime(bool fallbackToCreationTime) const
                     return dateTime;
                 }
             }
-
         }
 
         // In second, trying to get Date & time from Iptc tags.
 
         if (!d->iptcMetadata().empty())
         {
-
             // Try digitization Iptc date time entries.
 
             Exiv2::IptcData iptcData(d->iptcMetadata());
@@ -834,8 +836,6 @@ QDateTime KExiv2::getDigitizationDateTime(bool fallbackToCreationTime) const
         return QDateTime();
 }
 
-
-
 bool KExiv2::getImagePreview(QImage& preview) const
 {
     try
@@ -868,7 +868,7 @@ bool KExiv2::setImagePreview(const QImage& preview, bool setProgramName) const
         // A little bit compressed preview jpeg image to limit IPTC size.
         preview.save(&buffer, "JPEG");
         kDebug() << "JPEG image preview size: (" << preview.width() << " x "
-                      << preview.height() << ") pixels - " << data.size() << " bytes";
+                 << preview.height() << ") pixels - " << data.size() << " bytes";
 
         Exiv2::DataValue val;
         val.read((Exiv2::byte *)data.data(), data.size());
