@@ -36,7 +36,7 @@ namespace KExiv2Iface
 {
 
 KExiv2Data::KExiv2Data()
-          : d(0)
+    : d(0)
 {
 }
 
@@ -56,12 +56,12 @@ KExiv2Data& KExiv2Data::operator=(const KExiv2Data& other)
 }
 
 KExiv2::KExiv2()
-      : d(new KExiv2Priv)
+    : d(new KExiv2Priv)
 {
 }
 
 KExiv2::KExiv2(const KExiv2& metadata)
-      : d(new KExiv2Priv)
+    : d(new KExiv2Priv)
 {
     d->data = metadata.d->data;
 
@@ -69,14 +69,13 @@ KExiv2::KExiv2(const KExiv2& metadata)
 }
 
 KExiv2::KExiv2(const KExiv2Data& data)
-      : d(new KExiv2Priv)
+    : d(new KExiv2Priv)
 {
     setData(data);
 }
 
 KExiv2::KExiv2(const QString& filePath)
-      : d(new KExiv2Priv)
-
+    : d(new KExiv2Priv)
 {
     load(filePath);
 }
@@ -299,47 +298,21 @@ bool KExiv2::load(const QString& filePath) const
         return false;
     }
 
-    // ensure that symlinks are used correctly
-    QString fileName = filePath;
-    QFileInfo info(fileName);
-    if (info.isSymLink())
-    {
-        kDebug() << "filePath" << filePath << "is a symlink."
-                 << "Using target" << info.symLinkTarget();
-        fileName = info.symLinkTarget();
-    }
+    QFileInfo info(filePath);
 
     try
     {
         Exiv2::Image::AutoPtr image;
 
-        // If XMP sidecar exist and if we want manage it, parse it instead the image.
-        if (d->useXMPSidecar4Reading)
+        if (!info.isReadable())
         {
-            QString xmpSidecarPath = sidecarFilePathForFile(fileName);
-            QFileInfo xmpSidecarFileInfo(xmpSidecarPath);
-
-            if (xmpSidecarFileInfo.exists() && xmpSidecarFileInfo.isReadable())
-            {
-                // TODO: We should rather read both image and sidecar metadata
-                // and merge the two, with sidecar taking precedence
-                image = Exiv2::ImageFactory::open((const char*)
-                        (QFile::encodeName(xmpSidecarPath)));
-            }
+            kDebug() << "File '" << info.filePath().toAscii().constData() << "' is not readable.";
+            return false;
         }
+        
+        image        = Exiv2::ImageFactory::open((const char*)(QFile::encodeName(filePath)));
+        d->filePath  = filePath;
 
-        // No XMP sidecar file managed. We load image file metadata instead.
-        if (!image.get())
-        {
-            if (!info.isReadable())
-            {
-                kDebug() << "File '" << info.fileName().toAscii().constData() << "' is not readable.";
-                return false;
-            }
-            image = Exiv2::ImageFactory::open((const char*)(QFile::encodeName(fileName)));
-        }
-
-        d->filePath = fileName;
         image->readMetadata();
 
         // Size and mimetype ---------------------------------
@@ -362,8 +335,30 @@ bool KExiv2::load(const QString& filePath) const
 #ifdef _XMP_SUPPORT_
 
         // Xmp metadata -----------------------------------
+        Exiv2::Image::AutoPtr xmpsidecar;
 
-        d->xmpMetadata() = image->xmpData();
+        // If XMP sidecar exist and if we want manage it, parse it instead the image.
+        // TODO: We should rather read both image XMP and sidecar XMP
+        // metadata and merge the two, with sidecar taking precedence.
+        if (d->useXMPSidecar4Reading)
+        {
+            QString xmpSidecarPath = sidecarFilePathForFile(filePath);
+            QFileInfo xmpSidecarFileInfo(xmpSidecarPath);
+
+            if (xmpSidecarFileInfo.exists() && xmpSidecarFileInfo.isReadable())
+            {
+                xmpsidecar = Exiv2::ImageFactory::open((const char*)
+                             (QFile::encodeName(xmpSidecarPath)));
+
+                d->xmpMetadata() = xmpsidecar->xmpData();
+            }
+        }
+
+        // No XMP sidecar file managed. We load image file metadata instead.
+        if (!xmpsidecar.get())
+        {
+            d->xmpMetadata() = image->xmpData();
+        }
 
 #endif // _XMP_SUPPORT_
 
@@ -379,8 +374,31 @@ bool KExiv2::load(const QString& filePath) const
 
 bool KExiv2::save(const QString& imageFilePath) const
 {
+    // If our image is really a symlink, we should follow the symlink so that
+    // when we delete the file and rewrite it, we are honoring the symlink
+    // (rather than just deleting it and putting a file there).
+
+    // However, this may be surprising to the user when they are writing sidecar
+    // files.  They might expect them to show up where the symlink is.  So, we
+    // shouldn't follow the link when figuring out what the filename for the
+    // sidecar should be.
+
+    // Note, we are not yet handling the case where the sidecar itself is a
+    // symlink.
+    QString regularFilePath = imageFilePath; // imageFilePath might be a
+                                             // symlink.  Below we will change
+                                             // regularFile to the pointed to
+                                             // file if so.
+    QFileInfo givenFileInfo(imageFilePath);
+    if (givenFileInfo.isSymLink())
+    {
+        kDebug() << "filePath" << imageFilePath << "is a symlink."
+                 << "Using target" << givenFileInfo.symLinkTarget();
+        regularFilePath = givenFileInfo.canonicalPath();// Walk all the symlinks
+    }
+
     // NOTE: see B.K.O #137770 & #138540 : never touch the file if is read only.
-    QFileInfo finfo(imageFilePath);
+    QFileInfo finfo(regularFilePath);
     QFileInfo dinfo(finfo.path());
     if (!dinfo.isWritable())
     {
@@ -394,30 +412,46 @@ bool KExiv2::save(const QString& imageFilePath) const
     {
         case WRITETOSIDECARONLY:
             ret = d->saveToXMPSidecar(imageFilePath);
-            if (ret) kDebug() << "Metadata for file '" << finfo.fileName().toAscii().constData() << "' written to XMP sidecar.";
+            if (ret)
+            {
+                kDebug() << "Metadata for file '" << givenFileInfo.fileName().toAscii().constData() << "' written to XMP sidecar.";
+            }
             break;
 
         case WRITETOSIDECARANDIMAGE:
             ret = d->saveToFile(finfo);
-            if (ret) kDebug() << "Metadata for file '" << finfo.fileName().toAscii().constData() << "' written to file.";
+            if (ret)
+            {
+                kDebug() << "Metadata for file '" << finfo.fileName().toAscii().constData() << "' written to file.";
+            }
 
             ret |=  d->saveToXMPSidecar(imageFilePath);
-            if (ret) kDebug() << "Metadata for file '" << finfo.fileName().toAscii().constData() << "' written to XMP sidecar.";
+            if (ret)
+            {
+                kDebug() << "Metadata for file '" << givenFileInfo.fileName().toAscii().constData() << "' written to XMP sidecar.";
+            }
             break;
 
         case WRITETOSIDECARONLY4READONLYFILES:
             ret = d->saveToFile(finfo);
-            if (ret) kDebug() << "Metadata for file '" << finfo.fileName().toAscii().constData() << "' written to file.";
-            if (!ret)
+            if (ret)
+            {
+                kDebug() << "Metadata for file '" << finfo.fileName().toAscii().constData() << "' written to file.";
+            }
+            else
             {
                 ret |= d->saveToXMPSidecar(imageFilePath);
-                if (ret) kDebug() << "Metadata for file '" << finfo.fileName().toAscii().constData() << "' written to XMP sidecar.";
+                if (ret) 
+                    kDebug() << "Metadata for file '" << givenFileInfo.fileName().toAscii().constData() << "' written to XMP sidecar.";
             }
             break;
 
-        default:          // WRITETOIMAGEONLY:
+        default: // WRITETOIMAGEONLY:
             ret = d->saveToFile(finfo);
-            if (ret) kDebug() << "Metadata for file '" << finfo.fileName().toAscii().constData() << "' written to file.";
+            if (ret)
+            {
+                kDebug() << "Metadata for file '" << finfo.fileName().toAscii().constData() << "' written to file.";
+            }
             break;
     }
 
