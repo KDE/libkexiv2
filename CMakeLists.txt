@@ -41,7 +41,7 @@ INCLUDE_DIRECTORIES (${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DI
 SET(LIBKEXIV2_AREA_CODE_GENERAL 51003)
 ADD_DEFINITIONS(-DKDE_DEFAULT_DEBUG_AREA=${LIBKEXIV2_AREA_CODE_GENERAL})
 
-SET(EXIV2_MIN_VERSION "0.20")
+SET(EXIV2_MIN_VERSION "0.21")
 FIND_PACKAGE(Exiv2)
 MACRO_LOG_FEATURE(EXIV2_FOUND "Exiv2" "Required to build libkexiv2." "http://www.exiv2.org"
                   TRUE ${EXIV2_MIN_VERSION} "")
@@ -69,10 +69,11 @@ MACRO_LOG_FEATURE(EXIV2_FOUND "Exiv2" "Required to build libkexiv2." "http://www
 # 1.1.0 => 8.1.0     (Released with KDE 4.5.0)
 # 1.2.0 => 9.0.0     (Released with KDE 4.6.0 - Including XMP sidecar support)
 # 2.0.0 => 10.0.0    (Released with KDE 4.7.0)
+# 2.1.0 => 10.0.1    (Released with KDE 4.7.1) - Add AltLangStrEdit visible lines API
 
 # Library API version
 SET(KEXIV2_LIB_MAJOR_VERSION "2")
-SET(KEXIV2_LIB_MINOR_VERSION "0")
+SET(KEXIV2_LIB_MINOR_VERSION "1")
 SET(KEXIV2_LIB_PATCH_VERSION "0")
 
 # Suffix to add at end of version string. Usual values are:
@@ -88,7 +89,7 @@ SET(KEXIV2_LIB_SUFFIX_VERSION "")
 # For details : http://www.gnu.org/software/libtool/manual/libtool.html#Updating-version-info
 SET(KEXIV2_LIB_SO_CUR_VERSION "10")
 SET(KEXIV2_LIB_SO_REV_VERSION "0")
-SET(KEXIV2_LIB_SO_AGE_VERSION "0")
+SET(KEXIV2_LIB_SO_AGE_VERSION "1")
 
 # =======================================================
 # Set env. variables accordinly.

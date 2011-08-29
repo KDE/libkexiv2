@@ -27,6 +27,8 @@
 
 // Qt includes
 
+#include <QEvent>
+#include <QStyle>
 #include <QLabel>
 #include <QMap>
 #include <QToolButton>
@@ -55,10 +57,10 @@ public:
 
     AltLangStrEditPriv()
     {
-        titleLabel     = 0;
-        delValueButton = 0;
-        languageCB     = 0;
-
+        titleLabel      = 0;
+        delValueButton  = 0;
+        languageCB      = 0;
+        linesVisible    = 0;
         currentLanguage = "x-default";
 
         // We cannot use KLocale::allLanguagesList() here because KDE only
@@ -248,6 +250,8 @@ public:
     LanguageCodeMap                languageCodeMap;
 
     QString                        currentLanguage;
+
+    uint                           linesVisible;
 
     QLabel*                        titleLabel;
 
@@ -456,6 +460,43 @@ void AltLangStrEdit::addCurrent()
     loadLangAltListEntries();
     d->delValueButton->setEnabled(true);
     emit signalValueAdded(d->currentLanguage, text);
+}
+
+void AltLangStrEdit::setLinesVisible(uint lines)
+{
+    d->linesVisible = lines;
+
+    if (d->linesVisible == 0)
+    {
+        d->valueEdit->setFixedHeight(QWIDGETSIZE_MAX); // reset
+    }
+    else
+    {
+        d->valueEdit->setFixedHeight(d->valueEdit->fontMetrics().lineSpacing() * d->linesVisible         +
+                                     d->valueEdit->contentsMargins().top()                               +
+                                     d->valueEdit->contentsMargins().bottom()                            +
+                                     1                                                                   +
+                                     2*(d->valueEdit->style()->pixelMetric(QStyle::PM_DefaultFrameWidth) +
+                                        d->valueEdit->style()->pixelMetric(QStyle::PM_FocusFrameVMargin))
+                                    );
+    }
+
+    // It's not possible to display scrollbar properlly if size is too small
+    if (d->linesVisible < 3)
+        d->valueEdit->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+}
+
+uint AltLangStrEdit::linesVisible() const
+{
+    return d->linesVisible;
+}
+
+void AltLangStrEdit::changeEvent(QEvent* e)
+{
+    if (e->type() == QEvent::FontChange)
+        setLinesVisible(linesVisible());
+
+    QWidget::changeEvent(e);
 }
 
 }  // namespace KExiv2Iface

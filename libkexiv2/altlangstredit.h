@@ -57,6 +57,11 @@ public:
     QString currentLanguageCode() const;
     QString languageCode(int index) const;
 
+    /** Fix lines visibile in text editor to lines. If zero, do not fix layout to number of lines visible.
+     */
+    void setLinesVisible(uint lines);
+    uint linesVisible() const;
+
     QString defaultAltLang() const;
     bool    asDefaultAltLang() const;
 
@@ -94,6 +99,8 @@ protected Q_SLOTS:
 protected:
 
     void loadLangAltListEntries();
+
+    virtual void changeEvent(QEvent* e);
 
 private:
 
