@@ -263,12 +263,15 @@ bool KExiv2::setExifComment(const QString& comment, bool setProgramName) const
 
     try
     {
+        removeExifTag("Exif.Image.ImageDescription");
         removeExifTag("Exif.Photo.UserComment");
 
         if (!comment.isNull())
         {
+            setExifTagString("Exif.Image.ImageDescription", comment, setProgramName);
+
             // Write as Unicode only when necessary.
-            QTextCodec *latin1Codec = QTextCodec::codecForName("iso8859-1");
+            QTextCodec* latin1Codec = QTextCodec::codecForName("iso8859-1");
             if (latin1Codec->canEncode(comment))
             {
                 // write as ASCII
@@ -291,7 +294,7 @@ bool KExiv2::setExifComment(const QString& comment, bool setProgramName) const
                 // Null termination means \0\0, strlen does not work,
                 // do not use any const-char*-only methods,
                 // pass a std::string and not a const char * to ExifDatum::operator=().
-                const unsigned short *ucs2 = comment.utf16();
+                const unsigned short* ucs2 = comment.utf16();
                 std::string exifComment("charset=\"Unicode\" ");
                 exifComment.append((const char*)ucs2, sizeof(unsigned short) * comment.length());
                 d->exifMetadata()["Exif.Photo.UserComment"] = exifComment;
