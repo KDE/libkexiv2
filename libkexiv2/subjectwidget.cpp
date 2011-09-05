@@ -193,7 +193,10 @@ SubjectWidget::SubjectWidget(QWidget* parent)
 
     // --------------------------------------------------------
 
-    d->iprLabel    = new QLabel(i18n("I.P.R:"));
+    d->iprLabel    = new QLabel(i18nc("Information Provider Reference: "
+                                      "A name, registered with the IPTC/NAA, "
+                                      "identifying the provider that guarantees "
+                                      "the uniqueness of the UNO", "I.P.R:"));
     d->refLabel    = new QLabel(i18n("Reference:"));
     d->nameLabel   = new QLabel(i18n("Name:"));
     d->matterLabel = new QLabel(i18n("Matter:"));
