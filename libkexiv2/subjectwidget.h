@@ -10,7 +10,7 @@
  * @author Copyright (C) 2006-2011 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  * @author Copyright (C) 2009-2011 by Andi Clemens
- *         <a href="mailto:andi dot clemens at gmx dot net">andi dot clemens at gmx dot net</a>
+ *         <a href="mailto:andi dot clemens at googlemail dot com">andi dot clemens at googlemail dot com</a>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
