@@ -64,13 +64,13 @@ QString MsgTextEdit::clickMessage() const
 void MsgTextEdit::setClickMessage(const QString& msg)
 {
     d->message = msg;
-    viewport()->repaint();
+    viewport()->update();
 }
 
 void MsgTextEdit::setText(const QString& txt)
 {
     KTextEdit::setText(txt);
-    viewport()->repaint();
+    viewport()->update();
 }
 
 void MsgTextEdit::paintEvent(QPaintEvent* e)
@@ -90,19 +90,19 @@ void MsgTextEdit::paintEvent(QPaintEvent* e)
 
 void MsgTextEdit::dropEvent(QDropEvent* e)
 {
-    viewport()->repaint();
+    viewport()->update();
     KTextEdit::dropEvent(e);
 }
 
 void MsgTextEdit::focusInEvent(QFocusEvent* e)
 {
-    viewport()->repaint();
+    viewport()->update();
     KTextEdit::focusInEvent(e);
 }
 
 void MsgTextEdit::focusOutEvent(QFocusEvent* e)
 {
-    viewport()->repaint();
+    viewport()->update();
     KTextEdit::focusOutEvent(e);
 }
 
