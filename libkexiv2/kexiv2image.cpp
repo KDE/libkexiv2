@@ -859,6 +859,14 @@ bool KExiv2::setImagePreview(const QImage& preview, bool setProgramName) const
     if (!setProgramId(setProgramName))
         return false;
 
+    if (preview.isNull())
+    {
+        removeIptcTag("Iptc.Application2.Preview");
+        removeIptcTag("Iptc.Application2.PreviewFormat");
+        removeIptcTag("Iptc.Application2.PreviewVersion");
+        return true;
+    }
+
     try
     {
         QByteArray data;

@@ -883,25 +883,19 @@ bool KExiv2::setExifThumbnail(const QImage& thumbImage, bool setProgramName) con
     if (!setProgramId(setProgramName))
         return false;
 
+    if (thumbImage.isNull())
+    {
+        return removeExifThumbnail();
+    }
+
     try
     {
-#if (EXIV2_TEST_VERSION(0,17,91))
         QByteArray data;
         QBuffer buffer(&data);
         buffer.open(QIODevice::WriteOnly);
         thumbImage.save(&buffer, "JPEG");
         Exiv2::ExifThumb thumb(d->exifMetadata());
         thumb.setJpegThumbnail((Exiv2::byte *)data.data(), data.size());
-#else
-        KTemporaryFile thumbFile;
-        thumbFile.setSuffix("KExiv2ExifThumbnail");
-        thumbFile.setAutoRemove(true);
-        thumbFile.open();
-        thumb.save(thumbFile.fileName(), "JPEG");
-        kDebug() << "Thumbnail temp file: " << thumbFile.fileName().toAscii().data();
-        const std::string &fileName((const char*)(QFile::encodeName(thumbFile.fileName())));
-        d->exifMetadata().setJpegThumbnail( fileName );
-#endif
         return true;
     }
     catch( Exiv2::Error& e )
@@ -921,7 +915,6 @@ bool KExiv2::setTiffThumbnail(const QImage& thumbImage, bool setProgramName) con
 
     try
     {
-#if (EXIV2_TEST_VERSION(0,17,91))
         // Make sure IFD0 is explicitly marked as a main image
         Exiv2::ExifData::const_iterator pos = d->exifMetadata().findKey(Exiv2::ExifKey("Exif.Image.NewSubfileType"));
         if (pos == d->exifMetadata().end() || pos->count() != 1 || pos->toLong() != 0) {
@@ -936,22 +929,25 @@ bool KExiv2::setTiffThumbnail(const QImage& thumbImage, bool setProgramName) con
             else
                 ++md;
         }
-        // Set thumbnail tags
-        QByteArray data;
-        QBuffer buffer(&data);
-        buffer.open(QIODevice::WriteOnly);
-        thumbImage.save(&buffer, "JPEG");
 
-        Exiv2::DataBuf buf((Exiv2::byte *)data.data(), data.size());
-        Exiv2::ULongValue val;
-        val.read("0");
-        val.setDataArea(buf.pData_, buf.size_);
-        d->exifMetadata()["Exif.SubImage1.JPEGInterchangeFormat"] = val;
-        d->exifMetadata()["Exif.SubImage1.JPEGInterchangeFormatLength"] = uint32_t(buf.size_);
-        d->exifMetadata()["Exif.SubImage1.Compression"] = uint16_t(6); // JPEG (old-style)
-        d->exifMetadata()["Exif.SubImage1.NewSubfileType"] = uint32_t(1); // Thumbnail image
-        return true;
-#endif
+        if (!thumbImage.isNull())
+        {
+            // Set thumbnail tags
+            QByteArray data;
+            QBuffer buffer(&data);
+            buffer.open(QIODevice::WriteOnly);
+            thumbImage.save(&buffer, "JPEG");
+
+            Exiv2::DataBuf buf((Exiv2::byte *)data.data(), data.size());
+            Exiv2::ULongValue val;
+            val.read("0");
+            val.setDataArea(buf.pData_, buf.size_);
+            d->exifMetadata()["Exif.SubImage1.JPEGInterchangeFormat"] = val;
+            d->exifMetadata()["Exif.SubImage1.JPEGInterchangeFormatLength"] = uint32_t(buf.size_);
+            d->exifMetadata()["Exif.SubImage1.Compression"] = uint16_t(6); // JPEG (old-style)
+            d->exifMetadata()["Exif.SubImage1.NewSubfileType"] = uint32_t(1); // Thumbnail image
+            return true;
+        }
     }
     catch( Exiv2::Error& e )
     {
