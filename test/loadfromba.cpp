@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-// Qt includes.
+// Qt includes
 
 #include <QDataStream>
 #include <QImage>
@@ -30,11 +30,11 @@
 #include <QFile>
 #include <QByteArray>
 
-// KDE includes.
+// KDE includes
 
 #include "kdebug.h"
 
-// Local includes.
+// Local includes
 
 #include "kexiv2.h"
 

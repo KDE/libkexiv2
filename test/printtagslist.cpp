@@ -22,12 +22,12 @@
  *
  * ============================================================ */
 
-// Qt includes.
+// Qt includes
 
 #include <QStringList>
 #include <QDebug>
 
-// Local includes.
+// Local includes
 
 #include "kexiv2.h"
 

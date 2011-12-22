@@ -27,7 +27,7 @@
 
 #include "kexiv2_p.h"
 
-// C ANSI includes.
+// C ANSI includes
 
 extern "C"
 {

@@ -22,14 +22,14 @@
  *
  * ============================================================ */
 
-// Qt includes.
+// Qt includes
 
 #include <QMatrix>
 #include <QImage>
 #include <QString>
 #include <QFile>
 
-// KDE includes.
+// KDE includes
 
 #include "kdeversion.h"
 
@@ -37,7 +37,7 @@
 #define PRINT_DEBUG qDebug()
 #define ENDL
 
-// Local includes.
+// Local includes
 
 #include "kexiv2.h"
 

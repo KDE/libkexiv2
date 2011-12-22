@@ -28,7 +28,7 @@
 #include "kexiv2.h"
 #include "kexiv2_p.h"
 
-// Local includes.
+// Local includes
 
 #include "version.h"
 

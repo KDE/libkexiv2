@@ -25,7 +25,7 @@
  *
  * ============================================================ */
 
-// Local includes.
+// Local includes
 
 #include "kexiv2_p.h"
 #include "kexiv2.h"

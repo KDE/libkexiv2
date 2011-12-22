@@ -23,13 +23,13 @@
  *
  * ============================================================ */
 
-// Qt includes.
+// Qt includes
 
 #include <QColor>
 #include <QPalette>
 #include <QPainter>
 
-// Local includes.
+// Local includes
 
 #include "msgtextedit.moc"
 

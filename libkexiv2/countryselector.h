@@ -35,7 +35,7 @@
 
 #include <kcombobox.h>
 
-// Local includes.
+// Local includes
 
 #include "libkexiv2_export.h"
 

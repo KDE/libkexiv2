@@ -43,7 +43,7 @@
 #include <kurl.h>
 #include <klineedit.h>
 
-// Local includes.
+// Local includes
 
 #include "libkexiv2_export.h"
 

@@ -34,7 +34,7 @@
 #ifndef KEXIV2_H
 #define KEXIV2_H
 
-// QT includes.
+// QT includes
 
 #include <QtCore/QByteArray>
 #include <QtCore/QString>
@@ -46,7 +46,7 @@
 #include <QtCore/QVariant>
 #include <QtCore/QRegExp>
 
-// Local includes.
+// Local includes
 
 #include "libkexiv2_export.h"
 #include "kexiv2data.h"

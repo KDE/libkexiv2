@@ -34,7 +34,7 @@
 #include <QtCore/QSize>
 #include <QtCore/QString>
 
-// Local includes.
+// Local includes
 
 #include "libkexiv2_export.h"
 

@@ -22,16 +22,16 @@
  *
  * ============================================================ */
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 #include <QFile>
 
-// KDE includes.
+// KDE includes
 
 #include "kdebug.h"
 
-// Local includes.
+// Local includes
 
 #include "kexiv2.h"
 

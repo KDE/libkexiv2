@@ -28,11 +28,11 @@
 #ifndef KEXIV2DATA_H
 #define KEXIV2DATA_H
 
-// QT includes.
+// QT includes
 
 #include <QtCore/QSharedDataPointer>
 
-// Local includes.
+// Local includes
 
 #include "libkexiv2_export.h"
 

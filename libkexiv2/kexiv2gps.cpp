@@ -30,7 +30,7 @@
 #include "kexiv2.h"
 #include "kexiv2_p.h"
 
-// C++ includes.
+// C++ includes
 
 #include <climits>
 #include <cmath>

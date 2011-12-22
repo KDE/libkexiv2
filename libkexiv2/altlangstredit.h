@@ -31,7 +31,7 @@
 #include <QtGui/QWidget>
 #include <QtCore/QString>
 
-// Local includes.
+// Local includes
 
 #include "libkexiv2_export.h"
 #include "kexiv2.h"
