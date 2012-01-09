@@ -7,7 +7,7 @@
  * @date   2009-06-15
  * @brief  multi-languages string editor
  *
- * @author Copyright (C) 2009-2011 by Gilles Caulier
+ * @author Copyright (C) 2009-2012 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
@@ -316,6 +316,18 @@ QString AltLangStrEdit::currentLanguageCode() const
     return d->currentLanguage;
 }
 
+void AltLangStrEdit::setCurrentLanguageCode(const QString& lang)
+{
+    if(d->currentLanguage.isEmpty())
+    {
+        d->currentLanguage = "x-default";
+    }
+    else
+    {
+        d->currentLanguage = lang;
+    }
+}
+
 QString AltLangStrEdit::languageCode(int index) const
 {
     return d->languageCB->itemText(index);
@@ -369,7 +381,7 @@ void AltLangStrEdit::slotSelectionChanged()
 
 void AltLangStrEdit::setValues(const KExiv2::AltLangMap& values)
 {
-    d->values = values;
+    d->values    = values;
     loadLangAltListEntries();
 
     d->valueEdit->blockSignals(true);

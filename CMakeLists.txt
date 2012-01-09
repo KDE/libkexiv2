@@ -6,7 +6,7 @@
 # @date   2006-09-15
 # @brief  Exiv2 library interface for KDE
 #
-# @author Copyright (C) 2006-2011 by Gilles Caulier
+# @author Copyright (C) 2006-2012 by Gilles Caulier
 #         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
 #
 # This program is free software; you can redistribute it
@@ -70,11 +70,12 @@ MACRO_LOG_FEATURE(EXIV2_FOUND "Exiv2" "Required to build libkexiv2." "http://www
 # 1.2.0 => 9.0.0     (Released with KDE 4.6.0 - Including XMP sidecar support)
 # 2.0.0 => 10.0.0    (Released with KDE 4.7.0)
 # 2.1.0 => 10.0.1    (Released with KDE 4.7.1) - Add AltLangStrEdit visible lines API
+# 2.1.1 => 10.0.2    (Released with KDE 4.7.4) - Add AltLangStrEdit::setCurrentLanguageCode()
 
 # Library API version
 SET(KEXIV2_LIB_MAJOR_VERSION "2")
 SET(KEXIV2_LIB_MINOR_VERSION "1")
-SET(KEXIV2_LIB_PATCH_VERSION "0")
+SET(KEXIV2_LIB_PATCH_VERSION "1")
 
 # Suffix to add at end of version string. Usual values are:
 # "-git"   : alpha code unstable from git. Do not use in production
@@ -89,7 +90,7 @@ SET(KEXIV2_LIB_SUFFIX_VERSION "")
 # For details : http://www.gnu.org/software/libtool/manual/libtool.html#Updating-version-info
 SET(KEXIV2_LIB_SO_CUR_VERSION "10")
 SET(KEXIV2_LIB_SO_REV_VERSION "0")
-SET(KEXIV2_LIB_SO_AGE_VERSION "1")
+SET(KEXIV2_LIB_SO_AGE_VERSION "2")
 
 # =======================================================
 # Set env. variables accordinly.

@@ -7,7 +7,7 @@
  * @date   2009-06-15
  * @brief  multi-languages string editor
  *
- * @author Copyright (C) 2009-2011 by Gilles Caulier
+ * @author Copyright (C) 2009-2012 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
@@ -51,11 +51,13 @@ public:
     void setTitle(const QString& title);
     void setClickMessage(const QString& msg);
 
+    void    setCurrentLanguageCode(const QString& lang);
+    QString currentLanguageCode() const;
+
+    QString languageCode(int index) const;
+
     void setValues(const KExiv2::AltLangMap& values);
     KExiv2::AltLangMap& values();
-
-    QString currentLanguageCode() const;
-    QString languageCode(int index) const;
 
     /** Fix lines visibile in text editor to lines. If zero, do not fix layout to number of lines visible.
      */
