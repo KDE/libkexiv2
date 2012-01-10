@@ -7,7 +7,7 @@ Keywords:       kde image jpeg raw tiff png exif iptc xmp digikam kipi-plugins
 Author:         caulier dot gilles at gmail dot com (Gilles Caulier)
                 marcel dot wiesweg at gmx dot de (Marcel Wiesweg)
 Maintained-by:
-Primary-site:   http://www.kipi-plugins.org
+Primary-site:   http://www.digikam.org
 Alternate-site: http://www.digikam.org
 Original-site:
 Platforms:      Linux and other Unices, MacOs-X, Win32. Needs KDE 4.x
