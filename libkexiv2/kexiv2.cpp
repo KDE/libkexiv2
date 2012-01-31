@@ -7,9 +7,9 @@
  * @date   2006-09-15
  * @brief  Exiv2 library interface for KDE
  *
- * @author Copyright (C) 2006-2011 by Gilles Caulier
+ * @author Copyright (C) 2006-2012 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
- * @author Copyright (C) 2006-2011 by Marcel Wiesweg
+ * @author Copyright (C) 2006-2012 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
  *
  * This program is free software; you can redistribute it
@@ -239,11 +239,6 @@ void KExiv2::setData(const KExiv2Data& data)
         // but we never want a null pointer in KExiv2Priv.
         d->data->clear();
     }
-}
-
-bool KExiv2::load(const QByteArray& imgData) const
-{
-    return loadFromData(imgData);
 }
 
 bool KExiv2::loadFromData(const QByteArray& imgData) const

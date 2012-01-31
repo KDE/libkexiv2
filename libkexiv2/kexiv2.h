@@ -13,9 +13,9 @@
  * @brief         http://www.iptc.org/std/Iptc4xmpCore/1.0/specification/Iptc4xmpCore_1.0-spec-XMPSchema_8.pdf
  * @brief  Paper: http://www.metadataworkinggroup.com/pdf/mwg_guidance.pdf
  *
- * @author Copyright (C) 2006-2011 by Gilles Caulier
+ * @author Copyright (C) 2006-2012 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
- * @author Copyright (C) 2006-2011 by Marcel Wiesweg
+ * @author Copyright (C) 2006-2012 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
  *
  * This program is free software; you can redistribute it
@@ -200,7 +200,6 @@ public:
         Return true if metadata have been loaded successfully from image data.
      */
     bool loadFromData(const QByteArray& imgData) const;
-    KDE_DEPRECATED bool load(const QByteArray& imgData) const;
 
     /** Load all metadata (Exif, Iptc, Xmp, and JFIF Comments) from a picture (JPEG, RAW, TIFF, PNG,
         DNG, etc...). Return true if metadata have been loaded successfully from file.
@@ -429,7 +428,6 @@ public:
         Set true 'addExifHeader' parameter to add an Exif header to Exif metadata.
         Returns a null Qt byte array if there is no Exif metadata in memory.
      */
-    KDE_DEPRECATED QByteArray getExif(bool addExifHeader=false) const;
     QByteArray getExifEncoded(bool addExifHeader=false) const;
 
     /** Set the Exif data using a Qt byte array. Return true if Exif metadata
@@ -481,7 +479,7 @@ public:
     /** Get an Exif tag content like a long value. Return true if Exif tag be found.
      */
     bool getExifTagLong(const char* exifTagName, long &val) const;
-    
+
     /** Get an Exif tag content like a long value. Return true if Exif tag be found.
      */
     bool getExifTagLong(const char* exifTagName, long &val, int component) const;
