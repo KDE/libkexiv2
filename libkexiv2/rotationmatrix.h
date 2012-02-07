@@ -100,7 +100,7 @@ public:
     QMatrix toMatrix() const;
 
     /// Returns a QMatrix for the given Exif orientation
-    static QMatrix toMatrix(KExiv2::ImageOrientation orienation);
+    static QMatrix toMatrix(KExiv2::ImageOrientation orientation);
 
     RotationMatrix(int m11, int m12, int m21, int m22);
 
