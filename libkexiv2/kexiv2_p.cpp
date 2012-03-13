@@ -410,4 +410,22 @@ int KExiv2::KExiv2Priv::getXMPTagsListFromPrefix(const QString& pf, KExiv2::Tags
     return i;
 }
 
+#ifdef _XMP_SUPPORT_
+void KExiv2::KExiv2Priv::mergeXmpData(const Exiv2::XmpData& src, Exiv2::XmpData& dest)
+{
+    for (Exiv2::XmpData::const_iterator it = src.begin(); it != src.end(); ++it)
+    {
+        Exiv2::XmpData::iterator destIt = dest.findKey(Exiv2::XmpKey(it->key()));
+        if (destIt == dest.end())
+        {
+            dest.add(*it);
+        }
+        else
+        {
+            *destIt = *it;
+        }
+    }
+}
+#endif
+
 }  // NameSpace KExiv2Iface

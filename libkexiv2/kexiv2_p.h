@@ -180,6 +180,12 @@ public:
 
 #ifdef _XMP_SUPPORT_
     Exiv2::XmpData&  xmpMetadata()               { return data.data()->xmpMetadata;   }
+
+    /**
+     * Merge two XmpData packages, where the result is stored in dest
+     * and fields from src take precedence over existing data from dest.
+     */
+    void mergeXmpData(const Exiv2::XmpData& src, Exiv2::XmpData& dest);
 #endif
 
 public:

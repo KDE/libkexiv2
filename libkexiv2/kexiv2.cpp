@@ -207,15 +207,12 @@ QString KExiv2::version()
 
 QString KExiv2::sidecarFilePathForFile(const QString& path)
 {
-    if (!path.isEmpty() && !QFileInfo(path).fileName().isEmpty())
+    if (path.isEmpty())
     {
-        QString sidecar(path + QString(".xmp"));
-        kDebug() << "File path: " << path << " => " << "XMP sidecar path: " << sidecar;
-        return sidecar;
+        return QString();
     }
 
-    kDebug() << "XMP sidecar path is null";
-    return QString();
+    return path + ".xmp";
 }
 
 //-- General methods ----------------------------------------------
@@ -332,29 +329,26 @@ bool KExiv2::load(const QString& filePath) const
 #ifdef _XMP_SUPPORT_
 
         // Xmp metadata -----------------------------------
-        Exiv2::Image::AutoPtr xmpsidecar;
+        d->xmpMetadata() = image->xmpData();
 
-        // If XMP sidecar exist and if we want manage it, parse it instead the image.
-        // TODO: We should rather read both image XMP and sidecar XMP
-        // metadata and merge the two, with sidecar taking precedence.
         if (d->useXMPSidecar4Reading)
         {
             QString xmpSidecarPath = sidecarFilePathForFile(filePath);
             QFileInfo xmpSidecarFileInfo(xmpSidecarPath);
 
+            Exiv2::Image::AutoPtr xmpsidecar;
             if (xmpSidecarFileInfo.exists() && xmpSidecarFileInfo.isReadable())
             {
-                xmpsidecar = Exiv2::ImageFactory::open((const char*)
-                             (QFile::encodeName(xmpSidecarPath)));
+                // Read sidecar data
+                xmpsidecar = Exiv2::ImageFactory::open((const char*)QFile::encodeName(xmpSidecarPath));
+                xmpsidecar->readMetadata();
 
-                d->xmpMetadata() = xmpsidecar->xmpData();
+                // Merge sidecar data to main XMP
+                d->mergeXmpData(xmpsidecar->xmpData(), d->xmpMetadata());
+                // Xmp.exif data from the sidecar is available from the exifData of the sidecar image;
+                // but we do not need to care for this, all reading methods check main Exif first,
+                // then Xmp.exif, so we have already implemented the correct reading algorithm.
             }
-        }
-
-        // No XMP sidecar file managed. We load image file metadata instead.
-        if (!xmpsidecar.get())
-        {
-            d->xmpMetadata() = image->xmpData();
         }
 
 #endif // _XMP_SUPPORT_
