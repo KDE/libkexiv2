@@ -384,7 +384,7 @@ bool KExiv2::save(const QString& imageFilePath) const
     if (givenFileInfo.isSymLink())
     {
         kDebug() << "filePath" << imageFilePath << "is a symlink."
-                 << "Using target" << givenFileInfo.symLinkTarget();
+                 << "Using target" << givenFileInfo.canonicalPath();
         regularFilePath = givenFileInfo.canonicalPath();// Walk all the symlinks
     }
 
@@ -393,60 +393,50 @@ bool KExiv2::save(const QString& imageFilePath) const
     QFileInfo dinfo(finfo.path());
     if (!dinfo.isWritable())
     {
-        kDebug() << "Dir '" << dinfo.filePath().toAscii().constData() << "' is read-only. Metadata not saved.";
+        kDebug() << "Dir '" << dinfo.filePath() << "' is read-only. Metadata not saved.";
         return false;
     }
 
-    bool ret = false;
+    bool writeToFile = false, writeToSidecar = false, writeToSidecarIfFileNotPossible = false;
+    bool writtenToFile = false, writtenToSidecar = false;
 
     switch(d->metadataWritingMode)
     {
         case WRITETOSIDECARONLY:
-            ret = d->saveToXMPSidecar(imageFilePath);
-            if (ret)
-            {
-                kDebug() << "Metadata for file '" << givenFileInfo.fileName().toAscii().constData() << "' written to XMP sidecar.";
-            }
+            writeToSidecar = true;
             break;
-
+        case WRITETOIMAGEONLY:
+            writeToFile    = true;
+            break;
         case WRITETOSIDECARANDIMAGE:
-            ret = d->saveToFile(finfo);
-            if (ret)
-            {
-                kDebug() << "Metadata for file '" << finfo.fileName().toAscii().constData() << "' written to file.";
-            }
-
-            ret |=  d->saveToXMPSidecar(imageFilePath);
-            if (ret)
-            {
-                kDebug() << "Metadata for file '" << givenFileInfo.fileName().toAscii().constData() << "' written to XMP sidecar.";
-            }
+            writeToFile    = true;
+            writeToSidecar = true;
             break;
-
         case WRITETOSIDECARONLY4READONLYFILES:
-            ret = d->saveToFile(finfo);
-            if (ret)
-            {
-                kDebug() << "Metadata for file '" << finfo.fileName().toAscii().constData() << "' written to file.";
-            }
-            else
-            {
-                ret |= d->saveToXMPSidecar(imageFilePath);
-                if (ret) 
-                    kDebug() << "Metadata for file '" << givenFileInfo.fileName().toAscii().constData() << "' written to XMP sidecar.";
-            }
-            break;
-
-        default: // WRITETOIMAGEONLY:
-            ret = d->saveToFile(finfo);
-            if (ret)
-            {
-                kDebug() << "Metadata for file '" << finfo.fileName().toAscii().constData() << "' written to file.";
-            }
+            writeToFile = true;
+            writeToSidecarIfFileNotPossible = true;
             break;
     }
 
-    return ret;
+    if (writeToFile)
+    {
+        writtenToFile = d->saveToFile(finfo);
+        if (writeToFile)
+        {
+            kDebug() << "Metadata for file" << finfo.fileName() << "written to file.";
+        }
+    }
+
+    if (writeToSidecar || (writeToSidecarIfFileNotPossible && !writtenToFile))
+    {
+        writtenToSidecar = d->saveToXMPSidecar(imageFilePath);
+        if (writtenToSidecar)
+        {
+            kDebug() << "Metadata for file '" << givenFileInfo.fileName() << "' written to XMP sidecar.";
+        }
+    }
+
+    return writtenToFile || writtenToSidecar;
 }
 
 bool KExiv2::applyChanges() const
