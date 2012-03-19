@@ -294,6 +294,7 @@ bool KExiv2::load(const QString& filePath) const
 
     QFileInfo info(filePath);
 
+    bool hasLoaded = false;
     try
     {
         Exiv2::Image::AutoPtr image;
@@ -331,6 +332,18 @@ bool KExiv2::load(const QString& filePath) const
         // Xmp metadata -----------------------------------
         d->xmpMetadata() = image->xmpData();
 
+#endif // _XMP_SUPPORT_
+
+        hasLoaded = true;
+    }
+    catch( Exiv2::Error& e )
+    {
+        d->printExiv2ExceptionError("Cannot load metadata from file ", e);
+    }
+
+#ifdef _XMP_SUPPORT_
+    try
+    {
         if (d->useXMPSidecar4Reading)
         {
             QString xmpSidecarPath = sidecarFilePathForFile(filePath);
@@ -348,19 +361,18 @@ bool KExiv2::load(const QString& filePath) const
                 // Xmp.exif data from the sidecar is available from the exifData of the sidecar image;
                 // but we do not need to care for this, all reading methods check main Exif first,
                 // then Xmp.exif, so we have already implemented the correct reading algorithm.
+
+                hasLoaded = true;
             }
         }
-
-#endif // _XMP_SUPPORT_
-
-        return true;
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError("Cannot load metadata using Exiv2 ", e);
+        d->printExiv2ExceptionError("Cannot load XMP sidecar", e);
     }
+#endif // _XMP_SUPPORT_
 
-    return false;
+    return hasLoaded;
 }
 
 bool KExiv2::save(const QString& imageFilePath) const
