@@ -38,13 +38,17 @@
 
 #include <QtCore/QByteArray>
 #include <QtCore/QString>
-#include <QtGui/QImage>
 #include <QtCore/QDateTime>
 #include <QtCore/QMap>
 #include <QtCore/QSharedDataPointer>
 #include <QtCore/QStringList>
 #include <QtCore/QVariant>
 #include <QtCore/QRegExp>
+#include <QtGui/QImage>
+
+// KDE includes.
+
+#include <kurl.h>
 
 // Local includes
 
@@ -186,7 +190,22 @@ public:
      */
     static QString sidecarFilePathForFile(const QString& path);
 
+    /** Like sidecarFilePathForFile(), but works for local file path.
+     */
+    static QString sidecarPath(const QString& path);
 
+    /** Like sidecarFilePathForFile(), but works for remote URLs.
+     */
+    static KUrl sidecarUrl(const KUrl& url);
+    
+    /** Gives a file url for a local path.
+     */
+    static KUrl sidecarUrl(const QString& path);
+    
+    /** Performs a QFileInfo based check if the given local file has a sidecar.
+     */
+    static bool hasSidecar(const QString& path);
+    
     //@}
 
     //-----------------------------------------------------------------

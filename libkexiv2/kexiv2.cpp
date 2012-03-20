@@ -215,6 +215,29 @@ QString KExiv2::sidecarFilePathForFile(const QString& path)
     return path + ".xmp";
 }
 
+KUrl KExiv2::sidecarUrl(const KUrl& url)
+{
+    QString sidecarPath = sidecarFilePathForFile(url.path());
+    KUrl sidecarUrl(url);
+    sidecarUrl.setPath(sidecarPath);
+    return sidecarUrl;
+}
+
+KUrl KExiv2::sidecarUrl(const QString& path)
+{
+    return KUrl::fromPath(sidecarFilePathForFile(path));
+}
+
+QString KExiv2::sidecarPath(const QString& path)
+{
+    return sidecarFilePathForFile(path);
+}
+
+bool KExiv2::hasSidecar(const QString& path)
+{
+    return QFileInfo(sidecarFilePathForFile(path)).exists();
+}
+
 //-- General methods ----------------------------------------------
 
 KExiv2Data KExiv2::data() const
@@ -409,8 +432,11 @@ bool KExiv2::save(const QString& imageFilePath) const
         return false;
     }
 
-    bool writeToFile = false, writeToSidecar = false, writeToSidecarIfFileNotPossible = false;
-    bool writtenToFile = false, writtenToSidecar = false;
+    bool writeToFile                     = false; 
+    bool writeToSidecar                  = false;
+    bool writeToSidecarIfFileNotPossible = false;
+    bool writtenToFile                   = false;
+    bool writtenToSidecar                = false;
 
     switch(d->metadataWritingMode)
     {
