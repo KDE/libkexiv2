@@ -55,6 +55,8 @@ KExiv2Data& KExiv2Data::operator=(const KExiv2Data& other)
     return *this;
 }
 
+// -------------------------------------------------------------------------------------------
+
 KExiv2::KExiv2()
     : d(new KExiv2Priv)
 {
@@ -63,13 +65,7 @@ KExiv2::KExiv2()
 KExiv2::KExiv2(const KExiv2& metadata)
     : d(new KExiv2Priv)
 {
-    d->data = metadata.d->data;
-
-    setFilePath(metadata.getFilePath());
-    setUseXMPSidecar4Reading(metadata.useXMPSidecar4Reading());
-    setWriteRawFiles(metadata.writeRawFiles());
-    setMetadataWritingMode(metadata.metadataWritingMode());
-    setUpdateFileTimeStamp(metadata.updateFileTimeStamp());
+    d->copyPrivateData(metadata.d);
 }
 
 KExiv2::KExiv2(const KExiv2Data& data)
@@ -91,13 +87,7 @@ KExiv2::~KExiv2()
 
 KExiv2& KExiv2::operator=(const KExiv2& metadata)
 {
-    d->data = metadata.d->data;
-
-    setFilePath(metadata.getFilePath());
-    setUseXMPSidecar4Reading(metadata.useXMPSidecar4Reading());
-    setWriteRawFiles(metadata.writeRawFiles());
-    setMetadataWritingMode(metadata.metadataWritingMode());
-    setUpdateFileTimeStamp(metadata.updateFileTimeStamp());
+    d->copyPrivateData(metadata.d);
 
     return *this;
 }

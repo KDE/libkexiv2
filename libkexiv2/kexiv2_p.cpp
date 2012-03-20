@@ -39,7 +39,7 @@ namespace KExiv2Iface
 {
 
 KExiv2::KExiv2Priv::KExiv2Priv()
-                  : data(new KExiv2Data::KExiv2DataPriv)
+    : data(new KExiv2Data::KExiv2DataPriv)
 {
     writeRawFiles         = false;
     updateFileTimeStamp   = false;
@@ -52,6 +52,16 @@ KExiv2::KExiv2Priv::KExiv2Priv()
 
 KExiv2::KExiv2Priv::~KExiv2Priv()
 {
+}
+
+void KExiv2::KExiv2Priv::copyPrivateData(const KExiv2Priv* const  other)
+{
+    data                  = other->data;
+    filePath              = other->filePath;
+    writeRawFiles         = other->writeRawFiles;
+    updateFileTimeStamp   = other->updateFileTimeStamp;
+    useXMPSidecar4Reading = other->useXMPSidecar4Reading;
+    metadataWritingMode   = other->metadataWritingMode;
 }
 
 bool KExiv2::KExiv2Priv::saveToXMPSidecar(const QFileInfo& finfo) const

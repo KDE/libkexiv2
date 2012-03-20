@@ -152,6 +152,8 @@ public:
     KExiv2Priv();
     ~KExiv2Priv();
 
+    void copyPrivateData(const KExiv2Priv* const other);
+
     bool saveToXMPSidecar(const QFileInfo& finfo) const;
     bool saveToFile(const QFileInfo& finfo) const;
     bool saveOperations(Exiv2::Image::AutoPtr image) const;
