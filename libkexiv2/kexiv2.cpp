@@ -438,6 +438,8 @@ bool KExiv2::save(const QString& imageFilePath) const
     bool writtenToFile                   = false;
     bool writtenToSidecar                = false;
 
+    kDebug() << "KExiv2::metadataWritingMode" << d->metadataWritingMode;
+
     switch(d->metadataWritingMode)
     {
         case WRITETOSIDECARONLY:
