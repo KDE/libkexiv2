@@ -458,6 +458,7 @@ bool KExiv2::save(const QString& imageFilePath) const
 
     if (writeToFile)
     {
+        kDebug() << "Will write Metadata to file" << finfo.fileName();
         writtenToFile = d->saveToFile(finfo);
         if (writeToFile)
         {
@@ -467,6 +468,7 @@ bool KExiv2::save(const QString& imageFilePath) const
 
     if (writeToSidecar || (writeToSidecarIfFileNotPossible && !writtenToFile))
     {
+        kDebug() << "Will write XMP sidecar for file" << givenFileInfo.fileName();
         writtenToSidecar = d->saveToXMPSidecar(imageFilePath);
         if (writtenToSidecar)
         {
