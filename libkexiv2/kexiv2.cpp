@@ -66,6 +66,10 @@ KExiv2::KExiv2(const KExiv2& metadata)
     d->data = metadata.d->data;
 
     setFilePath(metadata.getFilePath());
+    setUseXMPSidecar4Reading(metadata.useXMPSidecar4Reading());
+    setWriteRawFiles(metadata.writeRawFiles());
+    setMetadataWritingMode(metadata.metadataWritingMode());
+    setUpdateFileTimeStamp(metadata.updateFileTimeStamp());
 }
 
 KExiv2::KExiv2(const KExiv2Data& data)
