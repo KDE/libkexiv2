@@ -314,21 +314,14 @@ bool KExiv2::load(const QString& filePath) const
         return false;
     }
 
-    QFileInfo info(filePath);
+    d->filePath = filePath;
 
     bool hasLoaded = false;
     try
     {
         Exiv2::Image::AutoPtr image;
 
-        if (!info.isReadable())
-        {
-            kDebug() << "File '" << info.filePath().toAscii().constData() << "' is not readable.";
-            return false;
-        }
-        
         image        = Exiv2::ImageFactory::open((const char*)(QFile::encodeName(filePath)));
-        d->filePath  = filePath;
 
         image->readMetadata();
 
