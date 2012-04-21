@@ -209,7 +209,7 @@ QString KExiv2::sidecarFilePathForFile(const QString& path)
     QString ret;
     if (!path.isEmpty())
     {
-        ret = path + QString(".xmp")
+        ret = path + QString(".xmp");
     }
     return ret;
 }
