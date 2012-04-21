@@ -211,7 +211,7 @@ QString KExiv2::sidecarFilePathForFile(const QString& path)
         return QString();
     }
 
-    return path + ".xmp";
+    return path + QString(".xmp");
 }
 
 KUrl KExiv2::sidecarUrl(const KUrl& url)
@@ -314,9 +314,9 @@ bool KExiv2::load(const QString& filePath) const
         return false;
     }
 
-    d->filePath = filePath;
+    d->filePath      = filePath;
+    bool hasLoaded   = false;
 
-    bool hasLoaded = false;
     try
     {
         Exiv2::Image::AutoPtr image;
@@ -412,6 +412,7 @@ bool KExiv2::save(const QString& imageFilePath) const
     {
         kDebug() << "filePath" << imageFilePath << "is a symlink."
                  << "Using target" << givenFileInfo.canonicalPath();
+
         regularFilePath = givenFileInfo.canonicalPath();// Walk all the symlinks
     }
 
