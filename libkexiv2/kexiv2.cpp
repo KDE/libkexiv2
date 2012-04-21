@@ -206,12 +206,12 @@ QString KExiv2::version()
 
 QString KExiv2::sidecarFilePathForFile(const QString& path)
 {
-    if (path.isEmpty())
+    QString ret;
+    if (!path.isEmpty())
     {
-        return QString();
+        ret = path + QString(".xmp")
     }
-
-    return path + QString(".xmp");
+    return ret;
 }
 
 KUrl KExiv2::sidecarUrl(const KUrl& url)
