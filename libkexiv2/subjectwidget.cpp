@@ -141,7 +141,7 @@ SubjectWidget::SubjectWidget(QWidget* parent)
     d->customBtn     = new QRadioButton;
     d->refCB         = new KComboBox;
     QLabel* codeLink = new QLabel(i18n("Use standard "
-                                       "<b><a href='http://www.iptc.org/NewsCodes'>"
+                                       "<b><a href='http://www.iptc.org/site/NewsCodes'>"
                                        "reference code</a></b>"));
     codeLink->setOpenExternalLinks(true);
     codeLink->setWordWrap(false);
