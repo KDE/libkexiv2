@@ -84,14 +84,9 @@ QByteArray KExiv2::getExifEncoded(bool addExifHeader) const
         {
             QByteArray data;
             Exiv2::ExifData& exif = d->exifMetadata();
-#if (EXIV2_TEST_VERSION(0,17,91))
             Exiv2::Blob blob;
             Exiv2::ExifParser::encode(blob, Exiv2::bigEndian, exif);
             QByteArray ba((const char*)&blob[0], blob.size());
-#else
-            Exiv2::DataBuf c2 = exif.copy();
-            QByteArray ba((const char*)c2.pData_, c2.size_);
-#endif
             if (addExifHeader)
             {
                 const uchar ExifHeader[] = {0x45, 0x78, 0x69, 0x66, 0x00, 0x00};
@@ -123,15 +118,8 @@ bool KExiv2::setExif(const QByteArray& data) const
     {
         if (!data.isEmpty())
         {
-#if (EXIV2_TEST_VERSION(0,17,91))
             Exiv2::ExifParser::decode(d->exifMetadata(), (const Exiv2::byte*)data.data(), data.size());
             return (!d->exifMetadata().empty());
-#else
-            if (d->exifMetadata().load((const Exiv2::byte*)data.data(), data.size()) != 0)
-                return false;
-            else
-                return true;
-#endif
         }
     }
     catch( Exiv2::Error& e )
@@ -278,23 +266,9 @@ bool KExiv2::setExifComment(const QString& comment, bool setProgramName) const
             else
             {
                 // write as Unicode (UCS-2)
-
-#if (EXIV2_TEST_VERSION(0,20,0))
                 std::string exifComment("charset=\"Unicode\" ");
                 exifComment += comment.toUtf8().constData();
                 d->exifMetadata()["Exif.Photo.UserComment"] = exifComment;
-#else
-                // Older versions took a UCS2-String, see bug #205824
-
-                // Be aware that we are dealing with a UCS-2 string.
-                // Null termination means \0\0, strlen does not work,
-                // do not use any const-char*-only methods,
-                // pass a std::string and not a const char * to ExifDatum::operator=().
-                const unsigned short* ucs2 = comment.utf16();
-                std::string exifComment("charset=\"Unicode\" ");
-                exifComment.append((const char*)ucs2, sizeof(unsigned short) * comment.length());
-                d->exifMetadata()["Exif.Photo.UserComment"] = exifComment;
-#endif
             }
         }
         return true;
@@ -313,11 +287,7 @@ QString KExiv2::getExifTagTitle(const char* exifTagName)
     {
         std::string exifkey(exifTagName);
         Exiv2::ExifKey ek(exifkey);
-#if (EXIV2_TEST_VERSION(0,21,0))
         return QString::fromLocal8Bit( ek.tagLabel().c_str() );
-#else
-        return QString::fromLocal8Bit( Exiv2::ExifTags::tagTitle(ek.tag(), ek.ifdId()) );
-#endif
     }
     catch (Exiv2::Error& e)
     {
@@ -333,11 +303,7 @@ QString KExiv2::getExifTagDescription(const char* exifTagName)
     {
         std::string exifkey(exifTagName);
         Exiv2::ExifKey ek(exifkey);
-#if (EXIV2_TEST_VERSION(0,21,0))
         return QString::fromLocal8Bit( ek.tagDesc().c_str() );
-#else
-        return QString::fromLocal8Bit( Exiv2::ExifTags::tagDesc(ek.tag(), ek.ifdId()) );
-#endif
     }
     catch (Exiv2::Error& e)
     {
@@ -634,11 +600,7 @@ QByteArray KExiv2::getExifTagData(const char* exifTagName) const
         if (it != exifData.end())
         {
             char *s = new char[(*it).size()];
-#if (EXIV2_TEST_VERSION(0,17,91))
             (*it).copy((Exiv2::byte*)s, Exiv2::bigEndian);
-#else
-            (*it).copy((Exiv2::byte*)s, exifData.byteOrder());
-#endif
             QByteArray data(s, (*it).size());
             delete[] s;
             return data;
@@ -737,15 +699,9 @@ QString KExiv2::getExifTagString(const char* exifTagName, bool escapeCR) const
         Exiv2::ExifData::iterator it = exifData.findKey(exifKey);
         if (it != exifData.end())
         {
-#if (EXIV2_TEST_VERSION(0,17,91))
             // See B.K.O #184156 comment #13
             std::string val  = it->print(&exifData);
             QString tagValue = QString::fromLocal8Bit(val.c_str());
-#else
-            std::ostringstream os;
-            os << *it;
-            QString tagValue = QString::fromLocal8Bit(os.str().c_str());
-#endif
             if (escapeCR)
                 tagValue.replace('\n', ' ');
 
@@ -788,12 +744,8 @@ QImage KExiv2::getExifThumbnail(bool fixOrientation) const
 
     try
     {
-#if (EXIV2_TEST_VERSION(0,17,91))
         Exiv2::ExifThumbC thumb(d->exifMetadata());
         Exiv2::DataBuf const c1 = thumb.copy();
-#else
-        Exiv2::DataBuf const c1(d->exifMetadata().copyThumbnail());
-#endif
         thumbnail.loadFromData(c1.pData_, c1.size_);
 
         if (!thumbnail.isNull())
@@ -921,12 +873,10 @@ bool KExiv2::removeExifThumbnail() const
 {
     try
     {
-#if (EXIV2_TEST_VERSION(0,17,91))
         // Remove all IFD0 subimages.
         Exiv2::ExifThumb thumb(d->exifMetadata());
         thumb.erase();
         return true;
-#endif
     }
     catch( Exiv2::Error& e )
     {
@@ -943,7 +893,6 @@ KExiv2::TagsMap KExiv2::getStdExifTagsList() const
         QList<const Exiv2::TagInfo*> tags;
         TagsMap                      tagsMap;
 
-#if (EXIV2_TEST_VERSION(0,21,0))
         const Exiv2::GroupInfo* gi = Exiv2::ExifTags::groupList();
         while (gi->tagList_ != 0)
         {
@@ -974,25 +923,6 @@ KExiv2::TagsMap KExiv2::getStdExifTagsList() const
             }
             while((*it)->tag_ != 0xffff);
         }
-#else
-        tags << Exiv2::ExifTags::ifdTagList()
-             << Exiv2::ExifTags::exifTagList()
-             << Exiv2::ExifTags::iopTagList()
-             << Exiv2::ExifTags::gpsTagList();
-
-        for (QList<const Exiv2::TagInfo*>::iterator it = tags.begin(); it != tags.end(); ++it)
-        {
-            do
-            {
-                QString key = QLatin1String( Exiv2::ExifKey( (*it)->tag_, Exiv2::ExifTags::ifdItem( (*it)->ifdId_ ) ).key().c_str() );
-                QStringList values;
-                values << (*it)->name_ << (*it)->title_ << (*it)->desc_;
-                tagsMap.insert(key, values);
-                ++(*it);
-            }
-            while((*it)->tag_ != 0xffff);
-        }
-#endif
         return tagsMap;
     }
     catch( Exiv2::Error& e )
@@ -1009,8 +939,6 @@ KExiv2::TagsMap KExiv2::getMakernoteTagsList() const
     {
         QList<const Exiv2::TagInfo*> tags;
         TagsMap                      tagsMap;
-
-#if (EXIV2_TEST_VERSION(0,21,0))
 
         const Exiv2::GroupInfo* gi = Exiv2::ExifTags::groupList();
 
@@ -1043,73 +971,6 @@ KExiv2::TagsMap KExiv2::getMakernoteTagsList() const
             }
             while((*it)->tag_ != 0xffff);
         }
-
-#else
-
-#if (EXIV2_TEST_VERSION(0,18,1))
-        tags
-             // Canon Makernotes.
-             << Exiv2::CanonMakerNote::tagList()
-             << Exiv2::CanonMakerNote::tagListCs()
-             << Exiv2::CanonMakerNote::tagListSi()
-             << Exiv2::CanonMakerNote::tagListPa()
-             << Exiv2::CanonMakerNote::tagListCf()
-             << Exiv2::CanonMakerNote::tagListPi()
-#if (EXIV2_TEST_VERSION(0,19,1))
-             << Exiv2::CanonMakerNote::tagListFi()
-#endif // (EXIV2_TEST_VERSION(0,19,1))
-             // Sigma Makernotes.
-             << Exiv2::SigmaMakerNote::tagList()
-             // Sony Makernotes.
-             << Exiv2::SonyMakerNote::tagList()
-#if (EXIV2_TEST_VERSION(0,19,1))
-             << Exiv2::SonyMakerNote::tagListCs()
-             << Exiv2::SonyMakerNote::tagListCs2()
-#endif // (EXIV2_TEST_VERSION(0,19,1))
-             // Minolta Makernotes.
-             << Exiv2::MinoltaMakerNote::tagList()
-             << Exiv2::MinoltaMakerNote::tagListCsStd()
-             << Exiv2::MinoltaMakerNote::tagListCs7D()
-             << Exiv2::MinoltaMakerNote::tagListCs5D()
-             // Nikon Makernotes.
-             << Exiv2::Nikon1MakerNote::tagList()
-             << Exiv2::Nikon2MakerNote::tagList()
-             << Exiv2::Nikon3MakerNote::tagList()
-             // Olympus Makernotes.
-             << Exiv2::OlympusMakerNote::tagList()
-             << Exiv2::OlympusMakerNote::tagListCs()
-             << Exiv2::OlympusMakerNote::tagListEq()
-             << Exiv2::OlympusMakerNote::tagListRd()
-             << Exiv2::OlympusMakerNote::tagListRd2()
-             << Exiv2::OlympusMakerNote::tagListIp()
-             << Exiv2::OlympusMakerNote::tagListFi()
-             << Exiv2::OlympusMakerNote::tagListFe()
-             << Exiv2::OlympusMakerNote::tagList()
-             << Exiv2::OlympusMakerNote::tagListRi()
-             // Panasonic Makernotes.
-             << Exiv2::PanasonicMakerNote::tagList()
-             << Exiv2::PanasonicMakerNote::tagListRaw()
-             // Pentax Makernotes.
-             << Exiv2::PentaxMakerNote::tagList()
-             // Fuji Makernotes.
-             << Exiv2::FujiMakerNote::tagList();
-
-#endif // (EXIV2_TEST_VERSION(0,18,1))
-
-        for (QList<const Exiv2::TagInfo*>::iterator it = tags.begin(); it != tags.end(); ++it)
-        {
-            do
-            {
-                QString     key = QLatin1String( Exiv2::ExifKey( (*it)->tag_, Exiv2::ExifTags::ifdItem( (*it)->ifdId_ ) ).key().c_str() );
-                QStringList values;
-                values << (*it)->name_ << (*it)->title_ << (*it)->desc_;
-                tagsMap.insert(key, values);
-                ++(*it);
-            }
-            while((*it)->tag_ != 0xffff);
-        }
-
-#endif // (EXIV2_TEST_VERSION(0,21,0))
 
         return tagsMap;
     }

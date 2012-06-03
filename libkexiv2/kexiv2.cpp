@@ -143,43 +143,23 @@ bool KExiv2::supportMetadataWritting(const QString& typeMime)
     }
     else if (typeMime == QString("image/tiff"))
     {
-#if (EXIV2_TEST_VERSION(0,17,91))
         return true;
-#else
-        return false;
-#endif
     }
     else if (typeMime == QString("image/png"))
     {
-#if (EXIV2_TEST_VERSION(0,17,91))
         return true;
-#else
-        return false;
-#endif
     }
     else if (typeMime == QString("image/jp2"))
     {
-#if (EXIV2_TEST_VERSION(0,17,91))
         return true;
-#else
-        return false;
-#endif
     }
     else if (typeMime == QString("image/x-raw"))
     {
-#if (EXIV2_TEST_VERSION(0,17,91))
         return true;
-#else
-        return false;
-#endif
     }
     else if (typeMime == QString("image/pgf"))
     {
-#if (EXIV2_TEST_VERSION(0,19,1))
         return true;
-#else
-        return false;
-#endif
     }
 
     return false;
@@ -190,13 +170,7 @@ QString KExiv2::Exiv2Version()
     // Since 0.14.0 release, we can extract run-time version of Exiv2.
     // else we return make version.
 
-#if (EXIV2_TEST_VERSION(0,14,0))
     return QString(Exiv2::version());
-#else
-    return QString("%1.%2.%3").arg(EXIV2_MAJOR_VERSION)
-                              .arg(EXIV2_MINOR_VERSION)
-                              .arg(EXIV2_PATCH_VERSION);
-#endif
 }
 
 QString KExiv2::version()

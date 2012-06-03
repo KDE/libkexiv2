@@ -45,9 +45,7 @@ KExiv2::KExiv2Priv::KExiv2Priv()
     updateFileTimeStamp   = false;
     useXMPSidecar4Reading = false;
     metadataWritingMode   = WRITETOIMAGEONLY;
-#if (EXIV2_TEST_VERSION(0,21,0))
     Exiv2::LogMsg::setHandler(KExiv2::KExiv2Priv::printExiv2MessageHandler);
-#endif
 }
 
 KExiv2::KExiv2Priv::~KExiv2Priv()
@@ -95,36 +93,13 @@ bool KExiv2::KExiv2Priv::saveToFile(const QFileInfo& finfo) const
     }
 
     QStringList rawTiffBasedSupported = QStringList()
-#if (EXIV2_TEST_VERSION(0,19,1))
         // TIFF/EP Raw files based supported by Exiv2 0.19.1
         << "dng" << "nef" << "pef" << "orf";
-#else
-#if (EXIV2_TEST_VERSION(0,17,91))
-        // TIFF/EP Raw files based supported by Exiv2 0.18.0
-        << "dng" << "nef" << "pef";
-#else
-        // TIFF/EP Raw files based supported by all other Exiv2 versions
-        // NONE
-#endif
-#endif
 
     QStringList rawTiffBasedNotSupported = QStringList()
-#if (EXIV2_TEST_VERSION(0,19,1))
         // TIFF/EP Raw files based not supported by Exiv2 0.19.1
         << "3fr" << "arw" << "cr2" << "dcr" << "erf" << "k25"
         << "kdc" << "mos" << "raw" << "sr2" << "srf";
-#else
-#if (EXIV2_TEST_VERSION(0,17,91))
-        // TIFF/EP Raw files based not supported by Exiv2 0.18.0
-        << "3fr" << "arw" << "cr2" << "dcr" << "erf" << "k25"
-        << "kdc" << "mos" << "raw" << "sr2" << "srf" << "orf";
-#else
-        // TIFF/EP Raw files based not supported by all other Exiv2 versions
-        << "dng" << "nef" << "pef"
-        << "3fr" << "arw" << "cr2" << "dcr" << "erf" << "k25"
-        << "kdc" << "mos" << "raw" << "sr2" << "srf" << "orf";
-#endif
-#endif
 
     QString ext = finfo.suffix().toLower();
     if (rawTiffBasedNotSupported.contains(ext))
@@ -309,19 +284,7 @@ QString KExiv2::KExiv2Priv::convertCommentValue(const Exiv2::Exifdatum& exifDatu
         std::string comment;
         std::string charset;
 
-#if (EXIV2_TEST_VERSION(0,11,0))
         comment = exifDatum.toString();
-#else
-        // workaround for bug in TIFF parser: CommentValue is loaded as DataValue
-        const Exiv2::Value& value = exifDatum.value();
-        Exiv2::byte* data         = new Exiv2::byte[value.size()];
-        value.copy(data, Exiv2::invalidByteOrder);
-        Exiv2::CommentValue commentValue;
-        // this read method is hidden in CommentValue
-        static_cast<Exiv2::Value&>(commentValue).read(data, value.size(), Exiv2::invalidByteOrder);
-        comment = commentValue.toString();
-        delete [] data;
-#endif
 
         // libexiv2 will prepend "charset=\"SomeCharset\" " if charset is specified
         // Before conversion to QString, we must know the charset, so we stay with std::string for a while
@@ -340,16 +303,7 @@ QString KExiv2::KExiv2Priv::convertCommentValue(const Exiv2::Exifdatum& exifDatu
 
         if (charset == "\"Unicode\"")
         {
-#if (EXIV2_TEST_VERSION(0,20,0))
             return QString::fromUtf8(comment.data());
-#else
-            // Older versions give a UCS2-String, see bug #205824
-
-            // QString expects a null-terminated UCS-2 string.
-            // Is it already null terminated? In any case, add termination "\0\0" for safety.
-            comment.resize(comment.length() + 2, '\0');
-            return QString::fromUtf16((unsigned short *)comment.data());
-#endif
         }
         else if (charset == "\"Jis\"")
         {

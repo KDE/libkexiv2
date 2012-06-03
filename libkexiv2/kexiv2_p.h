@@ -102,22 +102,9 @@
 #    define EXIV2_TEST_VERSION(major,minor,patch) (false)
 #endif
 
-#if (EXIV2_TEST_VERSION(0,21,0))
-
 // With exiv2 > 0.20.0, all makernote header files have been removed to increase binary compatibility.
 // See Exiv2 bugzilla entry http://dev.exiv2.org/issues/719
 // and wiki topic           http://dev.exiv2.org/boards/3/topics/583
-#else
-#include <exiv2/canonmn.hpp>
-#include <exiv2/sigmamn.hpp>
-#include <exiv2/sonymn.hpp>
-#include <exiv2/minoltamn.hpp>
-#include <exiv2/nikonmn.hpp>
-#include <exiv2/olympusmn.hpp>
-#include <exiv2/panasonicmn.hpp>
-#include <exiv2/pentaxmn.hpp>
-#include <exiv2/fujimn.hpp>
-#endif
 
 #ifdef __GNUC__
 #pragma GCC visibility pop

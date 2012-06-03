@@ -82,20 +82,11 @@ QByteArray KExiv2::getIptc(bool addIrbHeader) const
 
             if (addIrbHeader)
             {
-#if (EXIV2_TEST_VERSION(0,10,0))
                 c2 = Exiv2::Photoshop::setIptcIrb(0, 0, iptc);
-#else
-                kDebug() << "Exiv2 version is to old. Cannot add Irb header to Iptc metadata";
-                return QByteArray();
-#endif
             }
             else
             {
-#if (EXIV2_TEST_VERSION(0,17,91))
                 c2 = Exiv2::IptcParser::encode(d->iptcMetadata());
-#else
-                c2 = iptc.copy();
-#endif
             }
 
             QByteArray data((const char*)c2.pData_, c2.size_);
@@ -120,15 +111,8 @@ bool KExiv2::setIptc(const QByteArray& data) const
     {
         if (!data.isEmpty())
         {
-#if (EXIV2_TEST_VERSION(0,17,91))
             Exiv2::IptcParser::decode(d->iptcMetadata(), (const Exiv2::byte*)data.data(), data.size());
             return (!d->iptcMetadata().empty());
-#else
-            if (d->iptcMetadata().load((const Exiv2::byte*)data.data(), data.size()) != 0)
-                return false;
-            else
-                return true;
-#endif
         }
     }
     catch( Exiv2::Error& e )

@@ -45,9 +45,7 @@ bool KExiv2::setImageProgramId(const QString& program, const QString& version) c
 
         // Set program info into Exif.Image.ProcessingSoftware tag (only available with Exiv2 >= 0.14.0).
 
-#if (EXIV2_TEST_VERSION(0,14,0))
         d->exifMetadata()["Exif.Image.ProcessingSoftware"] = std::string(software.toAscii().constData());
-#endif
 
         // See B.K.O #142564: Check if Exif.Image.Software already exist. If yes, do not touch this tag.
 
