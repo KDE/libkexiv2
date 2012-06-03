@@ -29,6 +29,10 @@
 #include "kexiv2_p.h"
 #include "rotationmatrix.h"
 
+// C++ includes
+
+#include <cctype>
+
 // KDE includes
 
 #include <klocale.h>
@@ -240,6 +244,19 @@ QString KExiv2::getExifComment() const
     return QString();
 }
 
+static bool is7BitAscii(const QByteArray& s)
+{
+    const int size = s.size();
+    for (int i=0; i<size; i++)
+    {
+        if (!isascii(s[i]))
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
 bool KExiv2::setExifComment(const QString& comment, bool setProgramName) const
 {
     if (!setProgramId(setProgramName))
@@ -258,20 +275,23 @@ bool KExiv2::setExifComment(const QString& comment, bool setProgramName) const
             QTextCodec* latin1Codec = QTextCodec::codecForName("iso8859-1");
             if (latin1Codec->canEncode(comment))
             {
-                // write as ASCII
-                std::string exifComment("charset=\"Ascii\" ");
-                exifComment += comment.toLatin1().constData();
-                d->exifMetadata()["Exif.Photo.UserComment"] = exifComment;
+                // We know it's in the ISO-8859-1 8bit range.
+                // Check if it's in the ASCII 7bit range
+                if (is7BitAscii(comment.toLatin1()))
+                {
+                    // write as ASCII
+                    std::string exifComment("charset=\"Ascii\" ");
+                    exifComment += comment.toLatin1().constData();
+                    d->exifMetadata()["Exif.Photo.UserComment"] = exifComment;
+                    return true;
+                }
             }
-            else
-            {
-                // write as Unicode (UCS-2)
-                std::string exifComment("charset=\"Unicode\" ");
-                exifComment += comment.toUtf8().constData();
-                d->exifMetadata()["Exif.Photo.UserComment"] = exifComment;
-            }
+            // write as Unicode (UCS-2)
+            std::string exifComment("charset=\"Unicode\" ");
+            exifComment += comment.toUtf8().constData();
+            d->exifMetadata()["Exif.Photo.UserComment"] = exifComment;
+            return true;
         }
-        return true;
     }
     catch( Exiv2::Error& e )
     {
