@@ -227,6 +227,7 @@ QString KExiv2::getExifComment() const
                 // Some cameras fill in nonsense default values
                 QStringList blackList;
                 blackList << "SONY DSC"; // + whitespace
+                blackList << "OLYMPUS DIGITAL CAMERA";
 
                 QString trimmedComment = exifComment.trimmed();
 
