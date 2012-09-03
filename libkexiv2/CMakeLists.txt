@@ -6,7 +6,7 @@
 # @date   2006-09-15
 # @brief  Exiv2 library interface for KDE
 #
-# @author Copyright (C) 2006-2011 by Gilles Caulier
+# @author Copyright (C) 2006-2012 by Gilles Caulier
 #         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
 #
 # This program is free software; you can redistribute it
@@ -26,8 +26,9 @@ INCLUDE_DIRECTORIES(${EXIV2_INCLUDE_DIR})
 
 ADD_DEFINITIONS(${EXIV2_DEFINITIONS})
 ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})
+
 IF( WIN32 )
-ADD_DEFINITIONS( -DEXV_HAVE_DLL )
+    ADD_DEFINITIONS( -DEXV_HAVE_DLL )
 ENDIF( WIN32 )
 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/version.h)
@@ -58,7 +59,7 @@ TARGET_LINK_LIBRARIES(kexiv2 ${KDE4_KDEUI_LIBS} ${KDE4_KDECORE_LIBS} ${QT_QTGUI_
                              ${QT_QTXML_LIBRARY} ${EXIV2_LIBRARIES})
 
 IF( WIN32 )
-TARGET_LINK_LIBRARIES( kexiv2 ${EXPAT_LIBRARIES} )
+    TARGET_LINK_LIBRARIES( kexiv2 ${EXPAT_LIBRARIES} )
 ENDIF( WIN32 )
 
 SET_TARGET_PROPERTIES(kexiv2 PROPERTIES VERSION ${KEXIV2_LIB_SO_VERSION_STRING} 
@@ -66,16 +67,21 @@ SET_TARGET_PROPERTIES(kexiv2 PROPERTIES VERSION ${KEXIV2_LIB_SO_VERSION_STRING}
 
 INSTALL(TARGETS kexiv2 ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
-INSTALL(FILES kexiv2.h
-              kexiv2data.h
-              kexiv2previews.h
-              libkexiv2_export.h
-              msgtextedit.h
-              subjectwidget.h
-              altlangstredit.h
-              countryselector.h
-              rotationmatrix.h
-              ${CMAKE_CURRENT_BINARY_DIR}/version.h
-        DESTINATION ${INCLUDE_INSTALL_DIR}/libkexiv2 COMPONENT Devel)
-
 INSTALL(FILES topicset.iptc-subjectcode.xml DESTINATION ${DATA_INSTALL_DIR}/libkexiv2/data)
+
+# Check if compilation is done through digiKam SC or not. If yes, do not install header files.
+IF(NOT DIGIKAMSC_USE_PRIVATE_KDEGRAPHICS)
+    INSTALL(FILES kexiv2.h
+                  kexiv2data.h
+                  kexiv2previews.h
+                  libkexiv2_export.h
+                  msgtextedit.h
+                  subjectwidget.h
+                  altlangstredit.h
+                  countryselector.h
+                  rotationmatrix.h
+                  ${CMAKE_CURRENT_BINARY_DIR}/version.h
+            DESTINATION ${INCLUDE_INSTALL_DIR}/libkexiv2
+            COMPONENT Devel
+           )
+ENDIF()
