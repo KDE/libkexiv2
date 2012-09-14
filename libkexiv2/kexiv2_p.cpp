@@ -65,6 +65,7 @@ void KExiv2::KExiv2Priv::copyPrivateData(const KExiv2Priv* const  other)
 bool KExiv2::KExiv2Priv::saveToXMPSidecar(const QFileInfo& finfo) const
 {
     QString filePath = KExiv2::sidecarFilePathForFile(finfo.filePath());
+
     if (filePath.isEmpty())
         return false;
 
@@ -102,6 +103,7 @@ bool KExiv2::KExiv2Priv::saveToFile(const QFileInfo& finfo) const
         << "kdc" << "mos" << "raw" << "sr2" << "srf";
 
     QString ext = finfo.suffix().toLower();
+
     if (rawTiffBasedNotSupported.contains(ext))
     {
         kDebug() << finfo.fileName()
@@ -116,6 +118,7 @@ bool KExiv2::KExiv2Priv::saveToFile(const QFileInfo& finfo) const
                  << "Metadata not saved.";
         return false;
     }
+
     kDebug() << "File Extension: " << ext << " is supported for writing mode";
 
     bool ret = false;
@@ -147,6 +150,7 @@ bool KExiv2::KExiv2Priv::saveOperations(Exiv2::Image::AutoPtr image) const
         // Image Comments ---------------------------------
 
         mode = image->checkMode(Exiv2::mdComment);
+
         if (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite)
         {
             image->setComment(imageComments());
@@ -155,6 +159,7 @@ bool KExiv2::KExiv2Priv::saveOperations(Exiv2::Image::AutoPtr image) const
         // Exif metadata ----------------------------------
 
         mode = image->checkMode(Exiv2::mdExif);
+
         if (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite)
         {
             if (image->mimeType() == "image/tiff")
@@ -190,6 +195,7 @@ bool KExiv2::KExiv2Priv::saveOperations(Exiv2::Image::AutoPtr image) const
                 }
 
                 Exiv2::ExifData readedExif = exifMetadata();
+
                 for (Exiv2::ExifData::iterator it = readedExif.begin(); it != readedExif.end(); ++it)
                 {
                     if (!untouchedTags.contains(it->key().c_str()))
@@ -209,6 +215,7 @@ bool KExiv2::KExiv2Priv::saveOperations(Exiv2::Image::AutoPtr image) const
         // Iptc metadata ----------------------------------
 
         mode = image->checkMode(Exiv2::mdIptc);
+
         if (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite)
         {
             image->setIptcData(iptcMetadata());
@@ -219,6 +226,7 @@ bool KExiv2::KExiv2Priv::saveOperations(Exiv2::Image::AutoPtr image) const
         // Xmp metadata -----------------------------------
 
         mode = image->checkMode(Exiv2::mdXmp);
+
         if (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite)
         {
             image->setXmpData(xmpMetadata());
@@ -277,7 +285,7 @@ void KExiv2::KExiv2Priv::printExiv2MessageHandler(int lvl, const char* msg)
     kDebug() << "Exiv2 (" << lvl << ") : " << msg;
 }
 
-QString KExiv2::KExiv2Priv::convertCommentValue(const Exiv2::Exifdatum& exifDatum)
+QString KExiv2::KExiv2Priv::convertCommentValue(const Exiv2::Exifdatum& exifDatum) const
 {
     try
     {
@@ -336,7 +344,9 @@ QString KExiv2::KExiv2Priv::detectEncodingAndDecode(const std::string& value) co
     // TODO: Gilles ==> Marcel : Look like KEncodingDetector class can provide a full implementation for encoding detection.
 
     if (value.empty())
+    {
         return QString();
+    }
 
     if (KStringHandler::isUtf8(value.c_str()))
     {
@@ -371,6 +381,7 @@ int KExiv2::KExiv2Priv::getXMPTagsListFromPrefix(const QString& pf, KExiv2::Tags
             i++;
         }
     }
+
     return i;
 }
 
@@ -380,6 +391,7 @@ void KExiv2::KExiv2Priv::mergeXmpData(const Exiv2::XmpData& src, Exiv2::XmpData&
     for (Exiv2::XmpData::const_iterator it = src.begin(); it != src.end(); ++it)
     {
         Exiv2::XmpData::iterator destIt = dest.findKey(Exiv2::XmpKey(it->key()));
+
         if (destIt == dest.end())
         {
             dest.add(*it);

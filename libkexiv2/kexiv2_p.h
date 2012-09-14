@@ -121,6 +121,8 @@ public:
 
     void clear();
 
+public:
+
     std::string     imageComments;
 
     Exiv2::ExifData exifMetadata;
@@ -132,6 +134,8 @@ public:
 #endif
 };
 
+// --------------------------------------------------------------------------
+
 class KExiv2::KExiv2Priv
 {
 public:
@@ -141,17 +145,17 @@ public:
 
     void copyPrivateData(const KExiv2Priv* const other);
 
-    bool saveToXMPSidecar(const QFileInfo& finfo) const;
-    bool saveToFile(const QFileInfo& finfo) const;
+    bool saveToXMPSidecar(const QFileInfo& finfo)    const;
+    bool saveToFile(const QFileInfo& finfo)          const;
     bool saveOperations(Exiv2::Image::AutoPtr image) const;
 
     /** Wrapper method to convert a Comments content to a QString.
-    */
-    QString convertCommentValue(const Exiv2::Exifdatum& exifDatum);
+     */
+    QString convertCommentValue(const Exiv2::Exifdatum& exifDatum) const;
 
     /** Charset autodetection to convert a string to a QString.
-    */
-    QString detectEncodingAndDecode(const std::string& value) const;
+     */
+    QString detectEncodingAndDecode(const std::string& value)      const;
 
     int getXMPTagsListFromPrefix(const QString& pf, KExiv2::TagsMap& tagsMap) const;
 
@@ -163,12 +167,12 @@ public:
     const Exiv2::XmpData&  xmpMetadata()   const { return data.constData()->xmpMetadata;   }
 #endif
 
-    Exiv2::ExifData& exifMetadata()              { return data.data()->exifMetadata;  }
-    Exiv2::IptcData& iptcMetadata()              { return data.data()->iptcMetadata;  }
-    std::string& imageComments()                 { return data.data()->imageComments; }
+    Exiv2::ExifData&       exifMetadata()        { return data.data()->exifMetadata;       }
+    Exiv2::IptcData&       iptcMetadata()        { return data.data()->iptcMetadata;       }
+    std::string&           imageComments()       { return data.data()->imageComments;      }
 
 #ifdef _XMP_SUPPORT_
-    Exiv2::XmpData&  xmpMetadata()               { return data.data()->xmpMetadata;   }
+    Exiv2::XmpData&        xmpMetadata()         { return data.data()->xmpMetadata;        }
 
     /**
      * Merge two XmpData packages, where the result is stored in dest
@@ -180,13 +184,13 @@ public:
 public:
 
     /** Generic method to print the Exiv2 C++ Exception error message from 'e'.
-        'msg' string is printed using kDebug rules..
-    */
+     *  'msg' string is printed using kDebug rules..
+     */
     static void printExiv2ExceptionError(const QString& msg, Exiv2::Error& e);
 
     /** Generic method to print debug message from Exiv2.
-        'msg' string is printed using kDebug rules. 'lvl' is the debug level of Exiv2 message.
-    */
+     *  'msg' string is printed using kDebug rules. 'lvl' is the debug level of Exiv2 message.
+     */
     static void printExiv2MessageHandler(int lvl, const char* msg);
 
 public:
