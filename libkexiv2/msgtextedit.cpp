@@ -36,17 +36,17 @@
 namespace KExiv2Iface
 {
 
-class MsgTextEdit::MsgTextEditPriv
+class MsgTextEdit::Private
 {
 public:
 
-    MsgTextEditPriv(){}
+    Private(){}
 
     QString message;
 };
 
 MsgTextEdit::MsgTextEdit(QWidget* parent)
-           : KTextEdit(parent), d(new MsgTextEditPriv)
+           : KTextEdit(parent), d(new Private)
 {
     setAcceptRichText(false);
 }

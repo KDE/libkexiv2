@@ -197,15 +197,15 @@ public:
     /** Like sidecarFilePathForFile(), but works for remote URLs.
      */
     static KUrl sidecarUrl(const KUrl& url);
-    
+
     /** Gives a file url for a local path.
      */
     static KUrl sidecarUrl(const QString& path);
-    
+
     /** Performs a QFileInfo based check if the given local file has a sidecar.
      */
     static bool hasSidecar(const QString& path);
-    
+
     //@}
 
     //-----------------------------------------------------------------
@@ -1072,8 +1072,8 @@ private:
 
     /** Internal container to store private members. Used to improve binary compatibility
      */
-    class KExiv2Priv;
-    KExiv2Priv* const d;
+    class Private;
+    Private* const d;
 
     friend class KExiv2Previews;
 };

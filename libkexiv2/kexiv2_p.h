@@ -115,7 +115,7 @@
 namespace KExiv2Iface
 {
 
-class KExiv2Data::KExiv2DataPriv : public QSharedData
+class KExiv2Data::Private : public QSharedData
 {
 public:
 
@@ -136,14 +136,14 @@ public:
 
 // --------------------------------------------------------------------------
 
-class KExiv2::KExiv2Priv
+class KExiv2::Private
 {
 public:
 
-    KExiv2Priv();
-    ~KExiv2Priv();
+    Private();
+    ~Private();
 
-    void copyPrivateData(const KExiv2Priv* const other);
+    void copyPrivateData(const Private* const other);
 
     bool saveToXMPSidecar(const QFileInfo& finfo)    const;
     bool saveToFile(const QFileInfo& finfo)          const;
@@ -207,7 +207,7 @@ public:
     QSize                                          pixelSize;
     QString                                        mimeType;
 
-    QSharedDataPointer<KExiv2Data::KExiv2DataPriv> data;
+    QSharedDataPointer<KExiv2Data::Private> data;
 };
 
 }  // NameSpace KExiv2Iface

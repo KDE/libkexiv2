@@ -52,11 +52,11 @@ public:
 public:
 
     // Declared as public due to use in KExiv2Priv class
-    class KExiv2DataPriv;
+    class Private;
 
 private:
 
-    QSharedDataPointer<KExiv2DataPriv> d;
+    QSharedDataPointer<Private> d;
 
     friend class KExiv2;
 };

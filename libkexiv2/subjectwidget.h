@@ -113,8 +113,8 @@ protected:
 
 private:
 
-    class SubjectWidgetPriv;
-    SubjectWidgetPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace KExiv2Iface

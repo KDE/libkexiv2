@@ -58,24 +58,24 @@ KExiv2Data& KExiv2Data::operator=(const KExiv2Data& other)
 // -------------------------------------------------------------------------------------------
 
 KExiv2::KExiv2()
-    : d(new KExiv2Priv)
+    : d(new Private)
 {
 }
 
 KExiv2::KExiv2(const KExiv2& metadata)
-    : d(new KExiv2Priv)
+    : d(new Private)
 {
     d->copyPrivateData(metadata.d);
 }
 
 KExiv2::KExiv2(const KExiv2Data& data)
-    : d(new KExiv2Priv)
+    : d(new Private)
 {
     setData(data);
 }
 
 KExiv2::KExiv2(const QString& filePath)
-    : d(new KExiv2Priv)
+    : d(new Private)
 {
     load(filePath);
 }
@@ -229,7 +229,7 @@ void KExiv2::setData(const KExiv2Data& data)
     else
     {
         // KExiv2Data can have a null pointer,
-        // but we never want a null pointer in KExiv2Priv.
+        // but we never want a null pointer in Private.
         d->data->clear();
     }
 }

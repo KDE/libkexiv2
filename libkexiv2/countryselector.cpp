@@ -38,11 +38,11 @@
 namespace KExiv2Iface
 {
 
-class CountrySelector::CountrySelectorPriv
+class CountrySelector::Private
 {
 public:
 
-    CountrySelectorPriv()
+    Private()
     {
         // We cannot use KLocale::allCountriesList() here because KDE only
         // support 2 characters country codes. XMP require 3 characters country
@@ -313,9 +313,9 @@ public:
 };
 
 CountrySelector::CountrySelector(QWidget* parent)
-               : KComboBox(parent), d(new CountrySelectorPriv)
+               : KComboBox(parent), d(new Private)
 {
-    for (CountrySelectorPriv::CountryCodeMap::Iterator it = d->countryCodeMap.begin();
+    for (Private::CountryCodeMap::Iterator it = d->countryCodeMap.begin();
          it != d->countryCodeMap.end(); ++it)
     {
         addItem(QString("%1 - %2").arg(it.key()).arg(it.value()));
@@ -363,7 +363,7 @@ bool CountrySelector::country(QString& countryCode, QString& countryName)
 
 QString CountrySelector::countryForCode(const QString& countryCode)
 {
-    CountrySelectorPriv priv;
+    Private priv;
     return (priv.countryCodeMap[countryCode]);
 }
 

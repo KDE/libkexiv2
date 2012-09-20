@@ -106,8 +106,8 @@ protected:
 
 private:
 
-    class AltLangStrEditPriv;
-    AltLangStrEditPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace KExiv2Iface

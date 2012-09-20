@@ -57,8 +57,8 @@ public:
 
 private:
 
-    class CountrySelectorPriv;
-    CountrySelectorPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace KExiv2Iface

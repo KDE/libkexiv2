@@ -65,8 +65,8 @@ protected:
 
 private:
 
-    class MsgTextEditPriv;
-    MsgTextEditPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace KExiv2Iface

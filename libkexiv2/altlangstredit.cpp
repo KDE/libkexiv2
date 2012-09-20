@@ -51,11 +51,11 @@
 namespace KExiv2Iface
 {
 
-class AltLangStrEdit::AltLangStrEditPriv
+class AltLangStrEdit::Private
 {
 public:
 
-    AltLangStrEditPriv()
+    Private()
     {
         titleLabel      = 0;
         delValueButton  = 0;
@@ -265,7 +265,7 @@ public:
 };
 
 AltLangStrEdit::AltLangStrEdit(QWidget* parent)
-              : QWidget(parent), d(new AltLangStrEditPriv)
+              : QWidget(parent), d(new Private)
 {
     QGridLayout* grid = new QGridLayout(this);
     d->titleLabel     = new QLabel(this);
@@ -419,7 +419,7 @@ void AltLangStrEdit::loadLangAltListEntries()
 
     // ...and now, all the rest...
 
-    for (AltLangStrEditPriv::LanguageCodeMap::Iterator it = d->languageCodeMap.begin();
+    for (Private::LanguageCodeMap::Iterator it = d->languageCodeMap.begin();
          it != d->languageCodeMap.end(); ++it)
     {
         if (!list.contains(it.key()))

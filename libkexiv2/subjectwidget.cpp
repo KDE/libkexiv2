@@ -55,7 +55,7 @@
 namespace KExiv2Iface
 {
 
-class SubjectWidget::SubjectWidgetPriv
+class SubjectWidget::Private
 {
 public:
 
@@ -65,7 +65,7 @@ public:
         CUSTOM
     };
 
-    SubjectWidgetPriv()
+    Private()
     {
         addSubjectButton = 0;
         delSubjectButton = 0;
@@ -114,7 +114,7 @@ public:
 // --------------------------------------------------------------------------------
 
 SubjectWidget::SubjectWidget(QWidget* parent)
-             : QWidget(parent), d(new SubjectWidgetPriv)
+             : QWidget(parent), d(new Private)
 {
     // Load subject codes provided by IPTC/NAA as xml file.
     // See http://iptc.cms.apa.at/std/topicset/topicset.iptc-subjectcode.xml for details.
@@ -151,12 +151,12 @@ SubjectWidget::SubjectWidget(QWidget* parent)
 
     QLabel* customLabel = new QLabel(i18n("Use custom definition"));
 
-    d->btnGroup->addButton(d->stdBtn,    SubjectWidgetPriv::STANDARD);
-    d->btnGroup->addButton(d->customBtn, SubjectWidgetPriv::CUSTOM);
+    d->btnGroup->addButton(d->stdBtn,    Private::STANDARD);
+    d->btnGroup->addButton(d->customBtn, Private::CUSTOM);
     d->btnGroup->setExclusive(true);
     d->stdBtn->setChecked(true);
 
-    for (SubjectWidgetPriv::SubjectCodesMap::Iterator it = d->subMap.begin();
+    for (Private::SubjectCodesMap::Iterator it = d->subMap.begin();
          it != d->subMap.end(); ++it)
         d->refCB->addItem(it.key());
 
@@ -325,7 +325,7 @@ void SubjectWidget::slotSubjectsToggled(bool b)
 
 void SubjectWidget::slotEditOptionChanged(int b)
 {
-    if (b == SubjectWidgetPriv::CUSTOM)
+    if (b == Private::CUSTOM)
     {
         d->refCB->setEnabled(false);
         m_iprEdit->setEnabled(true);
@@ -351,7 +351,7 @@ void SubjectWidget::slotRefChanged()
     QString key = d->refCB->currentText();
     QString name, matter, detail;
 
-    for (SubjectWidgetPriv::SubjectCodesMap::Iterator it = d->subMap.begin();
+    for (Private::SubjectCodesMap::Iterator it = d->subMap.begin();
          it != d->subMap.end(); ++it)
     {
         if (key == it.key())
@@ -521,7 +521,7 @@ bool SubjectWidget::loadSubjectCodesFromXML(const KUrl& url)
 
     // Set the Subject Name everywhere on the map.
 
-    for (SubjectWidgetPriv::SubjectCodesMap::Iterator it = d->subMap.begin();
+    for (Private::SubjectCodesMap::Iterator it = d->subMap.begin();
          it != d->subMap.end(); ++it)
     {
         QString name, keyPrefix;
@@ -530,7 +530,7 @@ bool SubjectWidget::loadSubjectCodesFromXML(const KUrl& url)
             keyPrefix = it.key().left(3);
             name      = it.value().name;
 
-            for (SubjectWidgetPriv::SubjectCodesMap::Iterator it2 = d->subMap.begin();
+            for (Private::SubjectCodesMap::Iterator it2 = d->subMap.begin();
                 it2 != d->subMap.end(); ++it2)
             {
                 if (it2.key().startsWith(keyPrefix) &&
@@ -544,7 +544,7 @@ bool SubjectWidget::loadSubjectCodesFromXML(const KUrl& url)
 
     // Set the Subject Matter Name everywhere on the map.
 
-    for (SubjectWidgetPriv::SubjectCodesMap::Iterator it = d->subMap.begin();
+    for (Private::SubjectCodesMap::Iterator it = d->subMap.begin();
          it != d->subMap.end(); ++it)
     {
         QString matter, keyPrefix;
@@ -553,7 +553,7 @@ bool SubjectWidget::loadSubjectCodesFromXML(const KUrl& url)
             keyPrefix = it.key().left(5);
             matter    = it.value().matter;
 
-            for (SubjectWidgetPriv::SubjectCodesMap::Iterator it2 = d->subMap.begin();
+            for (Private::SubjectCodesMap::Iterator it2 = d->subMap.begin();
                 it2 != d->subMap.end(); ++it2)
             {
                 if (it2.key().startsWith(keyPrefix) &&

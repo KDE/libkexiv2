@@ -97,8 +97,8 @@ public:
 
 private:
 
-    class KExiv2PreviewsPriv;
-    KExiv2PreviewsPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace KExiv2Iface

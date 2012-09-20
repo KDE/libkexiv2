@@ -909,7 +909,7 @@ bool KExiv2::registerXmpNameSpace(const QString& uri, const QString& prefix)
     }
     catch( Exiv2::Error& e )
     {
-        KExiv2Priv::printExiv2ExceptionError("Cannot register a new Xmp namespace using Exiv2 ", e);
+        Private::printExiv2ExceptionError("Cannot register a new Xmp namespace using Exiv2 ", e);
     }
 
 #else
@@ -935,7 +935,7 @@ bool KExiv2::unregisterXmpNameSpace(const QString& uri)
     }
     catch( Exiv2::Error& e )
     {
-        KExiv2Priv::printExiv2ExceptionError("Cannot unregister a new Xmp namespace using Exiv2 ", e);
+        Private::printExiv2ExceptionError("Cannot unregister a new Xmp namespace using Exiv2 ", e);
     }
 
 #else

@@ -38,21 +38,21 @@ extern "C"
 namespace KExiv2Iface
 {
 
-KExiv2::KExiv2Priv::KExiv2Priv()
-    : data(new KExiv2Data::KExiv2DataPriv)
+KExiv2::Private::Private()
+    : data(new KExiv2Data::Private)
 {
     writeRawFiles         = false;
     updateFileTimeStamp   = false;
     useXMPSidecar4Reading = false;
     metadataWritingMode   = WRITETOIMAGEONLY;
-    Exiv2::LogMsg::setHandler(KExiv2::KExiv2Priv::printExiv2MessageHandler);
+    Exiv2::LogMsg::setHandler(KExiv2::Private::printExiv2MessageHandler);
 }
 
-KExiv2::KExiv2Priv::~KExiv2Priv()
+KExiv2::Private::~Private()
 {
 }
 
-void KExiv2::KExiv2Priv::copyPrivateData(const KExiv2Priv* const  other)
+void KExiv2::Private::copyPrivateData(const Private* const  other)
 {
     data                  = other->data;
     filePath              = other->filePath;
@@ -62,7 +62,7 @@ void KExiv2::KExiv2Priv::copyPrivateData(const KExiv2Priv* const  other)
     metadataWritingMode   = other->metadataWritingMode;
 }
 
-bool KExiv2::KExiv2Priv::saveToXMPSidecar(const QFileInfo& finfo) const
+bool KExiv2::Private::saveToXMPSidecar(const QFileInfo& finfo) const
 {
     QString filePath = KExiv2::sidecarFilePathForFile(finfo.filePath());
 
@@ -85,7 +85,7 @@ bool KExiv2::KExiv2Priv::saveToXMPSidecar(const QFileInfo& finfo) const
     return ret;
 }
 
-bool KExiv2::KExiv2Priv::saveToFile(const QFileInfo& finfo) const
+bool KExiv2::Private::saveToFile(const QFileInfo& finfo) const
 {
     if (!finfo.isWritable())
     {
@@ -137,7 +137,7 @@ bool KExiv2::KExiv2Priv::saveToFile(const QFileInfo& finfo) const
     return ret;
 }
 
-bool KExiv2::KExiv2Priv::saveOperations(Exiv2::Image::AutoPtr image) const
+bool KExiv2::Private::saveOperations(Exiv2::Image::AutoPtr image) const
 {
     try
     {
@@ -263,7 +263,7 @@ bool KExiv2::KExiv2Priv::saveOperations(Exiv2::Image::AutoPtr image) const
     return false;
 }
 
-void KExiv2Data::KExiv2DataPriv::clear()
+void KExiv2Data::Private::clear()
 {
     imageComments.clear();
     exifMetadata.clear();
@@ -273,19 +273,19 @@ void KExiv2Data::KExiv2DataPriv::clear()
 #endif
 }
 
-void KExiv2::KExiv2Priv::printExiv2ExceptionError(const QString& msg, Exiv2::Error& e)
+void KExiv2::Private::printExiv2ExceptionError(const QString& msg, Exiv2::Error& e)
 {
     std::string s(e.what());
     kDebug() << msg.toAscii().constData() << " (Error #"
              << e.code() << ": " << s.c_str();
 }
 
-void KExiv2::KExiv2Priv::printExiv2MessageHandler(int lvl, const char* msg)
+void KExiv2::Private::printExiv2MessageHandler(int lvl, const char* msg)
 {
     kDebug() << "Exiv2 (" << lvl << ") : " << msg;
 }
 
-QString KExiv2::KExiv2Priv::convertCommentValue(const Exiv2::Exifdatum& exifDatum) const
+QString KExiv2::Private::convertCommentValue(const Exiv2::Exifdatum& exifDatum) const
 {
     try
     {
@@ -335,7 +335,7 @@ QString KExiv2::KExiv2Priv::convertCommentValue(const Exiv2::Exifdatum& exifDatu
     return QString();
 }
 
-QString KExiv2::KExiv2Priv::detectEncodingAndDecode(const std::string& value) const
+QString KExiv2::Private::detectEncodingAndDecode(const std::string& value) const
 {
     // For charset autodetection, we could use sophisticated code
     // (Mozilla chardet, KHTML's autodetection, QTextCodec::codecForContent),
@@ -363,7 +363,7 @@ QString KExiv2::KExiv2Priv::detectEncodingAndDecode(const std::string& value) co
     //return QString::fromLatin1(value.c_str());
 }
 
-int KExiv2::KExiv2Priv::getXMPTagsListFromPrefix(const QString& pf, KExiv2::TagsMap& tagsMap) const
+int KExiv2::Private::getXMPTagsListFromPrefix(const QString& pf, KExiv2::TagsMap& tagsMap) const
 {
     QList<const Exiv2::XmpPropertyInfo*> tags;
     tags << Exiv2::XmpProperties::propertyList(pf.toAscii().data());
@@ -386,7 +386,7 @@ int KExiv2::KExiv2Priv::getXMPTagsListFromPrefix(const QString& pf, KExiv2::Tags
 }
 
 #ifdef _XMP_SUPPORT_
-void KExiv2::KExiv2Priv::mergeXmpData(const Exiv2::XmpData& src, Exiv2::XmpData& dest)
+void KExiv2::Private::mergeXmpData(const Exiv2::XmpData& src, Exiv2::XmpData& dest)
 {
     for (Exiv2::XmpData::const_iterator it = src.begin(); it != src.end(); ++it)
     {
