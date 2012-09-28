@@ -67,22 +67,21 @@ bool KExiv2::Private::saveToXMPSidecar(const QFileInfo& finfo) const
     QString filePath = KExiv2::sidecarFilePathForFile(finfo.filePath());
 
     if (filePath.isEmpty())
+    {
         return false;
-
-    bool ret = false;
+    }
 
     try
     {
         Exiv2::Image::AutoPtr image;
         image = Exiv2::ImageFactory::create(Exiv2::ImageType::xmp, (const char*)(QFile::encodeName(filePath)));
-        ret   = saveOperations(image);
+        return saveOperations(finfo, image);
     }
     catch( Exiv2::Error& e )
     {
         printExiv2ExceptionError("Cannot save metadata to XMP sidecar using Exiv2 ", e);
+        return false;
     }
-
-    return ret;
 }
 
 bool KExiv2::Private::saveToFile(const QFileInfo& finfo) const
@@ -93,17 +92,33 @@ bool KExiv2::Private::saveToFile(const QFileInfo& finfo) const
         return false;
     }
 
-    QStringList rawTiffBasedSupported = QStringList()
-        // TIFF/EP Raw files based supported by Exiv2 0.19.1
-        << "dng" << "nef" << "pef" << "orf";
+    QStringList rawTiffBasedSupported, rawTiffBasedNotSupported;
 
-    QStringList rawTiffBasedNotSupported = QStringList()
-        // TIFF/EP Raw files based not supported by Exiv2 0.19.1
+    // Raw files supported by Exiv2 0.21
+    rawTiffBasedSupported << "dng" << "nef" << "pef" << "orf" << "srw";
+    if (Exiv2::testVersion(0,23,0))
+    {
+        rawTiffBasedSupported << "cr2";
+    }
+
+    // Raw files not supported by Exiv2 0.21
+    rawTiffBasedNotSupported
         << "3fr" << "arw" << "cr2" << "dcr" << "erf" << "k25"
-        << "kdc" << "mos" << "raw" << "sr2" << "srf";
+        << "kdc" << "mos" << "raw" << "sr2" << "srf" << "rw2";
+    if (!Exiv2::testVersion(0,23,0))
+    {
+        rawTiffBasedNotSupported << "cr2";
+    }
 
     QString ext = finfo.suffix().toLower();
 
+    if (!writeRawFiles && (rawTiffBasedSupported.contains(ext) || rawTiffBasedNotSupported.contains(ext)) )
+    {
+        kDebug() << finfo.fileName()
+                 << "is a TIFF based RAW file, writing to such a file is disabled by current settings.";
+    }
+
+    /*
     if (rawTiffBasedNotSupported.contains(ext))
     {
         kDebug() << finfo.fileName()
@@ -122,26 +137,27 @@ bool KExiv2::Private::saveToFile(const QFileInfo& finfo) const
     kDebug() << "File Extension: " << ext << " is supported for writing mode";
 
     bool ret = false;
+    */
 
     try
     {
         Exiv2::Image::AutoPtr image;
         image = Exiv2::ImageFactory::open((const char*)(QFile::encodeName(finfo.filePath())));
-        ret   = saveOperations(image);
+        return saveOperations(finfo, image);
     }
     catch( Exiv2::Error& e )
     {
         printExiv2ExceptionError("Cannot save metadata to image using Exiv2 ", e);
+        return false;
     }
-
-    return ret;
 }
 
-bool KExiv2::Private::saveOperations(Exiv2::Image::AutoPtr image) const
+bool KExiv2::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::AutoPtr image) const
 {
     try
     {
         Exiv2::AccessMode mode;
+        bool wroteComment = false, wroteEXIF = false, wroteIPTC = false, wroteXMP = false;
 
         // We need to load target file metadata to merge with new one. It's mandatory with TIFF format:
         // like all tiff file structure is based on Exif.
@@ -154,6 +170,7 @@ bool KExiv2::Private::saveOperations(Exiv2::Image::AutoPtr image) const
         if (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite)
         {
             image->setComment(imageComments());
+            wroteComment = true;
         }
 
         // Exif metadata ----------------------------------
@@ -210,6 +227,8 @@ bool KExiv2::Private::saveOperations(Exiv2::Image::AutoPtr image) const
             {
                 image->setExifData(exifMetadata());
             }
+
+            wroteEXIF = true;
         }
 
         // Iptc metadata ----------------------------------
@@ -219,9 +238,8 @@ bool KExiv2::Private::saveOperations(Exiv2::Image::AutoPtr image) const
         if (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite)
         {
             image->setIptcData(iptcMetadata());
+            wroteIPTC = true;
         }
-
-#ifdef _XMP_SUPPORT_
 
         // Xmp metadata -----------------------------------
 
@@ -230,13 +248,23 @@ bool KExiv2::Private::saveOperations(Exiv2::Image::AutoPtr image) const
         if (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite)
         {
             image->setXmpData(xmpMetadata());
+            wroteXMP = true;
         }
 
-#endif // _XMP_SUPPORT_
+        if (!wroteComment && !wroteEXIF && !wroteIPTC && !wroteXMP)
+        {
+            kDebug() << "Writing metadata is not supported for file" << finfo.fileName();
+            return false;
+        }
+        else if (!wroteEXIF || !wroteIPTC || !wroteXMP)
+        {
+            kDebug() << "Support for writing metadata is limited for file" << finfo.fileName()
+                     << "EXIF" << wroteEXIF << "IPTC" << wroteIPTC << "XMP" << wroteXMP;
+        }
 
         if (!updateFileTimeStamp)
         {
-            // NOTE: Don't touch access and modification timestamp of file.
+            // Don't touch access and modification timestamp of file.
             struct stat st;
             ::stat(QFile::encodeName(filePath), &st);
 

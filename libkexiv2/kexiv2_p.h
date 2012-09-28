@@ -147,7 +147,7 @@ public:
 
     bool saveToXMPSidecar(const QFileInfo& finfo)    const;
     bool saveToFile(const QFileInfo& finfo)          const;
-    bool saveOperations(Exiv2::Image::AutoPtr image) const;
+    bool saveOperations(const QFileInfo& finfo, Exiv2::Image::AutoPtr image) const;
 
     /** Wrapper method to convert a Comments content to a QString.
      */
