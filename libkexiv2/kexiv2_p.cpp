@@ -116,6 +116,7 @@ bool KExiv2::Private::saveToFile(const QFileInfo& finfo) const
     {
         kDebug() << finfo.fileName()
                  << "is a TIFF based RAW file, writing to such a file is disabled by current settings.";
+        return false;
     }
 
     /*
