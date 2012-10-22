@@ -119,7 +119,7 @@ bool KExiv2::Private::saveToFile(const QFileInfo& finfo) const
         return false;
     }
 
-    /*
+/*
     if (rawTiffBasedNotSupported.contains(ext))
     {
         kDebug() << finfo.fileName()
@@ -138,7 +138,7 @@ bool KExiv2::Private::saveToFile(const QFileInfo& finfo) const
     kDebug() << "File Extension: " << ext << " is supported for writing mode";
 
     bool ret = false;
-    */
+*/
 
     try
     {
@@ -248,8 +248,10 @@ bool KExiv2::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::AutoP
 
         if (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite)
         {
+#ifdef _XMP_SUPPORT_
             image->setXmpData(xmpMetadata());
             wroteXMP = true;
+#endif
         }
 
         if (!wroteComment && !wroteEXIF && !wroteIPTC && !wroteXMP)
