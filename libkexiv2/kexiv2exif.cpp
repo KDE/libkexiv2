@@ -291,8 +291,9 @@ bool KExiv2::setExifComment(const QString& comment, bool setProgramName) const
             std::string exifComment("charset=\"Unicode\" ");
             exifComment += comment.toUtf8().constData();
             d->exifMetadata()["Exif.Photo.UserComment"] = exifComment;
-            return true;
         }
+
+        return true;
     }
     catch( Exiv2::Error& e )
     {
