@@ -57,6 +57,7 @@ public:
 
     Private()
     {
+        valueEdit       = 0;
         titleLabel      = 0;
         delValueButton  = 0;
         languageCB      = 0;
