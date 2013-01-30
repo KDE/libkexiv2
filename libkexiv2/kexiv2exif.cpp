@@ -7,7 +7,7 @@
  * @date   2006-09-15
  * @brief  Exif manipulation methods
  *
- * @author Copyright (C) 2006-2012 by Gilles Caulier
+ * @author Copyright (C) 2006-2013 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  * @author Copyright (C) 2006-2012 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
@@ -48,6 +48,7 @@ bool KExiv2::canWriteExif(const QString& filePath)
                                       (QFile::encodeName(filePath)));
 
         Exiv2::AccessMode mode = image->checkMode(Exiv2::mdExif);
+
         return (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite);
     }
     catch( Exiv2::Error& e )
@@ -137,7 +138,7 @@ bool KExiv2::setExif(const QByteArray& data) const
     return false;
 }
 
-KExiv2::MetaDataMap KExiv2::getExifTagsDataList(const QStringList &exifKeysFilter, bool invertSelection) const
+KExiv2::MetaDataMap KExiv2::getExifTagsDataList(const QStringList& exifKeysFilter, bool invertSelection) const
 {
     if (d->exifMetadata().empty())
        return MetaDataMap();
@@ -156,6 +157,7 @@ KExiv2::MetaDataMap KExiv2::getExifTagsDataList(const QStringList &exifKeysFilte
 
             // Decode the tag value with a user friendly output.
             QString tagValue;
+
             if (key == "Exif.Photo.UserComment")
             {
                 tagValue = d->convertCommentValue(*md);
@@ -172,6 +174,7 @@ KExiv2::MetaDataMap KExiv2::getExifTagsDataList(const QStringList &exifKeysFilte
                 // Exif tag contents can be an i18n strings, no only simple ascii.
                 tagValue = QString::fromLocal8Bit(os.str().c_str());
             }
+
             tagValue.replace('\n', ' ');
 
             // We apply a filter to get only the Exif tags that we need.
@@ -248,6 +251,7 @@ QString KExiv2::getExifComment() const
 static bool is7BitAscii(const QByteArray& s)
 {
     const int size = s.size();
+
     for (int i=0; i<size; i++)
     {
         if (!isascii(s[i]))
@@ -255,6 +259,7 @@ static bool is7BitAscii(const QByteArray& s)
             return false;
         }
     }
+
     return true;
 }
 
@@ -309,6 +314,7 @@ QString KExiv2::getExifTagTitle(const char* exifTagName)
     {
         std::string exifkey(exifTagName);
         Exiv2::ExifKey ek(exifkey);
+
         return QString::fromLocal8Bit( ek.tagLabel().c_str() );
     }
     catch (Exiv2::Error& e)
@@ -325,6 +331,7 @@ QString KExiv2::getExifTagDescription(const char* exifTagName)
     {
         std::string exifkey(exifTagName);
         Exiv2::ExifKey ek(exifkey);
+
         return QString::fromLocal8Bit( ek.tagDesc().c_str() );
     }
     catch (Exiv2::Error& e)
@@ -344,6 +351,7 @@ bool KExiv2::removeExifTag(const char* exifTagName, bool setProgramName) const
     {
         Exiv2::ExifKey exifKey(exifTagName);
         Exiv2::ExifData::iterator it = d->exifMetadata().findKey(exifKey);
+
         if (it != d->exifMetadata().end())
         {
             d->exifMetadata().erase(it);
@@ -365,10 +373,12 @@ bool KExiv2::getExifTagRational(const char* exifTagName, long int& num, long int
         Exiv2::ExifKey exifKey(exifTagName);
         Exiv2::ExifData exifData(d->exifMetadata());
         Exiv2::ExifData::iterator it = exifData.findKey(exifKey);
+
         if (it != exifData.end())
         {
             num = (*it).toRational(component).first;
             den = (*it).toRational(component).second;
+
             return true;
         }
     }
@@ -427,7 +437,7 @@ bool KExiv2::setExifTagData(const char* exifTagName, const QByteArray& data, boo
 
     try
     {
-        Exiv2::DataValue val((Exiv2::byte *)data.data(), data.size());
+        Exiv2::DataValue val((Exiv2::byte*)data.data(), data.size());
         d->exifMetadata()[exifTagName] = val;
         return true;
     }
@@ -454,20 +464,25 @@ bool KExiv2::setExifTagVariant(const char* exifTagName, const QVariant& val,
         case QVariant::Double:
         {
             long num, den;
+
             if (rationalWantSmallDenominator)
                 convertToRationalSmallDenominator(val.toDouble(), &num, &den);
             else
                 convertToRational(val.toDouble(), &num, &den, 4);
+
             return setExifTagRational(exifTagName, num, den, setProgramName);
         }
         case QVariant::List:
         {
             long num = 0, den = 1;
             QList<QVariant> list = val.toList();
+
             if (list.size() >= 1)
                 num = list[0].toInt();
+
             if (list.size() >= 2)
                 den = list[1].toInt();
+
             return setExifTagRational(exifTagName, num, den, setProgramName);
         }
 
@@ -475,6 +490,7 @@ bool KExiv2::setExifTagVariant(const char* exifTagName, const QVariant& val,
         case QVariant::DateTime:
         {
             QDateTime dateTime = val.toDateTime();
+
             if(!dateTime.isValid())
                 return false;
 
@@ -490,6 +506,7 @@ bool KExiv2::setExifTagVariant(const char* exifTagName, const QVariant& val,
             {
                 d->printExiv2ExceptionError("Cannot set Date & Time in image using Exiv2 ", e);
             }
+
             return false;
         }
 
@@ -511,6 +528,7 @@ QString KExiv2::createExifUserStringFromValue(const char* exifTagName, const QVa
     {
         Exiv2::ExifKey key(exifTagName);
         Exiv2::Exifdatum datum(key);
+
         switch (val.type())
         {
             case QVariant::Int:
@@ -597,6 +615,7 @@ bool KExiv2::getExifTagLong(const char* exifTagName, long& val, int component) c
         Exiv2::ExifKey exifKey(exifTagName);
         Exiv2::ExifData exifData(d->exifMetadata());
         Exiv2::ExifData::iterator it = exifData.findKey(exifKey);
+
         if (it != exifData.end() && it->count() > 0)
         {
             val = it->toLong(component);
@@ -619,12 +638,14 @@ QByteArray KExiv2::getExifTagData(const char* exifTagName) const
         Exiv2::ExifKey exifKey(exifTagName);
         Exiv2::ExifData exifData(d->exifMetadata());
         Exiv2::ExifData::iterator it = exifData.findKey(exifKey);
+
         if (it != exifData.end())
         {
-            char *s = new char[(*it).size()];
+            char* const s = new char[(*it).size()];
             (*it).copy((Exiv2::byte*)s, Exiv2::bigEndian);
             QByteArray data(s, (*it).size());
             delete[] s;
+
             return data;
         }
     }
@@ -644,6 +665,7 @@ QVariant KExiv2::getExifTagVariant(const char* exifTagName, bool rationalAsListO
         Exiv2::ExifKey exifKey(exifTagName);
         Exiv2::ExifData exifData(d->exifMetadata());
         Exiv2::ExifData::iterator it = exifData.findKey(exifKey);
+
         if (it != exifData.end())
         {
             switch (it->typeId())
@@ -659,24 +681,30 @@ QVariant KExiv2::getExifTagVariant(const char* exifTagName, bool rationalAsListO
                         return QVariant(QVariant::Int);
                 case Exiv2::unsignedRational:
                 case Exiv2::signedRational:
+
                     if (rationalAsListOfInts)
                     {
                         if (it->count() <= component)
                             return QVariant(QVariant::List);
+
                         QList<QVariant> list;
                         list << (*it).toRational(component).first;
                         list << (*it).toRational(component).second;
+
                         return QVariant(list);
                     }
                     else
                     {
                         if (it->count() <= component)
                             return QVariant(QVariant::Double);
+
                         // prefer double precision
                         double num = (*it).toRational(component).first;
                         double den = (*it).toRational(component).second;
+
                         if (den == 0.0)
                             return QVariant(QVariant::Double);
+
                         return QVariant(num / den);
                     }
                 case Exiv2::date:
@@ -706,7 +734,7 @@ QVariant KExiv2::getExifTagVariant(const char* exifTagName, bool rationalAsListO
     catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError(QString("Cannot find Exif key '%1' in the image using Exiv2 ")
-                                 .arg(exifTagName), e);
+                                    .arg(exifTagName), e);
     }
 
     return QVariant();
@@ -719,11 +747,13 @@ QString KExiv2::getExifTagString(const char* exifTagName, bool escapeCR) const
         Exiv2::ExifKey exifKey(exifTagName);
         Exiv2::ExifData exifData(d->exifMetadata());
         Exiv2::ExifData::iterator it = exifData.findKey(exifKey);
+
         if (it != exifData.end())
         {
             // See B.K.O #184156 comment #13
             std::string val  = it->print(&exifData);
             QString tagValue = QString::fromLocal8Bit(val.c_str());
+
             if (escapeCR)
                 tagValue.replace('\n', ' ');
 
@@ -778,8 +808,10 @@ QImage KExiv2::getExifThumbnail(bool fixOrientation) const
                 Exiv2::ExifKey key2("Exif.Image.Orientation");
                 Exiv2::ExifData exifData(d->exifMetadata());
                 Exiv2::ExifData::iterator it = exifData.findKey(key1);
+
                 if (it == exifData.end())
                     it = exifData.findKey(key2);
+
                 if (it != exifData.end() && it->count())
                 {
                     long orientation = it->toLong();
@@ -803,7 +835,7 @@ bool KExiv2::rotateExifQImage(QImage& image, ImageOrientation orientation) const
 {
     QMatrix matrix = RotationMatrix::toMatrix(orientation);
 
-    if (orientation != ORIENTATION_NORMAL || orientation != ORIENTATION_UNSPECIFIED)
+    if ((orientation != ORIENTATION_NORMAL) || (orientation != ORIENTATION_UNSPECIFIED))
     {
         image = image.transformed(matrix);
         return true;
@@ -851,11 +883,15 @@ bool KExiv2::setTiffThumbnail(const QImage& thumbImage, bool setProgramName) con
     {
         // Make sure IFD0 is explicitly marked as a main image
         Exiv2::ExifData::const_iterator pos = d->exifMetadata().findKey(Exiv2::ExifKey("Exif.Image.NewSubfileType"));
-        if (pos == d->exifMetadata().end() || pos->count() != 1 || pos->toLong() != 0) {
+
+        if (pos == d->exifMetadata().end() || pos->count() != 1 || pos->toLong() != 0)
+        {
             throw Exiv2::Error(1, "Exif.Image.NewSubfileType missing or not set as main image");
         }
+
         // Remove sub-IFD tags
         std::string subImage1("SubImage1");
+
         for (Exiv2::ExifData::iterator md = d->exifMetadata().begin(); md != d->exifMetadata().end();)
         {
             if (md->groupName() == subImage1)
@@ -876,10 +912,10 @@ bool KExiv2::setTiffThumbnail(const QImage& thumbImage, bool setProgramName) con
             Exiv2::ULongValue val;
             val.read("0");
             val.setDataArea(buf.pData_, buf.size_);
-            d->exifMetadata()["Exif.SubImage1.JPEGInterchangeFormat"] = val;
+            d->exifMetadata()["Exif.SubImage1.JPEGInterchangeFormat"]       = val;
             d->exifMetadata()["Exif.SubImage1.JPEGInterchangeFormatLength"] = uint32_t(buf.size_);
-            d->exifMetadata()["Exif.SubImage1.Compression"] = uint16_t(6); // JPEG (old-style)
-            d->exifMetadata()["Exif.SubImage1.NewSubfileType"] = uint32_t(1); // Thumbnail image
+            d->exifMetadata()["Exif.SubImage1.Compression"]                 = uint16_t(6); // JPEG (old-style)
+            d->exifMetadata()["Exif.SubImage1.NewSubfileType"]              = uint32_t(1); // Thumbnail image
             return true;
         }
     }
@@ -916,6 +952,7 @@ KExiv2::TagsMap KExiv2::getStdExifTagsList() const
         TagsMap                      tagsMap;
 
         const Exiv2::GroupInfo* gi = Exiv2::ExifTags::groupList();
+
         while (gi->tagList_ != 0)
         {
             if (QString(gi->ifdName_) != QString("Makernote"))
@@ -936,8 +973,8 @@ KExiv2::TagsMap KExiv2::getStdExifTagsList() const
         {
             do
             {
-                const Exiv2::TagInfo* ti = *it;
-                QString key              = QLatin1String(Exiv2::ExifKey(*ti).key().c_str());
+                const Exiv2::TagInfo* const ti = *it;
+                QString key                    = QLatin1String(Exiv2::ExifKey(*ti).key().c_str());
                 QStringList values;
                 values << ti->name_ << ti->title_ << ti->desc_;
                 tagsMap.insert(key, values);
@@ -984,8 +1021,8 @@ KExiv2::TagsMap KExiv2::getMakernoteTagsList() const
         {
             do
             {
-                const Exiv2::TagInfo* ti = *it;
-                QString key              = QLatin1String(Exiv2::ExifKey(*ti).key().c_str());
+                const Exiv2::TagInfo* const ti = *it;
+                QString key                    = QLatin1String(Exiv2::ExifKey(*ti).key().c_str());
                 QStringList values;
                 values << ti->name_ << ti->title_ << ti->desc_;
                 tagsMap.insert(key, values);

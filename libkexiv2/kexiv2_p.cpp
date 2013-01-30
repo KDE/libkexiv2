@@ -7,7 +7,7 @@
  * @date   2007-09-03
  * @brief  Exiv2 library interface for KDE
  *
- * @author Copyright (C) 2006-2012 by Gilles Caulier
+ * @author Copyright (C) 2006-2013 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  * @author Copyright (C) 2006-2012 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
@@ -52,7 +52,7 @@ KExiv2::Private::~Private()
 {
 }
 
-void KExiv2::Private::copyPrivateData(const Private* const  other)
+void KExiv2::Private::copyPrivateData(const Private* const other)
 {
     data                  = other->data;
     filePath              = other->filePath;
@@ -96,6 +96,7 @@ bool KExiv2::Private::saveToFile(const QFileInfo& finfo) const
 
     // Raw files supported by Exiv2 0.21
     rawTiffBasedSupported << "dng" << "nef" << "pef" << "orf" << "srw";
+
     if (Exiv2::testVersion(0,23,0))
     {
         rawTiffBasedSupported << "cr2";
@@ -105,6 +106,7 @@ bool KExiv2::Private::saveToFile(const QFileInfo& finfo) const
     rawTiffBasedNotSupported
         << "3fr" << "arw" << "cr2" << "dcr" << "erf" << "k25"
         << "kdc" << "mos" << "raw" << "sr2" << "srf" << "rw2";
+
     if (!Exiv2::testVersion(0,23,0))
     {
         rawTiffBasedNotSupported << "cr2";
@@ -168,7 +170,7 @@ bool KExiv2::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::AutoP
 
         mode = image->checkMode(Exiv2::mdComment);
 
-        if (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite)
+        if ((mode == Exiv2::amWrite) || (mode == Exiv2::amReadWrite))
         {
             image->setComment(imageComments());
             wroteComment = true;
@@ -178,7 +180,7 @@ bool KExiv2::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::AutoP
 
         mode = image->checkMode(Exiv2::mdExif);
 
-        if (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite)
+        if ((mode == Exiv2::amWrite) || (mode == Exiv2::amReadWrite))
         {
             if (image->mimeType() == "image/tiff")
             {
@@ -236,7 +238,7 @@ bool KExiv2::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::AutoP
 
         mode = image->checkMode(Exiv2::mdIptc);
 
-        if (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite)
+        if ((mode == Exiv2::amWrite) || (mode == Exiv2::amReadWrite))
         {
             image->setIptcData(iptcMetadata());
             wroteIPTC = true;
@@ -246,7 +248,7 @@ bool KExiv2::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::AutoP
 
         mode = image->checkMode(Exiv2::mdXmp);
 
-        if (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite)
+        if ((mode == Exiv2::amWrite) || (mode == Exiv2::amReadWrite))
         {
 #ifdef _XMP_SUPPORT_
             image->setXmpData(xmpMetadata());
@@ -331,6 +333,7 @@ QString KExiv2::Private::convertCommentValue(const Exiv2::Exifdatum& exifDatum) 
         {
             // the prepended charset specification is followed by a blank
             std::string::size_type pos = comment.find_first_of(' ');
+
             if (pos != std::string::npos)
             {
                 // extract string between the = and the blank
