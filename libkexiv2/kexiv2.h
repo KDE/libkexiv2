@@ -763,6 +763,12 @@ public:
      */
     bool setXmpTagString(const char* xmpTagName, const QString& value, bool setProgramName=true) const;
 
+    /** Set a Xmp tag content using a string. Use type to specify xmp tag type:
+     *  normal=0,bag=1 or struct=2. Note that no value will be set if
+     * xmp type is bag or struct
+     */
+    bool setXmpTagString(const char* xmpTagName, const QString& value, int type,bool setProgramName=true) const;
+
     /** Return the Xmp Tag title or a null string.
      */
     QString getXmpTagTitle(const char* xmpTagName);

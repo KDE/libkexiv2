@@ -47,3 +47,7 @@ TARGET_LINK_LIBRARIES(usexmpsidecar kexiv2 ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRA
 SET(readimagewritexmpsidecar_SRCS readimagewritexmpsidecar.cpp)
 KDE4_ADD_EXECUTABLE(readimagewritexmpsidecar NOGUI ${readimagewritexmpsidecar_SRCS})
 TARGET_LINK_LIBRARIES(readimagewritexmpsidecar kexiv2 ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY})
+
+SET(setxmpface_SRCS setxmpface.cpp)
+KDE4_ADD_EXECUTABLE(setxmpface NOGUI ${setxmpface_SRCS})
+TARGET_LINK_LIBRARIES(setxmpface kexiv2 ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY})

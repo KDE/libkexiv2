@@ -358,7 +358,52 @@ bool KExiv2::setXmpTagString(const char* xmpTagName, const QString& value, bool 
 
     return false;
 }
+bool KExiv2::setXmpTagString(const char* xmpTagName, const QString& value,
+                             int type, bool setProgramName) const
+{
+#ifdef _XMP_SUPPORT_
 
+    if (!setProgramId(setProgramName))
+        return false;
+
+    try
+    {
+        const std::string &txt(value.toUtf8().constData());
+        Exiv2::XmpTextValue xmpTxtVal("");
+
+        if(type == 0) // normal type
+        {
+            xmpTxtVal.read(txt);
+            d->xmpMetadata().add(Exiv2::XmpKey(xmpTagName),&xmpTxtVal);
+            return true;
+        }
+        if(type == 1) // xmp type = bag
+        {
+            xmpTxtVal.setXmpArrayType(Exiv2::XmpValue::xaBag);
+            xmpTxtVal.read("");
+            d->xmpMetadata().add(Exiv2::XmpKey(xmpTagName),&xmpTxtVal);
+        }
+        if(type == 2) // xmp type = struct
+        {
+            xmpTxtVal.setXmpStruct();
+            d->xmpMetadata().add(Exiv2::XmpKey(xmpTagName),&xmpTxtVal);
+        }
+    }
+    catch( Exiv2::Error& e )
+    {
+        d->printExiv2ExceptionError("Cannot set Xmp tag string into image using Exiv2 ", e);
+    }
+
+#else
+
+    Q_UNUSED(xmpTagName);
+    Q_UNUSED(value);
+    Q_UNUSED(setProgramName);
+
+#endif // _XMP_SUPPORT_
+
+    return false;
+}
 KExiv2::AltLangMap KExiv2::getXmpTagStringListLangAlt(const char* xmpTagName, bool escapeCR) const
 {
 #ifdef _XMP_SUPPORT_
@@ -1047,6 +1092,7 @@ KExiv2::TagsMap KExiv2::getXmpTagsList() const
         d->getXMPTagsListFromPrefix("iptc",           tagsMap);
         d->getXMPTagsListFromPrefix("iptcExt",        tagsMap);
         d->getXMPTagsListFromPrefix("plus",           tagsMap);
+        d->getXMPTagsListFromPrefix("mwg-rs",         tagsMap);
         return tagsMap;
     }
     catch( Exiv2::Error& e )
