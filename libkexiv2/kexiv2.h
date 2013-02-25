@@ -49,7 +49,6 @@
 // KDE includes.
 
 #include <kurl.h>
-#include <fixx11h.h>
 
 // Local includes
 
