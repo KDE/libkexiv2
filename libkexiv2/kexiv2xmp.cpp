@@ -359,7 +359,7 @@ bool KExiv2::setXmpTagString(const char* xmpTagName, const QString& value, bool 
     return false;
 }
 bool KExiv2::setXmpTagString(const char* xmpTagName, const QString& value,
-                             int type, bool setProgramName) const
+                             KExiv2::XmpTagType type, bool setProgramName) const
 {
 #ifdef _XMP_SUPPORT_
 
@@ -371,19 +371,19 @@ bool KExiv2::setXmpTagString(const char* xmpTagName, const QString& value,
         const std::string &txt(value.toUtf8().constData());
         Exiv2::XmpTextValue xmpTxtVal("");
 
-        if(type == 0) // normal type
+        if(type == KExiv2::NormalTag) // normal type
         {
             xmpTxtVal.read(txt);
             d->xmpMetadata().add(Exiv2::XmpKey(xmpTagName),&xmpTxtVal);
             return true;
         }
-        if(type == 1) // xmp type = bag
+        if(type == KExiv2::ArrayBagTag) // xmp type = bag
         {
             xmpTxtVal.setXmpArrayType(Exiv2::XmpValue::xaBag);
             xmpTxtVal.read("");
             d->xmpMetadata().add(Exiv2::XmpKey(xmpTagName),&xmpTxtVal);
         }
-        if(type == 2) // xmp type = struct
+        if(type == KExiv2::StructureTag) // xmp type = struct
         {
             xmpTxtVal.setXmpStruct();
             d->xmpMetadata().add(Exiv2::XmpKey(xmpTagName),&xmpTxtVal);

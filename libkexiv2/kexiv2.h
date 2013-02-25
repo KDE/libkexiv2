@@ -49,6 +49,7 @@
 // KDE includes.
 
 #include <kurl.h>
+#include <fixx11h.h>
 
 // Local includes
 
@@ -104,6 +105,18 @@ public:
         ORIENTATION_ROT_90       = 6,
         ORIENTATION_ROT_90_VFLIP = 7,
         ORIENTATION_ROT_270      = 8
+    };
+
+    /**
+     * Xmp tag types, used by setXmpTag, only first three types are used
+     */
+    enum XmpTagType
+    {
+        NormalTag               = 0,
+        ArrayBagTag             = 1,
+        StructureTag            = 2,
+        ArrayLangTag            = 3,
+        ArraySeqTag             = 4
     };
 
     /** A map used to store Tags Key and Tags Value.
@@ -761,13 +774,15 @@ public:
 
     /** Set a Xmp tag content using a string. Return true if tag is set successfully.
      */
-    bool setXmpTagString(const char* xmpTagName, const QString& value, bool setProgramName=true) const;
+    bool setXmpTagString(const char* xmpTagName, const QString& value,
+                         bool setProgramName=true) const;
 
-    /** Set a Xmp tag content using a string. Use type to specify xmp tag type:
-     *  normal=0,bag=1 or struct=2. Note that no value will be set if
-     * xmp type is bag or struct
+    /** Set a Xmp tag with a specific type. Return true if tag is set successfully.
+     *  This method only accept NormalTag, ArrayBagTag and StructureTag.
+     *  Other XmpTagTypes do nothing
      */
-    bool setXmpTagString(const char* xmpTagName, const QString& value, int type,bool setProgramName=true) const;
+    bool setXmpTagString(const char* xmpTagName, const QString& value,
+                         XmpTagType type,bool setProgramName=true) const;
 
     /** Return the Xmp Tag title or a null string.
      */
