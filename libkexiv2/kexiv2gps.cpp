@@ -7,7 +7,7 @@
  * @date   2006-09-15
  * @brief  GPS manipulation methods
  *
- * @author Copyright (C) 2006-2012 by Gilles Caulier
+ * @author Copyright (C) 2006-2013 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  * @author Copyright (C) 2006-2012 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
@@ -43,12 +43,15 @@ namespace KExiv2Iface
 bool KExiv2::getGPSInfo(double& altitude, double& latitude, double& longitude) const
 {
     // Some GPS device do not set Altitude. So a valid GPS position can be with a zero value.
+    // No need to check return value.
     getGPSAltitude(&altitude);
 
     if (!getGPSLatitudeNumber(&latitude))
          return false;
+
     if (!getGPSLongitudeNumber(&longitude))
          return false;
+
     return true;
 }
 
@@ -64,6 +67,7 @@ bool KExiv2::getGPSLatitudeNumber(double* const latitude) const
 
         // Now try to get the reference from Exif.
         const QByteArray latRef = getExifTagData("Exif.GPSInfo.GPSLatitudeRef");
+
         if (!latRef.isEmpty())
         {
             // Latitude decoding from Exif.
@@ -72,24 +76,31 @@ bool KExiv2::getGPSLatitudeNumber(double* const latitude) const
             Exiv2::ExifKey exifKey("Exif.GPSInfo.GPSLatitude");
             Exiv2::ExifData exifData(d->exifMetadata());
             Exiv2::ExifData::iterator it = exifData.findKey(exifKey);
+
             if (it != exifData.end() && (*it).count() == 3)
             {
                 num = (double)((*it).toRational(0).first);
                 den = (double)((*it).toRational(0).second);
+
                 if (den == 0)
                     return false;
+
                 *latitude = num/den;
 
                 num = (double)((*it).toRational(1).first);
                 den = (double)((*it).toRational(1).second);
+
                 if (den == 0)
                     return false;
+
                 min = num/den;
+
                 if (min != -1.0)
                     *latitude = *latitude + min/60.0;
 
                 num = (double)((*it).toRational(2).first);
                 den = (double)((*it).toRational(2).second);
+
                 if (den == 0)
                 {
                     // be relaxed and accept 0/0 seconds. See #246077.
@@ -98,7 +109,9 @@ bool KExiv2::getGPSLatitudeNumber(double* const latitude) const
                     else
                         return false;
                 }
+
                 sec = num/den;
+
                 if (sec != -1.0)
                     *latitude = *latitude + sec/3600.0;
             }
@@ -133,6 +146,7 @@ bool KExiv2::getGPSLongitudeNumber(double* const longitude) const
 
         // Now try to get the reference from Exif.
         const QByteArray lngRef = getExifTagData("Exif.GPSInfo.GPSLongitudeRef");
+
         if (!lngRef.isEmpty())
         {
             // Longitude decoding from Exif.
@@ -141,24 +155,31 @@ bool KExiv2::getGPSLongitudeNumber(double* const longitude) const
             Exiv2::ExifKey exifKey2("Exif.GPSInfo.GPSLongitude");
             Exiv2::ExifData exifData(d->exifMetadata());
             Exiv2::ExifData::iterator it = exifData.findKey(exifKey2);
+
             if (it != exifData.end() && (*it).count() == 3)
             {
                 num = (double)((*it).toRational(0).first);
                 den = (double)((*it).toRational(0).second);
+
                 if (den == 0)
                     return false;
+
                 *longitude = num/den;
 
                 num = (double)((*it).toRational(1).first);
                 den = (double)((*it).toRational(1).second);
+
                 if (den == 0)
                     return false;
+
                 min = num/den;
+
                 if (min != -1.0)
                     *longitude = *longitude + min/60.0;
 
                 num = (double)((*it).toRational(2).first);
                 den = (double)((*it).toRational(2).second);
+
                 if (den == 0)
                 {
                     // be relaxed and accept 0/0 seconds. See #246077.
@@ -167,7 +188,9 @@ bool KExiv2::getGPSLongitudeNumber(double* const longitude) const
                     else
                         return false;
                 }
+
                 sec = num/den;
+
                 if (sec != -1.0)
                     *longitude = *longitude + sec/3600.0;
             }
@@ -199,15 +222,19 @@ bool KExiv2::getGPSAltitude(double* const altitude) const
 
         // Try XMP first. Reason: XMP in sidecar may be more up-to-date than EXIF in original image.
         const QString altRefXmp = getXmpTagString("Xmp.exif.GPSAltitudeRef");
+
         if (!altRefXmp.isEmpty())
         {
             const QString altXmp = getXmpTagString("Xmp.exif.GPSAltitude");
+
             if (!altXmp.isEmpty())
             {
                 num = altXmp.section('/', 0, 0).toDouble();
                 den = altXmp.section('/', 1, 1).toDouble();
+
                 if (den == 0)
                     return false;
+
                 *altitude = num/den;
 
                 if (altRefXmp == QString("1"))
@@ -219,6 +246,7 @@ bool KExiv2::getGPSAltitude(double* const altitude) const
 
         // Get the reference from Exif (above/below sea level)
         const QByteArray altRef = getExifTagData("Exif.GPSInfo.GPSAltitudeRef");
+
         if (!altRef.isEmpty())
         {
             // Altitude decoding from Exif.
@@ -230,8 +258,10 @@ bool KExiv2::getGPSAltitude(double* const altitude) const
             {
                 num = (double)((*it).toRational(0).first);
                 den = (double)((*it).toRational(0).second);
+
                 if (den == 0)
                     return false;
+
                 *altitude = num/den;
             }
             else
@@ -256,6 +286,7 @@ bool KExiv2::getGPSAltitude(double* const altitude) const
 QString KExiv2::getGPSLatitudeString() const
 {
     double latitude;
+
     if (!getGPSLatitudeNumber(&latitude))
         return QString();
 
@@ -265,6 +296,7 @@ QString KExiv2::getGPSLatitudeString() const
 QString KExiv2::getGPSLongitudeString() const
 {
     double longitude;
+
     if (!getGPSLongitudeNumber(&longitude))
         return QString();
 
@@ -294,6 +326,7 @@ bool KExiv2::initializeGPSInfo(const bool setProgramName)
         setXmpTagString("Xmp.exif.GPSVersionID", QString("2.0.0.0"), false);
         setXmpTagString("Xmp.exif.GPSMapDatum", QString("WGS-84"), false);
 #endif // _XMP_SUPPORT_
+
         return true;
     }
     catch( Exiv2::Error& e )
@@ -334,8 +367,10 @@ bool KExiv2::setGPSInfo(const double* const altitude, const double latitude, con
         {
             // Altitude reference: byte "00" meaning "above sea level", "01" mening "behing sea level".
             Exiv2::Value::AutoPtr value = Exiv2::Value::create(Exiv2::unsignedByte);
+
             if ((*altitude) >= 0) value->read("0");
             else               value->read("1");
+
             d->exifMetadata().add(Exiv2::ExifKey("Exif.GPSInfo.GPSAltitudeRef"), value.get());
 
             // And the actual altitude, as absolute value..
@@ -433,8 +468,10 @@ bool KExiv2::setGPSInfo(const double* const altitude, const double latitude, con
 bool KExiv2::setGPSInfo(const double altitude, const QString& latitude, const QString& longitude, const bool setProgramName)
 {
     double longitudeValue, latitudeValue;
+
     if (!convertFromGPSCoordinateString(latitude, &latitudeValue))
         return false;
+
     if (!convertFromGPSCoordinateString(longitude, &longitudeValue))
         return false;
 
@@ -463,6 +500,7 @@ bool KExiv2::removeGPSInfo(const bool setProgramName)
         {
             Exiv2::ExifKey gpsKey((*it2).toAscii().constData());
             Exiv2::ExifData::iterator it3 = d->exifMetadata().findKey(gpsKey);
+
             if (it3 != d->exifMetadata().end())
                 d->exifMetadata().erase(it3);
         }
@@ -594,7 +632,7 @@ void KExiv2::convertToRationalSmallDenominator(const double number, long int* co
      * Date: Thu, 07 Sep 2006 17:35:30 -0400
      * Subject: Rational approximations
      */
-    int lastnum = 500; // this is _not_ the largest possible denominator
+    int      lastnum = 500; // this is _not_ the largest possible denominator
     long int num, approx, bestnum=0, bestdenom=1;
     double   value, error, leasterr, criterion;
 
@@ -608,15 +646,18 @@ void KExiv2::convertToRationalSmallDenominator(const double number, long int* co
     }
 
     criterion = 2 * value * DBL_EPSILON;
+
     for (leasterr = value, num = 1; num < lastnum; ++num)
     {
         approx = (int)(num / value + 0.5);
         error  = fabs((double)num / approx - value);
+
         if (error < leasterr)
         {
             bestnum   = num;
             bestdenom = approx;
             leasterr  = error;
+
             if (leasterr <= criterion) break;
         }
     }
@@ -630,10 +671,9 @@ void KExiv2::convertToRationalSmallDenominator(const double number, long int* co
     }
     else
     {
-        bestnum += bestdenom * (long int)whole;
-
-        *numerator   = bestnum;
-        *denominator = bestdenom;
+        bestnum      += bestdenom * (long int)whole;
+        *numerator   =  bestnum;
+        *denominator =  bestdenom;
     }
 }
 
@@ -664,19 +704,21 @@ QString KExiv2::convertToGPSCoordinateString(const long int numeratorDegrees, co
         coordinate = "%1,%2,%3%4";
         coordinate = coordinate.arg(numeratorDegrees).arg(numeratorMinutes).arg(numeratorSeconds).arg(directionReference);
     }
-    else if (denominatorDegrees == 1 &&
+    else if (denominatorDegrees == 1   &&
              denominatorMinutes == 100 &&
              denominatorSeconds == 1)
     {
         // use form DDD,MM.mmk
-        coordinate = "%1,%2%3";
-        double minutes = (double)numeratorMinutes / (double)denominatorMinutes;
-        minutes += (double)numeratorSeconds / 60.0;
-        QString minutesString = QString::number(minutes, 'f', 8);
+        coordinate             = "%1,%2%3";
+        double minutes         = (double)numeratorMinutes / (double)denominatorMinutes;
+        minutes               += (double)numeratorSeconds / 60.0;
+        QString minutesString =  QString::number(minutes, 'f', 8);
+
         while (minutesString.endsWith('0') && !minutesString.endsWith(".0"))
         {
             minutesString.chop(1);
         }
+
         coordinate = coordinate.arg(numeratorDegrees).arg(minutesString).arg(directionReference);
     }
     else if (denominatorDegrees == 0 ||
@@ -689,19 +731,22 @@ QString KExiv2::convertToGPSCoordinateString(const long int numeratorDegrees, co
     else
     {
         // use form DDD,MM.mmk
-        coordinate = "%1,%2%3";
-        double degrees = (double)numeratorDegrees / (double)denominatorDegrees;
-        double wholeDegrees = trunc(degrees);
-        double minutes = (double)numeratorMinutes / (double)denominatorMinutes;
-        minutes += (degrees - wholeDegrees) * 60.0;
-        minutes += ((double)numeratorSeconds / (double)denominatorSeconds) / 60.0;
-        QString minutesString = QString::number(minutes, 'f', 8);
+        coordinate             = "%1,%2%3";
+        double degrees         = (double)numeratorDegrees / (double)denominatorDegrees;
+        double wholeDegrees    = trunc(degrees);
+        double minutes         = (double)numeratorMinutes / (double)denominatorMinutes;
+        minutes               += (degrees - wholeDegrees) * 60.0;
+        minutes               += ((double)numeratorSeconds / (double)denominatorSeconds) / 60.0;
+        QString minutesString  = QString::number(minutes, 'f', 8);
+
         while (minutesString.endsWith('0') && !minutesString.endsWith(".0"))
         {
             minutesString.chop(1);
         }
+
         coordinate = coordinate.arg((int)wholeDegrees).arg(minutesString).arg(directionReference);
     }
+
     return coordinate;
 }
 
@@ -730,11 +775,11 @@ QString KExiv2::convertToGPSCoordinateString(const bool isLatitude, double coord
     }
 
     // remove sign
-    coordinate = fabs(coordinate);
+    coordinate     = fabs(coordinate);
 
-    int degrees = (int)floor(coordinate);
+    int degrees    = (int)floor(coordinate);
     // get fractional part
-    coordinate = coordinate - (double)(degrees);
+    coordinate     = coordinate - (double)(degrees);
     // To minutes
     double minutes = coordinate * 60.0;
 
@@ -742,6 +787,7 @@ QString KExiv2::convertToGPSCoordinateString(const bool isLatitude, double coord
     coordinateString = "%1,%2%3";
     coordinateString = coordinateString.arg(degrees);
     coordinateString = coordinateString.arg(minutes, 0, 'f', 8).arg(directionReference);
+
     return coordinateString;
 }
 
@@ -755,9 +801,9 @@ bool KExiv2::convertFromGPSCoordinateString(const QString& gpsString,
         return false;
 
     *directionReference = gpsString.at(gpsString.length() - 1).toUpper().toLatin1();
-    QString coordinate = gpsString.left(gpsString.length() - 1);
+    QString coordinate  = gpsString.left(gpsString.length() - 1);
+    QStringList parts   = coordinate.split(',');
 
-    QStringList parts = coordinate.split(',');
     if (parts.size() == 2)
     {
         // form DDD,MM.mmk
@@ -765,13 +811,14 @@ bool KExiv2::convertFromGPSCoordinateString(const QString& gpsString,
         *denominatorMinutes = 1000000;
         *denominatorSeconds = 1;
 
-        *numeratorDegrees = parts[0].toLong();
+        *numeratorDegrees   = parts[0].toLong();
 
-        double minutes = parts[1].toDouble();
-        minutes *= 1000000;
+        double minutes      = parts[1].toDouble();
+        minutes            *= 1000000;
 
-        *numeratorMinutes = (long)round(minutes);
-        *numeratorSeconds = 0;
+        *numeratorMinutes   = (long)round(minutes);
+        *numeratorSeconds   = 0;
+
         return true;
     }
     else if (parts.size() == 3)
@@ -781,13 +828,16 @@ bool KExiv2::convertFromGPSCoordinateString(const QString& gpsString,
         *denominatorMinutes = 1;
         *denominatorSeconds = 1;
 
-        *numeratorDegrees = parts[0].toLong();
-        *numeratorMinutes = parts[1].toLong();
-        *numeratorSeconds = parts[2].toLong();
+        *numeratorDegrees   = parts[0].toLong();
+        *numeratorMinutes   = parts[1].toLong();
+        *numeratorSeconds   = parts[2].toLong();
+
         return true;
     }
     else
+    {
         return false;
+    }
 }
 
 bool KExiv2::convertFromGPSCoordinateString(const QString& gpsString, double* const degrees)
@@ -797,8 +847,8 @@ bool KExiv2::convertFromGPSCoordinateString(const QString& gpsString, double* co
 
     char directionReference = gpsString.at(gpsString.length() - 1).toUpper().toLatin1();
     QString coordinate      = gpsString.left(gpsString.length() - 1);
+    QStringList parts       = coordinate.split(',');
 
-    QStringList parts = coordinate.split(',');
     if (parts.size() == 2)
     {
         // form DDD,MM.mmk
@@ -824,7 +874,9 @@ bool KExiv2::convertFromGPSCoordinateString(const QString& gpsString, double* co
         return true;
     }
     else
+    {
         return false;
+    }
 }
 
 bool KExiv2::convertToUserPresentableNumbers(const QString& gpsString,
@@ -835,17 +887,17 @@ bool KExiv2::convertToUserPresentableNumbers(const QString& gpsString,
         return false;
 
     *directionReference = gpsString.at(gpsString.length() - 1).toUpper().toLatin1();
-    QString coordinate = gpsString.left(gpsString.length() - 1);
+    QString coordinate  = gpsString.left(gpsString.length() - 1);
+    QStringList parts   = coordinate.split(',');
 
-    QStringList parts = coordinate.split(',');
     if (parts.size() == 2)
     {
         // form DDD,MM.mmk
-        *degrees = parts[0].toInt();
-
+        *degrees                 = parts[0].toInt();
         double fractionalMinutes = parts[1].toDouble();
-        *minutes = (int)trunc(fractionalMinutes);
-        *seconds = (fractionalMinutes - (double)(*minutes)) * 60.0;
+        *minutes                 = (int)trunc(fractionalMinutes);
+        *seconds                 = (fractionalMinutes - (double)(*minutes)) * 60.0;
+
         return true;
     }
     else if (parts.size() == 3)
@@ -854,6 +906,7 @@ bool KExiv2::convertToUserPresentableNumbers(const QString& gpsString,
         *degrees = parts[0].toInt();
         *minutes = parts[1].toInt();
         *seconds = (double)parts[2].toInt();
+
         return true;
     }
     else
@@ -882,18 +935,18 @@ void KExiv2::convertToUserPresentableNumbers(const bool isLatitude, double coord
     }
 
     // remove sign
-    coordinate = fabs(coordinate);
-    *degrees = (int)floor(coordinate);
+    coordinate  = fabs(coordinate);
+    *degrees    = (int)floor(coordinate);
     // get fractional part
-    coordinate = coordinate - (double)(*degrees);
+    coordinate  = coordinate - (double)(*degrees);
     // To minutes
     coordinate *= 60.0;
-    *minutes = (int)floor(coordinate);
+    *minutes    = (int)floor(coordinate);
     // get fractional part
-    coordinate = coordinate - (double)(*minutes);
+    coordinate  = coordinate - (double)(*minutes);
     // To seconds
     coordinate *= 60.0;
-    *seconds = coordinate;
+    *seconds    = coordinate;
 }
 
 }  // NameSpace KExiv2Iface
