@@ -270,16 +270,22 @@ bool KExiv2::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::AutoP
         if (!updateFileTimeStamp)
         {
             // Don't touch access and modification timestamp of file.
-            struct stat st;
-            ::stat(QFile::encodeName(filePath), &st);
-
+            struct stat    st;
             struct utimbuf ut;
-            ut.modtime = st.st_mtime;
-            ut.actime  = st.st_atime;
+            int ret = ::stat(QFile::encodeName(filePath), &st);
+
+            if (ret == 0)
+            {
+                ut.modtime = st.st_mtime;
+                ut.actime  = st.st_atime;
+            }
 
             image->writeMetadata();
 
-            ::utime(QFile::encodeName(filePath), &ut);
+            if (ret == 0)
+            {
+                ::utime(QFile::encodeName(filePath), &ut);
+            }
         }
         else
         {
