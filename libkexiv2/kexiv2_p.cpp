@@ -45,6 +45,7 @@ KExiv2::Private::Private()
     updateFileTimeStamp   = false;
     useXMPSidecar4Reading = false;
     metadataWritingMode   = WRITETOIMAGEONLY;
+    loadedFromSidecar     = false;
     Exiv2::LogMsg::setHandler(KExiv2::Private::printExiv2MessageHandler);
 }
 
@@ -426,22 +427,94 @@ int KExiv2::Private::getXMPTagsListFromPrefix(const QString& pf, KExiv2::TagsMap
 }
 
 #ifdef _XMP_SUPPORT_
-void KExiv2::Private::mergeXmpData(const Exiv2::XmpData& src, Exiv2::XmpData& dest)
+void KExiv2::Private::loadSidecarData(Exiv2::Image::AutoPtr xmpsidecar)
 {
-    for (Exiv2::XmpData::const_iterator it = src.begin(); it != src.end(); ++it)
-    {
-        Exiv2::XmpData::iterator destIt = dest.findKey(Exiv2::XmpKey(it->key()));
+    // Having a sidecar is a special situation.
+    // The sidecar data often "dominates", see in particular bug 309058 for important aspects:
+    // If a field is removed from the sidecar, we must ignore (older) data for this field in the file.
 
-        if (destIt == dest.end())
-        {
-            dest.add(*it);
-        }
-        else
-        {
-            *destIt = *it;
-        }
-    }
+    // First: Ignore file XMP, only use sidecar XMP
+    xmpMetadata() = xmpsidecar->xmpData();
+    loadedFromSidecar = true;
+
+    // EXIF
+    // Four groups of properties are mapped between EXIF and XMP:
+    // Date/Time, Description, Copyright, Creator
+    // A few more tags are defined "writeback" tags in the XMP specification, the sidecar value therefore overrides the Exif value.
+    // The rest is kept side-by-side.
+    // (to understand, remember that the xmpsidecar's Exif data is actually XMP data mapped back to Exif)
+
+    // Description, Copyright and Creator is dominated by the sidecar: Remove file Exif fields, if field not in XMP.
+    ExifMergeHelper exifDominatedHelper;
+    exifDominatedHelper << QLatin1String("Exif.Image.ImageDescription")
+                        << QLatin1String("Exif.Photo.UserComment")
+                        << QLatin1String("Exif.Image.Copyright")
+                        << QLatin1String("Exif.Image.Artist");
+    exifDominatedHelper.exclusiveMerge(xmpsidecar->exifData(), exifMetadata());
+    // Date/Time and "the few more" from the XMP spec are handled as writeback
+    // Note that Date/Time mapping is slightly contradictory in latest specs.
+    ExifMergeHelper exifWritebackHelper;
+    exifWritebackHelper << QLatin1String("Exif.Image.DateTime")
+                        << QLatin1String("Exif.Image.DateTime")
+                        << QLatin1String("Exif.Photo.DateTimeOriginal")
+                        << QLatin1String("Exif.Photo.DateTimeDigitized")
+                        << QLatin1String("Exif.Image.Orientation")
+                        << QLatin1String("Exif.Image.XResolution")
+                        << QLatin1String("Exif.Image.YResolution")
+                        << QLatin1String("Exif.Image.ResolutionUnit")
+                        << QLatin1String("Exif.Image.Software")
+                        << QLatin1String("Exif.Photo.RelatedSoundFile");
+    exifWritebackHelper.mergeFields(xmpsidecar->exifData(), exifMetadata());
+
+    // IPTC
+    // These fields cover almost all relevant IPTC data and are defined in the XMP specification for reconciliation.
+    IptcMergeHelper iptcDominatedHelper;
+    iptcDominatedHelper << QLatin1String("Iptc.Application2.ObjectName")
+                        << QLatin1String("Iptc.Application2.Urgency")
+                        << QLatin1String("Iptc.Application2.Category")
+                        << QLatin1String("Iptc.Application2.SuppCategory")
+                        << QLatin1String("Iptc.Application2.Keywords")
+                        << QLatin1String("Iptc.Application2.SubLocation")
+                        << QLatin1String("Iptc.Application2.SpecialInstructions")
+                        << QLatin1String("Iptc.Application2.Byline")
+                        << QLatin1String("Iptc.Application2.BylineTitle")
+                        << QLatin1String("Iptc.Application2.City")
+                        << QLatin1String("Iptc.Application2.ProvinceState")
+                        << QLatin1String("Iptc.Application2.CountryCode")
+                        << QLatin1String("Iptc.Application2.CountryName")
+                        << QLatin1String("Iptc.Application2.TransmissionReference")
+                        << QLatin1String("Iptc.Application2.Headline")
+                        << QLatin1String("Iptc.Application2.Credit")
+                        << QLatin1String("Iptc.Application2.Source")
+                        << QLatin1String("Iptc.Application2.Copyright")
+                        << QLatin1String("Iptc.Application2.Caption")
+                        << QLatin1String("Iptc.Application2.Writer");
+    iptcDominatedHelper.exclusiveMerge(xmpsidecar->iptcData(), iptcMetadata());
+
+    IptcMergeHelper iptcWritebackHelper;
+    iptcWritebackHelper << QLatin1String("Iptc.Application2.DateCreated")
+                        << QLatin1String("Iptc.Application2.TimeCreated")
+                        << QLatin1String("Iptc.Application2.DigitizationDate")
+                        << QLatin1String("Iptc.Application2.DigitizationTime");
+    iptcWritebackHelper.mergeFields(xmpsidecar->iptcData(), iptcMetadata());
+
+    /*
+     * TODO: Exiv2 (referring to 0.23) does not correctly synchronize all times values as given below.
+     * Time values and their synchronization:
+     * Original Date/Time – Creation date of the intellectual content (e.g. the photograph),
+       rather than the creatio*n date of the content being shown
+        Exif DateTimeOriginal (36867, 0x9003) and SubSecTimeOriginal (37521, 0x9291)
+        IPTC DateCreated (IIM 2:55, 0x0237) and TimeCreated (IIM 2:60, 0x023C)
+        XMP (photoshop:DateCreated)
+     * Digitized Date/Time – Creation date of the digital representation
+        Exif DateTimeDigitized (36868, 0x9004) and SubSecTimeDigitized (37522, 0x9292)
+        IPTC DigitalCreationDate (IIM 2:62, 0x023E) and DigitalCreationTime (IIM 2:63, 0x023F)
+        XMP (xmp:CreateDate)
+     * Modification Date/Time – Modification date of the digital image file
+        Exif DateTime (306, 0x132) and SubSecTime (37520, 0x9290)
+        XMP (xmp:ModifyDate)
+     */
 }
-#endif
+#endif // _XMP_SUPPORT_
 
 }  // NameSpace KExiv2Iface

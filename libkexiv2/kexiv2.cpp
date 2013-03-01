@@ -345,12 +345,8 @@ bool KExiv2::load(const QString& filePath) const
                 xmpsidecar = Exiv2::ImageFactory::open((const char*)QFile::encodeName(xmpSidecarPath));
                 xmpsidecar->readMetadata();
 
-                // Merge sidecar data to main XMP
-                d->mergeXmpData(xmpsidecar->xmpData(), d->xmpMetadata());
-                // Xmp.exif data from the sidecar is available from the exifData of the sidecar image;
-                // but we do not need to care for this, all reading methods check main Exif first,
-                // then Xmp.exif, so we have already implemented the correct reading algorithm.
-
+                // Merge
+                d->loadSidecarData(xmpsidecar);
                 hasLoaded = true;
             }
         }

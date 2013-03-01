@@ -224,6 +224,24 @@ KExiv2::ImageOrientation KExiv2::getImageOrientation() const
         long orientation;
         ImageOrientation imageOrient = ORIENTATION_NORMAL;
 
+        // -- Standard Xmp tag --------------------------------
+
+#ifdef _XMP_SUPPORT_
+
+        bool ok = false;
+        QString str = getXmpTagString("Xmp.tiff.Orientation");
+        if (!str.isEmpty())
+        {
+            orientation = str.toLong(&ok);
+            if (ok)
+            {
+                kDebug() << "Orientation => Xmp.tiff.Orientation => " << (int)orientation;
+                return (ImageOrientation)orientation;
+            }
+        }
+
+#endif // _XMP_SUPPORT_
+
         // Because some camera set a wrong standard exif orientation tag,
         // We need to check makernote tags in first!
 
@@ -278,24 +296,6 @@ KExiv2::ImageOrientation KExiv2::getImageOrientation() const
             kDebug() << "Orientation => Exif.Image.Orientation => " << (int)orientation;
             return (ImageOrientation)orientation;
         }
-
-        // -- Standard Xmp tag --------------------------------
-
-#ifdef _XMP_SUPPORT_
-
-        bool ok = false;
-        QString str = getXmpTagString("Xmp.tiff.Orientation");
-        if (!str.isEmpty())
-        {
-            orientation = str.toLong(&ok);
-            if (ok)
-            {
-                kDebug() << "Orientation => Xmp.tiff.Orientation => " << (int)orientation;
-                return (ImageOrientation)orientation;
-            }
-        }
-
-#endif // _XMP_SUPPORT_
 
     }
     catch( Exiv2::Error& e )

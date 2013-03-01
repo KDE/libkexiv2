@@ -47,6 +47,7 @@
 #include <QFile>
 #include <QImage>
 #include <QSize>
+#include <QLatin1String>
 #include <QTextCodec>
 #include <QMatrix>
 #include <QFileInfo>
@@ -174,11 +175,7 @@ public:
 #ifdef _XMP_SUPPORT_
     Exiv2::XmpData&        xmpMetadata()         { return data.data()->xmpMetadata;        }
 
-    /**
-     * Merge two XmpData packages, where the result is stored in dest
-     * and fields from src take precedence over existing data from dest.
-     */
-    void mergeXmpData(const Exiv2::XmpData& src, Exiv2::XmpData& dest);
+    void loadSidecarData(Exiv2::Image::AutoPtr xmpsidecar);
 #endif
 
 public:
@@ -203,12 +200,128 @@ public:
     /// A mode from #MetadataWritingMode enum.
     int                                            metadataWritingMode;
 
+    /// XMP, and parts of EXIF/IPTC, were loaded from an XMP sidecar file
+    bool                                           loadedFromSidecar;
+
     QString                                        filePath;
     QSize                                          pixelSize;
     QString                                        mimeType;
 
     QSharedDataPointer<KExiv2Data::Private> data;
 };
+
+template <class Data, class Key, class KeyString, class KeyStringList = QList<KeyString> >
+class MergeHelper
+{
+public:
+
+    KeyStringList keys;
+
+    MergeHelper& operator<<(const KeyString& key)
+    {
+        keys << key;
+        return *this;
+    }
+
+    /**
+      * Merge two (Exif,IPTC,Xmp)Data packages, where the result is stored in dest
+      * and fields from src take precedence over existing data from dest.
+      */
+    void mergeAll(const Data& src, Data& dest)
+    {
+        for (typename Data::const_iterator it = src.begin(); it != src.end(); ++it)
+        {
+            typename Data::iterator destIt = dest.findKey(Key(it->key()));
+
+            if (destIt == dest.end())
+            {
+                dest.add(*it);
+            }
+            else
+            {
+                *destIt = *it;
+            }
+        }
+    }
+
+    /**
+     * Merge two (Exif,IPTC,Xmp)Data packages, the result is stored in dest.
+     * Only keys in keys are considered for merging.
+     * Fields from src take precedence over existing data from dest.
+     */
+    void mergeFields(const Data& src, Data& dest)
+    {
+        foreach (const KeyString& keyString, keys)
+        {
+            Key key(keyString.latin1());
+            typename Data::const_iterator it = src.findKey(key);
+            if (it == src.end())
+            {
+                continue;
+            }
+            typename Data::iterator destIt = dest.findKey(key);
+            if (destIt == dest.end())
+            {
+                dest.add(*it);
+            }
+            else
+            {
+                *destIt = *it;
+            }
+        }
+    }
+
+    /**
+     * Merge two (Exif,IPTC,Xmp)Data packages, the result is stored in dest.
+     * The following steps apply only to keys in "keys":
+     * The result is determined by src.
+     * Keys must exist in src to kept in dest.
+     * Fields from src take precedence over existing data from dest.
+     */
+    void exclusiveMerge(const Data& src, Data& dest)
+    {
+        foreach (const KeyString& keyString, keys)
+        {
+            Key key(keyString.latin1());
+            typename Data::const_iterator it = src.findKey(key);
+            typename Data::iterator destIt = dest.findKey(key);
+
+            if (destIt == dest.end())
+            {
+                if (it != src.end())
+                {
+                    dest.add(*it);
+                }
+            }
+            else
+            {
+                if (it == src.end())
+                {
+                    dest.erase(destIt);
+                }
+                else
+                {
+                    *destIt = *it;
+                }
+            }
+        }
+    }
+};
+
+class ExifMergeHelper : public MergeHelper<Exiv2::ExifData, Exiv2::ExifKey, QLatin1String>
+{
+};
+
+class IptcMergeHelper : public MergeHelper<Exiv2::IptcData, Exiv2::IptcKey, QLatin1String>
+{
+};
+
+#ifdef _XMP_SUPPORT_
+class XmpMergeHelper : public MergeHelper<Exiv2::XmpData, Exiv2::XmpKey, QLatin1String>
+{
+};
+#endif
+
 
 }  // NameSpace KExiv2Iface
 
