@@ -105,8 +105,8 @@ bool KExiv2::Private::saveToFile(const QFileInfo& finfo) const
 
     // Raw files not supported by Exiv2 0.21
     rawTiffBasedNotSupported
-        << "3fr" << "arw" << "cr2" << "dcr" << "erf" << "k25"
-        << "kdc" << "mos" << "raw" << "sr2" << "srf" << "rw2";
+        << "3fr" << "arw" << "dcr" << "erf" << "k25" << "kdc" 
+        << "mos" << "raw" << "sr2" << "srf" << "rw2";
 
     if (!Exiv2::testVersion(0,23,0))
     {
