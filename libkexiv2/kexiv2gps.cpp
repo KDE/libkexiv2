@@ -70,15 +70,15 @@ bool KExiv2::getGPSLatitudeNumber(double* const latitude) const
 
         if (!latRef.isEmpty())
         {
-            // Latitude decoding from Exif.
-            double num, den, min, sec;
-
             Exiv2::ExifKey exifKey("Exif.GPSInfo.GPSLatitude");
             Exiv2::ExifData exifData(d->exifMetadata());
             Exiv2::ExifData::iterator it = exifData.findKey(exifKey);
 
             if (it != exifData.end() && (*it).count() == 3)
             {
+                // Latitude decoding from Exif.
+                double num, den, min, sec;
+
                 num = (double)((*it).toRational(0).first);
                 den = (double)((*it).toRational(0).second);
 
