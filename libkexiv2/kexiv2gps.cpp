@@ -150,7 +150,6 @@ bool KExiv2::getGPSLongitudeNumber(double* const longitude) const
         if (!lngRef.isEmpty())
         {
             // Longitude decoding from Exif.
-            double num, den, min, sec;
 
             Exiv2::ExifKey exifKey2("Exif.GPSInfo.GPSLongitude");
             Exiv2::ExifData exifData(d->exifMetadata());
@@ -158,11 +157,17 @@ bool KExiv2::getGPSLongitudeNumber(double* const longitude) const
 
             if (it != exifData.end() && (*it).count() == 3)
             {
+                /// @todo Decoding of latitude and longitude works in the same way,
+                ///       code here can be put in a separate function
+                double num, den;
+
                 num = (double)((*it).toRational(0).first);
                 den = (double)((*it).toRational(0).second);
 
                 if (den == 0)
+                {
                     return false;
+                }
 
                 *longitude = num/den;
 
@@ -170,12 +175,16 @@ bool KExiv2::getGPSLongitudeNumber(double* const longitude) const
                 den = (double)((*it).toRational(1).second);
 
                 if (den == 0)
+                {
                     return false;
+                }
 
-                min = num/den;
+                const double min = num/den;
 
                 if (min != -1.0)
+                {
                     *longitude = *longitude + min/60.0;
+                }
 
                 num = (double)((*it).toRational(2).first);
                 den = (double)((*it).toRational(2).second);
@@ -189,10 +198,12 @@ bool KExiv2::getGPSLongitudeNumber(double* const longitude) const
                         return false;
                 }
 
-                sec = num/den;
+                const double sec = num/den;
 
                 if (sec != -1.0)
+                {
                     *longitude = *longitude + sec/3600.0;
+                }
             }
             else
             {
@@ -200,7 +211,9 @@ bool KExiv2::getGPSLongitudeNumber(double* const longitude) const
             }
 
             if (lngRef[0] == 'W')
+            {
                 *longitude *= -1.0;
+            }
 
             return true;
         }
