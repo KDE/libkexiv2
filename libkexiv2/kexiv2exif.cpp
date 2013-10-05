@@ -231,6 +231,7 @@ QString KExiv2::getExifComment() const
                 QStringList blackList;
                 blackList << "SONY DSC"; // + whitespace
                 blackList << "OLYMPUS DIGITAL CAMERA";
+                blackList << "MINOLTA DIGITAL CAMERA";
 
                 QString trimmedComment = exifComment.trimmed();
 
