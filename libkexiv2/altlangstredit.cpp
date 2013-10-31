@@ -7,7 +7,7 @@
  * @date   2009-06-15
  * @brief  multi-languages string editor
  *
- * @author Copyright (C) 2009-2012 by Gilles Caulier
+ * @author Copyright (C) 2009-2013 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
@@ -246,6 +246,13 @@ public:
         languageCodeMap.insert( "zu-ZA", i18n("isiZulu Zulu (South Africa)") );
     }
 
+    ~Private()
+    {
+        languageCodeMap.clear();
+    }
+
+public:
+
     typedef QMap<QString, QString> LanguageCodeMap;
 
     LanguageCodeMap                languageCodeMap;
@@ -266,11 +273,11 @@ public:
 };
 
 AltLangStrEdit::AltLangStrEdit(QWidget* parent)
-              : QWidget(parent), d(new Private)
+    : QWidget(parent), d(new Private)
 {
-    QGridLayout* grid = new QGridLayout(this);
-    d->titleLabel     = new QLabel(this);
-    d->delValueButton = new QToolButton(this);
+    QGridLayout* const grid = new QGridLayout(this);
+    d->titleLabel           = new QLabel(this);
+    d->delValueButton       = new QToolButton(this);
     d->delValueButton->setIcon(SmallIcon("edit-clear"));
     d->delValueButton->setToolTip(i18n("Remove entry for this language"));
     d->delValueButton->setEnabled(false);
@@ -375,7 +382,7 @@ void AltLangStrEdit::slotSelectionChanged()
 
     d->valueEdit->blockSignals(false);
 
-    d->languageCB->setToolTip(d->languageCodeMap[d->currentLanguage]);
+    d->languageCB->setToolTip(d->languageCodeMap.value(d->currentLanguage));
 
     emit signalSelectionChanged(d->currentLanguage);
 }
@@ -408,13 +415,15 @@ void AltLangStrEdit::loadLangAltListEntries()
     // In first we fill already assigned languages.
 
     QStringList list = d->values.keys();
+
     if (!list.isEmpty())
     {
-        foreach(const QString &item, list)
+        foreach(const QString& item, list)
         {
               d->languageCB->addItem(item);
               d->languageCB->setItemIcon(d->languageCB->count()-1, SmallIcon("dialog-ok"));
         }
+
         d->languageCB->insertSeparator(d->languageCB->count());
     }
 
@@ -424,7 +433,9 @@ void AltLangStrEdit::loadLangAltListEntries()
          it != d->languageCodeMap.end(); ++it)
     {
         if (!list.contains(it.key()))
+        {
             d->languageCB->addItem(it.key());
+        }
     }
 
     d->languageCB->setCurrentItem(d->currentLanguage);
@@ -496,7 +507,9 @@ void AltLangStrEdit::setLinesVisible(uint lines)
 
     // It's not possible to display scrollbar properlly if size is too small
     if (d->linesVisible < 3)
+    {
         d->valueEdit->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    }
 }
 
 uint AltLangStrEdit::linesVisible() const
@@ -507,7 +520,9 @@ uint AltLangStrEdit::linesVisible() const
 void AltLangStrEdit::changeEvent(QEvent* e)
 {
     if (e->type() == QEvent::FontChange)
+    {
         setLinesVisible(linesVisible());
+    }
 
     QWidget::changeEvent(e);
 }
