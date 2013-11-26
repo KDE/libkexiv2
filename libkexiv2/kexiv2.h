@@ -13,7 +13,7 @@
  * @brief         http://www.iptc.org/std/Iptc4xmpCore/1.0/specification/Iptc4xmpCore_1.0-spec-XMPSchema_8.pdf
  * @brief  Paper: http://www.metadataworkinggroup.com/pdf/mwg_guidance.pdf
  *
- * @author Copyright (C) 2006-2012 by Gilles Caulier
+ * @author Copyright (C) 2006-2013 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  * @author Copyright (C) 2006-2012 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
@@ -589,6 +589,8 @@ public:
         "Thumbnail"
         "Image"
         "Photo"
+        
+        List can be empty to not filter output.
 
         ... this method will return a map of all Exif tags witch :
 
@@ -597,7 +599,7 @@ public:
         - not include "Iop", or "Thumbnail", or "Image", or "Photo" in the Exif tag keys
           if 'inverSelection' is true.
      */
-    KExiv2::MetaDataMap getExifTagsDataList(const QStringList& exifKeysFilter, bool invertSelection=false) const;
+    KExiv2::MetaDataMap getExifTagsDataList(const QStringList& exifKeysFilter=QStringList(), bool invertSelection=false) const;
 
     //@}
 
@@ -687,6 +689,8 @@ public:
 
         "Envelope"
         "Application2"
+        
+        List can be empty to not filter output.
 
         ... this method will return a map of all Iptc tags witch :
 
@@ -695,7 +699,7 @@ public:
         - not include "Envelope", or "Application2" in the Iptc tag keys
           if 'inverSelection' is true.
      */
-    KExiv2::MetaDataMap getIptcTagsDataList(const QStringList& iptcKeysFilter, bool invertSelection=false) const;
+    KExiv2::MetaDataMap getIptcTagsDataList(const QStringList& iptcKeysFilter=QStringList(), bool invertSelection=false) const;
 
     /** Return a strings list of Iptc keywords from image. Return an empty list if no keyword are set.
      */
@@ -799,6 +803,8 @@ public:
 
         "dc"           // Dubling Core schema.
         "xmp"          // Standard Xmp schema.
+        
+        List can be empty to not filter output.
 
         ... this method will return a map of all Xmp tags witch :
 
@@ -807,7 +813,7 @@ public:
         - not include "dc", or "xmp" in the Xmp tag keys
           if 'inverSelection' is true.
      */
-    KExiv2::MetaDataMap getXmpTagsDataList(const QStringList& xmpKeysFilter, bool invertSelection=false) const;
+    KExiv2::MetaDataMap getXmpTagsDataList(const QStringList& xmpKeysFilter=QStringList(), bool invertSelection=false) const;
 
     /** Get all redondant Alternative Language Xmp tags content like a map.
         See AltLangMap class description for details.

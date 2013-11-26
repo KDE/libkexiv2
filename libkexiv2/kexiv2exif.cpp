@@ -179,16 +179,23 @@ KExiv2::MetaDataMap KExiv2::getExifTagsDataList(const QStringList& exifKeysFilte
 
             // We apply a filter to get only the Exif tags that we need.
 
-            if (!invertSelection)
+            if (!exifKeysFilter.isEmpty())
             {
-                if (exifKeysFilter.contains(key.section('.', 1, 1)))
-                    metaDataMap.insert(key, tagValue);
+                if (!invertSelection)
+                {
+                    if (exifKeysFilter.contains(key.section('.', 1, 1)))
+                        metaDataMap.insert(key, tagValue);
+                }
+                else
+                {
+                    if (!exifKeysFilter.contains(key.section('.', 1, 1)))
+                        metaDataMap.insert(key, tagValue);
+                }
             }
-            else
+            else // else no filter at all.
             {
-                if (!exifKeysFilter.contains(key.section('.', 1, 1)))
-                    metaDataMap.insert(key, tagValue);
-            }
+                metaDataMap.insert(key, tagValue);
+            }          
         }
 
         return metaDataMap;

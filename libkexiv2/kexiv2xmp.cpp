@@ -7,7 +7,7 @@
  * @date   2006-09-15
  * @brief  Xmp manipulation methods
  *
- * @author Copyright (C) 2006-2012 by Gilles Caulier
+ * @author Copyright (C) 2006-2013 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  * @author Copyright (C) 2006-2012 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
@@ -195,34 +195,55 @@ KExiv2::MetaDataMap KExiv2::getXmpTagsDataList(const QStringList& xmpKeysFilter,
 
             // We apply a filter to get only the XMP tags that we need.
 
-            if (!invertSelection)
+            if (!xmpKeysFilter.isEmpty())
             {
-                if (xmpKeysFilter.contains(key.section('.', 1, 1)))
+                if (!invertSelection)
                 {
-                    if (it == metaDataMap.end())
-                        metaDataMap.insert(key, value);
-                    else
+                    if (xmpKeysFilter.contains(key.section('.', 1, 1)))
                     {
-                        QString v = *it;
-                        v.append(", ");
-                        v.append(value);
-                        metaDataMap.insert(key, v);
+                        if (it == metaDataMap.end())
+                        {
+                            metaDataMap.insert(key, value);
+                        }
+                        else
+                        {
+                            QString v = *it;
+                            v.append(", ");
+                            v.append(value);
+                            metaDataMap.insert(key, v);
+                        }
+                    }
+                }
+                else
+                {
+                    if (!xmpKeysFilter.contains(key.section('.', 1, 1)))
+                    {
+                        if (it == metaDataMap.end())
+                        {
+                            metaDataMap.insert(key, value);
+                        }
+                        else
+                        {
+                            QString v = *it;
+                            v.append(", ");
+                            v.append(value);
+                            metaDataMap.insert(key, v);
+                        }
                     }
                 }
             }
-            else
+            else // else no filter at all.
             {
-                if (!xmpKeysFilter.contains(key.section('.', 1, 1)))
+                if (it == metaDataMap.end())
                 {
-                    if (it == metaDataMap.end())
-                        metaDataMap.insert(key, value);
-                    else
-                    {
-                        QString v = *it;
-                        v.append(", ");
-                        v.append(value);
-                        metaDataMap.insert(key, v);
-                    }
+                    metaDataMap.insert(key, value);
+                }
+                else
+                {
+                    QString v = *it;
+                    v.append(", ");
+                    v.append(value);
+                    metaDataMap.insert(key, v);
                 }
             }
         }
