@@ -15,7 +15,7 @@
  *
  * @author Copyright (C) 2006-2013 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
- * @author Copyright (C) 2006-2012 by Marcel Wiesweg
+ * @author Copyright (C) 2006-2013 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
  *
  * This program is free software; you can redistribute it
@@ -589,7 +589,7 @@ public:
         "Thumbnail"
         "Image"
         "Photo"
-        
+
         List can be empty to not filter output.
 
         ... this method will return a map of all Exif tags witch :
@@ -689,7 +689,7 @@ public:
 
         "Envelope"
         "Application2"
-        
+
         List can be empty to not filter output.
 
         ... this method will return a map of all Iptc tags witch :
@@ -803,7 +803,7 @@ public:
 
         "dc"           // Dubling Core schema.
         "xmp"          // Standard Xmp schema.
-        
+
         List can be empty to not filter output.
 
         ... this method will return a map of all Xmp tags witch :
