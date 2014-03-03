@@ -7,7 +7,7 @@
  * @date   2006-09-15
  * @brief  Iptc manipulation methods
  *
- * @author Copyright (C) 2006-2013 by Gilles Caulier
+ * @author Copyright (C) 2006-2014 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  * @author Copyright (C) 2006-2012 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
@@ -41,7 +41,7 @@ bool KExiv2::canWriteIptc(const QString& filePath)
         Exiv2::AccessMode mode = image->checkMode(Exiv2::mdIptc);
         return (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite);
     }
-    catch( Exiv2::Error& e )
+    catch(Exiv2::Error& e)
     {
         std::string s(e.what());
         kDebug() << "Cannot check Iptc access mode using Exiv2 (Error #"
@@ -63,7 +63,7 @@ bool KExiv2::clearIptc() const
         d->iptcMetadata().clear();
         return true;
     }
-    catch( Exiv2::Error& e )
+    catch(Exiv2::Error& e)
     {
         d->printExiv2ExceptionError("Cannot clear Iptc data using Exiv2 ", e);
     }
@@ -94,10 +94,12 @@ QByteArray KExiv2::getIptc(bool addIrbHeader) const
 
         }
     }
-    catch( Exiv2::Error& e )
+    catch(Exiv2::Error& e)
     {
         if (!d->filePath.isEmpty())
+        {
             kDebug() << "From file " << d->filePath.toAscii().constData();
+        }
 
         d->printExiv2ExceptionError("Cannot get Iptc data using Exiv2 ",e);
     }
@@ -115,10 +117,12 @@ bool KExiv2::setIptc(const QByteArray& data) const
             return (!d->iptcMetadata().empty());
         }
     }
-    catch( Exiv2::Error& e )
+    catch(Exiv2::Error& e)
     {
         if (!d->filePath.isEmpty())
+        {
             kDebug() << "From file " << d->filePath.toAscii().constData();
+        }
 
         d->printExiv2ExceptionError("Cannot set Iptc data using Exiv2 ", e);
     }
@@ -146,7 +150,18 @@ KExiv2::MetaDataMap KExiv2::getIptcTagsDataList(const QStringList& iptcKeysFilte
             // Decode the tag value with a user friendly output.
             std::ostringstream os;
             os << *md;
-            QString value = QString(os.str().c_str());
+
+            QString value;
+
+            if (key == QString("Iptc.Envelope.CharacterSet"))
+            {
+                value = iptcData.detectCharset();
+            }
+            else 
+            {
+                value = QString::fromUtf8(os.str().c_str());
+            }
+
             // To make a string just on one line.
             value.replace('\n', ' ');
 
@@ -259,7 +274,8 @@ bool KExiv2::removeIptcTag(const char* iptcTagName, bool setProgramName) const
     try
     {
         Exiv2::IptcData::iterator it = d->iptcMetadata().begin();
-        int i = 0;
+        int i                        = 0;
+
         while(it != d->iptcMetadata().end())
         {
             QString key = QString::fromLocal8Bit(it->key().c_str());
@@ -278,7 +294,7 @@ bool KExiv2::removeIptcTag(const char* iptcTagName, bool setProgramName) const
         if (i > 0)
             return true;
     }
-    catch( Exiv2::Error& e )
+    catch(Exiv2::Error& e)
     {
         d->printExiv2ExceptionError("Cannot remove Iptc tag using Exiv2 ", e);
     }
@@ -300,7 +316,7 @@ bool KExiv2::setIptcTagData(const char* iptcTagName, const QByteArray& data, boo
         d->iptcMetadata()[iptcTagName] = val;
         return true;
     }
-    catch( Exiv2::Error& e )
+    catch(Exiv2::Error& e)
     {
         d->printExiv2ExceptionError("Cannot set Iptc tag data into image using Exiv2 ", e);
     }
@@ -315,16 +331,17 @@ QByteArray KExiv2::getIptcTagData(const char* iptcTagName) const
         Exiv2::IptcKey iptcKey(iptcTagName);
         Exiv2::IptcData iptcData(d->iptcMetadata());
         Exiv2::IptcData::iterator it = iptcData.findKey(iptcKey);
+
         if (it != iptcData.end())
         {
-            char *s = new char[(*it).size()];
+            char* const s = new char[(*it).size()];
             (*it).copy((Exiv2::byte*)s, Exiv2::bigEndian);
             QByteArray data(s, (*it).size());
             delete [] s;
             return data;
         }
     }
-    catch( Exiv2::Error& e )
+    catch(Exiv2::Error& e)
     {
         d->printExiv2ExceptionError(QString("Cannot find Iptc key '%1' into image using Exiv2 ")
                                     .arg(iptcTagName), e);
@@ -340,6 +357,7 @@ QString KExiv2::getIptcTagString(const char* iptcTagName, bool escapeCR) const
         Exiv2::IptcKey iptcKey(iptcTagName);
         Exiv2::IptcData iptcData(d->iptcMetadata());
         Exiv2::IptcData::iterator it = iptcData.findKey(iptcKey);
+
         if (it != iptcData.end())
         {
             std::ostringstream os;
@@ -352,7 +370,7 @@ QString KExiv2::getIptcTagString(const char* iptcTagName, bool escapeCR) const
             return tagValue;
         }
     }
-    catch( Exiv2::Error& e )
+    catch(Exiv2::Error& e)
     {
         d->printExiv2ExceptionError(QString("Cannot find Iptc key '%1' into image using Exiv2 ")
                                     .arg(iptcTagName), e);
@@ -368,10 +386,13 @@ bool KExiv2::setIptcTagString(const char* iptcTagName, const QString& value, boo
 
     try
     {
-        d->iptcMetadata()[iptcTagName] = std::string(value.toAscii().constData());
+        d->iptcMetadata()[iptcTagName] = std::string(value.toUtf8().constData());
+
+        // Make sure we have set the charset to UTF-8
+        d->iptcMetadata()["Iptc.Envelope.CharacterSet"] = "\33%G";
         return true;
     }
-    catch( Exiv2::Error& e )
+    catch(Exiv2::Error& e)
     {
         d->printExiv2ExceptionError("Cannot set Iptc tag string into image using Exiv2 ", e);
     }
@@ -394,7 +415,7 @@ QStringList KExiv2::getIptcTagsStringList(const char* iptcTagName, bool escapeCR
 
                 if (key == QString(iptcTagName))
                 {
-                    QString tagValue(it->toString().c_str());
+                    QString tagValue = QString::fromUtf8(it->toString().c_str());
 
                     if (escapeCR)
                         tagValue.replace('\n', ' ');
@@ -406,7 +427,7 @@ QStringList KExiv2::getIptcTagsStringList(const char* iptcTagName, bool escapeCR
             return values;
         }
     }
-    catch( Exiv2::Error& e )
+    catch(Exiv2::Error& e)
     {
         d->printExiv2ExceptionError(QString("Cannot find Iptc key '%1' into image using Exiv2 ")
                                     .arg(iptcTagName), e);
@@ -428,7 +449,7 @@ bool KExiv2::setIptcTagsStringList(const char* iptcTagName, int maxSize,
         QStringList newvals = newValues;
 
         kDebug() << d->filePath.toAscii().constData() << " : " << iptcTagName
-                      << " => " << newvals.join(",").toAscii().constData();
+                 << " => " << newvals.join(",").toAscii().constData();
 
         // Remove all old values.
         Exiv2::IptcData iptcData(d->iptcMetadata());
@@ -437,7 +458,7 @@ bool KExiv2::setIptcTagsStringList(const char* iptcTagName, int maxSize,
         while(it != iptcData.end())
         {
             QString key = QString::fromLocal8Bit(it->key().c_str());
-            QString val(it->toString().c_str());
+            QString val = QString::fromUtf8(it->toString().c_str());
 
             // Also remove new values to avoid duplicates. They will be added again below.
             if ( key == QString(iptcTagName) &&
@@ -458,15 +479,18 @@ bool KExiv2::setIptcTagsStringList(const char* iptcTagName, int maxSize,
             key.truncate(maxSize);
 
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::string);
-            val->read(key.toLatin1().constData());
+            val->read(key.toUtf8().constData());
             iptcData.add(iptcTag, val.get());
         }
 
         d->iptcMetadata() = iptcData;
 
+        // Make sure character set is UTF-8
+        setIptcTagString("Iptc.Envelope.CharacterSet", "\33%G", false);
+
         return true;
     }
-    catch( Exiv2::Error& e )
+    catch(Exiv2::Error& e)
     {
         d->printExiv2ExceptionError(QString("Cannot set Iptc key '%1' into image using Exiv2 ")
                                     .arg(iptcTagName), e);
@@ -490,15 +514,17 @@ QStringList KExiv2::getIptcKeywords() const
 
                 if (key == QString("Iptc.Application2.Keywords"))
                 {
-                    QString val(it->toString().c_str());
+                    QString val = QString::fromUtf8(it->toString().c_str());
                     keywords.append(val);
                 }
             }
 
+            kDebug() << d->filePath << " ==> Read Iptc Keywords: " << keywords;
+
             return keywords;
         }
     }
-    catch( Exiv2::Error& e )
+    catch(Exiv2::Error& e)
     {
         d->printExiv2ExceptionError("Cannot get Iptc Keywords from image using Exiv2 ", e);
     }
@@ -517,8 +543,7 @@ bool KExiv2::setIptcKeywords(const QStringList& oldKeywords, const QStringList& 
         QStringList oldkeys = oldKeywords;
         QStringList newkeys = newKeywords;
 
-        kDebug() << d->filePath.toAscii().constData()
-                      << " ==> Iptc Keywords: " << newkeys.join(",").toAscii().constData();
+        kDebug() << d->filePath << " ==> New Iptc Keywords: " << newkeys;
 
         // Remove all old keywords.
         Exiv2::IptcData iptcData(d->iptcMetadata());
@@ -527,11 +552,12 @@ bool KExiv2::setIptcKeywords(const QStringList& oldKeywords, const QStringList& 
         while(it != iptcData.end())
         {
             QString key = QString::fromLocal8Bit(it->key().c_str());
-            QString val(it->toString().c_str());
+            QString val = QString::fromUtf8(it->toString().c_str());
 
             // Also remove new keywords to avoid duplicates. They will be added again below.
             if ( key == QString("Iptc.Application2.Keywords") &&
-                 (oldKeywords.contains(val) || newKeywords.contains(val)) )
+                 (oldKeywords.contains(val) || newKeywords.contains(val))
+               )
                 it = iptcData.erase(it);
             else
                 ++it;
@@ -547,15 +573,18 @@ bool KExiv2::setIptcKeywords(const QStringList& oldKeywords, const QStringList& 
             key.truncate(64);
 
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::string);
-            val->read(key.toLatin1().constData());
+            val->read(key.toUtf8().constData());
             iptcData.add(iptcTag, val.get());
         }
 
         d->iptcMetadata() = iptcData;
 
+        // Make sure character set is UTF-8
+        setIptcTagString("Iptc.Envelope.CharacterSet", "\33%G", false);
+
         return true;
     }
-    catch( Exiv2::Error& e )
+    catch(Exiv2::Error& e)
     {
         d->printExiv2ExceptionError("Cannot set Iptc Keywords into image using Exiv2 ", e);
     }
@@ -586,7 +615,7 @@ QStringList KExiv2::getIptcSubjects() const
             return subjects;
         }
     }
-    catch( Exiv2::Error& e )
+    catch(Exiv2::Error& e)
     {
         d->printExiv2ExceptionError("Cannot get Iptc Subjects from image using Exiv2 ", e);
     }
@@ -612,7 +641,7 @@ bool KExiv2::setIptcSubjects(const QStringList& oldSubjects, const QStringList& 
         while(it != iptcData.end())
         {
             QString key = QString::fromLocal8Bit(it->key().c_str());
-            QString val(it->toString().c_str());
+            QString val = QString::fromUtf8(it->toString().c_str());
 
             if (key == QString("Iptc.Application2.Subject") && oldDef.contains(val))
                 it = iptcData.erase(it);
@@ -630,15 +659,18 @@ bool KExiv2::setIptcSubjects(const QStringList& oldSubjects, const QStringList& 
             key.truncate(236);
 
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::string);
-            val->read(key.toLatin1().constData());
+            val->read(key.toUtf8().constData());
             iptcData.add(iptcTag, val.get());
         }
 
         d->iptcMetadata() = iptcData;
 
+        // Make sure character set is UTF-8
+        setIptcTagString("Iptc.Envelope.CharacterSet", "\33%G", false);
+
         return true;
     }
-    catch( Exiv2::Error& e )
+    catch(Exiv2::Error& e)
     {
         d->printExiv2ExceptionError("Cannot set Iptc Subjects into image using Exiv2 ", e);
     }
@@ -669,7 +701,7 @@ QStringList KExiv2::getIptcSubCategories() const
             return subCategories;
         }
     }
-    catch( Exiv2::Error& e )
+    catch(Exiv2::Error& e)
     {
         d->printExiv2ExceptionError("Cannot get Iptc Sub Categories from image using Exiv2 ", e);
     }
@@ -695,7 +727,7 @@ bool KExiv2::setIptcSubCategories(const QStringList& oldSubCategories, const QSt
         while(it != iptcData.end())
         {
             QString key = QString::fromLocal8Bit(it->key().c_str());
-            QString val(it->toString().c_str());
+            QString val = QString::fromUtf8(it->toString().c_str());
 
             if (key == QString("Iptc.Application2.SuppCategory") && oldSubCategories.contains(val))
                 it = iptcData.erase(it);
@@ -714,15 +746,18 @@ bool KExiv2::setIptcSubCategories(const QStringList& oldSubCategories, const QSt
             key.truncate(32);
 
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::string);
-            val->read(key.toLatin1().constData());
+            val->read(key.toUtf8().constData());
             iptcData.add(iptcTag, val.get());
         }
 
         d->iptcMetadata() = iptcData;
 
+        // Make sure character set is UTF-8
+        setIptcTagString("Iptc.Envelope.CharacterSet", "\33%G", false);
+
         return true;
     }
-    catch( Exiv2::Error& e )
+    catch(Exiv2::Error& e)
     {
         d->printExiv2ExceptionError("Cannot set Iptc Sub Categories into image using Exiv2 ", e);
     }
@@ -753,7 +788,7 @@ KExiv2::TagsMap KExiv2::getIptcTagsList() const
         }
         return tagsMap;
     }
-    catch( Exiv2::Error& e )
+    catch(Exiv2::Error& e)
     {
         d->printExiv2ExceptionError("Cannot get Iptc Tags list using Exiv2 ", e);
     }
