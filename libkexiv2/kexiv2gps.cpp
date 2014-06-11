@@ -132,7 +132,7 @@ bool KExiv2::getGPSLatitudeNumber(double* const latitude) const
     }
     catch(...)
     {
-        kDebug() << "Default exception from Exiv2";
+        kError() << "Default exception from Exiv2";
     }
 
     return false;
@@ -228,7 +228,7 @@ bool KExiv2::getGPSLongitudeNumber(double* const longitude) const
     }
     catch(...)
     {
-        kDebug() << "Default exception from Exiv2";
+        kError() << "Default exception from Exiv2";
     }
 
     return false;
@@ -302,7 +302,7 @@ bool KExiv2::getGPSAltitude(double* const altitude) const
     }
     catch(...)
     {
-        kDebug() << "Default exception from Exiv2";
+        kError() << "Default exception from Exiv2";
     }
 
     return false;
@@ -360,7 +360,7 @@ bool KExiv2::initializeGPSInfo(const bool setProgramName)
     }
     catch(...)
     {
-        kDebug() << "Default exception from Exiv2";
+        kError() << "Default exception from Exiv2";
     }
 
     return false;
@@ -492,7 +492,7 @@ bool KExiv2::setGPSInfo(const double* const altitude, const double latitude, con
     }
     catch(...)
     {
-        kDebug() << "Default exception from Exiv2";
+        kError() << "Default exception from Exiv2";
     }
 
     return false;
@@ -581,7 +581,7 @@ bool KExiv2::removeGPSInfo(const bool setProgramName)
     }
     catch(...)
     {
-        kDebug() << "Default exception from Exiv2";
+        kError() << "Default exception from Exiv2";
     }
 
     return false;

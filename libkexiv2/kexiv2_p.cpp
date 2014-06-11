@@ -85,7 +85,7 @@ bool KExiv2::Private::saveToXMPSidecar(const QFileInfo& finfo) const
     }
     catch(...)
     {
-        kDebug() << "Default exception from Exiv2";
+        kError() << "Default exception from Exiv2";
         return false;
     }
 }
@@ -161,7 +161,7 @@ bool KExiv2::Private::saveToFile(const QFileInfo& finfo) const
     }
     catch(...)
     {
-        kDebug() << "Default exception from Exiv2";
+        kError() << "Default exception from Exiv2";
         return false;
     }
 }
@@ -311,7 +311,7 @@ bool KExiv2::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::AutoP
     }
     catch(...)
     {
-        kDebug() << "Default exception from Exiv2";
+        kError() << "Default exception from Exiv2";
     }
 
     return false;
@@ -330,7 +330,7 @@ void KExiv2Data::Private::clear()
 void KExiv2::Private::printExiv2ExceptionError(const QString& msg, Exiv2::Error& e)
 {
     std::string s(e.what());
-    kDebug() << msg.toAscii().constData() << " (Error #"
+    kError() << msg.toAscii().constData() << " (Error #"
              << e.code() << ": " << s.c_str();
 }
 
@@ -388,7 +388,7 @@ QString KExiv2::Private::convertCommentValue(const Exiv2::Exifdatum& exifDatum) 
     }
     catch(...)
     {
-        kDebug() << "Default exception from Exiv2";
+        kError() << "Default exception from Exiv2";
     }
 
     return QString();

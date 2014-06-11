@@ -279,7 +279,7 @@ bool KExiv2::loadFromData(const QByteArray& imgData) const
     }
     catch(...)
     {
-        kDebug() << "Default exception from Exiv2";
+        kError() << "Default exception from Exiv2";
     }
 
     return false;
@@ -335,7 +335,7 @@ bool KExiv2::load(const QString& filePath) const
     }
     catch(...)
     {
-        kDebug() << "Default exception from Exiv2";
+        kError() << "Default exception from Exiv2";
     }
 
 #ifdef _XMP_SUPPORT_
@@ -365,7 +365,7 @@ bool KExiv2::load(const QString& filePath) const
     }
     catch(...)
     {
-        kDebug() << "Default exception from Exiv2";
+        kError() << "Default exception from Exiv2";
     }
 
 #endif // _XMP_SUPPORT_

@@ -46,12 +46,12 @@ bool KExiv2::canWriteComment(const QString& filePath)
     catch( Exiv2::Error& e )
     {
         std::string s(e.what());
-        kDebug() << "Cannot check Comment access mode using Exiv2 (Error #"
+        kError() << "Cannot check Comment access mode using Exiv2 (Error #"
                  << e.code() << ": " << s.c_str() << ")";
     }
     catch(...)
     {
-        kDebug() << "Default exception from Exiv2";
+        kError() << "Default exception from Exiv2";
     }
 
     return false;
