@@ -7,7 +7,7 @@
  * @date   2007-09-03
  * @brief  Exiv2 library interface for KDE
  *
- * @author Copyright (C) 2006-2013 by Gilles Caulier
+ * @author Copyright (C) 2006-2014 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  * @author Copyright (C) 2006-2012 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
@@ -83,6 +83,11 @@ bool KExiv2::Private::saveToXMPSidecar(const QFileInfo& finfo) const
         printExiv2ExceptionError("Cannot save metadata to XMP sidecar using Exiv2 ", e);
         return false;
     }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
+        return false;
+    }
 }
 
 bool KExiv2::Private::saveToFile(const QFileInfo& finfo) const
@@ -152,6 +157,11 @@ bool KExiv2::Private::saveToFile(const QFileInfo& finfo) const
     catch( Exiv2::Error& e )
     {
         printExiv2ExceptionError("Cannot save metadata to image using Exiv2 ", e);
+        return false;
+    }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
         return false;
     }
 }
@@ -299,6 +309,10 @@ bool KExiv2::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::AutoP
     {
         printExiv2ExceptionError("Cannot save metadata using Exiv2 ", e);
     }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
+    }
 
     return false;
 }
@@ -371,6 +385,10 @@ QString KExiv2::Private::convertCommentValue(const Exiv2::Exifdatum& exifDatum) 
     catch( Exiv2::Error& e )
     {
         printExiv2ExceptionError("Cannot convert Comment using Exiv2 ", e);
+    }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
     }
 
     return QString();

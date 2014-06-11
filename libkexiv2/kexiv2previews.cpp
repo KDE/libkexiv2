@@ -7,7 +7,7 @@
  * @date   2009-11-14
  * @brief  Embedded preview loading
  *
- * @author Copyright (C) 2009-2012 by Gilles Caulier
+ * @author Copyright (C) 2009-2014 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  * @author Copyright (C) 2009-2012 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
@@ -85,6 +85,10 @@ KExiv2Previews::KExiv2Previews(const QString& filePath)
     {
         KExiv2::Private::printExiv2ExceptionError("Cannot load metadata using Exiv2 ", e);
     }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
+    }
 }
 
 KExiv2Previews::KExiv2Previews(const QByteArray& imgData)
@@ -98,6 +102,10 @@ KExiv2Previews::KExiv2Previews(const QByteArray& imgData)
     catch( Exiv2::Error& e )
     {
         KExiv2::Private::printExiv2ExceptionError("Cannot load metadata using Exiv2 ", e);
+    }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
     }
 }
 
@@ -165,6 +173,11 @@ QByteArray KExiv2Previews::data(int index)
     catch( Exiv2::Error& e )
     {
         KExiv2::Private::printExiv2ExceptionError("Cannot load metadata using Exiv2 ", e);
+        return QByteArray();
+    }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
         return QByteArray();
     }
 }

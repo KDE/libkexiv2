@@ -7,7 +7,7 @@
  * @date   2006-09-15
  * @brief  Exif manipulation methods
  *
- * @author Copyright (C) 2006-2013 by Gilles Caulier
+ * @author Copyright (C) 2006-2014 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  * @author Copyright (C) 2006-2012 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
@@ -57,6 +57,10 @@ bool KExiv2::canWriteExif(const QString& filePath)
         kDebug() << "Cannot check Exif access mode using Exiv2 (Error #"
                  << e.code() << ": " << s.c_str() << ")";
     }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
+    }
 
     return false;
 }
@@ -76,6 +80,10 @@ bool KExiv2::clearExif() const
     catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot clear Exif data using Exiv2 ", e);
+    }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
     }
 
     return false;
@@ -113,6 +121,10 @@ QByteArray KExiv2::getExifEncoded(bool addExifHeader) const
 
         d->printExiv2ExceptionError("Cannot get Exif data using Exiv2 ", e);
     }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
+    }
 
     return QByteArray();
 }
@@ -133,6 +145,10 @@ bool KExiv2::setExif(const QByteArray& data) const
             kDebug() << "From file " << d->filePath.toAscii().constData();
 
         d->printExiv2ExceptionError("Cannot set Exif data using Exiv2 ", e);
+    }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
     }
 
     return false;
@@ -195,7 +211,7 @@ KExiv2::MetaDataMap KExiv2::getExifTagsDataList(const QStringList& exifKeysFilte
             else // else no filter at all.
             {
                 metaDataMap.insert(key, tagValue);
-            }          
+            }
         }
 
         return metaDataMap;
@@ -203,6 +219,10 @@ KExiv2::MetaDataMap KExiv2::getExifTagsDataList(const QStringList& exifKeysFilte
     catch (Exiv2::Error& e)
     {
         d->printExiv2ExceptionError("Cannot parse EXIF metadata using Exiv2 ", e);
+    }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
     }
 
     return MetaDataMap();
@@ -251,6 +271,10 @@ QString KExiv2::getExifComment() const
     catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot find Exif User Comment using Exiv2 ", e);
+    }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
     }
 
     return QString();
@@ -312,6 +336,10 @@ bool KExiv2::setExifComment(const QString& comment, bool setProgramName) const
     {
         d->printExiv2ExceptionError("Cannot set Exif Comment using Exiv2 ", e);
     }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
+    }
 
     return false;
 }
@@ -329,6 +357,10 @@ QString KExiv2::getExifTagTitle(const char* exifTagName)
     {
         d->printExiv2ExceptionError("Cannot get metadata tag title using Exiv2 ", e);
     }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
+    }
 
     return QString();
 }
@@ -345,6 +377,10 @@ QString KExiv2::getExifTagDescription(const char* exifTagName)
     catch (Exiv2::Error& e)
     {
         d->printExiv2ExceptionError("Cannot get metadata tag description using Exiv2 ", e);
+    }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
     }
 
     return QString();
@@ -369,6 +405,10 @@ bool KExiv2::removeExifTag(const char* exifTagName, bool setProgramName) const
     catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot remove Exif tag using Exiv2 ", e);
+    }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
     }
 
     return false;
@@ -395,6 +435,10 @@ bool KExiv2::getExifTagRational(const char* exifTagName, long int& num, long int
         d->printExiv2ExceptionError(QString("Cannot find Exif Rational value from key '%1' "
                                          "into image using Exiv2 ").arg(exifTagName), e);
     }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
+    }
 
     return false;
 }
@@ -413,6 +457,10 @@ bool KExiv2::setExifTagLong(const char* exifTagName, long val, bool setProgramNa
     {
         d->printExiv2ExceptionError("Cannot set Exif tag long value into image using Exiv2 ", e);
     }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
+    }
 
     return false;
 }
@@ -430,6 +478,10 @@ bool KExiv2::setExifTagRational(const char* exifTagName, long int num, long int 
     catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot set Exif tag rational value into image using Exiv2 ", e);
+    }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
     }
 
     return false;
@@ -452,6 +504,10 @@ bool KExiv2::setExifTagData(const char* exifTagName, const QByteArray& data, boo
     catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot set Exif tag data into image using Exiv2 ", e);
+    }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
     }
 
     return false;
@@ -513,6 +569,10 @@ bool KExiv2::setExifTagVariant(const char* exifTagName, const QVariant& val,
             catch( Exiv2::Error &e )
             {
                 d->printExiv2ExceptionError("Cannot set Date & Time in image using Exiv2 ", e);
+            }
+            catch(...)
+            {
+                kDebug() << "Default exception from Exiv2";
             }
 
             return false;
@@ -607,6 +667,10 @@ QString KExiv2::createExifUserStringFromValue(const char* exifTagName, const QVa
     {
         d->printExiv2ExceptionError("Cannot set Iptc tag string into image using Exiv2 ", e);
     }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
+    }
 
     return QString();
 }
@@ -635,6 +699,10 @@ bool KExiv2::getExifTagLong(const char* exifTagName, long& val, int component) c
         d->printExiv2ExceptionError(QString("Cannot find Exif key '%1' into image using Exiv2 ")
                                     .arg(exifTagName), e);
     }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
+    }
 
     return false;
 }
@@ -661,6 +729,10 @@ QByteArray KExiv2::getExifTagData(const char* exifTagName) const
     {
         d->printExiv2ExceptionError(QString("Cannot find Exif key '%1' into image using Exiv2 ")
                                  .arg(exifTagName), e);
+    }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
     }
 
     return QByteArray();
@@ -744,6 +816,10 @@ QVariant KExiv2::getExifTagVariant(const char* exifTagName, bool rationalAsListO
         d->printExiv2ExceptionError(QString("Cannot find Exif key '%1' in the image using Exiv2 ")
                                     .arg(exifTagName), e);
     }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
+    }
 
     return QVariant();
 }
@@ -773,6 +849,10 @@ QString KExiv2::getExifTagString(const char* exifTagName, bool escapeCR) const
         d->printExiv2ExceptionError(QString("Cannot find Exif key '%1' into image using Exiv2 ")
                                  .arg(exifTagName), e);
     }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
+    }
 
     return QString();
 }
@@ -790,6 +870,10 @@ bool KExiv2::setExifTagString(const char* exifTagName, const QString& value, boo
     catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot set Exif tag string into image using Exiv2 ", e);
+    }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
     }
 
     return false;
@@ -835,6 +919,10 @@ QImage KExiv2::getExifThumbnail(bool fixOrientation) const
     {
         d->printExiv2ExceptionError("Cannot get Exif Thumbnail using Exiv2 ", e);
     }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
+    }
 
     return thumbnail;
 }
@@ -875,6 +963,10 @@ bool KExiv2::setExifThumbnail(const QImage& thumbImage, bool setProgramName) con
     catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot set Exif Thumbnail using Exiv2 ", e);
+    }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
     }
 
     return false;
@@ -931,6 +1023,10 @@ bool KExiv2::setTiffThumbnail(const QImage& thumbImage, bool setProgramName) con
     {
         d->printExiv2ExceptionError("Cannot set TIFF Thumbnail using Exiv2 ", e);
     }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
+    }
 
     return false;
 }
@@ -947,6 +1043,10 @@ bool KExiv2::removeExifThumbnail() const
     catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot remove Exif Thumbnail using Exiv2 ", e);
+    }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
     }
 
     return false;
@@ -996,6 +1096,10 @@ KExiv2::TagsMap KExiv2::getStdExifTagsList() const
     {
         d->printExiv2ExceptionError("Cannot get Exif Tags list using Exiv2 ", e);
     }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
+    }
 
     return TagsMap();
 }
@@ -1044,6 +1148,10 @@ KExiv2::TagsMap KExiv2::getMakernoteTagsList() const
     catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot get Makernote Tags list using Exiv2 ", e);
+    }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
     }
 
     return TagsMap();

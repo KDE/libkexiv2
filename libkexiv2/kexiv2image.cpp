@@ -7,7 +7,7 @@
  * @date   2006-09-15
  * @brief  Common metadata image information manipulation methods
  *
- * @author Copyright (C) 2006-2012 by Gilles Caulier
+ * @author Copyright (C) 2006-2014 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  * @author Copyright (C) 2006-2012 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
@@ -85,6 +85,10 @@ bool KExiv2::setImageProgramId(const QString& program, const QString& version) c
     catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot set Program identity into image using Exiv2 ", e);
+    }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
     }
 
     return false;
@@ -175,6 +179,10 @@ QSize KExiv2::getImageDimensions() const
     {
         d->printExiv2ExceptionError("Cannot parse image dimensions tag using Exiv2 ", e);
     }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
+    }
 
     return QSize();
 }
@@ -210,6 +218,10 @@ bool KExiv2::setImageDimensions(const QSize& size, bool setProgramName) const
     catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot set image dimensions using Exiv2 ", e);
+    }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
     }
 
     return false;
@@ -302,6 +314,10 @@ KExiv2::ImageOrientation KExiv2::getImageOrientation() const
     {
         d->printExiv2ExceptionError("Cannot parse Exif Orientation tag using Exiv2 ", e);
     }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
+    }
 
     return ORIENTATION_UNSPECIFIED;
 }
@@ -371,6 +387,10 @@ bool KExiv2::setImageOrientation(ImageOrientation orientation, bool setProgramNa
     catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot set Exif Orientation tag using Exiv2 ", e);
+    }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
     }
 
     return false;
@@ -477,6 +497,10 @@ bool KExiv2::setImageColorWorkSpace(ImageColorWorkSpace workspace, bool setProgr
     catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot set Exif color workspace tag using Exiv2 ", e);
+    }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
     }
 
     return false;
@@ -691,6 +715,10 @@ QDateTime KExiv2::getImageDateTime() const
     {
         d->printExiv2ExceptionError("Cannot parse Exif date & time tag using Exiv2 ", e);
     }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
+    }
 
     return QDateTime();
 }
@@ -758,6 +786,10 @@ bool KExiv2::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitiz
     catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot set Date & Time into image using Exiv2 ", e);
+    }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
     }
 
     return false;
@@ -827,6 +859,10 @@ QDateTime KExiv2::getDigitizationDateTime(bool fallbackToCreationTime) const
     {
         d->printExiv2ExceptionError("Cannot parse Exif digitization date & time tag using Exiv2 ", e);
     }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
+    }
 
     if (fallbackToCreationTime)
         return getImageDateTime();
@@ -847,6 +883,10 @@ bool KExiv2::getImagePreview(QImage& preview) const
     catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot get image preview using Exiv2 ", e);
+    }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
     }
 
     return false;
@@ -889,6 +929,10 @@ bool KExiv2::setImagePreview(const QImage& preview, bool setProgramName) const
     catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot get image preview using Exiv2 ", e);
+    }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
     }
 
     return false;

@@ -7,7 +7,7 @@
  * @date   2006-09-15
  * @brief  Comments manipulation methods
  *
- * @author Copyright (C) 2006-2012 by Gilles Caulier
+ * @author Copyright (C) 2006-2014 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  * @author Copyright (C) 2006-2012 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
@@ -47,7 +47,11 @@ bool KExiv2::canWriteComment(const QString& filePath)
     {
         std::string s(e.what());
         kDebug() << "Cannot check Comment access mode using Exiv2 (Error #"
-                      << e.code() << ": " << s.c_str() << ")";
+                 << e.code() << ": " << s.c_str() << ")";
+    }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
     }
 
     return false;

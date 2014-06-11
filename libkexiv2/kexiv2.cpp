@@ -7,7 +7,7 @@
  * @date   2006-09-15
  * @brief  Exiv2 library interface for KDE
  *
- * @author Copyright (C) 2006-2013 by Gilles Caulier
+ * @author Copyright (C) 2006-2014 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  * @author Copyright (C) 2006-2013 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
@@ -277,6 +277,10 @@ bool KExiv2::loadFromData(const QByteArray& imgData) const
     {
         d->printExiv2ExceptionError("Cannot load metadata using Exiv2 ", e);
     }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
+    }
 
     return false;
 }
@@ -329,6 +333,10 @@ bool KExiv2::load(const QString& filePath) const
     {
         d->printExiv2ExceptionError("Cannot load metadata from file ", e);
     }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
+    }
 
 #ifdef _XMP_SUPPORT_
     try
@@ -355,6 +363,11 @@ bool KExiv2::load(const QString& filePath) const
     {
         d->printExiv2ExceptionError("Cannot load XMP sidecar", e);
     }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
+    }
+
 #endif // _XMP_SUPPORT_
 
     return hasLoaded;

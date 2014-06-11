@@ -7,7 +7,7 @@
  * @date   2006-09-15
  * @brief  GPS manipulation methods
  *
- * @author Copyright (C) 2006-2013 by Gilles Caulier
+ * @author Copyright (C) 2006-2014 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  * @author Copyright (C) 2006-2012 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
@@ -130,6 +130,10 @@ bool KExiv2::getGPSLatitudeNumber(double* const latitude) const
     {
         d->printExiv2ExceptionError("Cannot get GPS tag using Exiv2 ", e);
     }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
+    }
 
     return false;
 }
@@ -222,6 +226,10 @@ bool KExiv2::getGPSLongitudeNumber(double* const longitude) const
     {
         d->printExiv2ExceptionError("Cannot get GPS tag using Exiv2 ", e);
     }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
+    }
 
     return false;
 }
@@ -292,6 +300,10 @@ bool KExiv2::getGPSAltitude(double* const altitude) const
     {
         d->printExiv2ExceptionError("Cannot get GPS tag using Exiv2 ", e);
     }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
+    }
 
     return false;
 }
@@ -345,6 +357,10 @@ bool KExiv2::initializeGPSInfo(const bool setProgramName)
     catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot initialize GPS data using Exiv2 ", e);
+    }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
     }
 
     return false;
@@ -474,6 +490,10 @@ bool KExiv2::setGPSInfo(const double* const altitude, const double latitude, con
     {
         d->printExiv2ExceptionError("Cannot set Exif GPS tag using Exiv2 ", e);
     }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
+    }
 
     return false;
 }
@@ -558,6 +578,10 @@ bool KExiv2::removeGPSInfo(const bool setProgramName)
     catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError("Cannot remove Exif GPS tag using Exiv2 ", e);
+    }
+    catch(...)
+    {
+        kDebug() << "Default exception from Exiv2";
     }
 
     return false;
