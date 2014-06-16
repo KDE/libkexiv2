@@ -1202,6 +1202,7 @@ KExiv2::TagsMap KExiv2::getXmpTagsList() const
         d->getXMPTagsListFromPrefix("iptcExt",        tagsMap);
         d->getXMPTagsListFromPrefix("plus",           tagsMap);
         d->getXMPTagsListFromPrefix("mwg-rs",         tagsMap);
+        d->getXMPTagsListFromPrefix("dwc",            tagsMap);
         return tagsMap;
     }
     catch( Exiv2::Error& e )
