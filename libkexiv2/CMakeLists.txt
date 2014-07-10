@@ -31,7 +31,7 @@ IF( WIN32 )
     ADD_DEFINITIONS( -DEXV_HAVE_DLL )
 ENDIF( WIN32 )
 
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/version.h)
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/version.h)
 
 # This was used to enable catching of exceptions thrown by libexiv2.
 # We use now #pragma GCC visibility push(default) around the headers

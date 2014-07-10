@@ -112,7 +112,7 @@ IF (EXIV2_FOUND)
   ENDIF(KDE4_BUILD_TESTS)
 
   INCLUDE(CMakePackageConfigHelpers)
-  CONFIGURE_PACKAGE_CONFIG_FILE(libkexiv2-config.cmake.in libkexiv2-config.cmake
+  CONFIGURE_PACKAGE_CONFIG_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/libkexiv2-config.cmake.in libkexiv2-config.cmake
                                 INSTALL_DESTINATION "${LIB_INSTALL_DIR}/cmake/libkexiv2-${KEXIV2_LIB_VERSION_STRING}"
                                 PATH_VARS INCLUDE_INSTALL_DIR
                                 NO_CHECK_REQUIRED_COMPONENTS_MACRO)
@@ -130,8 +130,8 @@ IF (EXIV2_FOUND)
           "${LIB_INSTALL_DIR}/cmake/libkexiv2-${KEXIV2_LIB_VERSION_STRING}"
          )
   IF(NOT WIN32)
-    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/libkexiv2.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/libkexiv2.pc)
-    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/libkexiv2.lsm.cmake ${CMAKE_CURRENT_BINARY_DIR}/libkexiv2.lsm)
+    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/libkexiv2.pc.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/libkexiv2.pc)
+    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/libkexiv2.lsm.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/libkexiv2.lsm)
     INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/libkexiv2.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig )
   ENDIF(NOT WIN32)
 ENDIF (EXIV2_FOUND)
