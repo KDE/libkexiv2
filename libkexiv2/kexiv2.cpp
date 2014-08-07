@@ -299,7 +299,7 @@ bool KExiv2::load(const QString& filePath) const
     {
         Exiv2::Image::AutoPtr image;
 
-        image        = Exiv2::ImageFactory::open((const char*)(QFile::encodeName(filePath)));
+        image        = Exiv2::ImageFactory::open((const char*)(QFile::encodeName(filePath)).constData());
 
         image->readMetadata();
 
@@ -350,7 +350,7 @@ bool KExiv2::load(const QString& filePath) const
             if (xmpSidecarFileInfo.exists() && xmpSidecarFileInfo.isReadable())
             {
                 // Read sidecar data
-                xmpsidecar = Exiv2::ImageFactory::open((const char*)QFile::encodeName(xmpSidecarPath));
+                xmpsidecar = Exiv2::ImageFactory::open(QFile::encodeName(xmpSidecarPath).constData());
                 xmpsidecar->readMetadata();
 
                 // Merge

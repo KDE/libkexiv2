@@ -78,7 +78,7 @@ KExiv2Previews::KExiv2Previews(const QString& filePath)
 {
     try
     {
-        Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)(QFile::encodeName(filePath)));
+        Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)(QFile::encodeName(filePath).constData()));
         d->load(image);
     }
     catch( Exiv2::Error& e )
