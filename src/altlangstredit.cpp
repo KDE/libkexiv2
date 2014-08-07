@@ -23,6 +23,8 @@
  *
  * ============================================================ */
 
+#include "msgtextedit.h"
+#include "altlangstredit.h"
 // Qt includes
 
 #include <QEvent>
@@ -41,11 +43,6 @@
 #include <ktextedit.h>
 #include <kcombobox.h>
 #include <kdebug.h>
-
-// Local includes
-
-#include "msgtextedit.h"
-
 using namespace KExiv2Iface;
 
 class AltLangStrEdit::Private

@@ -108,6 +108,7 @@ private:
 
     class Private;
     Private* const d;
+    friend class Private;
 };
 
 }  // namespace KExiv2Iface

@@ -23,11 +23,14 @@
  *
  * ============================================================ */
 
+#include "msgtextedit.h"
+
 // Qt includes
 
 #include <QColor>
 #include <QPalette>
 #include <QPainter>
+
 
 
 namespace KExiv2Iface

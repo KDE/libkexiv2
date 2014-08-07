@@ -25,6 +25,7 @@
  *
  * ============================================================ */
 
+#include "subjectwidget.h"
 // Qt includes
 
 #include <QCheckBox>
