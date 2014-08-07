@@ -21,11 +21,12 @@
 # GNU General Public License for more details.
 #
 # ============================================================
+kde_enable_exceptions()
 
 INCLUDE_DIRECTORIES(${EXIV2_INCLUDE_DIR})
 
 ADD_DEFINITIONS(${EXIV2_DEFINITIONS})
-ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})
+
 remove_definitions(-DQT_NO_CAST_FROM_ASCII -DQT_NO_CAST_TO_ASCII)
 
 IF( WIN32 )
