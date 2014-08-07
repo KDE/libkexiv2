@@ -75,7 +75,7 @@ bool KExiv2::Private::saveToXMPSidecar(const QFileInfo& finfo) const
     try
     {
         Exiv2::Image::AutoPtr image;
-        image = Exiv2::ImageFactory::create(Exiv2::ImageType::xmp, (const char*)(QFile::encodeName(filePath).constData()));
+        image = Exiv2::ImageFactory::create(Exiv2::ImageType::xmp, (const char*)(QFile::encodeName(filePath)));
         return saveOperations(finfo, image);
     }
     catch( Exiv2::Error& e )
@@ -151,7 +151,7 @@ bool KExiv2::Private::saveToFile(const QFileInfo& finfo) const
     try
     {
         Exiv2::Image::AutoPtr image;
-        image = Exiv2::ImageFactory::open((const char*)(QFile::encodeName(finfo.filePath()).constData()));
+        image = Exiv2::ImageFactory::open((const char*)(QFile::encodeName(finfo.filePath())));
         return saveOperations(finfo, image);
     }
     catch( Exiv2::Error& e )
@@ -283,7 +283,7 @@ bool KExiv2::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::AutoP
             // Don't touch access and modification timestamp of file.
             struct stat    st;
             struct utimbuf ut;
-            int ret = ::stat(QFile::encodeName(filePath).constData(), &st);
+            int ret = ::stat(QFile::encodeName(filePath), &st);
 
             if (ret == 0)
             {
@@ -295,7 +295,7 @@ bool KExiv2::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::AutoP
 
             if (ret == 0)
             {
-                ::utime(QFile::encodeName(filePath).constData(), &ut);
+                ::utime(QFile::encodeName(filePath), &ut);
             }
         }
         else

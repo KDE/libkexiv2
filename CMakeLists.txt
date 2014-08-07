@@ -22,90 +22,7 @@
 #
 # ============================================================
 
-
-
-cmake_minimum_required(VERSION 2.8.12)
-
 PROJECT(libkexiv2)
-
-
-# ECM setup
-find_package(ECM 1.1.0 CONFIG REQUIRED)
-set(CMAKE_MODULE_PATH ${libkexiv2_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
-
-include(GenerateExportHeader)
-include(ECMGenerateHeaders)
-include(ECMGeneratePriFile)
-include(ECMPackageConfigHelpers)
-include(ECMSetupVersion)
-include(FeatureSummary)
-include(KDEInstallDirs)
-include(KDECMakeSettings)
-include(KDEFrameworkCompilerSettings)
-
-set(KF5_VERSION "5.0.0")
-set(LIBKEXIV2_LIB_VERSION "2.70.0")
-
-############## Find Packages ##############
-set(REQUIRED_QT_VERSION "5.2.0")
-find_package(KF5KDELibs4Support ${KF5_VERSION} CONFIG REQUIRED)
-find_package(KF5KHtml ${KF5_VERSION} CONFIG REQUIRED)
-
-SET(EXIV2_MIN_VERSION "0.21")
-FIND_PACKAGE(Exiv2)
-#MACRO_LOG_FEATURE(EXIV2_FOUND "Exiv2" "Required to build libkexiv2." "http://www.exiv2.org"
-#                  TRUE ${EXIV2_MIN_VERSION} "")
-
-
-ecm_setup_version(${LIBKEXIV2_LIB_VERSION}
-    VARIABLE_PREFIX KEXIV2
-    VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/libkexiv2_version.h"
-    PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF5KExiv2ConfigVersion.cmake"
-    SOVERSION 3
-)
-
-
-
-############## Targets ##############
-
-add_definitions(-DTRANSLATION_DOMAIN=\"libkexiv2\")
-
-add_subdirectory(libkexiv2)
-#add_subdirectory(tests)
-
-############## CMake Config Files ##############
-message("${CMAKECONFIG_INSTALL_DIR}")
-set(CMAKECONFIG_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/KEXIV2")
-
-ecm_configure_package_config_file(
-    "${CMAKE_CURRENT_SOURCE_DIR}/KF5KExiv2Config.cmake.in"
-    "${CMAKE_CURRENT_BINARY_DIR}/KF5KExiv2Config.cmake"
-    INSTALL_DESTINATION ${CMAKECONFIG_INSTALL_DIR}
-)
-
-install(FILES
-    "${CMAKE_CURRENT_BINARY_DIR}/KF5KExiv2Config.cmake"
-    "${CMAKE_CURRENT_BINARY_DIR}/KF5KExiv2ConfigVersion.cmake"
-    DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
-    COMPONENT Devel
-)
-
-#REACTIVATE
-#install(EXPORT KF5KExiv2Targets
-#    DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
-#    FILE KF5KExiv2Targets.cmake
-#    NAMESPACE KF5::
-#)
-
-install(FILES
-    "${CMAKE_CURRENT_BINARY_DIR}/libkexiv2_version.h"
-    DESTINATION "${KF5_INCLUDE_INSTALL_DIR}"
-    COMPONENT Devel
-)
-
-feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
-
-if (FALSE)
 
 MESSAGE(STATUS "----------------------------------------------------------------------------------")
 MESSAGE(STATUS "Starting CMake configuration for: libkexiv2")
@@ -119,11 +36,15 @@ INCLUDE(MacroOptionalFindPackage)
 INCLUDE(FindPackageHandleStandardArgs)
 
 ADD_DEFINITIONS (${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS} ${KDE4_DEFINITIONS})
-INCLUDE_DIRECTORIES (${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} )
+INCLUDE_DIRECTORIES (${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES})
 
 SET(LIBKEXIV2_AREA_CODE_GENERAL 51003)
 ADD_DEFINITIONS(-DKDE_DEFAULT_DEBUG_AREA=${LIBKEXIV2_AREA_CODE_GENERAL})
 
+SET(EXIV2_MIN_VERSION "0.21")
+FIND_PACKAGE(Exiv2)
+MACRO_LOG_FEATURE(EXIV2_FOUND "Exiv2" "Required to build libkexiv2." "http://www.exiv2.org"
+                  TRUE ${EXIV2_MIN_VERSION} "")
 
 # =======================================================
 # Information to update before to release this library.
@@ -216,4 +137,3 @@ IF (EXIV2_FOUND)
 ENDIF (EXIV2_FOUND)
 
 MACRO_DISPLAY_FEATURE_LOG()
-endif()
