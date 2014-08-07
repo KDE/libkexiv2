@@ -70,7 +70,7 @@ ecm_setup_version(${LIBKEXIV2_LIB_VERSION}
 
 add_definitions(-DTRANSLATION_DOMAIN=\"libkexiv2\")
 
-add_subdirectory(libkexiv2)
+add_subdirectory(src)
 #add_subdirectory(tests)
 
 ############## CMake Config Files ##############

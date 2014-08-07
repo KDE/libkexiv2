@@ -1,2 +1,2 @@
 #! /bin/sh
-$XGETTEXT libkexiv2/*.cpp -o $podir/libkexiv2.pot
+$XGETTEXT src/*.cpp -o $podir/libkexiv2.pot
