@@ -30,13 +30,13 @@
 
 // Qt includes
 
-#include <QtGui/QButtonGroup>
+#include <QButtonGroup>
 #include <QtCore/QByteArray>
 #include <QtCore/QMap>
 #include <QtCore/QStringList>
-#include <QtGui/QWidget>
-#include <QtGui/QCheckBox>
-#include <QtGui/QLabel>
+#include <QWidget>
+#include <QCheckBox>
+#include <QLabel>
 
 // KDE includes
 
@@ -45,7 +45,7 @@
 
 // Local includes
 
-#include "libkexiv2_export.h"
+#include "kexiv2_export.h"
 
 namespace KExiv2Iface
 {

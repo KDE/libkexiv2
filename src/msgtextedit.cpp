@@ -29,9 +29,6 @@
 #include <QPalette>
 #include <QPainter>
 
-// Local includes
-
-#include "msgtextedit.moc"
 
 namespace KExiv2Iface
 {

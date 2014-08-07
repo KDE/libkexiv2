@@ -29,7 +29,7 @@
 // Qt includes
 
 #include <QtCore/QString>
-#include <QtGui/QWidget>
+#include <QWidget>
 
 // KDE includes
 
@@ -37,7 +37,7 @@
 
 // Local includes
 
-#include "libkexiv2_export.h"
+#include "kexiv2_export.h"
 
 namespace KExiv2Iface
 {

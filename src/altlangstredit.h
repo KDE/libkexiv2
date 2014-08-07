@@ -28,12 +28,12 @@
 
 // Qt includes
 
-#include <QtGui/QWidget>
+#include <QWidget>
 #include <QtCore/QString>
 
 // Local includes
 
-#include "libkexiv2_export.h"
+#include "kexiv2_export.h"
 #include "kexiv2.h"
 
 namespace KExiv2Iface

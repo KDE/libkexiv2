@@ -44,7 +44,7 @@
 #include <QtCore/QStringList>
 #include <QtCore/QVariant>
 #include <QtCore/QRegExp>
-#include <QtGui/QImage>
+#include <QImage>
 
 // KDE includes.
 
@@ -52,7 +52,7 @@
 
 // Local includes
 
-#include "libkexiv2_export.h"
+#include "kexiv2_export.h"
 #include "kexiv2data.h"
 
 namespace KExiv2Iface

@@ -23,8 +23,6 @@
  *
  * ============================================================ */
 
-#include "altlangstredit.moc"
-
 // Qt includes
 
 #include <QEvent>
@@ -48,8 +46,7 @@
 
 #include "msgtextedit.h"
 
-namespace KExiv2Iface
-{
+using namespace KExiv2Iface;
 
 class AltLangStrEdit::Private
 {
@@ -527,4 +524,3 @@ void AltLangStrEdit::changeEvent(QEvent* e)
     QWidget::changeEvent(e);
 }
 
-}  // namespace KExiv2Iface
