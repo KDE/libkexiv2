@@ -91,11 +91,11 @@ install(FILES
 )
 
 #REACTIVATE
-install(EXPORT KF5KExiv2Targets
-    DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
-    FILE KF5KExiv2Targets.cmake
-    NAMESPACE KF5::
-)
+#install(EXPORT KF5KExiv2Targets
+#    DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
+#    FILE KF5KExiv2Targets.cmake
+#    NAMESPACE KF5::
+#)
 
 install(FILES
     "${CMAKE_CURRENT_BINARY_DIR}/libkexiv2_version.h"
