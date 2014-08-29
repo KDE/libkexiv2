@@ -46,7 +46,7 @@
 #include <khbox.h>
 #include <kiconloader.h>
 #include <klineedit.h>
-#include <klistwidget.h>
+#include <QListWidget>
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <QDebug>
@@ -107,7 +107,7 @@ public:
 
     KComboBox*                         refCB;
 
-    KListWidget*                       subjectsBox;
+    QListWidget*                       subjectsBox;
 };
 
 // --------------------------------------------------------------------------------
@@ -203,7 +203,7 @@ SubjectWidget::SubjectWidget(QWidget* parent)
 
     // --------------------------------------------------------
 
-    d->subjectsBox = new KListWidget;
+    d->subjectsBox = new QListWidget;
     d->subjectsBox->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 
     d->addSubjectButton = new QPushButton(i18n("&Add"));
