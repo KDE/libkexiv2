@@ -55,7 +55,7 @@
 #include <kencodingdetector.h>
 #include <kstringhandler.h>
 #include <kdeversion.h>
-#include <kdebug.h>
+#include <QDebug>
 
 // Exiv2 includes -------------------------------------------------------
 

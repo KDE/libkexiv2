@@ -36,7 +36,7 @@
 // KDE includes
 #include <QTextCodec>
 #include <QBuffer>
-#include <klocale.h>
+#include <KLocalizedString>
 
 namespace KExiv2Iface
 {
