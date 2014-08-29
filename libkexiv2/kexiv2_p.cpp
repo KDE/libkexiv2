@@ -305,7 +305,7 @@ bool KExiv2::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::AutoP
                 ::utime(QFile::encodeName(filePath), &ut);
             }
             
-            kDebug() << "File time stamp restored"
+            kDebug() << "File time stamp restored";
         }
         else
         {
