@@ -25,29 +25,29 @@
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../libkexiv2)
 
 SET(setiptcpreview_SRCS setiptcpreview.cpp)
-add_executable(setiptcpreview NOGUI ${setiptcpreview_SRCS})
-TARGET_LINK_LIBRARIES(setiptcpreview kexiv2  )
+add_executable(setiptcpreview ${setiptcpreview_SRCS})
+TARGET_LINK_LIBRARIES(setiptcpreview KF5Kexiv2  )
 
 SET(loadfromba_SRCS loadfromba.cpp)
-add_executable(loadfromba NOGUI ${loadfromba_SRCS})
-TARGET_LINK_LIBRARIES(loadfromba kexiv2  )
+add_executable(loadfromba  ${loadfromba_SRCS})
+TARGET_LINK_LIBRARIES(loadfromba KF5Kexiv2  )
 
 SET(erasetag_SRCS erasetag.cpp)
-add_executable(erasetag NOGUI ${erasetag_SRCS})
-TARGET_LINK_LIBRARIES(erasetag kexiv2  )
+add_executable(erasetag ${erasetag_SRCS})
+TARGET_LINK_LIBRARIES(erasetag KF5Kexiv2 )
 
 SET(printtagslist_SRCS printtagslist.cpp)
-add_executable(printtagslist NOGUI ${printtagslist_SRCS})
-TARGET_LINK_LIBRARIES(printtagslist kexiv2  )
+add_executable(printtagslist ${printtagslist_SRCS})
+TARGET_LINK_LIBRARIES(printtagslist KF5Kexiv2  )
 
 SET(usexmpsidecar_SRCS usexmpsidecar.cpp)
-add_executable(usexmpsidecar NOGUI ${usexmpsidecar_SRCS})
-TARGET_LINK_LIBRARIES(usexmpsidecar kexiv2  )
+add_executable(usexmpsidecar ${usexmpsidecar_SRCS})
+TARGET_LINK_LIBRARIES(usexmpsidecar KF5Kexiv2 )
 
 SET(readimagewritexmpsidecar_SRCS readimagewritexmpsidecar.cpp)
-add_executable(readimagewritexmpsidecar NOGUI ${readimagewritexmpsidecar_SRCS})
-TARGET_LINK_LIBRARIES(readimagewritexmpsidecar kexiv2  )
+add_executable(readimagewritexmpsidecar ${readimagewritexmpsidecar_SRCS})
+TARGET_LINK_LIBRARIES(readimagewritexmpsidecar KF5Kexiv2  )
 
 SET(setxmpface_SRCS setxmpface.cpp)
-add_executable(setxmpface NOGUI ${setxmpface_SRCS})
-TARGET_LINK_LIBRARIES(setxmpface kexiv2  )
+add_executable(setxmpface ${setxmpface_SRCS})
+TARGET_LINK_LIBRARIES(setxmpface KF5Kexiv2  )

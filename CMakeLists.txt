@@ -43,7 +43,7 @@ include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(KDEFrameworkCompilerSettings)
 
-set(KF5_VERSION "5.0.0")
+set(KF5_VERSION "5.1.0")
 set(LIBKEXIV2_LIB_VERSION "2.70.0")
 
 ############## Find Packages ##############
@@ -71,7 +71,7 @@ ecm_setup_version(${LIBKEXIV2_LIB_VERSION}
 add_definitions(-DTRANSLATION_DOMAIN=\"libkexiv2\")
 
 add_subdirectory(src)
-#add_subdirectory(tests)
+add_subdirectory(tests)
 
 ############## CMake Config Files ##############
 message("${CMAKECONFIG_INSTALL_DIR}")
