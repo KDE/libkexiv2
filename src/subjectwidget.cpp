@@ -44,7 +44,7 @@
 #include <kdialog.h>
 #include <kglobal.h>
 #include <kiconloader.h>
-#include <klineedit.h>
+#include <QLineEdit>
 #include <QListWidget>
 #include <KLocalizedString>
 #include <kstandarddirs.h>
@@ -160,33 +160,33 @@ SubjectWidget::SubjectWidget(QWidget* parent)
 
     // --------------------------------------------------------
 
-    m_iprEdit = new KLineEdit;
-    m_iprEdit->setClearButtonShown(true);
+    m_iprEdit = new QLineEdit;
+    m_iprEdit->setClearButtonEnabled(true);
     m_iprEdit->setMaxLength(32);
 
     // --------------------------------------------------------
 
-    m_refEdit = new KLineEdit;
-    m_refEdit->setClearButtonShown(true);
+    m_refEdit = new QLineEdit;
+    m_refEdit->setClearButtonEnabled(true);
     m_refEdit->setValidator(refValidator);
     m_refEdit->setMaxLength(8);
 
     // --------------------------------------------------------
 
-    m_nameEdit = new KLineEdit;
-    m_nameEdit->setClearButtonShown(true);
+    m_nameEdit = new QLineEdit;
+    m_nameEdit->setClearButtonEnabled(true);
     m_nameEdit->setMaxLength(64);
 
     // --------------------------------------------------------
 
-    m_matterEdit = new KLineEdit;
-    m_matterEdit->setClearButtonShown(true);
+    m_matterEdit = new QLineEdit;
+    m_matterEdit->setClearButtonEnabled(true);
     m_matterEdit->setMaxLength(64);
 
     // --------------------------------------------------------
 
-    m_detailEdit = new KLineEdit;
-    m_detailEdit->setClearButtonShown(true);
+    m_detailEdit = new QLineEdit;
+    m_detailEdit->setClearButtonEnabled(true);
     m_detailEdit->setMaxLength(64);
 
     // --------------------------------------------------------

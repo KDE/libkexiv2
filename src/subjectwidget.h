@@ -40,7 +40,7 @@
 // KDE includes
 
 #include <kurl.h>
-#include <klineedit.h>
+#include <QLineEdit>
 
 // Local includes
 
@@ -104,11 +104,11 @@ protected:
 
     QCheckBox* m_subjectsCheck;
 
-    KLineEdit* m_iprEdit;
-    KLineEdit* m_refEdit;
-    KLineEdit* m_nameEdit;
-    KLineEdit* m_matterEdit;
-    KLineEdit* m_detailEdit;
+    QLineEdit* m_iprEdit;
+    QLineEdit* m_refEdit;
+    QLineEdit* m_nameEdit;
+    QLineEdit* m_matterEdit;
+    QLineEdit* m_detailEdit;
 
 private:
 
