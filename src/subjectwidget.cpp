@@ -264,28 +264,21 @@ SubjectWidget::SubjectWidget(QWidget* parent)
 
     // --------------------------------------------------------
 
-    connect(d->subjectsBox, SIGNAL(itemSelectionChanged()),
-            this, SLOT(slotSubjectSelectionChanged()));
+    connect(d->subjectsBox, &QListWidget::itemSelectionChanged, this, &SubjectWidget::slotSubjectSelectionChanged);
 
-    connect(d->addSubjectButton, SIGNAL(clicked()),
-            this, SLOT(slotAddSubject()));
+    connect(d->addSubjectButton, &QPushButton::clicked, this, &SubjectWidget::slotAddSubject);
 
-    connect(d->delSubjectButton, SIGNAL(clicked()),
-            this, SLOT(slotDelSubject()));
+    connect(d->delSubjectButton, &QPushButton::clicked, this, &SubjectWidget::slotDelSubject);
 
-    connect(d->repSubjectButton, SIGNAL(clicked()),
-            this, SLOT(slotRepSubject()));
+    connect(d->repSubjectButton, &QPushButton::clicked, this, &SubjectWidget::slotRepSubject);
 
-    connect(d->btnGroup, SIGNAL(buttonReleased(int)),
-            this, SLOT(slotEditOptionChanged(int)));
+    connect(d->btnGroup, static_cast<void (QButtonGroup::*)(int)>(&QButtonGroup::buttonReleased), this, &SubjectWidget::slotEditOptionChanged);
 
-    connect(d->refCB, SIGNAL(activated(int)),
-            this, SLOT(slotRefChanged()));
+    connect(d->refCB, static_cast<void (KComboBox::*)(int)>(&KComboBox::activated), this, &SubjectWidget::slotRefChanged);
 
     // --------------------------------------------------------
 
-    connect(m_subjectsCheck, SIGNAL(toggled(bool)),
-            this, SLOT(slotSubjectsToggled(bool)));
+    connect(m_subjectsCheck, &QCheckBox::toggled, this, &SubjectWidget::slotSubjectsToggled);
 
     // --------------------------------------------------------
 
