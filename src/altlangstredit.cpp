@@ -37,9 +37,8 @@
 // KDE includes
 
 #include <kdialog.h>
-#include <kglobal.h>
 #include <kiconloader.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <ktextedit.h>
 #include <kcombobox.h>
 using namespace KExiv2Iface;

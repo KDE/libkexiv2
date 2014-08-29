@@ -31,8 +31,6 @@
 
 // KDE includes
 
-#include "kdeversion.h"
-
 #include "qdebug.h"
 #define PRINT_DEBUG qDebug()
 #define ENDL

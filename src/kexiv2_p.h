@@ -51,10 +51,8 @@
 
 // KDE includes
 
-#include <ktemporaryfile.h>
 #include <kencodingdetector.h>
 #include <kstringhandler.h>
-#include <kdeversion.h>
 #include <QDebug>
 
 // Exiv2 includes -------------------------------------------------------
