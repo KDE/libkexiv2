@@ -172,7 +172,7 @@ bool KExiv2::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::AutoP
     {
         Exiv2::AccessMode mode;
         bool wroteComment = false, wroteEXIF = false, wroteIPTC = false, wroteXMP = false;
-
+        
         // We need to load target file metadata to merge with new one. It's mandatory with TIFF format:
         // like all tiff file structure is based on Exif.
         image->readMetadata();
@@ -186,6 +186,8 @@ bool KExiv2::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::AutoP
             image->setComment(imageComments());
             wroteComment = true;
         }
+
+        kDebug() << "wroteComment: " << wroteComment;
 
         // Exif metadata ----------------------------------
 
@@ -245,6 +247,8 @@ bool KExiv2::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::AutoP
             wroteEXIF = true;
         }
 
+        kDebug() << "wroteEXIF: " << wroteEXIF;
+
         // Iptc metadata ----------------------------------
 
         mode = image->checkMode(Exiv2::mdIptc);
@@ -254,6 +258,8 @@ bool KExiv2::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::AutoP
             image->setIptcData(iptcMetadata());
             wroteIPTC = true;
         }
+
+        kDebug() << "wroteIPTC: " << wroteIPTC;
 
         // Xmp metadata -----------------------------------
 
@@ -267,6 +273,8 @@ bool KExiv2::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::AutoP
 #endif
         }
 
+        kDebug() << "wroteXMP: " << wroteXMP;
+
         if (!wroteComment && !wroteEXIF && !wroteIPTC && !wroteXMP)
         {
             qDebug() << "Writing metadata is not supported for file" << finfo.fileName();
@@ -274,8 +282,7 @@ bool KExiv2::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::AutoP
         }
         else if (!wroteEXIF || !wroteIPTC || !wroteXMP)
         {
-            qDebug() << "Support for writing metadata is limited for file" << finfo.fileName()
-                     << "EXIF" << wroteEXIF << "IPTC" << wroteIPTC << "XMP" << wroteXMP;
+            qDebug() << "Support for writing metadata is limited for file" << finfo.fileName();
         }
 
         if (!updateFileTimeStamp)
@@ -297,6 +304,8 @@ bool KExiv2::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::AutoP
             {
                 ::utime(QFile::encodeName(filePath).constData(), &ut);
             }
+            
+            kDebug() << "File time stamp restored";
         }
         else
         {
