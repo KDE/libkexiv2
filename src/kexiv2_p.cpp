@@ -187,7 +187,7 @@ bool KExiv2::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::AutoP
             wroteComment = true;
         }
 
-        kDebug() << "wroteComment: " << wroteComment;
+        qDebug() << "wroteComment: " << wroteComment;
 
         // Exif metadata ----------------------------------
 
@@ -247,7 +247,7 @@ bool KExiv2::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::AutoP
             wroteEXIF = true;
         }
 
-        kDebug() << "wroteEXIF: " << wroteEXIF;
+        qDebug() << "wroteEXIF: " << wroteEXIF;
 
         // Iptc metadata ----------------------------------
 
@@ -259,7 +259,7 @@ bool KExiv2::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::AutoP
             wroteIPTC = true;
         }
 
-        kDebug() << "wroteIPTC: " << wroteIPTC;
+        qDebug() << "wroteIPTC: " << wroteIPTC;
 
         // Xmp metadata -----------------------------------
 
@@ -273,7 +273,7 @@ bool KExiv2::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::AutoP
 #endif
         }
 
-        kDebug() << "wroteXMP: " << wroteXMP;
+        qDebug() << "wroteXMP: " << wroteXMP;
 
         if (!wroteComment && !wroteEXIF && !wroteIPTC && !wroteXMP)
         {
@@ -305,7 +305,7 @@ bool KExiv2::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::AutoP
                 ::utime(QFile::encodeName(filePath).constData(), &ut);
             }
             
-            kDebug() << "File time stamp restored";
+            qDebug() << "File time stamp restored";
         }
         else
         {
