@@ -28,6 +28,7 @@
 #include "kexiv2.h"
 #include "kexiv2_p.h"
 
+#include <QBuffer>
 // Local includes
 
 #include "rotationmatrix.h"

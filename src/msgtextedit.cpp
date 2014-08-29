@@ -27,7 +27,6 @@
 
 // Qt includes
 
-#include <QColor>
 #include <QPalette>
 #include <QPainter>
 

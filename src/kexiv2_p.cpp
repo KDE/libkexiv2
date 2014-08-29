@@ -26,7 +26,7 @@
  * ============================================================ */
 
 #include "kexiv2_p.h"
-
+#include <QTextCodec>
 // C ANSI includes
 
 extern "C"

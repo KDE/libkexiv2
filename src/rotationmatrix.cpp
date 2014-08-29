@@ -29,7 +29,6 @@
 
 // KDE includes
 
-#include <QDebug>
 
 // local includes
 

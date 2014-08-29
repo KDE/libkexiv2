@@ -42,7 +42,6 @@
 #include <klocale.h>
 #include <ktextedit.h>
 #include <kcombobox.h>
-#include <QDebug>
 using namespace KExiv2Iface;
 
 class AltLangStrEdit::Private

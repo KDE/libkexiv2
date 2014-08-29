@@ -28,7 +28,6 @@
 // Qt includes
 
 #include <QMap>
-#include <QVariant>
 
 // KDE includes
 

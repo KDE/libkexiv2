@@ -30,7 +30,6 @@
 
 // Qt includes
 
-#include <QButtonGroup>
 #include <QtCore/QByteArray>
 #include <QtCore/QMap>
 #include <QtCore/QStringList>

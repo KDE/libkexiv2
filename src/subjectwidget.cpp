@@ -37,7 +37,7 @@
 #include <QPushButton>
 #include <QRadioButton>
 #include <QValidator>
-
+#include <QButtonGroup>
 // KDE includes
 
 #include <kcombobox.h>

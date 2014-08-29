@@ -43,15 +43,10 @@
 
 // Qt includes
 
-#include <QBuffer>
 #include <QFile>
-#include <QImage>
 #include <QSize>
 #include <QLatin1String>
-#include <QTextCodec>
-#include <QMatrix>
 #include <QFileInfo>
-#include <QDataStream>
 #include <QSharedData>
 
 // KDE includes
