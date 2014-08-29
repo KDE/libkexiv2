@@ -296,14 +296,11 @@ AltLangStrEdit::AltLangStrEdit(QWidget* parent)
 
     // --------------------------------------------------------
 
-    connect(d->languageCB, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(slotSelectionChanged()));
+    connect(d->languageCB, static_cast<void (KComboBox::*)(int)>(&KComboBox::currentIndexChanged), this, &AltLangStrEdit::slotSelectionChanged);
 
-    connect(d->delValueButton, SIGNAL(clicked()),
-            this, SLOT(slotDeleteValue()));
+    connect(d->delValueButton, &QToolButton::clicked, this, &AltLangStrEdit::slotDeleteValue);
 
-    connect(d->valueEdit, SIGNAL(textChanged()),
-            this, SLOT(slotTextChanged()));
+    connect(d->valueEdit, &MsgTextEdit::textChanged, this, &AltLangStrEdit::slotTextChanged);
 }
 
 AltLangStrEdit::~AltLangStrEdit()
