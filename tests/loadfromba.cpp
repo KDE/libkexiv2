@@ -44,8 +44,8 @@ int main (int argc, char **argv)
 {
     if(argc != 2)
     {
-        kDebug() << "loadfromba - test to load metadata from image as byte array";
-        kDebug() << "Usage: <image>";
+        qDebug() << "loadfromba - test to load metadata from image as byte array";
+        qDebug() << "Usage: <image>";
         return -1;
     }
 

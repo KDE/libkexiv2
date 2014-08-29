@@ -33,7 +33,7 @@
 // KDE includes
 
 #include <klocale.h>
-#include <kdebug.h>
+#include <QDebug>
 
 namespace KExiv2Iface
 {
@@ -347,7 +347,7 @@ void CountrySelector::setCountry(const QString& countryCode)
     }
     setCurrentIndex(id);
 
-    kDebug() << count() << " :: " << id;
+    qDebug() << count() << " :: " << id;
 }
 
 bool CountrySelector::country(QString& countryCode, QString& countryName)

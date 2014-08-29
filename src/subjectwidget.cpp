@@ -49,7 +49,7 @@
 #include <klistwidget.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
-#include <kdebug.h>
+#include <QDebug>
 
 namespace KExiv2Iface
 {
@@ -123,7 +123,7 @@ SubjectWidget::SubjectWidget(QWidget* parent)
     QString path = KGlobal::dirs()->findResource("iptcschema", "topicset.iptc-subjectcode.xml");
 
     if (!loadSubjectCodesFromXML(KUrl(path)))
-        kDebug() << "Cannot load IPTC/NAA subject codes XML database";
+        qDebug() << "Cannot load IPTC/NAA subject codes XML database";
 
     // --------------------------------------------------------
 

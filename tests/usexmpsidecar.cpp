@@ -41,8 +41,8 @@ int main (int argc, char **argv)
 {
     if(argc != 2)
     {
-        kDebug() << "usexmpsidecar - read from and write to XMP sidecar";
-        kDebug() << "Usage: <image>";
+        qDebug() << "usexmpsidecar - read from and write to XMP sidecar";
+        qDebug() << "Usage: <image>";
         return -1;
     }
 

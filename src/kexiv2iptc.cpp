@@ -44,12 +44,12 @@ bool KExiv2::canWriteIptc(const QString& filePath)
     catch(Exiv2::Error& e)
     {
         std::string s(e.what());
-        kError() << "Cannot check Iptc access mode using Exiv2 (Error #"
+        qCritical() << "Cannot check Iptc access mode using Exiv2 (Error #"
                  << e.code() << ": " << s.c_str() << ")";
     }
     catch(...)
     {
-        kError() << "Default exception from Exiv2";
+        qCritical() << "Default exception from Exiv2";
     }
 
     return false;
@@ -73,7 +73,7 @@ bool KExiv2::clearIptc() const
     }
     catch(...)
     {
-        kError() << "Default exception from Exiv2";
+        qCritical() << "Default exception from Exiv2";
     }
 
     return false;
@@ -106,14 +106,14 @@ QByteArray KExiv2::getIptc(bool addIrbHeader) const
     {
         if (!d->filePath.isEmpty())
         {
-            kError() << "From file " << d->filePath.toAscii().constData();
+            qCritical() << "From file " << d->filePath.toAscii().constData();
         }
 
         d->printExiv2ExceptionError("Cannot get Iptc data using Exiv2 ",e);
     }
     catch(...)
     {
-        kError() << "Default exception from Exiv2";
+        qCritical() << "Default exception from Exiv2";
     }
 
     return QByteArray();
@@ -133,14 +133,14 @@ bool KExiv2::setIptc(const QByteArray& data) const
     {
         if (!d->filePath.isEmpty())
         {
-            kError() << "From file " << d->filePath.toAscii().constData();
+            qCritical() << "From file " << d->filePath.toAscii().constData();
         }
 
         d->printExiv2ExceptionError("Cannot set Iptc data using Exiv2 ", e);
     }
     catch(...)
     {
-        kError() << "Default exception from Exiv2";
+        qCritical() << "Default exception from Exiv2";
     }
 
     return false;
@@ -248,7 +248,7 @@ KExiv2::MetaDataMap KExiv2::getIptcTagsDataList(const QStringList& iptcKeysFilte
     }
     catch(...)
     {
-        kError() << "Default exception from Exiv2";
+        qCritical() << "Default exception from Exiv2";
     }
 
     return MetaDataMap();
@@ -268,7 +268,7 @@ QString KExiv2::getIptcTagTitle(const char* iptcTagName)
     }
     catch(...)
     {
-        kError() << "Default exception from Exiv2";
+        qCritical() << "Default exception from Exiv2";
     }
 
     return QString();
@@ -288,7 +288,7 @@ QString KExiv2::getIptcTagDescription(const char* iptcTagName)
     }
     catch(...)
     {
-        kError() << "Default exception from Exiv2";
+        qCritical() << "Default exception from Exiv2";
     }
 
     return QString();
@@ -328,7 +328,7 @@ bool KExiv2::removeIptcTag(const char* iptcTagName, bool setProgramName) const
     }
     catch(...)
     {
-        kError() << "Default exception from Exiv2";
+        qCritical() << "Default exception from Exiv2";
     }
 
     return false;
@@ -354,7 +354,7 @@ bool KExiv2::setIptcTagData(const char* iptcTagName, const QByteArray& data, boo
     }
     catch(...)
     {
-        kError() << "Default exception from Exiv2";
+        qCritical() << "Default exception from Exiv2";
     }
 
     return false;
@@ -384,7 +384,7 @@ QByteArray KExiv2::getIptcTagData(const char* iptcTagName) const
     }
     catch(...)
     {
-        kError() << "Default exception from Exiv2";
+        qCritical() << "Default exception from Exiv2";
     }
 
     return QByteArray();
@@ -417,7 +417,7 @@ QString KExiv2::getIptcTagString(const char* iptcTagName, bool escapeCR) const
     }
     catch(...)
     {
-        kError() << "Default exception from Exiv2";
+        qCritical() << "Default exception from Exiv2";
     }
 
     return QString();
@@ -442,7 +442,7 @@ bool KExiv2::setIptcTagString(const char* iptcTagName, const QString& value, boo
     }
     catch(...)
     {
-        kError() << "Default exception from Exiv2";
+        qCritical() << "Default exception from Exiv2";
     }
 
     return false;
@@ -482,7 +482,7 @@ QStringList KExiv2::getIptcTagsStringList(const char* iptcTagName, bool escapeCR
     }
     catch(...)
     {
-        kError() << "Default exception from Exiv2";
+        qCritical() << "Default exception from Exiv2";
     }
 
     return QStringList();
@@ -500,7 +500,7 @@ bool KExiv2::setIptcTagsStringList(const char* iptcTagName, int maxSize,
         QStringList oldvals = oldValues;
         QStringList newvals = newValues;
 
-        kDebug() << d->filePath.toAscii().constData() << " : " << iptcTagName
+        qDebug() << d->filePath.toAscii().constData() << " : " << iptcTagName
                  << " => " << newvals.join(",").toAscii().constData();
 
         // Remove all old values.
@@ -549,7 +549,7 @@ bool KExiv2::setIptcTagsStringList(const char* iptcTagName, int maxSize,
     }
     catch(...)
     {
-        kError() << "Default exception from Exiv2";
+        qCritical() << "Default exception from Exiv2";
     }
 
     return false;
@@ -575,7 +575,7 @@ QStringList KExiv2::getIptcKeywords() const
                 }
             }
 
-            kDebug() << d->filePath << " ==> Read Iptc Keywords: " << keywords;
+            qDebug() << d->filePath << " ==> Read Iptc Keywords: " << keywords;
 
             return keywords;
         }
@@ -586,7 +586,7 @@ QStringList KExiv2::getIptcKeywords() const
     }
     catch(...)
     {
-        kError() << "Default exception from Exiv2";
+        qCritical() << "Default exception from Exiv2";
     }
 
     return QStringList();
@@ -603,7 +603,7 @@ bool KExiv2::setIptcKeywords(const QStringList& oldKeywords, const QStringList& 
         QStringList oldkeys = oldKeywords;
         QStringList newkeys = newKeywords;
 
-        kDebug() << d->filePath << " ==> New Iptc Keywords: " << newkeys;
+        qDebug() << d->filePath << " ==> New Iptc Keywords: " << newkeys;
 
         // Remove all old keywords.
         Exiv2::IptcData iptcData(d->iptcMetadata());
@@ -650,7 +650,7 @@ bool KExiv2::setIptcKeywords(const QStringList& oldKeywords, const QStringList& 
     }
     catch(...)
     {
-        kError() << "Default exception from Exiv2";
+        qCritical() << "Default exception from Exiv2";
     }
 
     return false;
@@ -685,7 +685,7 @@ QStringList KExiv2::getIptcSubjects() const
     }
     catch(...)
     {
-        kError() << "Default exception from Exiv2";
+        qCritical() << "Default exception from Exiv2";
     }
 
     return QStringList();
@@ -744,7 +744,7 @@ bool KExiv2::setIptcSubjects(const QStringList& oldSubjects, const QStringList& 
     }
     catch(...)
     {
-        kError() << "Default exception from Exiv2";
+        qCritical() << "Default exception from Exiv2";
     }
 
     return false;
@@ -779,7 +779,7 @@ QStringList KExiv2::getIptcSubCategories() const
     }
     catch(...)
     {
-        kError() << "Default exception from Exiv2";
+        qCritical() << "Default exception from Exiv2";
     }
 
     return QStringList();
@@ -839,7 +839,7 @@ bool KExiv2::setIptcSubCategories(const QStringList& oldSubCategories, const QSt
     }
     catch(...)
     {
-        kError() << "Default exception from Exiv2";
+        qCritical() << "Default exception from Exiv2";
     }
 
     return false;
@@ -874,7 +874,7 @@ KExiv2::TagsMap KExiv2::getIptcTagsList() const
     }
     catch(...)
     {
-        kError() << "Default exception from Exiv2";
+        qCritical() << "Default exception from Exiv2";
     }
 
     return TagsMap();

@@ -41,8 +41,8 @@ int main (int argc, char **argv)
 {
     if(argc != 2)
     {
-        kDebug() << "erasetag - erase tag from from image";
-        kDebug() << "Usage: <image>";
+        qDebug() << "erasetag - erase tag from from image";
+        qDebug() << "Usage: <image>";
         return -1;
     }
 
@@ -52,10 +52,10 @@ int main (int argc, char **argv)
     meta.load(filePath);
     meta.setWriteRawFiles(true);
     bool b = meta.removeExifTag("Exif.OlympusIp.BlackLevel", false);
-    kDebug() << "Exif.OlympusIp.BlackLevel found = " << b;
+    qDebug() << "Exif.OlympusIp.BlackLevel found = " << b;
 
     QByteArray ba = meta.getExifTagData("Exif.OlympusIp.BlackLevel");
-    kDebug() << "Exif.OlympusIp.BlackLevel removed = " << ba.isEmpty();
+    qDebug() << "Exif.OlympusIp.BlackLevel removed = " << ba.isEmpty();
 
     if (b)
     {

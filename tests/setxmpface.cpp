@@ -128,8 +128,8 @@ int main (int argc, char **argv)
 {
     if(argc != 3)
     {
-        kDebug() << "Adding a face rectangle to image";
-        kDebug() << "Usage: <add/remove> <image>";
+        qDebug() << "Adding a face rectangle to image";
+        qDebug() << "Usage: <add/remove> <image>";
         return -1;
     }
 
@@ -160,7 +160,7 @@ int main (int argc, char **argv)
 
     bool g = meta.supportXmp();
 
-    kDebug() << "Image support XMP" << g;
+    qDebug() << "Image support XMP" << g;
 
     const QString bag = "Xmp.mwg-rs.Regions/mwg-rs:RegionList";
 
@@ -181,7 +181,7 @@ int main (int argc, char **argv)
 
     QString nameR = meta2.getXmpTagString(recoverName.toLatin1(),false);
 
-    kDebug() << "Saved name is:" << nameR;
+    qDebug() << "Saved name is:" << nameR;
 
     KExiv2Iface::KExiv2::cleanupExiv2();
     return 0;

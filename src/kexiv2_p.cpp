@@ -85,7 +85,7 @@ bool KExiv2::Private::saveToXMPSidecar(const QFileInfo& finfo) const
     }
     catch(...)
     {
-        kError() << "Default exception from Exiv2";
+        qCritical() << "Default exception from Exiv2";
         return false;
     }
 }
@@ -94,7 +94,7 @@ bool KExiv2::Private::saveToFile(const QFileInfo& finfo) const
 {
     if (!finfo.isWritable())
     {
-        kDebug() << "File '" << finfo.fileName().toAscii().constData() << "' is read only. Metadata not written.";
+        qDebug() << "File '" << finfo.fileName().toAscii().constData() << "' is read only. Metadata not written.";
         return false;
     }
 
@@ -122,7 +122,7 @@ bool KExiv2::Private::saveToFile(const QFileInfo& finfo) const
 
     if (!writeRawFiles && (rawTiffBasedSupported.contains(ext) || rawTiffBasedNotSupported.contains(ext)) )
     {
-        kDebug() << finfo.fileName()
+        qDebug() << finfo.fileName()
                  << "is a TIFF based RAW file, writing to such a file is disabled by current settings.";
         return false;
     }
@@ -130,20 +130,20 @@ bool KExiv2::Private::saveToFile(const QFileInfo& finfo) const
 /*
     if (rawTiffBasedNotSupported.contains(ext))
     {
-        kDebug() << finfo.fileName()
+        qDebug() << finfo.fileName()
                  << "is TIFF based RAW file not yet supported. Metadata not saved.";
         return false;
     }
 
     if (rawTiffBasedSupported.contains(ext) && !writeRawFiles)
     {
-        kDebug() << finfo.fileName()
+        qDebug() << finfo.fileName()
                  << "is TIFF based RAW file supported but writing mode is disabled. "
                  << "Metadata not saved.";
         return false;
     }
 
-    kDebug() << "File Extension: " << ext << " is supported for writing mode";
+    qDebug() << "File Extension: " << ext << " is supported for writing mode";
 
     bool ret = false;
 */
@@ -161,7 +161,7 @@ bool KExiv2::Private::saveToFile(const QFileInfo& finfo) const
     }
     catch(...)
     {
-        kError() << "Default exception from Exiv2";
+        qCritical() << "Default exception from Exiv2";
         return false;
     }
 }
@@ -269,12 +269,12 @@ bool KExiv2::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::AutoP
 
         if (!wroteComment && !wroteEXIF && !wroteIPTC && !wroteXMP)
         {
-            kDebug() << "Writing metadata is not supported for file" << finfo.fileName();
+            qDebug() << "Writing metadata is not supported for file" << finfo.fileName();
             return false;
         }
         else if (!wroteEXIF || !wroteIPTC || !wroteXMP)
         {
-            kDebug() << "Support for writing metadata is limited for file" << finfo.fileName()
+            qDebug() << "Support for writing metadata is limited for file" << finfo.fileName()
                      << "EXIF" << wroteEXIF << "IPTC" << wroteIPTC << "XMP" << wroteXMP;
         }
 
@@ -311,7 +311,7 @@ bool KExiv2::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::AutoP
     }
     catch(...)
     {
-        kError() << "Default exception from Exiv2";
+        qCritical() << "Default exception from Exiv2";
     }
 
     return false;
@@ -330,13 +330,13 @@ void KExiv2Data::Private::clear()
 void KExiv2::Private::printExiv2ExceptionError(const QString& msg, Exiv2::Error& e)
 {
     std::string s(e.what());
-    kError() << msg.toAscii().constData() << " (Error #"
+    qCritical() << msg.toAscii().constData() << " (Error #"
              << e.code() << ": " << s.c_str();
 }
 
 void KExiv2::Private::printExiv2MessageHandler(int lvl, const char* msg)
 {
-    kDebug() << "Exiv2 (" << lvl << ") : " << msg;
+    qDebug() << "Exiv2 (" << lvl << ") : " << msg;
 }
 
 QString KExiv2::Private::convertCommentValue(const Exiv2::Exifdatum& exifDatum) const
@@ -388,7 +388,7 @@ QString KExiv2::Private::convertCommentValue(const Exiv2::Exifdatum& exifDatum) 
     }
     catch(...)
     {
-        kError() << "Default exception from Exiv2";
+        qCritical() << "Default exception from Exiv2";
     }
 
     return QString();

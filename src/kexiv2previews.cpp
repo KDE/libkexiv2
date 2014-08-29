@@ -87,7 +87,7 @@ KExiv2Previews::KExiv2Previews(const QString& filePath)
     }
     catch(...)
     {
-        kError() << "Default exception from Exiv2";
+        qCritical() << "Default exception from Exiv2";
     }
 }
 
@@ -105,7 +105,7 @@ KExiv2Previews::KExiv2Previews(const QByteArray& imgData)
     }
     catch(...)
     {
-        kError() << "Default exception from Exiv2";
+        qCritical() << "Default exception from Exiv2";
     }
 }
 
@@ -177,7 +177,7 @@ QByteArray KExiv2Previews::data(int index)
     }
     catch(...)
     {
-        kError() << "Default exception from Exiv2";
+        qCritical() << "Default exception from Exiv2";
         return QByteArray();
     }
 }
