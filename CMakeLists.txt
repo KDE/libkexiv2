@@ -41,7 +41,7 @@ INCLUDE_DIRECTORIES (${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DI
 SET(LIBKEXIV2_AREA_CODE_GENERAL 51003)
 ADD_DEFINITIONS(-DKDE_DEFAULT_DEBUG_AREA=${LIBKEXIV2_AREA_CODE_GENERAL})
 
-SET(EXIV2_MIN_VERSION "0.21")
+SET(EXIV2_MIN_VERSION "0.24")
 FIND_PACKAGE(Exiv2)
 MACRO_LOG_FEATURE(EXIV2_FOUND "Exiv2" "Required to build libkexiv2." "http://www.exiv2.org"
                   TRUE ${EXIV2_MIN_VERSION} "")
@@ -74,11 +74,12 @@ MACRO_LOG_FEATURE(EXIV2_FOUND "Exiv2" "Required to build libkexiv2." "http://www
 # 2.2.0 => 11.0.0    (Released with KDE 4.8.1) - Remove deprecated methods
 # 2.3.0 => 11.1.0    (Released with KDE 4.8.2) - Add new static methods about XMP sidecar file management.
 # 2.3.1 => 11.2.0                              - Add new method to set specific XMP tag string
+# 2.3.2 => 11.3.0                              - Add new method to access on text edit widget from AltLangStrEdit.
 
 # Library API version
 SET(KEXIV2_LIB_MAJOR_VERSION "2")
 SET(KEXIV2_LIB_MINOR_VERSION "3")
-SET(KEXIV2_LIB_PATCH_VERSION "1")
+SET(KEXIV2_LIB_PATCH_VERSION "2")
 
 # Suffix to add at end of version string. Usual values are:
 # "-git"   : alpha code unstable from git. Do not use in production
@@ -92,7 +93,7 @@ SET(KEXIV2_LIB_SUFFIX_VERSION "")
 # Library ABI version used by linker.
 # For details : http://www.gnu.org/software/libtool/manual/libtool.html#Updating-version-info
 SET(KEXIV2_LIB_SO_CUR_VERSION "11")
-SET(KEXIV2_LIB_SO_REV_VERSION "2")
+SET(KEXIV2_LIB_SO_REV_VERSION "3")
 SET(KEXIV2_LIB_SO_AGE_VERSION "0")
 
 # =======================================================

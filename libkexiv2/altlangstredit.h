@@ -7,7 +7,7 @@
  * @date   2009-06-15
  * @brief  multi-languages string editor
  *
- * @author Copyright (C) 2009-2012 by Gilles Caulier
+ * @author Copyright (C) 2009-2014 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
@@ -38,6 +38,8 @@
 
 namespace KExiv2Iface
 {
+
+class MsgTextEdit;
 
 class KEXIV2_EXPORT AltLangStrEdit : public QWidget
 {
@@ -78,6 +80,8 @@ public:
      * signalValueAdded() will be emitted.
      */
     void addCurrent();
+
+    MsgTextEdit* textEdit() const;
 
 Q_SIGNALS:
 
