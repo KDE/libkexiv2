@@ -458,6 +458,13 @@ void AltLangStrEdit::slotTextChanged()
     QString editedText   = d->valueEdit->toPlainText();
     QString previousText = d->values.value(d->currentLanguage);
 
+    // Special case : if edited and previous strings are empty, do nothing.
+    // See bug #152948.
+    if (editedText.isEmpty() && previousText.isNull())
+    {
+        return;
+    }
+
     if (editedText.isEmpty())
     {
         slotDeleteValue();
