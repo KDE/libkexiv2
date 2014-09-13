@@ -170,14 +170,14 @@ public:
     /** Return true if Exiv2 library initialization is done properly.
         This method must be called before using libkexiv2 with multithreading.
         It initialize several non re-entrancy code from Adobe XMP SDK
-        See B.K.O #166424 for details. Call cleanupExiv2() to clean things up later.
+        See bug #166424 for details. Call cleanupExiv2() to clean things up later.
      */
     static bool initializeExiv2();
 
     /** Return true if Exiv2 library memory allocations are cleaned properly.
         This method must be called after using libkexiv2 with multithreading.
         It cleans up memory used by Adobe XMP SDK
-        See B.K.O #166424 for details.
+        See bug #166424 for details.
      */
     static bool cleanupExiv2();
 

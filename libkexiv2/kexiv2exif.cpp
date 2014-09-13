@@ -834,7 +834,7 @@ QString KExiv2::getExifTagString(const char* exifTagName, bool escapeCR) const
 
         if (it != exifData.end())
         {
-            // See B.K.O #184156 comment #13
+            // See bug #184156 comment #13
             std::string val  = it->print(&exifData);
             QString tagValue = QString::fromLocal8Bit(val.c_str());
 

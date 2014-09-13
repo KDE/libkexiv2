@@ -24,7 +24,7 @@
                * cleanupExiv2().       
                Added a new method to load image data from a byte array.
 
-Bugs fixed from B.K.O (http://bugs.kde.org):
+Bugs fixed from bug (http://bugs.kde.org):
 001 ==> 166424: Crash when editing Caption with Digikam4 SVN.
 
 0.2.0 - Released with KDE 4.1.0
@@ -35,7 +35,7 @@ Split methods to separate files to provide a more readable implementation.
 New method to fix orientation of a QImage accordingly with Exif orientation tag.
 Moved from extragear/libs to kdegraphics/libs
 
-Bugs fixed from B.K.O (http://bugs.kde.org):
+Bugs fixed from bug (http://bugs.kde.org):
 001 ==> 146864: Lesser XMP support in digiKam.
 
 0.1.7
@@ -44,7 +44,7 @@ Bugs fixed from B.K.O (http://bugs.kde.org):
 - API changed: Added a version method to get runtime library version.
 - Fix RemoveIptcTag() to handle all redondant Iptc tags at the same time.
 
-Bugs fixed from B.K.O (http://bugs.kde.org):
+Bugs fixed from bug (http://bugs.kde.org):
 001 ==> 157552: negative altitudes are not shown in metadata GPS sidebar
 
 0.1.6
@@ -52,7 +52,7 @@ Bugs fixed from B.K.O (http://bugs.kde.org):
 - API Changed : Kexiv2 destructor is now virtual.
                 Krazy Code Checker fix (http://www.englishbreakfastnetwork.org/krazy)
 		
-Bugs fixed from B.K.O (http://bugs.kde.org):
+Bugs fixed from bug (http://bugs.kde.org):
 001 ==> 137750: color mode2 nikon d70s not recognized as adobe rgb
 002 ==> 149267: digiKam crashes after finding gif,avi,txt and so on.
 003 ==> 148182: Iptc.Application2.Keywords appends always the 0-byte.
@@ -71,7 +71,7 @@ New features
 - API changed: added 4 new static methods to get Exif/Iptc tags description/title. 
                moved depreceate protected methods used by digiKam core to private.
 
-Bugs fixed from B.K.O (http://bugs.kde.org):
+Bugs fixed from bug (http://bugs.kde.org):
 001 ==> 144604: Rotation causes Exif data corruption. GPS data fix
 
 General       : Make size of icons used in album icon view more configurable using a slider 
@@ -85,13 +85,13 @@ New features
 - added support for exiv2 from svn (next 0.14.0 release)
 - API changed: added printExiv2ExceptionError to manage Exiv2 C++ Exception error message 
 
-Bugs fixed from B.K.O (http://bugs.kde.org):
+Bugs fixed from bug (http://bugs.kde.org):
 001 ==> 142564: digiKam-signature in iptc and exif tags.
 002 ==> 140297: GPS kipi plugin truncates input coordinates, introducing inacuracy.
 
 0.1.1
 ------------------------------------------------------------------------
-Bugs fixed from B.K.O (http://bugs.kde.org):
+Bugs fixed from bug (http://bugs.kde.org):
 001 ==> 141980: digiKam crash when rescan certain files exiv2.
 
 0.1.0

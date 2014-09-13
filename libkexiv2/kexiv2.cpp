@@ -399,7 +399,7 @@ bool KExiv2::save(const QString& imageFilePath) const
         regularFilePath = givenFileInfo.canonicalPath();// Walk all the symlinks
     }
 
-    // NOTE: see B.K.O #137770 & #138540 : never touch the file if is read only.
+    // NOTE: see bug #137770 & #138540 : never touch the file if is read only.
     QFileInfo finfo(regularFilePath);
     QFileInfo dinfo(finfo.path());
     if (!dinfo.isWritable())
