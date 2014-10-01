@@ -30,7 +30,7 @@ PROJECT(libkexiv2)
 
 
 # ECM setup
-find_package(ECM 1.1.0 CONFIG REQUIRED)
+find_package(ECM 1.2.0 CONFIG REQUIRED)
 set(CMAKE_MODULE_PATH ${libkexiv2_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
 
 include(GenerateExportHeader)
@@ -53,9 +53,11 @@ find_package(KF5KHtml ${KF5_VERSION} CONFIG REQUIRED)
 
 SET(EXIV2_MIN_VERSION "0.21")
 FIND_PACKAGE(Exiv2)
-#MACRO_LOG_FEATURE(EXIV2_FOUND "Exiv2" "Required to build libkexiv2." "http://www.exiv2.org"
-#                  TRUE ${EXIV2_MIN_VERSION} "")
-
+set_package_properties("Exiv2" PROPERTIES
+        DESCRIPTION  "Required to build libkexiv2."
+        URL "http://www.exiv2.org"
+        TYPE RECOMMENDED
+        PURPOSE "Support for image files")
 
 ecm_setup_version(${LIBKEXIV2_LIB_VERSION}
     VARIABLE_PREFIX KEXIV2
@@ -75,7 +77,7 @@ add_subdirectory(tests)
 
 ############## CMake Config Files ##############
 message("${CMAKECONFIG_INSTALL_DIR}")
-set(CMAKECONFIG_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/KEXIV2")
+set(CMAKECONFIG_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/KF5Kexiv2")
 
 ecm_configure_package_config_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/KF5KExiv2Config.cmake.in"
@@ -90,7 +92,6 @@ install(FILES
     COMPONENT Devel
 )
 
-#REACTIVATE
 install(EXPORT KF5KExiv2Targets
     DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
     FILE KF5KExiv2Targets.cmake
