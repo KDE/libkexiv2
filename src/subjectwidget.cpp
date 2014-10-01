@@ -282,17 +282,13 @@ SubjectWidget::SubjectWidget(QWidget* parent)
 
     // --------------------------------------------------------
 
-    connect(m_subjectsCheck, SIGNAL(toggled(bool)),
-            this, SIGNAL(signalModified()));
+    connect(m_subjectsCheck, &QCheckBox::toggled, this, &SubjectWidget::signalModified);
 
-    connect(d->addSubjectButton, SIGNAL(clicked()),
-            this, SIGNAL(signalModified()));
+    connect(d->addSubjectButton, &QPushButton::clicked, this, &SubjectWidget::signalModified);
 
-    connect(d->delSubjectButton, SIGNAL(clicked()),
-            this, SIGNAL(signalModified()));
+    connect(d->delSubjectButton, &QPushButton::clicked, this, &SubjectWidget::signalModified);
 
-    connect(d->repSubjectButton, SIGNAL(clicked()),
-            this, SIGNAL(signalModified()));
+    connect(d->repSubjectButton, &QPushButton::clicked, this, &SubjectWidget::signalModified);
 
     // --------------------------------------------------------
 
