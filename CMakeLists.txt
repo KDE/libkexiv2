@@ -78,7 +78,7 @@ MACRO_LOG_FEATURE(EXIV2_FOUND "Exiv2" "Required to build libkexiv2." "http://www
 # Library API version
 SET(KEXIV2_LIB_MAJOR_VERSION "2")
 SET(KEXIV2_LIB_MINOR_VERSION "3")
-SET(KEXIV2_LIB_PATCH_VERSION "1")
+SET(KEXIV2_LIB_PATCH_VERSION "2")
 
 # Suffix to add at end of version string. Usual values are:
 # "-git"   : alpha code unstable from git. Do not use in production
