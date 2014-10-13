@@ -22,15 +22,12 @@
 #
 # ============================================================
 
-
-
 cmake_minimum_required(VERSION 2.8.12)
 
 PROJECT(libkexiv2)
 
-
 # ECM setup
-find_package(ECM 1.3.0 CONFIG REQUIRED)
+find_package(ECM 1.1.0 CONFIG REQUIRED)
 set(CMAKE_MODULE_PATH ${libkexiv2_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
 
 include(GenerateExportHeader)
@@ -43,7 +40,7 @@ include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(KDEFrameworkCompilerSettings)
 
-set(KF5_VERSION "5.3.0")
+set(KF5_VERSION "5.0.0")
 set(LIBKEXIV2_LIB_VERSION "2.70.0")
 
 ############## Find Packages ##############
@@ -51,7 +48,7 @@ set(REQUIRED_QT_VERSION "5.2.0")
 find_package(KF5KDELibs4Support ${KF5_VERSION} CONFIG REQUIRED)
 find_package(KF5KHtml ${KF5_VERSION} CONFIG REQUIRED)
 
-SET(EXIV2_MIN_VERSION "0.21")
+SET(EXIV2_MIN_VERSION "0.24")
 FIND_PACKAGE(Exiv2)
 set_package_properties("Exiv2" PROPERTIES
         DESCRIPTION  "Required to build libkexiv2."

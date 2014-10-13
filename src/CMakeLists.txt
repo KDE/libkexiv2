@@ -21,6 +21,7 @@
 # GNU General Public License for more details.
 #
 # ============================================================
+
 kde_enable_exceptions()
 
 INCLUDE_DIRECTORIES(${EXIV2_INCLUDE_DIR})
@@ -32,7 +33,6 @@ remove_definitions(-DQT_NO_CAST_FROM_ASCII -DQT_NO_CAST_TO_ASCII)
 IF( WIN32 )
     ADD_DEFINITIONS( -DEXV_HAVE_DLL )
 ENDIF( WIN32 )
-
 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/version.h)
 
@@ -97,10 +97,9 @@ IF( WIN32 )
     TARGET_LINK_LIBRARIES( kexiv2 ${EXPAT_LIBRARIES} )
 ENDIF( WIN32 )
 
-
 install(TARGETS
-    KF5Kexiv2
-    EXPORT KF5KExiv2Targets ${KF5_INSTALL_TARGETS_DEFAULT_ARGS}
+        KF5Kexiv2
+        EXPORT KF5KExiv2Targets ${KF5_INSTALL_TARGETS_DEFAULT_ARGS}
 )
 
 
@@ -109,8 +108,6 @@ set_target_properties(KF5Kexiv2 PROPERTIES
     SOVERSION ${KEXIV2_SOVERSION}
     EXPORT_NAME Kexiv2
 )
-
-
 
 INSTALL(FILES topicset.iptc-subjectcode.xml DESTINATION ${DATA_INSTALL_DIR}/libkexiv2/data)
 
