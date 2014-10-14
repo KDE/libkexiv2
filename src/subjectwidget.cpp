@@ -42,6 +42,7 @@
 #include <QLineEdit>
 #include <QListWidget>
 #include <QDebug>
+#include <QStandardPaths>
 
 // KDE includes
 
@@ -119,9 +120,8 @@ SubjectWidget::SubjectWidget(QWidget* const parent)
     // Load subject codes provided by IPTC/NAA as xml file.
     // See http://iptc.cms.apa.at/std/topicset/topicset.iptc-subjectcode.xml for details.
 
-    KGlobal::dirs()->addResourceDir("iptcschema", KStandardDirs::installPath("data") +
-                                                  QString("libkexiv2/data"));
-    QString path = KGlobal::dirs()->findResource("iptcschema", "topicset.iptc-subjectcode.xml");
+    QString path = QStandardPaths::locate(QStandardPaths::GenericDataLocation, 
+                                          "libkexiv2/data/topicset.iptc-subjectcode.xml");
 
     if (!loadSubjectCodesFromXML(QUrl(path)))
         qDebug() << "Cannot load IPTC/NAA subject codes XML database";
