@@ -7,7 +7,7 @@
  * @date   2006-10-15
  * @brief  IPTC subjects editor.
  *
- * @author Copyright (C) 2006-2012 by Gilles Caulier
+ * @author Copyright (C) 2006-2014 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  * @author Copyright (C) 2009-2012 by Andi Clemens
  *         <a href="mailto:andi dot clemens at googlemail dot com">andi dot clemens at googlemail dot com</a>
@@ -26,6 +26,7 @@
  * ============================================================ */
 
 #include "subjectwidget.h"
+
 // Qt includes
 
 #include <QCheckBox>
@@ -38,17 +39,18 @@
 #include <QRadioButton>
 #include <QValidator>
 #include <QButtonGroup>
+#include <QLineEdit>
+#include <QListWidget>
+#include <QDebug>
+
 // KDE includes
 
 #include <kcombobox.h>
 #include <kdialog.h>
 #include <kglobal.h>
 #include <kiconloader.h>
-#include <QLineEdit>
-#include <QListWidget>
 #include <KLocalizedString>
 #include <kstandarddirs.h>
-#include <QDebug>
 
 namespace KExiv2Iface
 {
@@ -111,8 +113,8 @@ public:
 
 // --------------------------------------------------------------------------------
 
-SubjectWidget::SubjectWidget(QWidget* parent)
-             : QWidget(parent), d(new Private)
+SubjectWidget::SubjectWidget(QWidget* const parent)
+    : QWidget(parent), d(new Private)
 {
     // Load subject codes provided by IPTC/NAA as xml file.
     // See http://iptc.cms.apa.at/std/topicset/topicset.iptc-subjectcode.xml for details.
@@ -121,24 +123,24 @@ SubjectWidget::SubjectWidget(QWidget* parent)
                                                   QString("libkexiv2/data"));
     QString path = KGlobal::dirs()->findResource("iptcschema", "topicset.iptc-subjectcode.xml");
 
-    if (!loadSubjectCodesFromXML(KUrl(path)))
+    if (!loadSubjectCodesFromXML(QUrl(path)))
         qDebug() << "Cannot load IPTC/NAA subject codes XML database";
 
     // --------------------------------------------------------
 
     // Subject Reference Number only accept digit.
     QRegExp refDigitRx("^[0-9]{8}$");
-    QValidator *refValidator = new QRegExpValidator(refDigitRx, this);
+    QValidator* const refValidator = new QRegExpValidator(refDigitRx, this);
 
     // --------------------------------------------------------
 
-    m_subjectsCheck  = new QCheckBox(i18n("Use structured definition of the subject matter:"), this);
-    d->optionsBox    = new QWidget;
-    d->btnGroup      = new QButtonGroup(this);
-    d->stdBtn        = new QRadioButton;
-    d->customBtn     = new QRadioButton;
-    d->refCB         = new KComboBox;
-    QLabel* codeLink = new QLabel(i18n("Use standard "
+    m_subjectsCheck        = new QCheckBox(i18n("Use structured definition of the subject matter:"), this);
+    d->optionsBox          = new QWidget;
+    d->btnGroup            = new QButtonGroup(this);
+    d->stdBtn              = new QRadioButton;
+    d->customBtn           = new QRadioButton;
+    d->refCB               = new KComboBox;
+    QLabel* const codeLink = new QLabel(i18n("Use standard "
                                        "<b><a href='http://www.iptc.org/site/NewsCodes'>"
                                        "reference code</a></b>"));
     codeLink->setOpenExternalLinks(true);
@@ -147,15 +149,14 @@ SubjectWidget::SubjectWidget(QWidget* parent)
     // By default, check box is not visible. (digiKam do not use it, kipi-plugins yes).
     m_subjectsCheck->setVisible(false);
 
-    QLabel* customLabel = new QLabel(i18n("Use custom definition"));
+    QLabel* const customLabel = new QLabel(i18n("Use custom definition"));
 
     d->btnGroup->addButton(d->stdBtn,    Private::STANDARD);
     d->btnGroup->addButton(d->customBtn, Private::CUSTOM);
     d->btnGroup->setExclusive(true);
     d->stdBtn->setChecked(true);
 
-    for (Private::SubjectCodesMap::Iterator it = d->subMap.begin();
-         it != d->subMap.end(); ++it)
+    for (Private::SubjectCodesMap::Iterator it = d->subMap.begin(); it != d->subMap.end(); ++it)
         d->refCB->addItem(it.key());
 
     // --------------------------------------------------------
@@ -224,7 +225,7 @@ SubjectWidget::SubjectWidget(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QGridLayout* optionsBoxLayout = new QGridLayout;
+    QGridLayout* const optionsBoxLayout = new QGridLayout;
     optionsBoxLayout->addWidget(d->stdBtn,      0, 0, 1, 1);
     optionsBoxLayout->addWidget(codeLink,       0, 1, 1, 2);
     optionsBoxLayout->addWidget(d->refCB,       0, 3, 1, 1);
@@ -247,7 +248,7 @@ SubjectWidget::SubjectWidget(QWidget* parent)
 
     // --------------------------------------------------------
 
-    QGridLayout* mainLayout = new QGridLayout;
+    QGridLayout* const mainLayout = new QGridLayout;
     mainLayout->setAlignment( Qt::AlignTop );
     mainLayout->addWidget(m_subjectsCheck,     0, 0, 1, 4);
     mainLayout->addWidget(d->optionsBox,       1, 0, 1, 4);
@@ -264,31 +265,42 @@ SubjectWidget::SubjectWidget(QWidget* parent)
 
     // --------------------------------------------------------
 
-    connect(d->subjectsBox, &QListWidget::itemSelectionChanged, this, &SubjectWidget::slotSubjectSelectionChanged);
+    connect(d->subjectsBox, &QListWidget::itemSelectionChanged,
+            this, &SubjectWidget::slotSubjectSelectionChanged);
 
-    connect(d->addSubjectButton, &QPushButton::clicked, this, &SubjectWidget::slotAddSubject);
+    connect(d->addSubjectButton, &QPushButton::clicked,
+            this, &SubjectWidget::slotAddSubject);
 
-    connect(d->delSubjectButton, &QPushButton::clicked, this, &SubjectWidget::slotDelSubject);
+    connect(d->delSubjectButton, &QPushButton::clicked,
+            this, &SubjectWidget::slotDelSubject);
 
-    connect(d->repSubjectButton, &QPushButton::clicked, this, &SubjectWidget::slotRepSubject);
+    connect(d->repSubjectButton, &QPushButton::clicked,
+            this, &SubjectWidget::slotRepSubject);
 
-    connect(d->btnGroup, static_cast<void (QButtonGroup::*)(int)>(&QButtonGroup::buttonReleased), this, &SubjectWidget::slotEditOptionChanged);
+    connect(d->btnGroup, static_cast<void (QButtonGroup::*)(int)>(&QButtonGroup::buttonReleased),
+            this, &SubjectWidget::slotEditOptionChanged);
 
-    connect(d->refCB, static_cast<void (KComboBox::*)(int)>(&KComboBox::activated), this, &SubjectWidget::slotRefChanged);
+    connect(d->refCB, static_cast<void (KComboBox::*)(int)>(&KComboBox::activated),
+            this, &SubjectWidget::slotRefChanged);
 
     // --------------------------------------------------------
 
-    connect(m_subjectsCheck, &QCheckBox::toggled, this, &SubjectWidget::slotSubjectsToggled);
+    connect(m_subjectsCheck, &QCheckBox::toggled,
+            this, &SubjectWidget::slotSubjectsToggled);
 
     // --------------------------------------------------------
 
-    connect(m_subjectsCheck, &QCheckBox::toggled, this, &SubjectWidget::signalModified);
+    connect(m_subjectsCheck, &QCheckBox::toggled,
+            this, &SubjectWidget::signalModified);
 
-    connect(d->addSubjectButton, &QPushButton::clicked, this, &SubjectWidget::signalModified);
+    connect(d->addSubjectButton, &QPushButton::clicked,
+            this, &SubjectWidget::signalModified);
 
-    connect(d->delSubjectButton, &QPushButton::clicked, this, &SubjectWidget::signalModified);
+    connect(d->delSubjectButton, &QPushButton::clicked,
+            this, &SubjectWidget::signalModified);
 
-    connect(d->repSubjectButton, &QPushButton::clicked, this, &SubjectWidget::signalModified);
+    connect(d->repSubjectButton, &QPushButton::clicked,
+            this, &SubjectWidget::signalModified);
 
     // --------------------------------------------------------
 
@@ -371,8 +383,10 @@ QString SubjectWidget::buildSubject() const
 
 void SubjectWidget::slotDelSubject()
 {
-    QListWidgetItem* item = d->subjectsBox->currentItem();
+    QListWidgetItem* const item = d->subjectsBox->currentItem();
+
     if (!item) return;
+
     d->subjectsBox->takeItem(d->subjectsBox->row(item));
     delete item;
 }
@@ -380,6 +394,7 @@ void SubjectWidget::slotDelSubject()
 void SubjectWidget::slotRepSubject()
 {
     QString newSubject = buildSubject();
+
     if (newSubject.isEmpty()) return;
 
     if (!d->subjectsBox->selectedItems().isEmpty())
@@ -416,12 +431,15 @@ void SubjectWidget::slotSubjectSelectionChanged()
 void SubjectWidget::slotAddSubject()
 {
     QString newSubject = buildSubject();
+
     if (newSubject.isEmpty()) return;
 
     bool found = false;
+
     for (int i = 0 ; i < d->subjectsBox->count(); i++)
     {
-        QListWidgetItem* item = d->subjectsBox->item(i);
+        QListWidgetItem* const item = d->subjectsBox->item(i);
+
         if (newSubject == item->text())
         {
             found = true;
@@ -440,7 +458,7 @@ void SubjectWidget::slotAddSubject()
     }
 }
 
-bool SubjectWidget::loadSubjectCodesFromXML(const KUrl& url)
+bool SubjectWidget::loadSubjectCodesFromXML(const QUrl& url)
 {
     QFile xmlfile(url.toLocalFile());
 
@@ -448,10 +466,12 @@ bool SubjectWidget::loadSubjectCodesFromXML(const KUrl& url)
         return false;
 
     QDomDocument xmlDoc("NewsML");
+
     if (!xmlDoc.setContent(&xmlfile))
         return false;
 
     QDomElement xmlDocElem = xmlDoc.documentElement();
+
     if (xmlDocElem.tagName()!="NewsML")
         return false;
 
@@ -459,6 +479,7 @@ bool SubjectWidget::loadSubjectCodesFromXML(const KUrl& url)
          !nbE1.isNull(); nbE1 = nbE1.nextSibling())
     {
         QDomElement newsItemElement = nbE1.toElement();
+
         if (newsItemElement.isNull()) continue;
         if (newsItemElement.tagName() != "NewsItem") continue;
 
@@ -466,6 +487,7 @@ bool SubjectWidget::loadSubjectCodesFromXML(const KUrl& url)
             !nbE2.isNull(); nbE2 = nbE2.nextSibling())
         {
             QDomElement topicSetElement = nbE2.toElement();
+
             if (topicSetElement.isNull()) continue;
             if (topicSetElement.tagName() != "TopicSet") continue;
 
@@ -473,14 +495,17 @@ bool SubjectWidget::loadSubjectCodesFromXML(const KUrl& url)
                 !nbE3.isNull(); nbE3 = nbE3.nextSibling())
             {
                 QDomElement topicElement = nbE3.toElement();
+
                 if (topicElement.isNull()) continue;
                 if (topicElement.tagName() != "Topic") continue;
 
                 QString type, name, matter, detail, ref;
+
                 for (QDomNode nbE4 = topicElement.firstChild();
                     !nbE4.isNull(); nbE4 = nbE4.nextSibling())
                 {
                     QDomElement topicSubElement = nbE4.toElement();
+
                     if (topicSubElement.isNull()) continue;
 
                     if (topicSubElement.tagName() == "TopicType")
@@ -512,6 +537,7 @@ bool SubjectWidget::loadSubjectCodesFromXML(const KUrl& url)
          it != d->subMap.end(); ++it)
     {
         QString name, keyPrefix;
+
         if (it.key().endsWith(QLatin1String("00000")))
         {
             keyPrefix = it.key().left(3);
@@ -535,6 +561,7 @@ bool SubjectWidget::loadSubjectCodesFromXML(const KUrl& url)
          it != d->subMap.end(); ++it)
     {
         QString matter, keyPrefix;
+
         if (it.key().endsWith(QLatin1String("000")))
         {
             keyPrefix = it.key().left(5);
@@ -562,6 +589,7 @@ void SubjectWidget::setSubjectsList(const QStringList& list)
     blockSignals(true);
     d->subjectsBox->clear();
     m_subjectsCheck->setChecked(false);
+
     if (!d->subjectsList.isEmpty())
     {
         d->subjectsBox->insertItems(0, d->subjectsList);

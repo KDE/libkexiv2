@@ -7,7 +7,7 @@
  * @date   2006-10-15
  * @brief  IPTC subjects editor.
  *
- * @author Copyright (C) 2006-2012 by Gilles Caulier
+ * @author Copyright (C) 2006-2014 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  * @author Copyright (C) 2009-2012 by Andi Clemens
  *         <a href="mailto:andi dot clemens at googlemail dot com">andi dot clemens at googlemail dot com</a>
@@ -36,10 +36,7 @@
 #include <QWidget>
 #include <QCheckBox>
 #include <QLabel>
-
-// KDE includes
-
-#include <kurl.h>
+#include <QUrl>
 #include <QLineEdit>
 
 // Local includes
@@ -73,7 +70,7 @@ class KEXIV2_EXPORT SubjectWidget : public QWidget
 
 public:
 
-    SubjectWidget(QWidget* parent);
+    SubjectWidget(QWidget* const parent);
     ~SubjectWidget();
 
     void setSubjectsList(const QStringList& list);
@@ -95,7 +92,7 @@ protected Q_SLOTS:
 
 protected:
 
-    virtual bool loadSubjectCodesFromXML(const KUrl& url);
+    virtual bool loadSubjectCodesFromXML(const QUrl& url);
     virtual QString buildSubject() const;
 
 protected:
