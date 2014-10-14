@@ -188,17 +188,17 @@ QString KExiv2::sidecarFilePathForFile(const QString& path)
     return ret;
 }
 
-KUrl KExiv2::sidecarUrl(const KUrl& url)
+QUrl KExiv2::sidecarUrl(const QUrl& url)
 {
     QString sidecarPath = sidecarFilePathForFile(url.path());
-    KUrl sidecarUrl(url);
+    QUrl sidecarUrl(url);
     sidecarUrl.setPath(sidecarPath);
     return sidecarUrl;
 }
 
-KUrl KExiv2::sidecarUrl(const QString& path)
+QUrl KExiv2::sidecarUrl(const QString& path)
 {
-    return KUrl::fromPath(sidecarFilePathForFile(path));
+    return QUrl::fromLocalFile(sidecarFilePathForFile(path));
 }
 
 QString KExiv2::sidecarPath(const QString& path)

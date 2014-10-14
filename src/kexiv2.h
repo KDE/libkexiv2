@@ -44,11 +44,8 @@
 #include <QtCore/QStringList>
 #include <QtCore/QVariant>
 #include <QtCore/QRegExp>
+#include <QtCore/QUrl>
 #include <QImage>
-
-// KDE includes.
-
-#include <kurl.h>
 
 // Local includes
 
@@ -208,11 +205,11 @@ public:
 
     /** Like sidecarFilePathForFile(), but works for remote URLs.
      */
-    static KUrl sidecarUrl(const KUrl& url);
+    static QUrl sidecarUrl(const QUrl& url);
 
     /** Gives a file url for a local path.
      */
-    static KUrl sidecarUrl(const QString& path);
+    static QUrl sidecarUrl(const QString& path);
 
     /** Performs a QFileInfo based check if the given local file has a sidecar.
      */
