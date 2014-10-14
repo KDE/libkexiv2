@@ -7,7 +7,7 @@
  * @date   2009-06-15
  * @brief  multi-languages string editor
  *
- * @author Copyright (C) 2009-2012 by Gilles Caulier
+ * @author Copyright (C) 2009-2014 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
@@ -45,7 +45,7 @@ class KEXIV2_EXPORT AltLangStrEdit : public QWidget
 
 public:
 
-    AltLangStrEdit(QWidget* parent);
+    AltLangStrEdit(QWidget* const parent);
     ~AltLangStrEdit();
 
     void setTitle(const QString& title);
@@ -57,14 +57,15 @@ public:
     QString languageCode(int index) const;
 
     void setValues(const KExiv2::AltLangMap& values);
-    KExiv2::AltLangMap& values();
+    KExiv2::AltLangMap& values() const;
 
-    /** Fix lines visibile in text editor to lines. If zero, do not fix layout to number of lines visible.
+    /**
+     * Fix lines visibile in text editor to lines. If zero, do not fix layout to number of lines visible.
      */
     void setLinesVisible(uint lines);
     uint linesVisible() const;
 
-    QString defaultAltLang() const;
+    QString defaultAltLang()   const;
     bool    asDefaultAltLang() const;
 
     /**
@@ -81,14 +82,15 @@ public:
 
 Q_SIGNALS:
 
-    /**
-     * Emitted when the user changes the text for the current language.
-     */
+    /// Emitted when the user changes the text for the current language.
     void signalModified(const QString& lang, const QString& text);
-    /// Emitted when the current language changed
+
+    /// Emitted when the current language changed.
     void signalSelectionChanged(const QString& lang);
-    /// Emitted when an entry for a new language is added
+
+    /// Emitted when an entry for a new language is added.
     void signalValueAdded(const QString& lang, const QString& text);
+
     /// Emitted when the entry for a language is removed.
     void signalValueDeleted(const QString& lang);
 

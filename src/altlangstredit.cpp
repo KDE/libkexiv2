@@ -7,7 +7,7 @@
  * @date   2009-06-15
  * @brief  multi-languages string editor
  *
- * @author Copyright (C) 2009-2013 by Gilles Caulier
+ * @author Copyright (C) 2009-2014 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
@@ -23,8 +23,6 @@
  *
  * ============================================================ */
 
-#include "msgtextedit.h"
-#include "altlangstredit.h"
 // Qt includes
 
 #include <QEvent>
@@ -38,9 +36,15 @@
 
 #include <kdialog.h>
 #include <kiconloader.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <ktextedit.h>
 #include <kcombobox.h>
+
+// Local includes
+
+#include "msgtextedit.h"
+#include "altlangstredit.h"
+
 using namespace KExiv2Iface;
 
 class AltLangStrEdit::Private
@@ -264,7 +268,7 @@ public:
     KExiv2::AltLangMap             values;
 };
 
-AltLangStrEdit::AltLangStrEdit(QWidget* parent)
+AltLangStrEdit::AltLangStrEdit(QWidget* const parent)
     : QWidget(parent), d(new Private)
 {
     QGridLayout* const grid = new QGridLayout(this);
@@ -296,11 +300,14 @@ AltLangStrEdit::AltLangStrEdit(QWidget* parent)
 
     // --------------------------------------------------------
 
-    connect(d->languageCB, static_cast<void (KComboBox::*)(int)>(&KComboBox::currentIndexChanged), this, &AltLangStrEdit::slotSelectionChanged);
+    connect(d->languageCB, static_cast<void (KComboBox::*)(int)>(&KComboBox::currentIndexChanged),
+            this, &AltLangStrEdit::slotSelectionChanged);
 
-    connect(d->delValueButton, &QToolButton::clicked, this, &AltLangStrEdit::slotDeleteValue);
+    connect(d->delValueButton, &QToolButton::clicked,
+            this, &AltLangStrEdit::slotDeleteValue);
 
-    connect(d->valueEdit, &MsgTextEdit::textChanged, this, &AltLangStrEdit::slotTextChanged);
+    connect(d->valueEdit, &MsgTextEdit::textChanged,
+            this, &AltLangStrEdit::slotTextChanged);
 }
 
 AltLangStrEdit::~AltLangStrEdit()
@@ -390,7 +397,7 @@ void AltLangStrEdit::setValues(const KExiv2::AltLangMap& values)
     d->valueEdit->blockSignals(false);
 }
 
-KExiv2::AltLangMap& AltLangStrEdit::values()
+KExiv2::AltLangMap& AltLangStrEdit::values() const
 {
     return d->values;
 }
@@ -515,4 +522,3 @@ void AltLangStrEdit::changeEvent(QEvent* e)
 
     QWidget::changeEvent(e);
 }
-
