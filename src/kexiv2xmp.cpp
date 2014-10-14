@@ -46,7 +46,7 @@ bool KExiv2::canWriteXmp(const QString& filePath)
     {
         std::string s(e.what());
         qCritical() << "Cannot check Xmp access mode using Exiv2 (Error #"
-                 << e.code() << ": " << s.c_str() << ")";
+                    << e.code() << ": " << s.c_str() << ")";
     }
     catch(...)
     {
@@ -138,9 +138,9 @@ bool KExiv2::setXmp(const QByteArray& data) const
     {
         if (!data.isEmpty())
         {
-
             std::string xmpPacket;
             xmpPacket.assign(data.data(), data.size());
+
             if (Exiv2::XmpParser::decode(d->xmpMetadata(), xmpPacket) != 0)
                 return false;
             else
@@ -349,6 +349,7 @@ QString KExiv2::getXmpTagString(const char* xmpTagName, bool escapeCR) const
         Exiv2::XmpData xmpData(d->xmpMetadata());
         Exiv2::XmpKey key(xmpTagName);
         Exiv2::XmpData::iterator it = xmpData.findKey(key);
+
         if (it != xmpData.end())
         {
             std::ostringstream os;
@@ -428,19 +429,21 @@ bool KExiv2::setXmpTagString(const char* xmpTagName, const QString& value,
         const std::string &txt(value.toUtf8().constData());
         Exiv2::XmpTextValue xmpTxtVal("");
 
-        if(type == KExiv2::NormalTag) // normal type
+        if (type == KExiv2::NormalTag) // normal type
         {
             xmpTxtVal.read(txt);
             d->xmpMetadata().add(Exiv2::XmpKey(xmpTagName),&xmpTxtVal);
             return true;
         }
-        if(type == KExiv2::ArrayBagTag) // xmp type = bag
+
+        if (type == KExiv2::ArrayBagTag) // xmp type = bag
         {
             xmpTxtVal.setXmpArrayType(Exiv2::XmpValue::xaBag);
             xmpTxtVal.read("");
             d->xmpMetadata().add(Exiv2::XmpKey(xmpTagName),&xmpTxtVal);
         }
-        if(type == KExiv2::StructureTag) // xmp type = struct
+
+        if (type == KExiv2::StructureTag) // xmp type = struct
         {
             xmpTxtVal.setXmpStruct();
             d->xmpMetadata().add(Exiv2::XmpKey(xmpTagName),&xmpTxtVal);
@@ -485,6 +488,7 @@ KExiv2::AltLangMap KExiv2::getXmpTagStringListLangAlt(const char* xmpTagName, bo
                 {
                     QString lang = QString::fromUtf8(it2->first.c_str());
                     QString text = QString::fromUtf8(it2->second.c_str());
+
                     if (escapeCR)
                         text.replace('\n', ' ');
 
@@ -574,6 +578,7 @@ QString KExiv2::getXmpTagStringLangAlt(const char* xmpTagName, const QString& la
     {
         Exiv2::XmpData xmpData(d->xmpMetadata());
         Exiv2::XmpKey key(xmpTagName);
+
         for (Exiv2::XmpData::iterator it = xmpData.begin(); it != xmpData.end(); ++it)
         {
             if (it->key() == xmpTagName && it->typeId() == Exiv2::langAlt)
@@ -585,6 +590,7 @@ QString KExiv2::getXmpTagStringLangAlt(const char* xmpTagName, const QString& la
                     QString lang;
                     QString tagValue = QString::fromUtf8(os.str().c_str());
                     tagValue = detectLanguageAlt(tagValue, lang);
+
                     if (langAlt == lang)
                     {
                         if (escapeCR)
@@ -640,6 +646,7 @@ bool KExiv2::setXmpTagStringLangAlt(const char* xmpTagName, const QString& value
         // Search if an Xmp tag already exist.
 
         AltLangMap map = getXmpTagStringListLangAlt(xmpTagName, false);
+
         if (!map.isEmpty())
         {
             for (AltLangMap::iterator it = map.begin(); it != map.end(); ++it)
@@ -688,6 +695,7 @@ QStringList KExiv2::getXmpTagStringSeq(const char* xmpTagName, bool escapeCR) co
         Exiv2::XmpData xmpData(d->xmpMetadata());
         Exiv2::XmpKey key(xmpTagName);
         Exiv2::XmpData::iterator it = xmpData.findKey(key);
+
         if (it != xmpData.end())
         {
             if (it->typeId() == Exiv2::xmpSeq)
@@ -755,6 +763,7 @@ bool KExiv2::setXmpTagStringSeq(const char* xmpTagName, const QStringList& seq,
                 const std::string &txt((*it).toUtf8().constData());
                 xmpTxtSeq->read(txt);
             }
+
             d->xmpMetadata()[xmpTagName].setValue(xmpTxtSeq.get());
         }
         return true;
@@ -788,6 +797,7 @@ QStringList KExiv2::getXmpTagStringBag(const char* xmpTagName, bool escapeCR) co
         Exiv2::XmpData xmpData(d->xmpMetadata());
         Exiv2::XmpKey key(xmpTagName);
         Exiv2::XmpData::iterator it = xmpData.findKey(key);
+
         if (it != xmpData.end())
         {
             if (it->typeId() == Exiv2::xmpBag)
@@ -854,6 +864,7 @@ bool KExiv2::setXmpTagStringBag(const char* xmpTagName, const QStringList& bag,
                 const std::string &txt((*it).toUtf8().constData());
                 xmpTxtBag->read(txt);
             }
+
             d->xmpMetadata()[xmpTagName].setValue(xmpTxtBag.get());
         }
         return true;
@@ -930,6 +941,7 @@ QVariant KExiv2::getXmpTagVariant(const char* xmpTagName, bool rationalAsListOfI
         Exiv2::XmpData xmpData(d->xmpMetadata());
         Exiv2::XmpKey key(xmpTagName);
         Exiv2::XmpData::iterator it = xmpData.findKey(key);
+
         if (it != xmpData.end())
         {
             switch (it->typeId())
@@ -954,8 +966,10 @@ QVariant KExiv2::getXmpTagVariant(const char* xmpTagName, bool rationalAsListOfI
                         // prefer double precision
                         double num = (*it).toRational().first;
                         double den = (*it).toRational().second;
+
                         if (den == 0.0)
                             return QVariant(QVariant::Double);
+
                         return QVariant(num / den);
                     }
                 case Exiv2::date:
@@ -993,10 +1007,12 @@ QVariant KExiv2::getXmpTagVariant(const char* xmpTagName, bool rationalAsListOfI
                 case Exiv2::xmpAlt:
                 {
                     QStringList list;
+
                     for (int i=0; i < it->count(); i++)
                     {
                         list << QString::fromUtf8(it->toString(i).c_str());
                     }
+
                     return list;
                 }
                 case Exiv2::langAlt:
@@ -1006,10 +1022,12 @@ QVariant KExiv2::getXmpTagVariant(const char* xmpTagName, bool rationalAsListOfI
                     QMap<QString, QVariant> map;
                     // access the ValueType std::map< std::string, std::string>
                     Exiv2::LangAltValue::ValueType::const_iterator i;
+
                     for (i = value.value_.begin(); i != value.value_.end(); ++i)
                     {
                         map[QString::fromUtf8(i->first.c_str())] = QString::fromUtf8(i->second.c_str());
                     }
+
                     return map;
                 }
                 default:
@@ -1045,7 +1063,10 @@ bool KExiv2::registerXmpNameSpace(const QString& uri, const QString& prefix)
     try
     {
         QString ns = uri;
-        if (!uri.endsWith('/')) ns.append('/');
+
+        if (!uri.endsWith('/'))
+            ns.append('/');
+
         Exiv2::XmpProperties::registerNs(ns.toAscii().constData(), prefix.toAscii().constData());
         return true;
     }
@@ -1075,7 +1096,10 @@ bool KExiv2::unregisterXmpNameSpace(const QString& uri)
     try
     {
         QString ns = uri;
-        if (!uri.endsWith('/')) ns.append('/');
+
+        if (!uri.endsWith('/'))
+            ns.append('/');
+
         Exiv2::XmpProperties::unregisterNs(ns.toAscii().constData());
         return true;
     }
@@ -1108,6 +1132,7 @@ bool KExiv2::removeXmpTag(const char* xmpTagName, bool setProgramName) const
     {
         Exiv2::XmpKey xmpKey(xmpTagName);
         Exiv2::XmpData::iterator it = d->xmpMetadata().findKey(xmpKey);
+
         if (it != d->xmpMetadata().end())
         {
             d->xmpMetadata().erase(it);

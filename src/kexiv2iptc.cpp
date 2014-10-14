@@ -45,7 +45,7 @@ bool KExiv2::canWriteIptc(const QString& filePath)
     {
         std::string s(e.what());
         qCritical() << "Cannot check Iptc access mode using Exiv2 (Error #"
-                 << e.code() << ": " << s.c_str() << ")";
+                    << e.code() << ": " << s.c_str() << ")";
     }
     catch(...)
     {
@@ -364,7 +364,7 @@ QByteArray KExiv2::getIptcTagData(const char* iptcTagName) const
 {
     try
     {
-        Exiv2::IptcKey iptcKey(iptcTagName);
+        Exiv2::IptcKey  iptcKey(iptcTagName);
         Exiv2::IptcData iptcData(d->iptcMetadata());
         Exiv2::IptcData::iterator it = iptcData.findKey(iptcKey);
 
@@ -394,7 +394,7 @@ QString KExiv2::getIptcTagString(const char* iptcTagName, bool escapeCR) const
 {
     try
     {
-        Exiv2::IptcKey iptcKey(iptcTagName);
+        Exiv2::IptcKey  iptcKey(iptcTagName);
         Exiv2::IptcData iptcData(d->iptcMetadata());
         Exiv2::IptcData::iterator it = iptcData.findKey(iptcKey);
 
@@ -854,6 +854,7 @@ KExiv2::TagsMap KExiv2::getIptcTagsList() const
              << Exiv2::IptcDataSets::application2RecordList();
 
         TagsMap tagsMap;
+
         for (QList<const Exiv2::DataSet*>::iterator it = tags.begin(); it != tags.end(); ++it)
         {
             do
@@ -866,6 +867,7 @@ KExiv2::TagsMap KExiv2::getIptcTagsList() const
             }
             while((*it)->number_ != 0xffff);
         }
+
         return tagsMap;
     }
     catch(Exiv2::Error& e)

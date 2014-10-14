@@ -7,7 +7,7 @@
  * @date   2009-07-15
  * @brief  a text edit widget with click message.
  *
- * @author Copyright (C) 2009-2012 by Gilles Caulier
+ * @author Copyright (C) 2009-2014 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
@@ -30,8 +30,6 @@
 #include <QPalette>
 #include <QPainter>
 
-
-
 namespace KExiv2Iface
 {
 
@@ -44,8 +42,8 @@ public:
     QString message;
 };
 
-MsgTextEdit::MsgTextEdit(QWidget* parent)
-           : KTextEdit(parent), d(new Private)
+MsgTextEdit::MsgTextEdit(QWidget* const parent)
+    : KTextEdit(parent), d(new Private)
 {
     setAcceptRichText(false);
 }

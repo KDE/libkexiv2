@@ -29,8 +29,6 @@
 
 // local includes
 
-//#include "libkexiv2_version.h"
-
 namespace KExiv2Iface
 {
 
@@ -100,6 +98,7 @@ RotationMatrix matrix(RotationMatrix::TransformationAction action)
         case RotationMatrix::Rotate270:
             return rotate270;
     }
+
     return identity;
 }
 
@@ -126,9 +125,9 @@ RotationMatrix matrix(KExiv2::ImageOrientation exifOrientation)
         case KExiv2::ORIENTATION_UNSPECIFIED:
             return identity;
     }
+    
     return identity;
 }
-
 
 } // namespace Matrix
 
@@ -162,22 +161,23 @@ void RotationMatrix::set(int m11, int m12, int m21, int m22)
 
 bool RotationMatrix::isNoTransform() const
 {
-    return *this == Matrix::identity;
+    return (*this == Matrix::identity);
 }
 
 RotationMatrix& RotationMatrix::operator*=(const RotationMatrix& ma)
 {
     set( ma.m[0][0]*m[0][0] + ma.m[0][1]*m[1][0],  ma.m[0][0]*m[0][1] + ma.m[0][1]*m[1][1],
          ma.m[1][0]*m[0][0] + ma.m[1][1]*m[1][0],  ma.m[1][0]*m[0][1] + ma.m[1][1]*m[1][1] );
-         return *this;
+
+    return *this;
 }
 
 bool RotationMatrix::operator==(const RotationMatrix& ma) const
 {
     return m[0][0]==ma.m[0][0] &&
-    m[0][1]==ma.m[0][1] &&
-    m[1][0]==ma.m[1][0] &&
-    m[1][1]==ma.m[1][1];
+           m[0][1]==ma.m[0][1] &&
+           m[1][0]==ma.m[1][0] &&
+           m[1][1]==ma.m[1][1];
 }
 
 bool RotationMatrix::operator!=(const RotationMatrix& ma) const
@@ -244,6 +244,7 @@ QList<RotationMatrix::TransformationAction> RotationMatrix::transformations() co
         transforms << Rotate90;
         transforms << FlipVertical;
     }
+
     return transforms;
 }
 
@@ -253,6 +254,7 @@ KExiv2::ImageOrientation RotationMatrix::exifOrientation() const
     {
         return KExiv2::ORIENTATION_NORMAL;
     }
+
     if (*this == Matrix::rotate90)
     {
         return KExiv2::ORIENTATION_ROT_90;
@@ -281,6 +283,7 @@ KExiv2::ImageOrientation RotationMatrix::exifOrientation() const
     {
         return KExiv2::ORIENTATION_ROT_90_VFLIP;
     }
+
     return KExiv2::ORIENTATION_UNSPECIFIED;
 }
 

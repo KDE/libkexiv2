@@ -7,7 +7,7 @@
  * @date   2009-08-03
  * @brief  Tools for combining rotation operations
  *
- * @author Copyright (C) 2006-2012 by Gilles Caulier
+ * @author Copyright (C) 2006-2014 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  * @author Copyright (C) 2004-2012 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
@@ -60,6 +60,8 @@ public:
         Rotate180        = 6, /// 180-degree rotation
         Rotate270        = 7  /// 270-degree clockwise (or 90 ccw)
     };
+
+public:
 
     /// Constructs the identity matrix (the matrix describing no transformation)
     RotationMatrix();
