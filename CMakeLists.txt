@@ -74,12 +74,12 @@ MACRO_LOG_FEATURE(EXIV2_FOUND "Exiv2" "Required to build libkexiv2." "http://www
 # 2.2.0 => 11.0.0    (Released with KDE 4.8.1) - Remove deprecated methods
 # 2.3.0 => 11.1.0    (Released with KDE 4.8.2) - Add new static methods about XMP sidecar file management.
 # 2.3.1 => 11.2.0                              - Add new method to set specific XMP tag string
-# 2.3.2 => 11.3.0                              - Add new method to access on text edit widget from AltLangStrEdit.
+# 2.4.2 => 11.3.0                              - Add new method to access on text edit widget from AltLangStrEdit.
 
 # Library API version
 SET(KEXIV2_LIB_MAJOR_VERSION "2")
-SET(KEXIV2_LIB_MINOR_VERSION "3")
-SET(KEXIV2_LIB_PATCH_VERSION "2")
+SET(KEXIV2_LIB_MINOR_VERSION "4")
+SET(KEXIV2_LIB_PATCH_VERSION "0")
 
 # Suffix to add at end of version string. Usual values are:
 # "-git"   : alpha code unstable from git. Do not use in production
