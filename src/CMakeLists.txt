@@ -57,26 +57,29 @@ SET(kexiv2_LIB_SRCS kexiv2.cpp
    )
 
 ecm_generate_headers(kexiv2_CamelCase_HEADERS
-    HEADER_NAMES
-    AltLangStrEdit
-    CountrySelector
-    KExiv2Data
-    KExiv2
-    KExiv2Previews
-    MsgTextEdit
-    RotationMatrix
-    #SubjectData
-    SubjectWidget
-    PREFIX KEXIV2
-    REQUIRED_HEADERS kexiv2_HEADERS
+                     
+                     HEADER_NAMES
+                     AltLangStrEdit
+                     CountrySelector
+                     KExiv2Data
+                     KExiv2
+                     KExiv2Previews
+                     MsgTextEdit
+                     RotationMatrix
+                     #SubjectData
+                     SubjectWidget
+                     
+                     PREFIX           KEXIV2
+                     REQUIRED_HEADERS kexiv2_HEADERS
 )
 
 install(FILES ${kexiv2_CamelCase_HEADERS}
         DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KEXIV2/KExiv2
-        COMPONENT Devel)
+        COMPONENT   Devel)
+
 install(FILES ${kexiv2_HEADERS}
         DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KEXIV2/kexiv2
-        COMPONENT Devel)
+        COMPONENT   Devel)
 
 add_library(KF5Kexiv2 ${kexiv2_LIB_SRCS})
 
@@ -85,29 +88,29 @@ generate_export_header(KF5Kexiv2 BASE_NAME kexiv2)
 install(FILES
         ${CMAKE_CURRENT_BINARY_DIR}/kexiv2_export.h
         DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KEXIV2
-        COMPONENT Devel)
+        COMPONENT   Devel)
 
 add_library(KF5::Kexiv2 ALIAS KF5Kexiv2)
 
-target_include_directories(KF5Kexiv2 INTERFACE "$<INSTALL_INTERFACE:${KF5_INCLUDE_INSTALL_DIR}/KEXIV2;${KF5_INCLUDE_INSTALL_DIR}/KEXIV2/kexiv2>")
+target_include_directories(KF5Kexiv2 INTERFACE 
+                           "$<INSTALL_INTERFACE:${KF5_INCLUDE_INSTALL_DIR}/KEXIV2;${KF5_INCLUDE_INSTALL_DIR}/KEXIV2/kexiv2>"
+)
 
-TARGET_LINK_LIBRARIES(KF5Kexiv2 KF5::KHtml KF5::KDELibs4Support Qt5::Xml ${EXIV2_LIBRARIES})
+TARGET_LINK_LIBRARIES(KF5Kexiv2 KF5::KDELibs4Support Qt5::Xml ${EXIV2_LIBRARIES})
 
 IF( WIN32 )
     TARGET_LINK_LIBRARIES( kexiv2 ${EXPAT_LIBRARIES} )
 ENDIF( WIN32 )
 
-install(TARGETS
-        KF5Kexiv2
-        EXPORT KF5KExiv2Targets ${KF5_INSTALL_TARGETS_DEFAULT_ARGS}
+install(TARGETS KF5Kexiv2
+        EXPORT  KF5KExiv2Targets ${KF5_INSTALL_TARGETS_DEFAULT_ARGS}
 )
 
-
-set_target_properties(KF5Kexiv2 PROPERTIES
-    VERSION ${KEXIV2_VERSION_STRING}
-    SOVERSION ${KEXIV2_SOVERSION}
-    EXPORT_NAME Kexiv2
+set_target_properties(KF5Kexiv2   PROPERTIES
+                      VERSION     ${KEXIV2_VERSION_STRING}
+                      SOVERSION   ${KEXIV2_SOVERSION}
+                      EXPORT_NAME Kexiv2
 )
 
-INSTALL(FILES topicset.iptc-subjectcode.xml DESTINATION ${DATA_INSTALL_DIR}/libkexiv2/data)
-
+INSTALL(FILES       topicset.iptc-subjectcode.xml
+        DESTINATION ${DATA_INSTALL_DIR}/libkexiv2/data)

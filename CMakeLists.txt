@@ -26,7 +26,8 @@ cmake_minimum_required(VERSION 2.8.12)
 
 PROJECT(libkexiv2)
 
-# ECM setup
+############## ECM setup ######################
+
 find_package(ECM 1.1.0 CONFIG REQUIRED)
 set(CMAKE_MODULE_PATH ${libkexiv2_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
 
@@ -43,29 +44,28 @@ include(KDEFrameworkCompilerSettings)
 set(KF5_VERSION "5.0.0")
 set(LIBKEXIV2_LIB_VERSION "2.70.0")
 
-############## Find Packages ##############
+############## Find Packages ###################
+
 set(REQUIRED_QT_VERSION "5.2.0")
 find_package(KF5KDELibs4Support ${KF5_VERSION} CONFIG REQUIRED)
-find_package(KF5KHtml ${KF5_VERSION} CONFIG REQUIRED)
 
 SET(EXIV2_MIN_VERSION "0.24")
 FIND_PACKAGE(Exiv2)
-set_package_properties("Exiv2" PROPERTIES
-        DESCRIPTION  "Required to build libkexiv2."
-        URL "http://www.exiv2.org"
-        TYPE RECOMMENDED
-        PURPOSE "Support for image files")
-
-ecm_setup_version(${LIBKEXIV2_LIB_VERSION}
-    VARIABLE_PREFIX KEXIV2
-    VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/libkexiv2_version.h"
-    PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF5KExiv2ConfigVersion.cmake"
-    SOVERSION 3
+set_package_properties("Exiv2"     PROPERTIES
+                       DESCRIPTION "Required to build libkexiv2."
+                       URL         "http://www.exiv2.org"
+                       TYPE        RECOMMENDED
+                       PURPOSE     "Library to manage image metadata"
 )
 
+ecm_setup_version(${LIBKEXIV2_LIB_VERSION}
+                  VARIABLE_PREFIX      KEXIV2
+                  VERSION_HEADER       "${CMAKE_CURRENT_BINARY_DIR}/libkexiv2_version.h"
+                  PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF5KExiv2ConfigVersion.cmake"
+                  SOVERSION            3
+)
 
-
-############## Targets ##############
+############## Targets #########################
 
 add_definitions(-DTRANSLATION_DOMAIN=\"libkexiv2\")
 
@@ -73,6 +73,7 @@ add_subdirectory(src)
 add_subdirectory(tests)
 
 ############## CMake Config Files ##############
+
 message("${CMAKECONFIG_INSTALL_DIR}")
 set(CMAKECONFIG_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/KF5Kexiv2")
 
@@ -83,23 +84,22 @@ ecm_configure_package_config_file(
 )
 
 install(FILES
-    "${CMAKE_CURRENT_BINARY_DIR}/KF5KExiv2Config.cmake"
-    "${CMAKE_CURRENT_BINARY_DIR}/KF5KExiv2ConfigVersion.cmake"
-    DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
-    COMPONENT Devel
+        "${CMAKE_CURRENT_BINARY_DIR}/KF5KExiv2Config.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/KF5KExiv2ConfigVersion.cmake"
+        DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
+        COMPONENT   Devel
 )
 
-install(EXPORT KF5KExiv2Targets
-    DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
-    FILE KF5KExiv2Targets.cmake
-    NAMESPACE KF5::
+install(EXPORT      KF5KExiv2Targets
+        DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
+        FILE        KF5KExiv2Targets.cmake
+        NAMESPACE   KF5::
 )
 
 install(FILES
-    "${CMAKE_CURRENT_BINARY_DIR}/libkexiv2_version.h"
-    DESTINATION "${KF5_INCLUDE_INSTALL_DIR}"
-    COMPONENT Devel
+        "${CMAKE_CURRENT_BINARY_DIR}/libkexiv2_version.h"
+        DESTINATION "${KF5_INCLUDE_INSTALL_DIR}"
+        COMPONENT   Devel
 )
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
-
