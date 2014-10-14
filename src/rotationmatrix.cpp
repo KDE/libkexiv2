@@ -7,7 +7,7 @@
  * @date   2009-08-03
  * @brief  Tools for combining rotation operations
  *
- * @author Copyright (C) 2006-2012 by Gilles Caulier
+ * @author Copyright (C) 2006-2014 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  * @author Copyright (C) 2004-2012 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
@@ -27,12 +27,9 @@
 
 #include "rotationmatrix.h"
 
-// KDE includes
-
-
 // local includes
 
-#include "version.h"
+//#include "libkexiv2_version.h"
 
 namespace KExiv2Iface
 {

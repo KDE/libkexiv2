@@ -30,7 +30,7 @@
 
 // Local includes
 
-#include "version.h"
+#include "libkexiv2_version.h"
 
 namespace KExiv2Iface
 {
@@ -175,7 +175,7 @@ QString KExiv2::Exiv2Version()
 
 QString KExiv2::version()
 {
-    return QString(kexiv2_version);
+    return QString(KEXIV2_VERSION_STRING);
 }
 
 QString KExiv2::sidecarFilePathForFile(const QString& path)

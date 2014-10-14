@@ -25,6 +25,7 @@
 kde_enable_exceptions()
 
 INCLUDE_DIRECTORIES(${EXIV2_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}/..)
 
 ADD_DEFINITIONS(${EXIV2_DEFINITIONS})
 
@@ -33,8 +34,6 @@ remove_definitions(-DQT_NO_CAST_FROM_ASCII -DQT_NO_CAST_TO_ASCII)
 IF( WIN32 )
     ADD_DEFINITIONS( -DEXV_HAVE_DLL )
 ENDIF( WIN32 )
-
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/version.h)
 
 # This was used to enable catching of exceptions thrown by libexiv2.
 # We use now #pragma GCC visibility push(default) around the headers
@@ -57,7 +56,7 @@ SET(kexiv2_LIB_SRCS kexiv2.cpp
    )
 
 ecm_generate_headers(kexiv2_CamelCase_HEADERS
-                     
+
                      HEADER_NAMES
                      AltLangStrEdit
                      CountrySelector
@@ -68,7 +67,7 @@ ecm_generate_headers(kexiv2_CamelCase_HEADERS
                      RotationMatrix
                      #SubjectData
                      SubjectWidget
-                     
+
                      PREFIX           KEXIV2
                      REQUIRED_HEADERS kexiv2_HEADERS
 )
