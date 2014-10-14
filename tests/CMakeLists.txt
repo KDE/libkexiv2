@@ -22,32 +22,32 @@
 #
 # ============================================================
 
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../libkexiv2)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../libkexiv2)
 
-SET(setiptcpreview_SRCS setiptcpreview.cpp)
+set(setiptcpreview_SRCS setiptcpreview.cpp)
 add_executable(setiptcpreview ${setiptcpreview_SRCS})
-TARGET_LINK_LIBRARIES(setiptcpreview KF5Kexiv2)
+target_link_libraries(setiptcpreview KF5Kexiv2)
 
-SET(loadfromba_SRCS loadfromba.cpp)
+set(loadfromba_SRCS loadfromba.cpp)
 add_executable(loadfromba ${loadfromba_SRCS})
-TARGET_LINK_LIBRARIES(loadfromba KF5Kexiv2)
+target_link_libraries(loadfromba KF5Kexiv2)
 
-SET(erasetag_SRCS erasetag.cpp)
+set(erasetag_SRCS erasetag.cpp)
 add_executable(erasetag ${erasetag_SRCS})
-TARGET_LINK_LIBRARIES(erasetag KF5Kexiv2)
+target_link_libraries(erasetag KF5Kexiv2)
 
-SET(printtagslist_SRCS printtagslist.cpp)
+set(printtagslist_SRCS printtagslist.cpp)
 add_executable(printtagslist ${printtagslist_SRCS})
-TARGET_LINK_LIBRARIES(printtagslist KF5Kexiv2)
+target_link_libraries(printtagslist KF5Kexiv2)
 
-SET(usexmpsidecar_SRCS usexmpsidecar.cpp)
+set(usexmpsidecar_SRCS usexmpsidecar.cpp)
 add_executable(usexmpsidecar ${usexmpsidecar_SRCS})
-TARGET_LINK_LIBRARIES(usexmpsidecar KF5Kexiv2)
+target_link_libraries(usexmpsidecar KF5Kexiv2)
 
-SET(readimagewritexmpsidecar_SRCS readimagewritexmpsidecar.cpp)
+set(readimagewritexmpsidecar_SRCS readimagewritexmpsidecar.cpp)
 add_executable(readimagewritexmpsidecar ${readimagewritexmpsidecar_SRCS})
-TARGET_LINK_LIBRARIES(readimagewritexmpsidecar KF5Kexiv2)
+target_link_libraries(readimagewritexmpsidecar KF5Kexiv2)
 
-SET(setxmpface_SRCS setxmpface.cpp)
+set(setxmpface_SRCS setxmpface.cpp)
 add_executable(setxmpface ${setxmpface_SRCS})
-TARGET_LINK_LIBRARIES(setxmpface KF5Kexiv2)
+target_link_libraries(setxmpface KF5Kexiv2)

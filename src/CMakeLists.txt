@@ -24,22 +24,22 @@
 
 kde_enable_exceptions()
 
-INCLUDE_DIRECTORIES(${EXIV2_INCLUDE_DIR})
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}/..)
+include_directories(${EXIV2_INCLUDE_DIR})
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/..)
 
-ADD_DEFINITIONS(${EXIV2_DEFINITIONS})
+add_definitions(${EXIV2_DEFINITIONS})
 
 remove_definitions(-DQT_NO_CAST_FROM_ASCII -DQT_NO_CAST_TO_ASCII)
 
-IF( WIN32 )
-    ADD_DEFINITIONS( -DEXV_HAVE_DLL )
-ENDIF( WIN32 )
+if( WIN32 )
+    add_definitions( -DEXV_HAVE_DLL )
+endif()
 
 # This was used to enable catching of exceptions thrown by libexiv2.
 # We use now #pragma GCC visibility push(default) around the headers
 #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=default")
 
-SET(kexiv2_LIB_SRCS kexiv2.cpp
+set(kexiv2_LIB_SRCS kexiv2.cpp
                     kexiv2_p.cpp
                     kexiv2data.cpp
                     kexiv2image.cpp
@@ -54,7 +54,7 @@ SET(kexiv2_LIB_SRCS kexiv2.cpp
                     countryselector.cpp
                     subjectwidget.cpp
                     rotationmatrix.cpp
-   )
+)
 
 ecm_generate_headers(kexiv2_CamelCase_HEADERS
 
@@ -66,7 +66,6 @@ ecm_generate_headers(kexiv2_CamelCase_HEADERS
                      KExiv2Previews
                      MsgTextEdit
                      RotationMatrix
-                     #SubjectData
                      SubjectWidget
 
                      PREFIX           KEXIV2
@@ -96,11 +95,11 @@ target_include_directories(KF5Kexiv2 INTERFACE
                            "$<INSTALL_INTERFACE:${KF5_INCLUDE_INSTALL_DIR}/KEXIV2;${KF5_INCLUDE_INSTALL_DIR}/KEXIV2/kexiv2>"
 )
 
-TARGET_LINK_LIBRARIES(KF5Kexiv2 KF5::KDELibs4Support Qt5::Xml ${EXIV2_LIBRARIES})
+target_link_libraries(KF5Kexiv2 KF5::KDELibs4Support Qt5::Xml ${EXIV2_LIBRARIES})
 
-IF( WIN32 )
-    TARGET_LINK_LIBRARIES( kexiv2 ${EXPAT_LIBRARIES} )
-ENDIF( WIN32 )
+if( WIN32 )
+    target_link_libraries( kexiv2 ${EXPAT_LIBRARIES} )
+endif()
 
 install(TARGETS KF5Kexiv2
         EXPORT  KF5KExiv2Targets ${KF5_INSTALL_TARGETS_DEFAULT_ARGS}
@@ -112,5 +111,5 @@ set_target_properties(KF5Kexiv2   PROPERTIES
                       EXPORT_NAME Kexiv2
 )
 
-INSTALL(FILES       topicset.iptc-subjectcode.xml
+install(FILES       topicset.iptc-subjectcode.xml
         DESTINATION ${DATA_INSTALL_DIR}/libkexiv2/data)
