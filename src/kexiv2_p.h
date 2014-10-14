@@ -48,12 +48,12 @@
 #include <QLatin1String>
 #include <QFileInfo>
 #include <QSharedData>
+#include <QDebug>
 
 // KDE includes
 
 #include <kencodingdetector.h>
 #include <kstringhandler.h>
-#include <QDebug>
 
 // Exiv2 includes -------------------------------------------------------
 
@@ -139,8 +139,8 @@ public:
 
     void copyPrivateData(const Private* const other);
 
-    bool saveToXMPSidecar(const QFileInfo& finfo)    const;
-    bool saveToFile(const QFileInfo& finfo)          const;
+    bool saveToXMPSidecar(const QFileInfo& finfo)                            const;
+    bool saveToFile(const QFileInfo& finfo)                                  const;
     bool saveOperations(const QFileInfo& finfo, Exiv2::Image::AutoPtr image) const;
 
     /** Wrapper method to convert a Comments content to a QString.
@@ -203,7 +203,10 @@ public:
     QSharedDataPointer<KExiv2Data::Private> data;
 };
 
+// --------------------------------------------------------------------------------------------
+
 template <class Data, class Key, class KeyString, class KeyStringList = QList<KeyString> >
+
 class MergeHelper
 {
 public:
@@ -248,11 +251,14 @@ public:
         {
             Key key(keyString.latin1());
             typename Data::const_iterator it = src.findKey(key);
+
             if (it == src.end())
             {
                 continue;
             }
+
             typename Data::iterator destIt = dest.findKey(key);
+
             if (destIt == dest.end())
             {
                 dest.add(*it);
@@ -314,7 +320,6 @@ class XmpMergeHelper : public MergeHelper<Exiv2::XmpData, Exiv2::XmpKey, QLatin1
 {
 };
 #endif
-
 
 }  // NameSpace KExiv2Iface
 

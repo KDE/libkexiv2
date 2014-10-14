@@ -26,7 +26,7 @@
  * ============================================================ */
 
 #include "kexiv2_p.h"
-#include <QTextCodec>
+
 // C ANSI includes
 
 extern "C"
@@ -34,6 +34,10 @@ extern "C"
 #include <sys/stat.h>
 #include <utime.h>
 }
+
+// Qt includes
+
+#include <QTextCodec>
 
 namespace KExiv2Iface
 {
@@ -340,7 +344,7 @@ void KExiv2::Private::printExiv2ExceptionError(const QString& msg, Exiv2::Error&
 {
     std::string s(e.what());
     qCritical() << msg.toAscii().constData() << " (Error #"
-             << e.code() << ": " << s.c_str();
+                << e.code() << ": " << s.c_str();
 }
 
 void KExiv2::Private::printExiv2MessageHandler(int lvl, const char* msg)
@@ -461,7 +465,7 @@ void KExiv2::Private::loadSidecarData(Exiv2::Image::AutoPtr xmpsidecar)
     // If a field is removed from the sidecar, we must ignore (older) data for this field in the file.
 
     // First: Ignore file XMP, only use sidecar XMP
-    xmpMetadata() = xmpsidecar->xmpData();
+    xmpMetadata()     = xmpsidecar->xmpData();
     loadedFromSidecar = true;
 
     // EXIF

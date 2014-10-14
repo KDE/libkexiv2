@@ -347,6 +347,7 @@ bool KExiv2::load(const QString& filePath) const
             QFileInfo xmpSidecarFileInfo(xmpSidecarPath);
 
             Exiv2::Image::AutoPtr xmpsidecar;
+
             if (xmpSidecarFileInfo.exists() && xmpSidecarFileInfo.isReadable())
             {
                 // Read sidecar data
@@ -391,6 +392,7 @@ bool KExiv2::save(const QString& imageFilePath) const
                                              // regularFile to the pointed to
                                              // file if so.
     QFileInfo givenFileInfo(imageFilePath);
+
     if (givenFileInfo.isSymLink())
     {
         qDebug() << "filePath" << imageFilePath << "is a symlink."
@@ -402,6 +404,7 @@ bool KExiv2::save(const QString& imageFilePath) const
     // NOTE: see B.K.O #137770 & #138540 : never touch the file if is read only.
     QFileInfo finfo(regularFilePath);
     QFileInfo dinfo(finfo.path());
+
     if (!dinfo.isWritable())
     {
         qDebug() << "Dir '" << dinfo.filePath() << "' is read-only. Metadata not saved.";
@@ -438,6 +441,7 @@ bool KExiv2::save(const QString& imageFilePath) const
     {
         qDebug() << "Will write Metadata to file" << finfo.fileName();
         writtenToFile = d->saveToFile(finfo);
+
         if (writeToFile)
         {
             qDebug() << "Metadata for file" << finfo.fileName() << "written to file.";
@@ -448,6 +452,7 @@ bool KExiv2::save(const QString& imageFilePath) const
     {
         qDebug() << "Will write XMP sidecar for file" << givenFileInfo.fileName();
         writtenToSidecar = d->saveToXMPSidecar(imageFilePath);
+
         if (writtenToSidecar)
         {
             qDebug() << "Metadata for file '" << givenFileInfo.fileName() << "' written to XMP sidecar.";
