@@ -22,26 +22,15 @@
 #
 # ============================================================
 
-cmake_minimum_required(VERSION 2.8.12)
+set(CMAKE_MIN_VERSION   "2.8.12")
+set(ECM_MIN_VERSION     "1.1.0")
+set(KF5_VERSION         "5.0.0")
+set(REQUIRED_QT_VERSION "5.2.0")
+set(EXIV2_MIN_VERSION   "0.24")
+
+cmake_minimum_required(VERSION ${CMAKE_MIN_VERSION})
 
 project(libkexiv2)
-
-############## ECM setup ######################
-
-find_package(ECM 1.1.0 CONFIG REQUIRED)
-set(CMAKE_MODULE_PATH ${libkexiv2_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
-
-include(GenerateExportHeader)
-include(ECMGenerateHeaders)
-include(ECMGeneratePriFile)
-include(ECMPackageConfigHelpers)
-include(ECMSetupVersion)
-include(FeatureSummary)
-include(KDEInstallDirs)
-include(KDECMakeSettings)
-include(KDEFrameworkCompilerSettings)
-
-set(KF5_VERSION "5.0.0")
 
 # =======================================================
 # Information to update before to release this library.
@@ -88,12 +77,28 @@ set(KEXIV2_LIB_SO_AGE_VERSION "0")
 set(LIBKEXIV2_LIB_VERSION "${KEXIV2_LIB_MAJOR_VERSION}.${KEXIV2_LIB_MINOR_VERSION}.${KEXIV2_LIB_PATCH_VERSION}")
 set(LIBKEXIV2_SO_VERSION  "${KEXIV2_LIB_SO_CUR_VERSION}.${KEXIV2_LIB_SO_REV_VERSION}.${KEXIV2_LIB_SO_AGE_VERSION}")
 
+############## ECM setup ######################
+
+find_package(ECM ${ECM_MIN_VERSION} CONFIG REQUIRED)
+set(CMAKE_MODULE_PATH ${libkexiv2_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
+
+include(ECMGenerateHeaders)
+include(ECMGeneratePriFile)
+include(ECMPackageConfigHelpers)
+include(ECMSetupVersion)
+include(KDEInstallDirs)
+include(KDECMakeSettings)
+include(KDEFrameworkCompilerSettings)
+include(GenerateExportHeader)
+include(FeatureSummary)
+
 ############## Find Packages ###################
 
-set(REQUIRED_QT_VERSION "5.2.0")
-find_package(KF5KDELibs4Support ${KF5_VERSION} CONFIG REQUIRED)
+find_package(KF5KDELibs4Support     ${KF5_VERSION} CONFIG REQUIRED)
+# find_package(KF5CoreAddons ${KF5_VERSION} CONFIG REQUIRED)
+# find_package(KF5Config ${KF5_VERSION} CONFIG REQUIRED)
+# find_package(KF5I18n ${KF5_VERSION} CONFIG REQUIRED)
 
-set(EXIV2_MIN_VERSION "0.24")
 find_package(Exiv2)
 set_package_properties("Exiv2"     PROPERTIES
                        DESCRIPTION "Required to build libkexiv2."
