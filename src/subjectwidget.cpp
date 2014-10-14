@@ -49,7 +49,7 @@
 #include <kdialog.h>
 #include <kglobal.h>
 #include <kiconloader.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kstandarddirs.h>
 
 namespace KExiv2Iface
