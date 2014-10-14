@@ -35,28 +35,6 @@
 namespace KExiv2Iface
 {
 
-KExiv2Data::KExiv2Data()
-    : d(0)
-{
-}
-
-KExiv2Data::KExiv2Data(const KExiv2Data& other)
-{
-    d = other.d;
-}
-
-KExiv2Data::~KExiv2Data()
-{
-}
-
-KExiv2Data& KExiv2Data::operator=(const KExiv2Data& other)
-{
-    d = other.d;
-    return *this;
-}
-
-// -------------------------------------------------------------------------------------------
-
 KExiv2::KExiv2()
     : d(new Private)
 {

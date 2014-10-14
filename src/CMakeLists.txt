@@ -41,6 +41,7 @@ ENDIF( WIN32 )
 
 SET(kexiv2_LIB_SRCS kexiv2.cpp
                     kexiv2_p.cpp
+                    kexiv2data.cpp
                     kexiv2image.cpp
                     kexiv2comments.cpp
                     kexiv2exif.cpp

@@ -25,42 +25,33 @@
  *
  * ============================================================ */
 
-#ifndef KEXIV2DATA_H
-#define KEXIV2DATA_H
-
-// QT includes
-
-#include <QtCore/QSharedDataPointer>
-
 // Local includes
 
-#include "kexiv2_export.h"
+#include "kexiv2data.h"
+#include "kexiv2.h"
+#include "kexiv2_p.h"
 
 namespace KExiv2Iface
 {
 
-class KEXIV2_EXPORT KExiv2Data
+KExiv2Data::KExiv2Data()
+    : d(0)
 {
-public:
+}
 
-    KExiv2Data();
-    KExiv2Data(const KExiv2Data&);
-    ~KExiv2Data();
+KExiv2Data::KExiv2Data(const KExiv2Data& other)
+{
+    d = other.d;
+}
 
-    KExiv2Data& operator=(const KExiv2Data&);
+KExiv2Data::~KExiv2Data()
+{
+}
 
-public:
-
-    // Declared as public due to use in KExiv2Priv class
-    class Private;
-
-private:
-
-    QSharedDataPointer<Private> d;
-
-    friend class KExiv2;
-};
+KExiv2Data& KExiv2Data::operator=(const KExiv2Data& other)
+{
+    d = other.d;
+    return *this;
+}
 
 }  // NameSpace KExiv2Iface
-
-#endif /* KEXIV2DATA_H */
