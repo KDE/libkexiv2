@@ -33,9 +33,13 @@
 
 #include <cctype>
 
-// KDE includes
+// Qt includes
+
 #include <QTextCodec>
 #include <QBuffer>
+
+// KDE includes
+
 #include <KLocalizedString>
 
 namespace KExiv2Iface
@@ -56,7 +60,7 @@ bool KExiv2::canWriteExif(const QString& filePath)
     {
         std::string s(e.what());
         qCritical() << "Cannot check Exif access mode using Exiv2 (Error #"
-                 << e.code() << ": " << s.c_str() << ")";
+                    << e.code() << ": " << s.c_str() << ")";
     }
     catch(...)
     {
@@ -101,12 +105,13 @@ QByteArray KExiv2::getExifEncoded(bool addExifHeader) const
             Exiv2::Blob blob;
             Exiv2::ExifParser::encode(blob, Exiv2::bigEndian, exif);
             QByteArray ba((const char*)&blob[0], blob.size());
+
             if (addExifHeader)
             {
                 const uchar ExifHeader[] = {0x45, 0x78, 0x69, 0x66, 0x00, 0x00};
                 data.resize(ba.size() + sizeof(ExifHeader));
                 memcpy(data.data(), ExifHeader, sizeof(ExifHeader));
-                memcpy(data.data()+sizeof(ExifHeader), ba.data(), ba.size());
+                memcpy(data.data() + sizeof(ExifHeader), ba.data(), ba.size());
             }
             else
             {

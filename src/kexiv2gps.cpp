@@ -30,12 +30,14 @@
 #include "kexiv2.h"
 #include "kexiv2_p.h"
 
+// C ANSI includes
+
+#include <math.h>
+
 // C++ includes
 
 #include <climits>
 #include <cmath>
-
-#include <math.h>
 
 namespace KExiv2Iface
 {

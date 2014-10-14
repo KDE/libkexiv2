@@ -28,7 +28,10 @@
 #include "kexiv2.h"
 #include "kexiv2_p.h"
 
+// Qt includes
+
 #include <QBuffer>
+
 // Local includes
 
 #include "rotationmatrix.h"
@@ -55,6 +58,7 @@ bool KExiv2::setImageProgramId(const QString& program, const QString& version) c
             Exiv2::ExifData exifData(d->exifMetadata());
             Exiv2::ExifKey key("Exif.Image.Software");
             Exiv2::ExifData::iterator it = exifData.findKey(key);
+
             if (it == exifData.end())
                 d->exifMetadata()["Exif.Image.Software"] = std::string(software.toAscii().constData());
         }
@@ -69,6 +73,7 @@ bool KExiv2::setImageProgramId(const QString& program, const QString& version) c
             Exiv2::XmpData xmpData(d->xmpMetadata());
             Exiv2::XmpKey key("Xmp.xmp.CreatorTool");
             Exiv2::XmpData::iterator it = xmpData.findKey(key);
+
             if (it == xmpData.end())
                 setXmpTagString("Xmp.xmp.CreatorTool", software, false);
         }
@@ -106,11 +111,13 @@ QSize KExiv2::getImageDimensions() const
         Exiv2::ExifData exifData(d->exifMetadata());
         Exiv2::ExifKey key("Exif.Photo.PixelXDimension");
         Exiv2::ExifData::iterator it = exifData.findKey(key);
+
         if (it != exifData.end() && it->count())
             width = it->toLong();
 
         Exiv2::ExifKey key2("Exif.Photo.PixelYDimension");
         Exiv2::ExifData::iterator it2 = exifData.findKey(key2);
+
         if (it2 != exifData.end() && it2->count())
             height = it2->toLong();
 
@@ -124,11 +131,13 @@ QSize KExiv2::getImageDimensions() const
 
         Exiv2::ExifKey key3("Exif.Image.ImageWidth");
         Exiv2::ExifData::iterator it3 = exifData.findKey(key3);
+
         if (it3 != exifData.end() && it3->count())
             width = it3->toLong();
 
         Exiv2::ExifKey key4("Exif.Image.ImageLength");
         Exiv2::ExifData::iterator it4 = exifData.findKey(key4);
+
         if (it4 != exifData.end() && it4->count())
             height = it4->toLong();
 
@@ -145,10 +154,12 @@ QSize KExiv2::getImageDimensions() const
         bool hOk = false;
 
         QString str = getXmpTagString("Xmp.tiff.ImageWidth");
+
         if (!str.isEmpty())
             width = str.toInt(&wOk);
 
         str = getXmpTagString("Xmp.tiff.ImageLength");
+
         if (!str.isEmpty())
             height = str.toInt(&hOk);
 
@@ -163,10 +174,12 @@ QSize KExiv2::getImageDimensions() const
         hOk    = false;
 
         str = getXmpTagString("Xmp.exif.PixelXDimension");
+
         if (!str.isEmpty())
             width = str.toInt(&wOk);
 
         str = getXmpTagString("Xmp.exif.PixelYDimension");
+
         if (!str.isEmpty())
             height = str.toInt(&hOk);
 
@@ -243,9 +256,11 @@ KExiv2::ImageOrientation KExiv2::getImageOrientation() const
 
         bool ok = false;
         QString str = getXmpTagString("Xmp.tiff.Orientation");
+
         if (!str.isEmpty())
         {
             orientation = str.toLong(&ok);
+
             if (ok)
             {
                 qDebug() << "Orientation => Xmp.tiff.Orientation => " << (int)orientation;
@@ -267,6 +282,7 @@ KExiv2::ImageOrientation KExiv2::getImageOrientation() const
         {
             orientation = it->toLong();
             qDebug() << "Orientation => Exif.MinoltaCs7D.Rotation => " << (int)orientation;
+
             switch(orientation)
             {
                 case 76:
@@ -276,6 +292,7 @@ KExiv2::ImageOrientation KExiv2::getImageOrientation() const
                     imageOrient = ORIENTATION_ROT_270;
                     break;
             }
+
             return imageOrient;
         }
 
@@ -286,6 +303,7 @@ KExiv2::ImageOrientation KExiv2::getImageOrientation() const
         {
             orientation = it->toLong();
             qDebug() << "Orientation => Exif.MinoltaCs5D.Rotation => " << (int)orientation;
+
             switch(orientation)
             {
                 case 76:
@@ -295,6 +313,7 @@ KExiv2::ImageOrientation KExiv2::getImageOrientation() const
                     imageOrient = ORIENTATION_ROT_270;
                     break;
             }
+
             return imageOrient;
         }
 
@@ -358,6 +377,7 @@ bool KExiv2::setImageOrientation(ImageOrientation orientation, bool setProgramNa
 
         Exiv2::ExifKey minoltaKey1("Exif.MinoltaCs7D.Rotation");
         it = d->exifMetadata().findKey(minoltaKey1);
+
         if (it != d->exifMetadata().end())
         {
             d->exifMetadata().erase(it);
@@ -366,6 +386,7 @@ bool KExiv2::setImageOrientation(ImageOrientation orientation, bool setProgramNa
 
         Exiv2::ExifKey minoltaKey2("Exif.MinoltaCs5D.Rotation");
         it = d->exifMetadata().findKey(minoltaKey2);
+
         if (it != d->exifMetadata().end())
         {
             d->exifMetadata().erase(it);
@@ -376,6 +397,7 @@ bool KExiv2::setImageOrientation(ImageOrientation orientation, bool setProgramNa
 
         Exiv2::ExifKey thumbKey("Exif.Thumbnail.Orientation");
         it = d->exifMetadata().findKey(thumbKey);
+
         if (it != d->exifMetadata().end() && it->count())
         {
             RotationMatrix operation((KExiv2Iface::KExiv2::ImageOrientation)it->toLong());
@@ -402,6 +424,7 @@ KExiv2::ImageColorWorkSpace KExiv2::getImageColorWorkSpace() const
     // Check Exif values.
 
     long exifColorSpace = -1;
+
     if (!getExifTagLong("Exif.Photo.ColorSpace", exifColorSpace))
     {
 #ifdef _XMP_SUPPORT_
@@ -426,6 +449,7 @@ KExiv2::ImageColorWorkSpace KExiv2::getImageColorWorkSpace() const
             // A lot of cameras set the Exif.Iop.InteroperabilityIndex,
             // as documented for ExifTool
             QString interopIndex = getExifTagString("Exif.Iop.InteroperabilityIndex");
+
             if (!interopIndex.isNull())
             {
                 if (interopIndex == "R03")
@@ -441,6 +465,7 @@ KExiv2::ImageColorWorkSpace KExiv2::getImageColorWorkSpace() const
         // then add additional information into the makernotes.
         // Exif.Nikon3.ColorSpace: 1 => sRGB, 2 => AdobeRGB
         long nikonColorSpace;
+
         if (getExifTagLong("Exif.Nikon3.ColorSpace", nikonColorSpace))
         {
             if (nikonColorSpace == 1)
@@ -770,6 +795,7 @@ bool KExiv2::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitiz
         const std::string &exifdatetime(dateTime.toString(QString("yyyy:MM:dd hh:mm:ss")).toAscii().constData());
         d->exifMetadata()["Exif.Image.DateTime"]         = exifdatetime;
         d->exifMetadata()["Exif.Photo.DateTimeOriginal"] = exifdatetime;
+
         if(setDateTimeDigitized)
             d->exifMetadata()["Exif.Photo.DateTimeDigitized"] = exifdatetime;
 
@@ -787,6 +813,7 @@ bool KExiv2::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitiz
         d->xmpMetadata().add(Exiv2::XmpKey("Xmp.xmp.CreateDate"),        xmpTxtVal.get());
         d->xmpMetadata().add(Exiv2::XmpKey("Xmp.xmp.MetadataDate"),      xmpTxtVal.get());
         d->xmpMetadata().add(Exiv2::XmpKey("Xmp.xmp.ModifyDate"),        xmpTxtVal.get());
+
         if(setDateTimeDigitized)
             d->xmpMetadata().add(Exiv2::XmpKey("Xmp.exif.DateTimeDigitized"), xmpTxtVal.get());
 
@@ -802,6 +829,7 @@ bool KExiv2::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitiz
         const std::string &iptctime(dateTime.time().toString(Qt::ISODate).toAscii().constData());
         d->iptcMetadata()["Iptc.Application2.DateCreated"] = iptcdate;
         d->iptcMetadata()["Iptc.Application2.TimeCreated"] = iptctime;
+
         if(setDateTimeDigitized)
         {
             d->iptcMetadata()["Iptc.Application2.DigitizationDate"] = iptcdate;
