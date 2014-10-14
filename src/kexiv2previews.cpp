@@ -51,16 +51,17 @@ public:
 
     void load(Exiv2::Image::AutoPtr image_)
     {
-        image = image_;
+        image                              = image_;
 
         image->readMetadata();
 
-        manager = new Exiv2::PreviewManager(*image);
+        manager                            = new Exiv2::PreviewManager(*image);
         Exiv2::PreviewPropertiesList props = manager->getPreviewProperties();
 
         // reverse order of list, which is smallest-first
         Exiv2::PreviewPropertiesList::reverse_iterator it;
-        for (it = props.rbegin(); it != props.rend(); ++it)
+
+        for (it = props.rbegin() ; it != props.rend() ; ++it)
         {
             properties << *it;
         }
@@ -123,6 +124,7 @@ QSize KExiv2Previews::originalSize() const
 {
     if (d->image.get())
         return QSize(d->image->pixelWidth(), d->image->pixelHeight());
+
     return QSize();
 }
 
@@ -130,6 +132,7 @@ QString KExiv2Previews::originalMimeType() const
 {
     if (d->image.get())
         return d->image->mimeType().c_str();
+
     return QString();
 }
 
@@ -140,31 +143,46 @@ int KExiv2Previews::count()
 
 int KExiv2Previews::dataSize(int index)
 {
+    if (index < 0 || index >= size()) return 0;
+
     return d->properties[index].size_;
 }
 
 int KExiv2Previews::width(int index)
 {
+    if (index < 0 || index >= size()) return 0;
+
     return d->properties[index].width_;
 }
 
 int KExiv2Previews::height(int index)
 {
+    if (index < 0 || index >= size()) return 0;
+
     return d->properties[index].height_;
 }
 
 QString KExiv2Previews::mimeType(int index)
 {
+    if (index < 0 || index >= size()) return 0;
+
     return QString::fromLatin1(d->properties[index].mimeType_.c_str());
 }
 
 QString KExiv2Previews::fileExtension(int index)
 {
+    if (index < 0 || index >= size()) return 0;
+
     return QString::fromLatin1(d->properties[index].extension_.c_str());
 }
 
 QByteArray KExiv2Previews::data(int index)
 {
+    if (index < 0 || index >= size()) return QByteArray();
+
+    qDebug() << "index: "         << index;
+    qDebug() << "d->properties: " << count();
+
     try
     {
         Exiv2::PreviewImage image = d->manager->getPreviewImage(d->properties[index]);
@@ -185,7 +203,8 @@ QByteArray KExiv2Previews::data(int index)
 QImage KExiv2Previews::image(int index)
 {
     QByteArray previewData = data(index);
-    QImage image;
+    QImage     image;
+
     if (!image.loadFromData(previewData))
         return QImage();
 
