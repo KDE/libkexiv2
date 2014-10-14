@@ -7,7 +7,7 @@
  * @date   2009-07-07
  * @brief  country selector combo-box.
  *
- * @author Copyright (C) 2009-2012 by Gilles Caulier
+ * @author Copyright (C) 2009-2014 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
@@ -28,11 +28,11 @@
 // Qt includes
 
 #include <QMap>
+#include <QDebug>
 
 // KDE includes
 
-#include <KLocalizedString>
-#include <QDebug>
+#include <klocalizedstring.h>
 
 namespace KExiv2Iface
 {
@@ -311,8 +311,8 @@ public:
     CountryCodeMap                 countryCodeMap;
 };
 
-CountrySelector::CountrySelector(QWidget* parent)
-               : KComboBox(parent), d(new Private)
+CountrySelector::CountrySelector(QWidget* const parent)
+    : KComboBox(parent), d(new Private)
 {
     for (Private::CountryCodeMap::Iterator it = d->countryCodeMap.begin();
          it != d->countryCodeMap.end(); ++it)
@@ -336,6 +336,7 @@ void CountrySelector::setCountry(const QString& countryCode)
     // NOTE: if countryCode is empty or do not matches code map, unknow is selected from the list.
 
     int id = count()-1;
+
     for (int i = 0 ; i < d->countryCodeMap.count() ; i++)
     {
         if (itemText(i).left(3) == countryCode)
@@ -344,12 +345,13 @@ void CountrySelector::setCountry(const QString& countryCode)
             break;
         }
     }
+
     setCurrentIndex(id);
 
     qDebug() << count() << " :: " << id;
 }
 
-bool CountrySelector::country(QString& countryCode, QString& countryName)
+bool CountrySelector::country(QString& countryCode, QString& countryName) const
 {
     // Unknow is selected ?
     if (currentIndex() == count()-1)
