@@ -123,7 +123,7 @@ QByteArray KExiv2::getExifEncoded(bool addExifHeader) const
     catch( Exiv2::Error& e )
     {
         if (!d->filePath.isEmpty())
-            qDebug() << "From file " << d->filePath.toAscii().constData();
+            qDebug() << "From file " << d->filePath.toLatin1().constData();
 
         d->printExiv2ExceptionError("Cannot get Exif data using Exiv2 ", e);
     }
@@ -148,7 +148,7 @@ bool KExiv2::setExif(const QByteArray& data) const
     catch( Exiv2::Error& e )
     {
         if (!d->filePath.isEmpty())
-            qCritical() << "From file " << d->filePath.toAscii().constData();
+            qCritical() << "From file " << d->filePath.toLatin1().constData();
 
         d->printExiv2ExceptionError("Cannot set Exif data using Exiv2 ", e);
     }
@@ -175,7 +175,7 @@ KExiv2::MetaDataMap KExiv2::getExifTagsDataList(const QStringList& exifKeysFilte
 
         for (Exiv2::ExifData::iterator md = exifData.begin(); md != exifData.end(); ++md)
         {
-            QString key = QString::fromAscii(md->key().c_str());
+            QString key = QString::fromLatin1(md->key().c_str());
 
             // Decode the tag value with a user friendly output.
             QString tagValue;
@@ -569,7 +569,7 @@ bool KExiv2::setExifTagVariant(const char* exifTagName, const QVariant& val,
 
             try
             {
-                const std::string &exifdatetime(dateTime.toString(QString("yyyy:MM:dd hh:mm:ss")).toAscii().constData());
+                const std::string &exifdatetime(dateTime.toString(QString("yyyy:MM:dd hh:mm:ss")).toLatin1().constData());
                 d->exifMetadata()[exifTagName] = exifdatetime;
             }
             catch( Exiv2::Error &e )
@@ -647,14 +647,14 @@ QString KExiv2::createExifUserStringFromValue(const char* exifTagName, const QVa
                 if(!dateTime.isValid())
                     break;
 
-                const std::string &exifdatetime(dateTime.toString(QString("yyyy:MM:dd hh:mm:ss")).toAscii().constData());
+                const std::string &exifdatetime(dateTime.toString(QString("yyyy:MM:dd hh:mm:ss")).toLatin1().constData());
                 datum = exifdatetime;
                 break;
             }
 
             case QVariant::String:
             case QVariant::Char:
-                datum = (std::string)val.toString().toAscii().constData();
+                datum = (std::string)val.toString().toLatin1().constData();
                 break;
             default:
                 break;
@@ -853,7 +853,7 @@ QString KExiv2::getExifTagString(const char* exifTagName, bool escapeCR) const
     catch( Exiv2::Error& e )
     {
         d->printExiv2ExceptionError(QString("Cannot find Exif key '%1' into image using Exiv2 ")
-                                 .arg(exifTagName), e);
+                                    .arg(exifTagName), e);
     }
     catch(...)
     {
@@ -870,7 +870,7 @@ bool KExiv2::setExifTagString(const char* exifTagName, const QString& value, boo
 
     try
     {
-        d->exifMetadata()[exifTagName] = std::string(value.toAscii().constData());
+        d->exifMetadata()[exifTagName] = std::string(value.toLatin1().constData());
         return true;
     }
     catch( Exiv2::Error& e )

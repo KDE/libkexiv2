@@ -29,7 +29,7 @@
 // Qt includes
 
 #include <QtCore/QString>
-#include <QWidget>
+#include <QtWidgets/QWidget>
 
 // KDE includes
 

@@ -52,7 +52,6 @@
 
 // KDE includes
 
-#include <kencodingdetector.h>
 #include <kstringhandler.h>
 
 // Exiv2 includes -------------------------------------------------------

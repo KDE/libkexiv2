@@ -45,7 +45,7 @@
 #include <QtCore/QVariant>
 #include <QtCore/QRegExp>
 #include <QtCore/QUrl>
-#include <QImage>
+#include <QtGui/QImage>
 
 // Local includes
 

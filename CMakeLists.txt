@@ -60,7 +60,7 @@ project(libkexiv2)
 # 2.2.0 => 11.0.0    (Released with KDE 4.8.1) - Remove deprecated methods
 # 2.3.0 => 11.1.0    (Released with KDE 4.8.2) - Add new static methods about XMP sidecar file management.
 # 2.3.1 => 11.2.0                              - Add new method to set specific XMP tag string
-# 2.3.2 => 11.3.0                              - Add new method to access on text edit widget from AltLangStrEdit
+# 2.4.0 => 11.3.0                              - Add new method to access on text edit widget from AltLangStrEdit
 # 3.0.0 => 15.0.0    (Released with KDE 5.x.0)
 
 # Library API version
@@ -95,9 +95,9 @@ include(FeatureSummary)
 ############## Find Packages ###################
 
 find_package(KF5KDELibs4Support     ${KF5_VERSION} CONFIG REQUIRED)
-# find_package(KF5CoreAddons ${KF5_VERSION} CONFIG REQUIRED)
-# find_package(KF5Config ${KF5_VERSION} CONFIG REQUIRED)
-# find_package(KF5I18n ${KF5_VERSION} CONFIG REQUIRED)
+
+#find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Core Widgets Gui Xml)
+#find_package(KF5 ${KF5_VERSION} REQUIRED COMPONENTS I18n Completion)
 
 find_package(Exiv2)
 set_package_properties("Exiv2"     PROPERTIES

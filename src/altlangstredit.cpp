@@ -26,19 +26,19 @@
 // Qt includes
 
 #include <QEvent>
+#include <QMap>
 #include <QStyle>
 #include <QLabel>
-#include <QMap>
 #include <QToolButton>
 #include <QGridLayout>
 
 // KDE includes
 
+#include <KLocalizedString>
+#include <KCompletion/KComboBox>
 #include <kdialog.h>
 #include <kiconloader.h>
-#include <klocalizedstring.h>
 #include <ktextedit.h>
-#include <kcombobox.h>
 
 // Local includes
 

@@ -98,7 +98,7 @@ bool KExiv2::Private::saveToFile(const QFileInfo& finfo) const
 {
     if (!finfo.isWritable())
     {
-        qDebug() << "File '" << finfo.fileName().toAscii().constData() << "' is read only. Metadata not written.";
+        qDebug() << "File '" << finfo.fileName().toLatin1().constData() << "' is read only. Metadata not written.";
         return false;
     }
 
@@ -343,7 +343,7 @@ void KExiv2Data::Private::clear()
 void KExiv2::Private::printExiv2ExceptionError(const QString& msg, Exiv2::Error& e)
 {
     std::string s(e.what());
-    qCritical() << msg.toAscii().constData() << " (Error #"
+    qCritical() << msg.toLatin1().constData() << " (Error #"
                 << e.code() << ": " << s.c_str();
 }
 
@@ -438,14 +438,14 @@ QString KExiv2::Private::detectEncodingAndDecode(const std::string& value) const
 int KExiv2::Private::getXMPTagsListFromPrefix(const QString& pf, KExiv2::TagsMap& tagsMap) const
 {
     QList<const Exiv2::XmpPropertyInfo*> tags;
-    tags << Exiv2::XmpProperties::propertyList(pf.toAscii().data());
+    tags << Exiv2::XmpProperties::propertyList(pf.toLatin1().data());
     int i = 0;
 
     for (QList<const Exiv2::XmpPropertyInfo*>::iterator it = tags.begin(); it != tags.end(); ++it)
     {
         while ( (*it) && !QString((*it)->name_).isNull() )
         {
-            QString     key = QLatin1String( Exiv2::XmpKey( pf.toAscii().data(), (*it)->name_ ).key().c_str() );
+            QString     key = QLatin1String( Exiv2::XmpKey( pf.toLatin1().data(), (*it)->name_ ).key().c_str() );
             QStringList values;
             values << (*it)->name_ << (*it)->title_ << (*it)->desc_;
             tagsMap.insert(key, values);

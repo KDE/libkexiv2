@@ -33,11 +33,11 @@
 #include <QtCore/QByteArray>
 #include <QtCore/QMap>
 #include <QtCore/QStringList>
-#include <QWidget>
-#include <QCheckBox>
-#include <QLabel>
-#include <QUrl>
-#include <QLineEdit>
+#include <QtCore/QUrl>
+#include <QtWidgets/QWidget>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLineEdit>
 
 // Local includes
 

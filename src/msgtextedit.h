@@ -28,12 +28,12 @@
 
 // Qt includes
 
-#include <QWidget>
 #include <QtCore/QString>
+#include <QtWidgets/QWidget>
 
 // KDE includes
 
-#include <ktextedit.h>
+#include <KTextEdit>
 
 // Local includes
 

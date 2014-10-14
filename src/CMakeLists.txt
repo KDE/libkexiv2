@@ -35,9 +35,6 @@ if( WIN32 )
     add_definitions( -DEXV_HAVE_DLL )
 endif()
 
-# This was used to enable catching of exceptions thrown by libexiv2.
-# We use now #pragma GCC visibility push(default) around the headers
-#SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=default")
 
 set(kexiv2_LIB_SRCS kexiv2.cpp
                     kexiv2_p.cpp
@@ -49,11 +46,11 @@ set(kexiv2_LIB_SRCS kexiv2.cpp
                     kexiv2gps.cpp
                     kexiv2xmp.cpp
                     kexiv2previews.cpp
-                    altlangstredit.cpp
+                    rotationmatrix.cpp
                     msgtextedit.cpp
+                    altlangstredit.cpp
                     countryselector.cpp
                     subjectwidget.cpp
-                    rotationmatrix.cpp
 )
 
 ecm_generate_headers(kexiv2_CamelCase_HEADERS
@@ -72,11 +69,11 @@ ecm_generate_headers(kexiv2_CamelCase_HEADERS
                      REQUIRED_HEADERS kexiv2_HEADERS
 )
 
-install(FILES ${kexiv2_CamelCase_HEADERS}
+install(FILES       ${kexiv2_CamelCase_HEADERS}
         DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KEXIV2/KExiv2
         COMPONENT   Devel)
 
-install(FILES ${kexiv2_HEADERS}
+install(FILES       ${kexiv2_HEADERS}
         DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KEXIV2/kexiv2
         COMPONENT   Devel)
 
@@ -84,8 +81,7 @@ add_library(KF5Kexiv2 ${kexiv2_LIB_SRCS})
 
 generate_export_header(KF5Kexiv2 BASE_NAME kexiv2)
 
-install(FILES
-        ${CMAKE_CURRENT_BINARY_DIR}/kexiv2_export.h
+install(FILES       ${CMAKE_CURRENT_BINARY_DIR}/kexiv2_export.h
         DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KEXIV2
         COMPONENT   Devel)
 
@@ -95,7 +91,12 @@ target_include_directories(KF5Kexiv2 INTERFACE
                            "$<INSTALL_INTERFACE:${KF5_INCLUDE_INSTALL_DIR}/KEXIV2;${KF5_INCLUDE_INSTALL_DIR}/KEXIV2/kexiv2>"
 )
 
-target_link_libraries(KF5Kexiv2 KF5::KDELibs4Support Qt5::Xml ${EXIV2_LIBRARIES})
+target_link_libraries(KF5Kexiv2
+		      KF5::KDELibs4Support
+#                      KF5::I18n
+                      Qt5::Xml
+                      ${EXIV2_LIBRARIES}
+)
 
 if( WIN32 )
     target_link_libraries( kexiv2 ${EXPAT_LIBRARIES} )

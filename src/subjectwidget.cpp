@@ -29,20 +29,19 @@
 
 // Qt includes
 
-#include <QCheckBox>
-#include <QDomDocument>
-#include <QDomElement>
+#include <QDebug>
+#include <QStandardPaths>
 #include <QFile>
+#include <QValidator>
+#include <QCheckBox>
 #include <QGridLayout>
 #include <QLabel>
 #include <QPushButton>
 #include <QRadioButton>
-#include <QValidator>
 #include <QButtonGroup>
-#include <QLineEdit>
 #include <QListWidget>
-#include <QDebug>
-#include <QStandardPaths>
+#include <QDomDocument>
+#include <QDomElement>
 
 // KDE includes
 

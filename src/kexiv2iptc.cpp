@@ -106,7 +106,7 @@ QByteArray KExiv2::getIptc(bool addIrbHeader) const
     {
         if (!d->filePath.isEmpty())
         {
-            qCritical() << "From file " << d->filePath.toAscii().constData();
+            qCritical() << "From file " << d->filePath.toLatin1().constData();
         }
 
         d->printExiv2ExceptionError("Cannot get Iptc data using Exiv2 ",e);
@@ -133,7 +133,7 @@ bool KExiv2::setIptc(const QByteArray& data) const
     {
         if (!d->filePath.isEmpty())
         {
-            qCritical() << "From file " << d->filePath.toAscii().constData();
+            qCritical() << "From file " << d->filePath.toLatin1().constData();
         }
 
         d->printExiv2ExceptionError("Cannot set Iptc data using Exiv2 ", e);
@@ -500,8 +500,8 @@ bool KExiv2::setIptcTagsStringList(const char* iptcTagName, int maxSize,
         QStringList oldvals = oldValues;
         QStringList newvals = newValues;
 
-        qDebug() << d->filePath.toAscii().constData() << " : " << iptcTagName
-                 << " => " << newvals.join(",").toAscii().constData();
+        qDebug() << d->filePath.toLatin1().constData() << " : " << iptcTagName
+                 << " => " << newvals.join(",").toLatin1().constData();
 
         // Remove all old values.
         Exiv2::IptcData iptcData(d->iptcMetadata());

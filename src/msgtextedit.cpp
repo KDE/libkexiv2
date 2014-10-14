@@ -27,8 +27,8 @@
 
 // Qt includes
 
-#include <QPalette>
-#include <QPainter>
+#include <QtGui/QPalette>
+#include <QtGui/QPainter>
 
 namespace KExiv2Iface
 {

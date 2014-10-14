@@ -49,7 +49,7 @@ bool KExiv2::setImageProgramId(const QString& program, const QString& version) c
 
         // Set program info into Exif.Image.ProcessingSoftware tag (only available with Exiv2 >= 0.14.0).
 
-        d->exifMetadata()["Exif.Image.ProcessingSoftware"] = std::string(software.toAscii().constData());
+        d->exifMetadata()["Exif.Image.ProcessingSoftware"] = std::string(software.toLatin1().constData());
 
         // See B.K.O #142564: Check if Exif.Image.Software already exist. If yes, do not touch this tag.
 
@@ -60,7 +60,7 @@ bool KExiv2::setImageProgramId(const QString& program, const QString& version) c
             Exiv2::ExifData::iterator it = exifData.findKey(key);
 
             if (it == exifData.end())
-                d->exifMetadata()["Exif.Image.Software"] = std::string(software.toAscii().constData());
+                d->exifMetadata()["Exif.Image.Software"] = std::string(software.toLatin1().constData());
         }
 
         // set program info into XMP tags.
@@ -84,8 +84,8 @@ bool KExiv2::setImageProgramId(const QString& program, const QString& version) c
 
         // Set program info into IPTC tags.
 
-        d->iptcMetadata()["Iptc.Application2.Program"]        = std::string(program.toAscii().constData());
-        d->iptcMetadata()["Iptc.Application2.ProgramVersion"] = std::string(version.toAscii().constData());
+        d->iptcMetadata()["Iptc.Application2.Program"]        = std::string(program.toLatin1().constData());
+        d->iptcMetadata()["Iptc.Application2.ProgramVersion"] = std::string(version.toLatin1().constData());
         return true;
     }
     catch( Exiv2::Error& e )
@@ -792,7 +792,7 @@ bool KExiv2::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitiz
         // For digital cameras, these dates should be both set, and identical.
         // Reference: http://www.exif.org/Exif2-2.PDF, chapter 4.6.5, table 4, section F.
 
-        const std::string &exifdatetime(dateTime.toString(QString("yyyy:MM:dd hh:mm:ss")).toAscii().constData());
+        const std::string &exifdatetime(dateTime.toString(QString("yyyy:MM:dd hh:mm:ss")).toLatin1().constData());
         d->exifMetadata()["Exif.Image.DateTime"]         = exifdatetime;
         d->exifMetadata()["Exif.Photo.DateTimeOriginal"] = exifdatetime;
 
@@ -803,7 +803,7 @@ bool KExiv2::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitiz
 
         // In second we write date & time into Xmp.
 
-        const std::string &xmpdatetime(dateTime.toString(Qt::ISODate).toAscii().constData());
+        const std::string &xmpdatetime(dateTime.toString(Qt::ISODate).toLatin1().constData());
 
         Exiv2::Value::AutoPtr xmpTxtVal = Exiv2::Value::create(Exiv2::xmpText);
         xmpTxtVal->read(xmpdatetime);
@@ -825,8 +825,8 @@ bool KExiv2::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitiz
 
         // In third we write date & time into Iptc.
 
-        const std::string &iptcdate(dateTime.date().toString(Qt::ISODate).toAscii().constData());
-        const std::string &iptctime(dateTime.time().toString(Qt::ISODate).toAscii().constData());
+        const std::string &iptcdate(dateTime.date().toString(Qt::ISODate).toLatin1().constData());
+        const std::string &iptctime(dateTime.time().toString(Qt::ISODate).toLatin1().constData());
         d->iptcMetadata()["Iptc.Application2.DateCreated"] = iptcdate;
         d->iptcMetadata()["Iptc.Application2.TimeCreated"] = iptctime;
 
@@ -870,7 +870,7 @@ QDateTime KExiv2::getDigitizationDateTime(bool fallbackToCreationTime) const
 
                 if (dateTime.isValid())
                 {
-                    qDebug() << "DateTime (Exif digitalized): " << dateTime.toString().toAscii().constData();
+                    qDebug() << "DateTime (Exif digitalized): " << dateTime.toString().toLatin1().constData();
                     return dateTime;
                 }
             }
@@ -903,7 +903,7 @@ QDateTime KExiv2::getDigitizationDateTime(bool fallbackToCreationTime) const
 
                     if (dateTime.isValid())
                     {
-                        qDebug() << "Date (IPTC digitalized): " << dateTime.toString().toAscii().constData();
+                        qDebug() << "Date (IPTC digitalized): " << dateTime.toString().toLatin1().constData();
                         return dateTime;
                     }
                 }

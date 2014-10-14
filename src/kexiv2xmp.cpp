@@ -150,7 +150,7 @@ bool KExiv2::setXmp(const QByteArray& data) const
     catch( Exiv2::Error& e )
     {
         if (!d->filePath.isEmpty())
-            qCritical() << "From file " << d->filePath.toAscii().constData();
+            qCritical() << "From file " << d->filePath.toLatin1().constData();
 
         d->printExiv2ExceptionError("Cannot set Xmp data using Exiv2 ", e);
     }
@@ -185,7 +185,7 @@ KExiv2::MetaDataMap KExiv2::getXmpTagsDataList(const QStringList& xmpKeysFilter,
 
         for (Exiv2::XmpData::iterator md = xmpData.begin(); md != xmpData.end(); ++md)
         {
-            QString key = QString::fromAscii(md->key().c_str());
+            QString key = QString::fromLatin1(md->key().c_str());
 
             // Decode the tag value with a user friendly output.
             std::ostringstream os;
@@ -1067,7 +1067,7 @@ bool KExiv2::registerXmpNameSpace(const QString& uri, const QString& prefix)
         if (!uri.endsWith('/'))
             ns.append('/');
 
-        Exiv2::XmpProperties::registerNs(ns.toAscii().constData(), prefix.toAscii().constData());
+        Exiv2::XmpProperties::registerNs(ns.toLatin1().constData(), prefix.toLatin1().constData());
         return true;
     }
     catch( Exiv2::Error& e )
@@ -1100,7 +1100,7 @@ bool KExiv2::unregisterXmpNameSpace(const QString& uri)
         if (!uri.endsWith('/'))
             ns.append('/');
 
-        Exiv2::XmpProperties::unregisterNs(ns.toAscii().constData());
+        Exiv2::XmpProperties::unregisterNs(ns.toLatin1().constData());
         return true;
     }
     catch( Exiv2::Error& e )
