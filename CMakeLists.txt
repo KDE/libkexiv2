@@ -86,6 +86,7 @@ include(ECMGenerateHeaders)
 include(ECMGeneratePriFile)
 include(ECMPackageConfigHelpers)
 include(ECMSetupVersion)
+include(ECMMarkNonGuiExecutable)
 include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(KDEFrameworkCompilerSettings)
@@ -113,7 +114,7 @@ find_package(KF5 ${KF5_VERSION} REQUIRED COMPONENTS
 
 find_package(Exiv2 ${EXIV2_MIN_VERSION} REQUIRED)
 set_package_properties("Exiv2"     PROPERTIES
-                       DESCRIPTION "Required to build libkexiv2."
+                       DESCRIPTION "Required to build libkexiv2"
                        URL         "http://www.exiv2.org"
                        TYPE        RECOMMENDED
                        PURPOSE     "Library to manage image metadata"
