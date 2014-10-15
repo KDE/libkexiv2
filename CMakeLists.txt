@@ -111,7 +111,7 @@ find_package(KF5 ${KF5_VERSION} REQUIRED COMPONENTS
 #             Completion
 #)
 
-find_package(Exiv2)
+find_package(Exiv2 ${EXIV2_MIN_VERSION} REQUIRED)
 set_package_properties("Exiv2"     PROPERTIES
                        DESCRIPTION "Required to build libkexiv2."
                        URL         "http://www.exiv2.org"
