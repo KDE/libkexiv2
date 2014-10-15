@@ -71,19 +71,22 @@ ecm_generate_headers(kexiv2_CamelCase_HEADERS
 
 install(FILES       ${kexiv2_CamelCase_HEADERS}
         DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KEXIV2/KExiv2
-        COMPONENT   Devel)
+        COMPONENT   Devel
+)
 
 install(FILES       ${kexiv2_HEADERS}
         DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KEXIV2/kexiv2
-        COMPONENT   Devel)
+        COMPONENT   Devel
+)
 
-add_library(KF5Kexiv2 ${kexiv2_LIB_SRCS})
+add_library(KF5Kexiv2 SHARED ${kexiv2_LIB_SRCS})
 
 generate_export_header(KF5Kexiv2 BASE_NAME kexiv2)
 
 install(FILES       ${CMAKE_CURRENT_BINARY_DIR}/kexiv2_export.h
         DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KEXIV2
-        COMPONENT   Devel)
+        COMPONENT   Devel
+)
 
 add_library(KF5::Kexiv2 ALIAS KF5Kexiv2)
 
@@ -93,7 +96,6 @@ target_include_directories(KF5Kexiv2 INTERFACE
 
 target_link_libraries(KF5Kexiv2
                       KF5::KDELibs4Support
-#                     KF5::I18n                 TODO: port to pure KF5
                       Qt5::Xml
                       ${EXIV2_LIBRARIES}
 )
