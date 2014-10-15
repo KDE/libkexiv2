@@ -28,9 +28,15 @@
 #include "kexiv2.h"
 #include "kexiv2_p.h"
 
+// KDE includes
+
+#include <klibloader.h>
+
 // Local includes
 
 #include "version.h"
+
+static const KCatalogLoader loader("libkexiv2");
 
 namespace KExiv2Iface
 {
