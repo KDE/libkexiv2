@@ -20,7 +20,7 @@ The library documentation is available on header files.
 -- DEPENDENCIES -------------------------------------------------------
 
 CMake      >= 2.8.12                   http://www.cmake.org
-libqt      >= 5.x                      http://www.qtsoftware.com
+libqt      >= 5.2.0                    http://www.qtsoftware.com
 libkde     >= 5.x                      http://www.kde.org
 libexiv2   >= 0.24.0                   http://www.exiv2.org
 
