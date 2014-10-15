@@ -92,8 +92,8 @@ target_include_directories(KF5Kexiv2 INTERFACE
 )
 
 target_link_libraries(KF5Kexiv2
-		      KF5::KDELibs4Support
-#                      KF5::I18n
+                      KF5::KDELibs4Support
+#                     KF5::I18n                 TODO: port to pure KF5
                       Qt5::Xml
                       ${EXIV2_LIBRARIES}
 )

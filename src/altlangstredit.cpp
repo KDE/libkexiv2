@@ -23,6 +23,8 @@
  *
  * ============================================================ */
 
+#include "altlangstredit.h"
+
 // Qt includes
 
 #include <QEvent>
@@ -43,7 +45,6 @@
 // Local includes
 
 #include "msgtextedit.h"
-#include "altlangstredit.h"
 
 namespace KExiv2Iface
 {

@@ -64,8 +64,8 @@ project(libkexiv2)
 # 3.0.0 => 15.0.0    (Released with KDE 5.x.0)
 
 # Library API version
-set(KEXIV2_LIB_MAJOR_VERSION "2")
-set(KEXIV2_LIB_MINOR_VERSION "7")
+set(KEXIV2_LIB_MAJOR_VERSION "5")
+set(KEXIV2_LIB_MINOR_VERSION "0")
 set(KEXIV2_LIB_PATCH_VERSION "0")
 
 # Library ABI version used by linker.
@@ -94,8 +94,9 @@ include(FeatureSummary)
 
 ############## Find Packages ###################
 
-find_package(KF5KDELibs4Support     ${KF5_VERSION} CONFIG REQUIRED)
+find_package(KF5KDELibs4Support ${KF5_VERSION} CONFIG REQUIRED)
 
+# TODO: port to pure KF5
 #find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Core Widgets Gui Xml)
 #find_package(KF5 ${KF5_VERSION} REQUIRED COMPONENTS I18n Completion)
 
