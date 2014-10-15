@@ -112,5 +112,5 @@ set_target_properties(KF5Kexiv2   PROPERTIES
                       EXPORT_NAME Kexiv2
 )
 
-install(FILES       topicset.iptc-subjectcode.xml
+install(FILES       ${CMAKE_CURRENT_SOURCE_DIR}/../data/topicset.iptc-subjectcode.xml
         DESTINATION ${DATA_INSTALL_DIR}/libkexiv2/data)
