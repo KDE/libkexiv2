@@ -769,6 +769,7 @@ bool KExiv2::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitiz
         const std::string &exifdatetime(dateTime.toString(QString("yyyy:MM:dd hh:mm:ss")).toAscii().constData());
         d->exifMetadata()["Exif.Image.DateTime"]         = exifdatetime;
         d->exifMetadata()["Exif.Photo.DateTimeOriginal"] = exifdatetime;
+        d->exifMetadata()["Exif.Image.PreviewDateTime"]  = exifdatetime;
         if(setDateTimeDigitized)
             d->exifMetadata()["Exif.Photo.DateTimeDigitized"] = exifdatetime;
 
