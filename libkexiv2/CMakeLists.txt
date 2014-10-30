@@ -70,7 +70,7 @@ INSTALL(TARGETS kexiv2 EXPORT Libkexiv2 ${INSTALL_TARGETS_DEFAULT_ARGS} )
 INSTALL(FILES topicset.iptc-subjectcode.xml DESTINATION ${DATA_INSTALL_DIR}/libkexiv2/data)
 
 # Check if compilation is done through digiKam SC or not. If yes, do not install header files.
-IF(NOT DIGIKAMSC_USE_PRIVATE_KDEGRAPHICS)
+IF(NOT DIGIKAMSC_USE_PRIVATE_SHAREDLIBS)
     INSTALL(FILES kexiv2.h
                   kexiv2data.h
                   kexiv2previews.h
