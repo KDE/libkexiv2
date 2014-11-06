@@ -1,43 +1,25 @@
-# ===========================================================
 #
-# This file is a part of digiKam project
-# <a href="http://www.digikam.org">http://www.digikam.org</a>
+# Copyright (c) 2010-2014, Gilles Caulier, <caulier dot gilles at gmail dot com>
 #
-# @date   2006-09-15
-# @brief  Exiv2 library interface for KDE
-#
-# @author Copyright (C) 2006-2014 by Gilles Caulier
-#         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
-#
-# This program is free software; you can redistribute it
-# and/or modify it under the terms of the GNU General
-# Public License as published by the Free Software Foundation;
-# either version 2, or (at your option)
-# any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# ============================================================
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-INCLUDE_DIRECTORIES(${EXIV2_INCLUDE_DIR})
+include_directories(${EXIV2_INCLUDE_DIR})
 
-ADD_DEFINITIONS(${EXIV2_DEFINITIONS})
-ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})
+add_definitions(${EXIV2_DEFINITIONS})
+add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
-IF( WIN32 )
-    ADD_DEFINITIONS( -DEXV_HAVE_DLL )
-ENDIF( WIN32 )
+if(WIN32)
+    add_definitions(-DEXV_HAVE_DLL)
+endif()
 
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/version.h)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/version.h)
 
 # This was used to enable catching of exceptions thrown by libexiv2.
 # We use now #pragma GCC visibility push(default) around the headers
 #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=default")
 
-SET(kexiv2_LIB_SRCS kexiv2.cpp
+set(kexiv2_LIB_SRCS kexiv2.cpp
                     kexiv2_p.cpp
                     kexiv2image.cpp
                     kexiv2comments.cpp
@@ -55,23 +37,23 @@ SET(kexiv2_LIB_SRCS kexiv2.cpp
 
 KDE4_ADD_LIBRARY(kexiv2 SHARED ${kexiv2_LIB_SRCS})
 
-TARGET_LINK_LIBRARIES(kexiv2 ${KDE4_KDEUI_LIBS} ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY}
+target_link_libraries(kexiv2 ${KDE4_KDEUI_LIBS} ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY}
                              ${QT_QTXML_LIBRARY} ${EXIV2_LIBRARIES})
 
-IF( WIN32 )
+if(WIN32)
     TARGET_LINK_LIBRARIES( kexiv2 ${EXPAT_LIBRARIES} )
-ENDIF( WIN32 )
+endif()
 
-SET_TARGET_PROPERTIES(kexiv2 PROPERTIES VERSION ${KEXIV2_LIB_SO_VERSION_STRING} 
+set_target_properties(kexiv2 PROPERTIES VERSION ${KEXIV2_LIB_SO_VERSION_STRING} 
                              SOVERSION ${KEXIV2_LIB_SO_CUR_VERSION})
 
-INSTALL(TARGETS kexiv2 EXPORT Libkexiv2 ${INSTALL_TARGETS_DEFAULT_ARGS} )
+install(TARGETS kexiv2 EXPORT Libkexiv2 ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
-INSTALL(FILES topicset.iptc-subjectcode.xml DESTINATION ${DATA_INSTALL_DIR}/libkexiv2/data)
+install(FILES topicset.iptc-subjectcode.xml DESTINATION ${DATA_INSTALL_DIR}/libkexiv2/data)
 
 # Check if compilation is done through digiKam SC or not. If yes, do not install header files.
-IF(NOT DIGIKAMSC_USE_PRIVATE_SHAREDLIBS)
-    INSTALL(FILES kexiv2.h
+if(NOT DIGIKAMSC_USE_PRIVATE_SHAREDLIBS)
+    install(FILES kexiv2.h
                   kexiv2data.h
                   kexiv2previews.h
                   libkexiv2_export.h
@@ -84,4 +66,4 @@ IF(NOT DIGIKAMSC_USE_PRIVATE_SHAREDLIBS)
             DESTINATION ${INCLUDE_INSTALL_DIR}/libkexiv2
             COMPONENT Devel
            )
-ENDIF()
+endif()

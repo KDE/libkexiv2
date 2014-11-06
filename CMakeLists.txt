@@ -1,48 +1,30 @@
-# ===========================================================
 #
-# This file is a part of digiKam project
-# <a href="http://www.digikam.org">http://www.digikam.org</a>
+# Copyright (c) 2010-2014, Gilles Caulier, <caulier dot gilles at gmail dot com>
 #
-# @date   2006-09-15
-# @brief  Exiv2 library interface for KDE
-#
-# @author Copyright (C) 2006-2014 by Gilles Caulier
-#         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
-#
-# This program is free software; you can redistribute it
-# and/or modify it under the terms of the GNU General
-# Public License as published by the Free Software Foundation;
-# either version 2, or (at your option)
-# any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# ============================================================
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-PROJECT(libkexiv2)
+project(libkexiv2)
 
-MESSAGE(STATUS "----------------------------------------------------------------------------------")
-MESSAGE(STATUS "Starting CMake configuration for: libkexiv2")
+message(STATUS "----------------------------------------------------------------------------------")
+message(STATUS "Starting CMake configuration for: libkexiv2")
 
-FIND_PACKAGE(KDE4 REQUIRED)
+find_package(KDE4 REQUIRED)
 
-INCLUDE(KDE4Defaults)
-INCLUDE(MacroLibrary)
-INCLUDE(MacroOptionalAddSubdirectory)
-INCLUDE(MacroOptionalFindPackage)
-INCLUDE(FindPackageHandleStandardArgs)
+include(KDE4Defaults)
+include(MacroLibrary)
+include(MacroOptionalAddSubdirectory)
+include(MacroOptionalFindPackage)
+include(FindPackageHandleStandardArgs)
 
-ADD_DEFINITIONS (${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS} ${KDE4_DEFINITIONS})
-INCLUDE_DIRECTORIES (${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES})
+add_definitions(${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS} ${KDE4_DEFINITIONS})
+include_directories(${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES})
 
-SET(LIBKEXIV2_AREA_CODE_GENERAL 51003)
-ADD_DEFINITIONS(-DKDE_DEFAULT_DEBUG_AREA=${LIBKEXIV2_AREA_CODE_GENERAL})
+set(LIBKEXIV2_AREA_CODE_GENERAL 51003)
+add_definitions(-DKDE_DEFAULT_DEBUG_AREA=${LIBKEXIV2_AREA_CODE_GENERAL})
 
-SET(EXIV2_MIN_VERSION "0.24")
-FIND_PACKAGE(Exiv2)
+set(EXIV2_MIN_VERSION "0.24")
+find_package(Exiv2)
 MACRO_LOG_FEATURE(EXIV2_FOUND "Exiv2" "Required to build libkexiv2." "http://www.exiv2.org"
                   TRUE ${EXIV2_MIN_VERSION} "")
 
@@ -77,9 +59,9 @@ MACRO_LOG_FEATURE(EXIV2_FOUND "Exiv2" "Required to build libkexiv2." "http://www
 # 2.4.0 => 11.3.0                              - Add new method to access on text edit widget from AltLangStrEdit.
 
 # Library API version
-SET(KEXIV2_LIB_MAJOR_VERSION "2")
-SET(KEXIV2_LIB_MINOR_VERSION "4")
-SET(KEXIV2_LIB_PATCH_VERSION "0")
+set(KEXIV2_LIB_MAJOR_VERSION "2")
+set(KEXIV2_LIB_MINOR_VERSION "4")
+set(KEXIV2_LIB_PATCH_VERSION "0")
 
 # Suffix to add at end of version string. Usual values are:
 # "-git"   : alpha code unstable from git. Do not use in production
@@ -88,53 +70,56 @@ SET(KEXIV2_LIB_PATCH_VERSION "0")
 # "-beta3" : beta3 release.
 # "-rc"    : release candidate.
 # ""       : final relase. Can be used in production.
-SET(KEXIV2_LIB_SUFFIX_VERSION "")
+set(KEXIV2_LIB_SUFFIX_VERSION "")
 
 # Library ABI version used by linker.
 # For details : http://www.gnu.org/software/libtool/manual/libtool.html#Updating-version-info
-SET(KEXIV2_LIB_SO_CUR_VERSION "11")
-SET(KEXIV2_LIB_SO_REV_VERSION "3")
-SET(KEXIV2_LIB_SO_AGE_VERSION "0")
+set(KEXIV2_LIB_SO_CUR_VERSION "11")
+set(KEXIV2_LIB_SO_REV_VERSION "3")
+set(KEXIV2_LIB_SO_AGE_VERSION "0")
 
 # =======================================================
 # Set env. variables accordinly.
 
-SET(KEXIV2_LIB_VERSION_STRING "${KEXIV2_LIB_MAJOR_VERSION}.${KEXIV2_LIB_MINOR_VERSION}.${KEXIV2_LIB_PATCH_VERSION}${KEXIV2_LIB_SUFFIX_VERSION}")
-SET(KEXIV2_LIB_VERSION_ID "0x0${KEXIV2_LIB_MAJOR_VERSION}0${KEXIV2_LIB_MINOR_VERSION}0${KEXIV2_LIB_PATCH_VERSION}")
-SET(KEXIV2_LIB_SO_VERSION_STRING "${KEXIV2_LIB_SO_CUR_VERSION}.${KEXIV2_LIB_SO_REV_VERSION}.${KEXIV2_LIB_SO_AGE_VERSION}")
+set(KEXIV2_LIB_VERSION_STRING    "${KEXIV2_LIB_MAJOR_VERSION}.${KEXIV2_LIB_MINOR_VERSION}.${KEXIV2_LIB_PATCH_VERSION}${KEXIV2_LIB_SUFFIX_VERSION}")
+set(KEXIV2_LIB_VERSION_ID        "0x0${KEXIV2_LIB_MAJOR_VERSION}0${KEXIV2_LIB_MINOR_VERSION}0${KEXIV2_LIB_PATCH_VERSION}")
+set(KEXIV2_LIB_SO_VERSION_STRING "${KEXIV2_LIB_SO_CUR_VERSION}.${KEXIV2_LIB_SO_REV_VERSION}.${KEXIV2_LIB_SO_AGE_VERSION}")
 
 # =======================================================
 
-IF (EXIV2_FOUND)
-  ADD_SUBDIRECTORY(libkexiv2)
+if(EXIV2_FOUND)
 
-  IF(KDE4_BUILD_TESTS)
-    MACRO_OPTIONAL_ADD_SUBDIRECTORY(tests)
-  ENDIF(KDE4_BUILD_TESTS)
+    add_subdirectory(libkexiv2)
 
-  INCLUDE(CMakePackageConfigHelpers)
-  CONFIGURE_PACKAGE_CONFIG_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/libkexiv2-config.cmake.in libkexiv2-config.cmake
-                                INSTALL_DESTINATION "${LIB_INSTALL_DIR}/cmake/libkexiv2-${KEXIV2_LIB_VERSION_STRING}"
-                                PATH_VARS INCLUDE_INSTALL_DIR
-                                NO_CHECK_REQUIRED_COMPONENTS_MACRO)
-  WRITE_BASIC_PACKAGE_VERSION_FILE(libkexiv2-config-version.cmake
-                                   VERSION "${KEXIV2_LIB_MAJOR_VERSION}.${KEXIV2_LIB_MINOR_VERSION}.${KEXIV2_LIB_PATCH_VERSION}"
-                                   COMPATIBILITY SameMajorVersion)
-  INSTALL(EXPORT Libkexiv2
-          DESTINATION "${LIB_INSTALL_DIR}/cmake/libkexiv2-${KEXIV2_LIB_VERSION_STRING}"
-          NAMESPACE Libkexiv2::
-          FILE libkexiv2-export.cmake)
-  INSTALL(FILES
-          ${CMAKE_CURRENT_BINARY_DIR}/libkexiv2-config.cmake
-          ${CMAKE_CURRENT_BINARY_DIR}/libkexiv2-config-version.cmake
-          DESTINATION
-          "${LIB_INSTALL_DIR}/cmake/libkexiv2-${KEXIV2_LIB_VERSION_STRING}"
-         )
-  IF(NOT WIN32)
-    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/libkexiv2.pc.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/libkexiv2.pc)
-    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/libkexiv2.lsm.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/libkexiv2.lsm)
-    INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/libkexiv2.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig )
-  ENDIF(NOT WIN32)
-ENDIF (EXIV2_FOUND)
+    if(KDE4_BUILD_TESTS)
+        MACRO_OPTIONAL_ADD_SUBDIRECTORY(tests)
+    endif()
+
+    include(CMakePackageConfigHelpers)
+    CONFIGURE_PACKAGE_CONFIG_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/libkexiv2-config.cmake.in libkexiv2-config.cmake
+                                    INSTALL_DESTINATION "${LIB_INSTALL_DIR}/cmake/libkexiv2-${KEXIV2_LIB_VERSION_STRING}"
+                                    PATH_VARS INCLUDE_INSTALL_DIR
+                                    NO_CHECK_REQUIRED_COMPONENTS_MACRO)
+    WRITE_BASIC_PACKAGE_VERSION_FILE(libkexiv2-config-version.cmake
+                                    VERSION "${KEXIV2_LIB_MAJOR_VERSION}.${KEXIV2_LIB_MINOR_VERSION}.${KEXIV2_LIB_PATCH_VERSION}"
+                                    COMPATIBILITY SameMajorVersion)
+    install(EXPORT Libkexiv2
+            DESTINATION "${LIB_INSTALL_DIR}/cmake/libkexiv2-${KEXIV2_LIB_VERSION_STRING}"
+            NAMESPACE Libkexiv2::
+            FILE libkexiv2-export.cmake)
+    install(FILES
+            ${CMAKE_CURRENT_BINARY_DIR}/libkexiv2-config.cmake
+            ${CMAKE_CURRENT_BINARY_DIR}/libkexiv2-config-version.cmake
+            DESTINATION
+            "${LIB_INSTALL_DIR}/cmake/libkexiv2-${KEXIV2_LIB_VERSION_STRING}"
+            )
+
+    if(NOT WIN32)
+            configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/libkexiv2.pc.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/libkexiv2.pc)
+            configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/libkexiv2.lsm.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/libkexiv2.lsm)
+            install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libkexiv2.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig )
+    endif()
+
+endif()
 
 MACRO_DISPLAY_FEATURE_LOG()

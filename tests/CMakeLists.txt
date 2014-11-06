@@ -1,53 +1,35 @@
-# ===========================================================
 #
-# This file is a part of digiKam project
-# <a href="http://www.digikam.org">http://www.digikam.org</a>
+# Copyright (c) 2010-2014, Gilles Caulier, <caulier dot gilles at gmail dot com>
 #
-# @date   2006-09-15
-# @brief  Exiv2 library interface for KDE
-#
-# @author Copyright (C) 2006-2012 by Gilles Caulier
-#         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
-#
-# This program is free software; you can redistribute it
-# and/or modify it under the terms of the GNU General
-# Public License as published by the Free Software Foundation;
-# either version 2, or (at your option)
-# any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# ============================================================
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../libkexiv2)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../libkexiv2)
 
-SET(setiptcpreview_SRCS setiptcpreview.cpp)
+set(setiptcpreview_SRCS setiptcpreview.cpp)
 KDE4_ADD_EXECUTABLE(setiptcpreview NOGUI ${setiptcpreview_SRCS})
-TARGET_LINK_LIBRARIES(setiptcpreview kexiv2 ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
+target_link_libraries(setiptcpreview kexiv2 ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
 
-SET(loadfromba_SRCS loadfromba.cpp)
+set(loadfromba_SRCS loadfromba.cpp)
 KDE4_ADD_EXECUTABLE(loadfromba NOGUI ${loadfromba_SRCS})
-TARGET_LINK_LIBRARIES(loadfromba kexiv2 ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY})
+target_link_libraries(loadfromba kexiv2 ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY})
 
-SET(erasetag_SRCS erasetag.cpp)
+set(erasetag_SRCS erasetag.cpp)
 KDE4_ADD_EXECUTABLE(erasetag NOGUI ${erasetag_SRCS})
-TARGET_LINK_LIBRARIES(erasetag kexiv2 ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY})
+target_link_libraries(erasetag kexiv2 ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY})
 
-SET(printtagslist_SRCS printtagslist.cpp)
+set(printtagslist_SRCS printtagslist.cpp)
 KDE4_ADD_EXECUTABLE(printtagslist NOGUI ${printtagslist_SRCS})
-TARGET_LINK_LIBRARIES(printtagslist kexiv2 ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY})
+target_link_libraries(printtagslist kexiv2 ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY})
 
-SET(usexmpsidecar_SRCS usexmpsidecar.cpp)
+set(usexmpsidecar_SRCS usexmpsidecar.cpp)
 KDE4_ADD_EXECUTABLE(usexmpsidecar NOGUI ${usexmpsidecar_SRCS})
-TARGET_LINK_LIBRARIES(usexmpsidecar kexiv2 ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY})
+target_link_libraries(usexmpsidecar kexiv2 ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY})
 
-SET(readimagewritexmpsidecar_SRCS readimagewritexmpsidecar.cpp)
+set(readimagewritexmpsidecar_SRCS readimagewritexmpsidecar.cpp)
 KDE4_ADD_EXECUTABLE(readimagewritexmpsidecar NOGUI ${readimagewritexmpsidecar_SRCS})
-TARGET_LINK_LIBRARIES(readimagewritexmpsidecar kexiv2 ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY})
+target_link_libraries(readimagewritexmpsidecar kexiv2 ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY})
 
-SET(setxmpface_SRCS setxmpface.cpp)
+set(setxmpface_SRCS setxmpface.cpp)
 KDE4_ADD_EXECUTABLE(setxmpface NOGUI ${setxmpface_SRCS})
-TARGET_LINK_LIBRARIES(setxmpface kexiv2 ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY})
+target_link_libraries(setxmpface kexiv2 ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY})
