@@ -91,12 +91,6 @@ find_package(KF5 ${KF5_VERSION} REQUIRED COMPONENTS
              KDELibs4Support
 )
 
-# TODO: port to pure KF5
-#find_package(KF5 ${KF5_VERSION} REQUIRED COMPONENTS
-#             I18n
-#             Completion
-#)
-
 find_package(Exiv2 ${EXIV2_MIN_VERSION} REQUIRED)
 set_package_properties("Exiv2"     PROPERTIES
                        DESCRIPTION "Required to build libkexiv2"
@@ -141,12 +135,6 @@ install(EXPORT      KF5KExiv2Targets
         DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
         FILE        KF5KExiv2Targets.cmake
         NAMESPACE   KF5::
-)
-
-install(FILES
-        "${CMAKE_CURRENT_BINARY_DIR}/libkexiv2_version.h"
-        DESTINATION "${KF5_INCLUDE_INSTALL_DIR}"
-        COMPONENT   Devel
 )
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
