@@ -77,9 +77,11 @@ target_include_directories(KF5Kexiv2 INTERFACE
 )
 
 target_link_libraries(KF5Kexiv2
+                      PRIVATE
+                      ${EXIV2_LIBRARIES}
+                      PUBLIC
                       KF5::KDELibs4Support
                       Qt5::Xml
-                      ${EXIV2_LIBRARIES}
 )
 
 if( WIN32 )
