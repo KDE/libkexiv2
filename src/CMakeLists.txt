@@ -51,26 +51,30 @@ ecm_generate_headers(kexiv2_CamelCase_HEADERS
                      REQUIRED_HEADERS kexiv2_HEADERS
 )
 
-install(FILES       ${kexiv2_CamelCase_HEADERS}
-        DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KEXIV2/KExiv2
-        COMPONENT   Devel
-)
-
-install(FILES       ${kexiv2_HEADERS}
-        DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KEXIV2/kexiv2
-        COMPONENT   Devel
-)
-
 add_library(KF5Kexiv2 SHARED ${kexiv2_LIB_SRCS})
-
-generate_export_header(KF5Kexiv2 BASE_NAME kexiv2)
-
-install(FILES       ${CMAKE_CURRENT_BINARY_DIR}/kexiv2_export.h
-        DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KEXIV2
-        COMPONENT   Devel
-)
-
 add_library(KF5::Kexiv2 ALIAS KF5Kexiv2)
+
+generate_export_header(KF5Kexiv2 BASE_NAME kexiv2 EXPORT_MACRO_NAME LIBKEXIV2_EXPORT)
+
+# Check if compilation is done through digiKam SC or not. If yes, do not install header files.
+if (NOT DIGIKAMSC_COMPILE_LIBKEXIV2)
+
+    install(FILES       ${CMAKE_CURRENT_BINARY_DIR}/kexiv2_export.h
+            DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KEXIV2
+            COMPONENT   Devel
+    )
+
+    install(FILES       ${kexiv2_CamelCase_HEADERS}
+            DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KEXIV2/KExiv2
+            COMPONENT   Devel
+    )
+
+    install(FILES       ${kexiv2_HEADERS}
+            DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KEXIV2/kexiv2
+            COMPONENT   Devel
+    )
+
+endif()
 
 target_include_directories(KF5Kexiv2 INTERFACE 
                            "$<INSTALL_INTERFACE:${KF5_INCLUDE_INSTALL_DIR}/KEXIV2;${KF5_INCLUDE_INSTALL_DIR}/KEXIV2/kexiv2>"
