@@ -111,7 +111,10 @@ ecm_setup_version(${LIBKEXIV2_LIB_VERSION}
 add_definitions(-DTRANSLATION_DOMAIN=\"libkexiv2\")
 
 add_subdirectory(src)
-add_subdirectory(tests)
+
+if (BUILD_TESTING)
+    add_subdirectory(tests)
+endif()
 
 ############## CMake Config Files ##############
 
