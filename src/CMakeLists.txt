@@ -54,13 +54,13 @@ ecm_generate_headers(kexiv2_CamelCase_HEADERS
 add_library(KF5Kexiv2 SHARED ${kexiv2_LIB_SRCS})
 add_library(KF5::Kexiv2 ALIAS KF5Kexiv2)
 
-generate_export_header(KF5Kexiv2 BASE_NAME kexiv2 EXPORT_MACRO_NAME LIBKEXIV2_EXPORT)
+generate_export_header(KF5Kexiv2 BASE_NAME libkexiv2 EXPORT_MACRO_NAME LIBKEXIV2_EXPORT)
 
 # Check if compilation is done through digiKam SC or not. If yes, do not install header files.
 if (NOT DIGIKAMSC_COMPILE_LIBKEXIV2)
 
-    install(FILES       ${CMAKE_CURRENT_BINARY_DIR}/kexiv2_export.h
-            DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KEXIV2
+    install(FILES       ${CMAKE_CURRENT_BINARY_DIR}/libkexiv2_export.h
+            DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KEXIV2/kexiv2
             COMPONENT   Devel
     )
 

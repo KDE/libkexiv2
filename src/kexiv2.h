@@ -49,7 +49,7 @@
 
 // Local includes
 
-#include "kexiv2_export.h"
+#include "libkexiv2_export.h"
 #include "kexiv2data.h"
 
 namespace KExiv2Iface
