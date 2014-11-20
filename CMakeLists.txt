@@ -137,7 +137,7 @@ install(FILES
 install(EXPORT      KF5KExiv2Targets
         DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
         FILE        KF5KExiv2Targets.cmake
-        NAMESPACE   KF5::
+        NAMESPACE   KExiv2::
 )
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
