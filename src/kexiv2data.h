@@ -30,7 +30,7 @@
 
 // QT includes
 
-#include <QtCore/QSharedDataPointer>
+#include <QSharedDataPointer>
 
 // Local includes
 
@@ -39,7 +39,7 @@
 namespace KExiv2Iface
 {
 
-class KEXIV2_EXPORT KExiv2Data
+class LIBKEXIV2_EXPORT KExiv2Data
 {
 public:
 

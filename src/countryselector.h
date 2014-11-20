@@ -42,7 +42,7 @@
 namespace KExiv2Iface
 {
 
-class KEXIV2_EXPORT CountrySelector : public KComboBox
+class LIBKEXIV2_EXPORT CountrySelector : public KComboBox
 {
 
 public:

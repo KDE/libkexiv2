@@ -42,7 +42,7 @@
 namespace KExiv2Iface
 {
 
-class KEXIV2_EXPORT MsgTextEdit : public KTextEdit
+class LIBKEXIV2_EXPORT MsgTextEdit : public KTextEdit
 {
     Q_OBJECT
 

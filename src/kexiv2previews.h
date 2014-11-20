@@ -43,7 +43,7 @@ class QImage;
 namespace KExiv2Iface
 {
 
-class KEXIV2_EXPORT KExiv2Previews
+class LIBKEXIV2_EXPORT KExiv2Previews
 {
 public:
 

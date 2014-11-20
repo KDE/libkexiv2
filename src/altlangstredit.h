@@ -39,7 +39,7 @@
 namespace KExiv2Iface
 {
 
-class KEXIV2_EXPORT AltLangStrEdit : public QWidget
+class LIBKEXIV2_EXPORT AltLangStrEdit : public QWidget
 {
     Q_OBJECT
 

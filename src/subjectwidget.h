@@ -46,7 +46,7 @@
 namespace KExiv2Iface
 {
 
-class KEXIV2_EXPORT SubjectData
+class LIBKEXIV2_EXPORT SubjectData
 {
 public:
 
@@ -64,7 +64,7 @@ public:
 
 // --------------------------------------------------------------------------------
 
-class KEXIV2_EXPORT SubjectWidget : public QWidget
+class LIBKEXIV2_EXPORT SubjectWidget : public QWidget
 {
     Q_OBJECT
 
