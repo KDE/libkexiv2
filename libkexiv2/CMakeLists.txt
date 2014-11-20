@@ -53,6 +53,7 @@ install(FILES topicset.iptc-subjectcode.xml DESTINATION ${DATA_INSTALL_DIR}/libk
 
 # Check if compilation is done through digiKam SC or not. If yes, do not install header files.
 if(NOT DIGIKAMSC_COMPILE_LIBKEXIV2)
+
     install(FILES kexiv2.h
                   kexiv2data.h
                   kexiv2previews.h
@@ -66,4 +67,11 @@ if(NOT DIGIKAMSC_COMPILE_LIBKEXIV2)
             DESTINATION ${INCLUDE_INSTALL_DIR}/libkexiv2
             COMPONENT Devel
            )
+
+    if(NOT WIN32)
+            configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/libkexiv2.pc.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/libkexiv2.pc)
+            configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/libkexiv2.lsm.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/libkexiv2.lsm)
+            install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libkexiv2.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
+    endif()
+
 endif()

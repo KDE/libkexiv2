@@ -96,29 +96,25 @@ if(EXIV2_FOUND)
     endif()
 
     include(CMakePackageConfigHelpers)
+
     CONFIGURE_PACKAGE_CONFIG_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/libkexiv2-config.cmake.in libkexiv2-config.cmake
-                                    INSTALL_DESTINATION "${LIB_INSTALL_DIR}/cmake/libkexiv2-${KEXIV2_LIB_VERSION_STRING}"
-                                    PATH_VARS INCLUDE_INSTALL_DIR
-                                    NO_CHECK_REQUIRED_COMPONENTS_MACRO)
+                                  INSTALL_DESTINATION "${LIB_INSTALL_DIR}/cmake/libkexiv2-${KEXIV2_LIB_VERSION_STRING}"
+                                  PATH_VARS INCLUDE_INSTALL_DIR
+                                  NO_CHECK_REQUIRED_COMPONENTS_MACRO)
+
     WRITE_BASIC_PACKAGE_VERSION_FILE(libkexiv2-config-version.cmake
-                                    VERSION "${KEXIV2_LIB_MAJOR_VERSION}.${KEXIV2_LIB_MINOR_VERSION}.${KEXIV2_LIB_PATCH_VERSION}"
-                                    COMPATIBILITY SameMajorVersion)
+                                     VERSION "${KEXIV2_LIB_MAJOR_VERSION}.${KEXIV2_LIB_MINOR_VERSION}.${KEXIV2_LIB_PATCH_VERSION}"
+                                     COMPATIBILITY SameMajorVersion)
     install(EXPORT Libkexiv2
             DESTINATION "${LIB_INSTALL_DIR}/cmake/libkexiv2-${KEXIV2_LIB_VERSION_STRING}"
             NAMESPACE Libkexiv2::
             FILE libkexiv2-export.cmake)
+
     install(FILES
             ${CMAKE_CURRENT_BINARY_DIR}/libkexiv2-config.cmake
             ${CMAKE_CURRENT_BINARY_DIR}/libkexiv2-config-version.cmake
             DESTINATION
-            "${LIB_INSTALL_DIR}/cmake/libkexiv2-${KEXIV2_LIB_VERSION_STRING}"
-            )
-
-    if(NOT WIN32)
-            configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/libkexiv2.pc.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/libkexiv2.pc)
-            configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/libkexiv2.lsm.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/libkexiv2.lsm)
-            install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libkexiv2.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig )
-    endif()
+            "${LIB_INSTALL_DIR}/cmake/libkexiv2-${KEXIV2_LIB_VERSION_STRING}")
 
 endif()
 
