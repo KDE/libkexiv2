@@ -4,7 +4,7 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../libkexiv2)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../src)
 
 set(setiptcpreview_SRCS setiptcpreview.cpp)
 add_executable(setiptcpreview ${setiptcpreview_SRCS})
