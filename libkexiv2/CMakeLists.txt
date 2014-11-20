@@ -69,8 +69,8 @@ if(NOT DIGIKAMSC_COMPILE_LIBKEXIV2)
            )
 
     if(NOT WIN32)
-            configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/libkexiv2.pc.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/libkexiv2.pc)
-            configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/libkexiv2.lsm.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/libkexiv2.lsm)
+            configure_file(${CMAKE_SOURCE_DIR}/cmake/templates/libkexiv2.pc.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/libkexiv2.pc)
+            configure_file(${CMAKE_SOURCE_DIR}/cmake/templates/libkexiv2.lsm.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/libkexiv2.lsm)
             install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libkexiv2.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
     endif()
 
