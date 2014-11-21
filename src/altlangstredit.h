@@ -110,6 +110,7 @@ private:
 
     class Private;
     Private* const d;
+
     friend class Private;
 };
 

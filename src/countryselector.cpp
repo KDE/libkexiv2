@@ -28,11 +28,14 @@
 // Qt includes
 
 #include <QMap>
-#include <QDebug>
 
 // KDE includes
 
 #include <klocalizedstring.h>
+
+// Local includes
+
+#include "libkexiv2_debug.h"
 
 namespace KExiv2Iface
 {
@@ -348,7 +351,7 @@ void CountrySelector::setCountry(const QString& countryCode)
 
     setCurrentIndex(id);
 
-    qDebug() << count() << " :: " << id;
+    qCDebug(LIBKEXIV2_LOG) << count() << " :: " << id;
 }
 
 bool CountrySelector::country(QString& countryCode, QString& countryName) const

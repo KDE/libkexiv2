@@ -33,6 +33,7 @@ set(kexiv2_LIB_SRCS kexiv2.cpp
                     altlangstredit.cpp
                     countryselector.cpp
                     subjectwidget.cpp
+                    libkexiv2_debug.cpp
 )
 
 ecm_generate_headers(kexiv2_CamelCase_HEADERS

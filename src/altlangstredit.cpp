@@ -36,8 +36,8 @@
 
 // KDE includes
 
-#include <KLocalizedString>
-#include <KCompletion/KComboBox>
+#include <klocalizedstring.h>
+#include <kcombobox.h>
 #include <kdialog.h>
 #include <kiconloader.h>
 #include <ktextedit.h>
