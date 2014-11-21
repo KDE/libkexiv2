@@ -28,7 +28,7 @@
 #ifndef KEXIV2DATA_H
 #define KEXIV2DATA_H
 
-// QT includes
+// Qt includes
 
 #include <QSharedDataPointer>
 

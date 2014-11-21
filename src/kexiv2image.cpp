@@ -35,6 +35,7 @@
 // Local includes
 
 #include "rotationmatrix.h"
+#include "libkexiv2_debug.h"
 
 namespace KExiv2Iface
 {
@@ -94,7 +95,7 @@ bool KExiv2::setImageProgramId(const QString& program, const QString& version) c
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -195,7 +196,7 @@ QSize KExiv2::getImageDimensions() const
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return QSize();
@@ -235,7 +236,7 @@ bool KExiv2::setImageDimensions(const QSize& size, bool setProgramName) const
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -263,7 +264,7 @@ KExiv2::ImageOrientation KExiv2::getImageOrientation() const
 
             if (ok)
             {
-                qDebug() << "Orientation => Xmp.tiff.Orientation => " << (int)orientation;
+                qCDebug(LIBKEXIV2_LOG) << "Orientation => Xmp.tiff.Orientation => " << (int)orientation;
                 return (ImageOrientation)orientation;
             }
         }
@@ -281,7 +282,7 @@ KExiv2::ImageOrientation KExiv2::getImageOrientation() const
         if (it != exifData.end() && it->count())
         {
             orientation = it->toLong();
-            qDebug() << "Orientation => Exif.MinoltaCs7D.Rotation => " << (int)orientation;
+            qCDebug(LIBKEXIV2_LOG) << "Orientation => Exif.MinoltaCs7D.Rotation => " << (int)orientation;
 
             switch(orientation)
             {
@@ -302,7 +303,7 @@ KExiv2::ImageOrientation KExiv2::getImageOrientation() const
         if (it != exifData.end() && it->count())
         {
             orientation = it->toLong();
-            qDebug() << "Orientation => Exif.MinoltaCs5D.Rotation => " << (int)orientation;
+            qCDebug(LIBKEXIV2_LOG) << "Orientation => Exif.MinoltaCs5D.Rotation => " << (int)orientation;
 
             switch(orientation)
             {
@@ -325,7 +326,7 @@ KExiv2::ImageOrientation KExiv2::getImageOrientation() const
         if (it != exifData.end() && it->count())
         {
             orientation = it->toLong();
-            qDebug() << "Orientation => Exif.Image.Orientation => " << (int)orientation;
+            qCDebug(LIBKEXIV2_LOG) << "Orientation => Exif.Image.Orientation => " << (int)orientation;
             return (ImageOrientation)orientation;
         }
 
@@ -336,7 +337,7 @@ KExiv2::ImageOrientation KExiv2::getImageOrientation() const
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return ORIENTATION_UNSPECIFIED;
@@ -351,14 +352,14 @@ bool KExiv2::setImageOrientation(ImageOrientation orientation, bool setProgramNa
     {
         if (orientation < ORIENTATION_UNSPECIFIED || orientation > ORIENTATION_ROT_270)
         {
-            qDebug() << "Image orientation value is not correct!";
+            qCDebug(LIBKEXIV2_LOG) << "Image orientation value is not correct!";
             return false;
         }
 
         // Set Exif values.
 
         d->exifMetadata()["Exif.Image.Orientation"] = static_cast<uint16_t>(orientation);
-        qDebug() << "Exif.Image.Orientation tag set to: " << (int)orientation;
+        qCDebug(LIBKEXIV2_LOG) << "Exif.Image.Orientation tag set to: " << (int)orientation;
 
         // Set Xmp values.
 
@@ -381,7 +382,7 @@ bool KExiv2::setImageOrientation(ImageOrientation orientation, bool setProgramNa
         if (it != d->exifMetadata().end())
         {
             d->exifMetadata().erase(it);
-            qDebug() << "Removing Exif.MinoltaCs7D.Rotation tag";
+            qCDebug(LIBKEXIV2_LOG) << "Removing Exif.MinoltaCs7D.Rotation tag";
         }
 
         Exiv2::ExifKey minoltaKey2("Exif.MinoltaCs5D.Rotation");
@@ -390,7 +391,7 @@ bool KExiv2::setImageOrientation(ImageOrientation orientation, bool setProgramNa
         if (it != d->exifMetadata().end())
         {
             d->exifMetadata().erase(it);
-            qDebug() << "Removing Exif.MinoltaCs5D.Rotation tag";
+            qCDebug(LIBKEXIV2_LOG) << "Removing Exif.MinoltaCs5D.Rotation tag";
         }
 
         // -- Exif embedded thumbnail ----------------------------------
@@ -413,7 +414,7 @@ bool KExiv2::setImageOrientation(ImageOrientation orientation, bool setProgramNa
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -526,7 +527,7 @@ bool KExiv2::setImageColorWorkSpace(ImageColorWorkSpace workspace, bool setProgr
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -551,7 +552,7 @@ QDateTime KExiv2::getImageDateTime() const
 
                     if (dateTime.isValid())
                     {
-                        qDebug() << "DateTime => Exif.Photo.DateTimeOriginal => " << dateTime;
+                        qCDebug(LIBKEXIV2_LOG) << "DateTime => Exif.Photo.DateTimeOriginal => " << dateTime;
                         return dateTime;
                     }
                 }
@@ -566,7 +567,7 @@ QDateTime KExiv2::getImageDateTime() const
 
                     if (dateTime.isValid())
                     {
-                        qDebug() << "DateTime => Exif.Photo.DateTimeDigitized => " << dateTime;
+                        qCDebug(LIBKEXIV2_LOG) << "DateTime => Exif.Photo.DateTimeDigitized => " << dateTime;
                         return dateTime;
                     }
                 }
@@ -581,7 +582,7 @@ QDateTime KExiv2::getImageDateTime() const
 
                     if (dateTime.isValid())
                     {
-                        qDebug() << "DateTime => Exif.Image.DateTime => " << dateTime;
+                        qCDebug(LIBKEXIV2_LOG) << "DateTime => Exif.Image.DateTime => " << dateTime;
                         return dateTime;
                     }
                 }
@@ -605,7 +606,7 @@ QDateTime KExiv2::getImageDateTime() const
 
                     if (dateTime.isValid())
                     {
-                        qDebug() << "DateTime => Xmp.exif.DateTimeOriginal => " << dateTime;
+                        qCDebug(LIBKEXIV2_LOG) << "DateTime => Xmp.exif.DateTimeOriginal => " << dateTime;
                         return dateTime;
                     }
                 }
@@ -620,7 +621,7 @@ QDateTime KExiv2::getImageDateTime() const
 
                     if (dateTime.isValid())
                     {
-                        qDebug() << "DateTime => Xmp.exif.DateTimeDigitized => " << dateTime;
+                        qCDebug(LIBKEXIV2_LOG) << "DateTime => Xmp.exif.DateTimeDigitized => " << dateTime;
                         return dateTime;
                     }
                 }
@@ -635,7 +636,7 @@ QDateTime KExiv2::getImageDateTime() const
 
                     if (dateTime.isValid())
                     {
-                        qDebug() << "DateTime => Xmp.photoshop.DateCreated => " << dateTime;
+                        qCDebug(LIBKEXIV2_LOG) << "DateTime => Xmp.photoshop.DateCreated => " << dateTime;
                         return dateTime;
                     }
                 }
@@ -650,7 +651,7 @@ QDateTime KExiv2::getImageDateTime() const
 
                     if (dateTime.isValid())
                     {
-                        qDebug() << "DateTime => Xmp.xmp.CreateDate => " << dateTime;
+                        qCDebug(LIBKEXIV2_LOG) << "DateTime => Xmp.xmp.CreateDate => " << dateTime;
                         return dateTime;
                     }
                 }
@@ -665,7 +666,7 @@ QDateTime KExiv2::getImageDateTime() const
 
                     if (dateTime.isValid())
                     {
-                        qDebug() << "DateTime => Xmp.tiff.DateTime => " << dateTime;
+                        qCDebug(LIBKEXIV2_LOG) << "DateTime => Xmp.tiff.DateTime => " << dateTime;
                         return dateTime;
                     }
                 }
@@ -680,7 +681,7 @@ QDateTime KExiv2::getImageDateTime() const
 
                     if (dateTime.isValid())
                     {
-                        qDebug() << "DateTime => Xmp.xmp.ModifyDate => " << dateTime;
+                        qCDebug(LIBKEXIV2_LOG) << "DateTime => Xmp.xmp.ModifyDate => " << dateTime;
                         return dateTime;
                     }
                 }
@@ -695,7 +696,7 @@ QDateTime KExiv2::getImageDateTime() const
 
                     if (dateTime.isValid())
                     {
-                        qDebug() << "DateTime => Xmp.xmp.MetadataDate => " << dateTime;
+                        qCDebug(LIBKEXIV2_LOG) << "DateTime => Xmp.xmp.MetadataDate => " << dateTime;
                         return dateTime;
                     }
                 }
@@ -730,7 +731,7 @@ QDateTime KExiv2::getImageDateTime() const
 
                     if (dateTime.isValid())
                     {
-                        qDebug() << "DateTime => Iptc.Application2.DateCreated => " << dateTime;
+                        qCDebug(LIBKEXIV2_LOG) << "DateTime => Iptc.Application2.DateCreated => " << dateTime;
                         return dateTime;
                     }
                 }
@@ -756,7 +757,7 @@ QDateTime KExiv2::getImageDateTime() const
 
                     if (dateTime.isValid())
                     {
-                        qDebug() << "DateTime => Iptc.Application2.DigitizationDate => " << dateTime;
+                        qCDebug(LIBKEXIV2_LOG) << "DateTime => Iptc.Application2.DigitizationDate => " << dateTime;
                         return dateTime;
                     }
                 }
@@ -769,7 +770,7 @@ QDateTime KExiv2::getImageDateTime() const
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return QDateTime();
@@ -844,7 +845,7 @@ bool KExiv2::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitiz
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -870,7 +871,7 @@ QDateTime KExiv2::getDigitizationDateTime(bool fallbackToCreationTime) const
 
                 if (dateTime.isValid())
                 {
-                    qDebug() << "DateTime (Exif digitalized): " << dateTime.toString().toLatin1().constData();
+                    qCDebug(LIBKEXIV2_LOG) << "DateTime (Exif digitalized): " << dateTime.toString().toLatin1().constData();
                     return dateTime;
                 }
             }
@@ -903,7 +904,7 @@ QDateTime KExiv2::getDigitizationDateTime(bool fallbackToCreationTime) const
 
                     if (dateTime.isValid())
                     {
-                        qDebug() << "Date (IPTC digitalized): " << dateTime.toString().toLatin1().constData();
+                        qCDebug(LIBKEXIV2_LOG) << "Date (IPTC digitalized): " << dateTime.toString().toLatin1().constData();
                         return dateTime;
                     }
                 }
@@ -916,7 +917,7 @@ QDateTime KExiv2::getDigitizationDateTime(bool fallbackToCreationTime) const
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     if (fallbackToCreationTime)
@@ -941,7 +942,7 @@ bool KExiv2::getImagePreview(QImage& preview) const
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -968,7 +969,7 @@ bool KExiv2::setImagePreview(const QImage& preview, bool setProgramName) const
 
         // A little bit compressed preview jpeg image to limit IPTC size.
         preview.save(&buffer, "JPEG");
-        qDebug() << "JPEG image preview size: (" << preview.width() << " x "
+        qCDebug(LIBKEXIV2_LOG) << "JPEG image preview size: (" << preview.width() << " x "
                  << preview.height() << ") pixels - " << data.size() << " bytes";
 
         Exiv2::DataValue val;
@@ -987,7 +988,7 @@ bool KExiv2::setImagePreview(const QImage& preview, bool setProgramName) const
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return false;

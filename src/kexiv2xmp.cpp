@@ -27,6 +27,7 @@
 
 #include "kexiv2.h"
 #include "kexiv2_p.h"
+#include "libkexiv2_debug.h"
 
 namespace KExiv2Iface
 {
@@ -45,12 +46,12 @@ bool KExiv2::canWriteXmp(const QString& filePath)
     catch( Exiv2::Error& e )
     {
         std::string s(e.what());
-        qCritical() << "Cannot check Xmp access mode using Exiv2 (Error #"
+        qCCritical(LIBKEXIV2_LOG) << "Cannot check Xmp access mode using Exiv2 (Error #"
                     << e.code() << ": " << s.c_str() << ")";
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
 #else
@@ -90,7 +91,7 @@ bool KExiv2::clearXmp() const
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
 #endif // _XMP_SUPPORT_
@@ -122,7 +123,7 @@ QByteArray KExiv2::getXmp() const
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
 #endif // _XMP_SUPPORT_
@@ -150,13 +151,13 @@ bool KExiv2::setXmp(const QByteArray& data) const
     catch( Exiv2::Error& e )
     {
         if (!d->filePath.isEmpty())
-            qCritical() << "From file " << d->filePath.toLatin1().constData();
+            qCCritical(LIBKEXIV2_LOG) << "From file " << d->filePath.toLatin1().constData();
 
         d->printExiv2ExceptionError("Cannot set Xmp data using Exiv2 ", e);
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
 #else
@@ -272,7 +273,7 @@ KExiv2::MetaDataMap KExiv2::getXmpTagsDataList(const QStringList& xmpKeysFilter,
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
 #else
@@ -301,7 +302,7 @@ QString KExiv2::getXmpTagTitle(const char* xmpTagName)
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
 #else
@@ -328,7 +329,7 @@ QString KExiv2::getXmpTagDescription(const char* xmpTagName)
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
 #else
@@ -369,7 +370,7 @@ QString KExiv2::getXmpTagString(const char* xmpTagName, bool escapeCR) const
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
 #else
@@ -403,7 +404,7 @@ bool KExiv2::setXmpTagString(const char* xmpTagName, const QString& value, bool 
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
 #else
@@ -455,7 +456,7 @@ bool KExiv2::setXmpTagString(const char* xmpTagName, const QString& value,
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
 #else
@@ -506,7 +507,7 @@ KExiv2::AltLangMap KExiv2::getXmpTagStringListLangAlt(const char* xmpTagName, bo
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
 #else
@@ -556,7 +557,7 @@ bool KExiv2::setXmpTagStringListLangAlt(const char* xmpTagName, const KExiv2::Al
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
 #else
@@ -609,7 +610,7 @@ QString KExiv2::getXmpTagStringLangAlt(const char* xmpTagName, const QString& la
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
 #else
@@ -655,7 +656,7 @@ bool KExiv2::setXmpTagStringLangAlt(const char* xmpTagName, const QString& value
                 {
                     const std::string &val((*it).toUtf8().constData());
                     xmpTxtVal->read(val);
-                    qDebug() << *it;
+                    qCDebug(LIBKEXIV2_LOG) << *it;
                 }
             }
         }
@@ -671,7 +672,7 @@ bool KExiv2::setXmpTagStringLangAlt(const char* xmpTagName, const QString& value
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
 #else
@@ -713,7 +714,7 @@ QStringList KExiv2::getXmpTagStringSeq(const char* xmpTagName, bool escapeCR) co
 
                     seq.append(seqValue);
                 }
-                qDebug() << "XMP String Seq (" << xmpTagName << "): " << seq;
+                qCDebug(LIBKEXIV2_LOG) << "XMP String Seq (" << xmpTagName << "): " << seq;
 
                 return seq;
             }
@@ -726,7 +727,7 @@ QStringList KExiv2::getXmpTagStringSeq(const char* xmpTagName, bool escapeCR) co
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
 #else
@@ -774,7 +775,7 @@ bool KExiv2::setXmpTagStringSeq(const char* xmpTagName, const QStringList& seq,
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
 #else
@@ -827,7 +828,7 @@ QStringList KExiv2::getXmpTagStringBag(const char* xmpTagName, bool escapeCR) co
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
 #else
@@ -875,7 +876,7 @@ bool KExiv2::setXmpTagStringBag(const char* xmpTagName, const QStringList& bag,
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
 #else
@@ -1042,7 +1043,7 @@ QVariant KExiv2::getXmpTagVariant(const char* xmpTagName, bool rationalAsListOfI
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
 #else
@@ -1076,7 +1077,7 @@ bool KExiv2::registerXmpNameSpace(const QString& uri, const QString& prefix)
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
 #else
@@ -1109,7 +1110,7 @@ bool KExiv2::unregisterXmpNameSpace(const QString& uri)
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
 #else
@@ -1145,7 +1146,7 @@ bool KExiv2::removeXmpTag(const char* xmpTagName, bool setProgramName) const
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
 #else
@@ -1236,7 +1237,7 @@ KExiv2::TagsMap KExiv2::getXmpTagsList() const
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return TagsMap();

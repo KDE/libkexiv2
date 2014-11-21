@@ -33,7 +33,7 @@
 
 // KDE includes
 
-#include <KTextEdit>
+#include <ktextedit.h>
 
 // Local includes
 

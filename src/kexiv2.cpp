@@ -31,6 +31,7 @@
 // Local includes
 
 #include "libkexiv2_version.h"
+#include "libkexiv2_debug.h"
 
 namespace KExiv2Iface
 {
@@ -159,10 +160,12 @@ QString KExiv2::version()
 QString KExiv2::sidecarFilePathForFile(const QString& path)
 {
     QString ret;
+
     if (!path.isEmpty())
     {
         ret = path + QString(".xmp");
     }
+
     return ret;
 }
 
@@ -257,7 +260,7 @@ bool KExiv2::loadFromData(const QByteArray& imgData) const
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -313,7 +316,7 @@ bool KExiv2::load(const QString& filePath) const
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
 #ifdef _XMP_SUPPORT_
@@ -344,7 +347,7 @@ bool KExiv2::load(const QString& filePath) const
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
 #endif // _XMP_SUPPORT_
@@ -373,7 +376,7 @@ bool KExiv2::save(const QString& imageFilePath) const
 
     if (givenFileInfo.isSymLink())
     {
-        qDebug() << "filePath" << imageFilePath << "is a symlink."
+        qCDebug(LIBKEXIV2_LOG) << "filePath" << imageFilePath << "is a symlink."
                  << "Using target" << givenFileInfo.canonicalPath();
 
         regularFilePath = givenFileInfo.canonicalPath();// Walk all the symlinks
@@ -385,7 +388,7 @@ bool KExiv2::save(const QString& imageFilePath) const
 
     if (!dinfo.isWritable())
     {
-        qDebug() << "Dir '" << dinfo.filePath() << "' is read-only. Metadata not saved.";
+        qCDebug(LIBKEXIV2_LOG) << "Dir '" << dinfo.filePath() << "' is read-only. Metadata not saved.";
         return false;
     }
 
@@ -395,7 +398,7 @@ bool KExiv2::save(const QString& imageFilePath) const
     bool writtenToFile                   = false;
     bool writtenToSidecar                = false;
 
-    qDebug() << "KExiv2::metadataWritingMode" << d->metadataWritingMode;
+    qCDebug(LIBKEXIV2_LOG) << "KExiv2::metadataWritingMode" << d->metadataWritingMode;
 
     switch(d->metadataWritingMode)
     {
@@ -417,23 +420,23 @@ bool KExiv2::save(const QString& imageFilePath) const
 
     if (writeToFile)
     {
-        qDebug() << "Will write Metadata to file" << finfo.fileName();
+        qCDebug(LIBKEXIV2_LOG) << "Will write Metadata to file" << finfo.fileName();
         writtenToFile = d->saveToFile(finfo);
 
         if (writeToFile)
         {
-            qDebug() << "Metadata for file" << finfo.fileName() << "written to file.";
+            qCDebug(LIBKEXIV2_LOG) << "Metadata for file" << finfo.fileName() << "written to file.";
         }
     }
 
     if (writeToSidecar || (writeToSidecarIfFileNotPossible && !writtenToFile))
     {
-        qDebug() << "Will write XMP sidecar for file" << givenFileInfo.fileName();
+        qCDebug(LIBKEXIV2_LOG) << "Will write XMP sidecar for file" << givenFileInfo.fileName();
         writtenToSidecar = d->saveToXMPSidecar(imageFilePath);
 
         if (writtenToSidecar)
         {
-            qDebug() << "Metadata for file '" << givenFileInfo.fileName() << "' written to XMP sidecar.";
+            qCDebug(LIBKEXIV2_LOG) << "Metadata for file '" << givenFileInfo.fileName() << "' written to XMP sidecar.";
         }
     }
 
@@ -444,7 +447,7 @@ bool KExiv2::applyChanges() const
 {
     if (d->filePath.isEmpty())
     {
-        qDebug() << "Failed to apply changes: file path is empty!";
+        qCDebug(LIBKEXIV2_LOG) << "Failed to apply changes: file path is empty!";
         return false;
     }
 

@@ -25,12 +25,12 @@
  *
  * ============================================================ */
 
-#include "kexiv2previews.h"
-
 // Local includes
 
+#include "kexiv2previews.h"
 #include "kexiv2_p.h"
 #include "kexiv2.h"
+#include "libkexiv2_debug.h"
 
 namespace KExiv2Iface
 {
@@ -88,7 +88,7 @@ KExiv2Previews::KExiv2Previews(const QString& filePath)
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 }
 
@@ -106,7 +106,7 @@ KExiv2Previews::KExiv2Previews(const QByteArray& imgData)
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 }
 
@@ -180,8 +180,8 @@ QByteArray KExiv2Previews::data(int index)
 {
     if (index < 0 || index >= size()) return QByteArray();
 
-    qDebug() << "index: "         << index;
-    qDebug() << "d->properties: " << count();
+    qCDebug(LIBKEXIV2_LOG) << "index: "         << index;
+    qCDebug(LIBKEXIV2_LOG) << "d->properties: " << count();
 
     try
     {
@@ -195,7 +195,7 @@ QByteArray KExiv2Previews::data(int index)
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
         return QByteArray();
     }
 }

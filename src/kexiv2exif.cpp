@@ -27,7 +27,6 @@
 
 #include "kexiv2.h"
 #include "kexiv2_p.h"
-#include "rotationmatrix.h"
 
 // C++ includes
 
@@ -40,7 +39,12 @@
 
 // KDE includes
 
-#include <KLocalizedString>
+#include <klocalizedstring.h>
+
+// Local includes
+
+#include "rotationmatrix.h"
+#include "libkexiv2_debug.h"
 
 namespace KExiv2Iface
 {
@@ -59,12 +63,12 @@ bool KExiv2::canWriteExif(const QString& filePath)
     catch( Exiv2::Error& e )
     {
         std::string s(e.what());
-        qCritical() << "Cannot check Exif access mode using Exiv2 (Error #"
+        qCCritical(LIBKEXIV2_LOG) << "Cannot check Exif access mode using Exiv2 (Error #"
                     << e.code() << ": " << s.c_str() << ")";
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -88,7 +92,7 @@ bool KExiv2::clearExif() const
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -123,13 +127,13 @@ QByteArray KExiv2::getExifEncoded(bool addExifHeader) const
     catch( Exiv2::Error& e )
     {
         if (!d->filePath.isEmpty())
-            qDebug() << "From file " << d->filePath.toLatin1().constData();
+            qCDebug(LIBKEXIV2_LOG) << "From file " << d->filePath.toLatin1().constData();
 
         d->printExiv2ExceptionError("Cannot get Exif data using Exiv2 ", e);
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return QByteArray();
@@ -148,13 +152,13 @@ bool KExiv2::setExif(const QByteArray& data) const
     catch( Exiv2::Error& e )
     {
         if (!d->filePath.isEmpty())
-            qCritical() << "From file " << d->filePath.toLatin1().constData();
+            qCCritical(LIBKEXIV2_LOG) << "From file " << d->filePath.toLatin1().constData();
 
         d->printExiv2ExceptionError("Cannot set Exif data using Exiv2 ", e);
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -228,7 +232,7 @@ KExiv2::MetaDataMap KExiv2::getExifTagsDataList(const QStringList& exifKeysFilte
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return MetaDataMap();
@@ -280,7 +284,7 @@ QString KExiv2::getExifComment() const
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return QString();
@@ -344,7 +348,7 @@ bool KExiv2::setExifComment(const QString& comment, bool setProgramName) const
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -365,7 +369,7 @@ QString KExiv2::getExifTagTitle(const char* exifTagName)
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return QString();
@@ -386,7 +390,7 @@ QString KExiv2::getExifTagDescription(const char* exifTagName)
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return QString();
@@ -414,7 +418,7 @@ bool KExiv2::removeExifTag(const char* exifTagName, bool setProgramName) const
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -443,7 +447,7 @@ bool KExiv2::getExifTagRational(const char* exifTagName, long int& num, long int
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -465,7 +469,7 @@ bool KExiv2::setExifTagLong(const char* exifTagName, long val, bool setProgramNa
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -487,7 +491,7 @@ bool KExiv2::setExifTagRational(const char* exifTagName, long int num, long int 
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -513,7 +517,7 @@ bool KExiv2::setExifTagData(const char* exifTagName, const QByteArray& data, boo
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -578,7 +582,7 @@ bool KExiv2::setExifTagVariant(const char* exifTagName, const QVariant& val,
             }
             catch(...)
             {
-                qCritical() << "Default exception from Exiv2";
+                qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
             }
 
             return false;
@@ -675,7 +679,7 @@ QString KExiv2::createExifUserStringFromValue(const char* exifTagName, const QVa
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return QString();
@@ -707,7 +711,7 @@ bool KExiv2::getExifTagLong(const char* exifTagName, long& val, int component) c
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -738,7 +742,7 @@ QByteArray KExiv2::getExifTagData(const char* exifTagName) const
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return QByteArray();
@@ -824,7 +828,7 @@ QVariant KExiv2::getExifTagVariant(const char* exifTagName, bool rationalAsListO
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return QVariant();
@@ -857,7 +861,7 @@ QString KExiv2::getExifTagString(const char* exifTagName, bool escapeCR) const
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return QString();
@@ -879,7 +883,7 @@ bool KExiv2::setExifTagString(const char* exifTagName, const QString& value, boo
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -913,7 +917,7 @@ QImage KExiv2::getExifThumbnail(bool fixOrientation) const
                 if (it != exifData.end() && it->count())
                 {
                     long orientation = it->toLong();
-                    qDebug() << "Exif Thumbnail Orientation: " << (int)orientation;
+                    qCDebug(LIBKEXIV2_LOG) << "Exif Thumbnail Orientation: " << (int)orientation;
                     rotateExifQImage(thumbnail, (ImageOrientation)orientation);
                 }
 
@@ -927,7 +931,7 @@ QImage KExiv2::getExifThumbnail(bool fixOrientation) const
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return thumbnail;
@@ -972,7 +976,7 @@ bool KExiv2::setExifThumbnail(const QImage& thumbImage, bool setProgramName) con
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -1031,7 +1035,7 @@ bool KExiv2::setTiffThumbnail(const QImage& thumbImage, bool setProgramName) con
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -1052,7 +1056,7 @@ bool KExiv2::removeExifThumbnail() const
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -1104,7 +1108,7 @@ KExiv2::TagsMap KExiv2::getStdExifTagsList() const
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return TagsMap();
@@ -1157,7 +1161,7 @@ KExiv2::TagsMap KExiv2::getMakernoteTagsList() const
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return TagsMap();

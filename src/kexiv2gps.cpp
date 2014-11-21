@@ -39,6 +39,10 @@
 #include <climits>
 #include <cmath>
 
+// Local includes
+
+#include "libkexiv2_debug.h"
+
 namespace KExiv2Iface
 {
 
@@ -134,7 +138,7 @@ bool KExiv2::getGPSLatitudeNumber(double* const latitude) const
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -230,7 +234,7 @@ bool KExiv2::getGPSLongitudeNumber(double* const longitude) const
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -304,7 +308,7 @@ bool KExiv2::getGPSAltitude(double* const altitude) const
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -362,7 +366,7 @@ bool KExiv2::initializeGPSInfo(const bool setProgramName)
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -494,7 +498,7 @@ bool KExiv2::setGPSInfo(const double* const altitude, const double latitude, con
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -583,7 +587,7 @@ bool KExiv2::removeGPSInfo(const bool setProgramName)
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return false;

@@ -39,6 +39,10 @@ extern "C"
 
 #include <QTextCodec>
 
+// Local includes
+
+#include "libkexiv2_debug.h"
+
 namespace KExiv2Iface
 {
 
@@ -89,7 +93,7 @@ bool KExiv2::Private::saveToXMPSidecar(const QFileInfo& finfo) const
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
         return false;
     }
 }
@@ -98,7 +102,7 @@ bool KExiv2::Private::saveToFile(const QFileInfo& finfo) const
 {
     if (!finfo.isWritable())
     {
-        qDebug() << "File '" << finfo.fileName().toLatin1().constData() << "' is read only. Metadata not written.";
+        qCDebug(LIBKEXIV2_LOG) << "File '" << finfo.fileName().toLatin1().constData() << "' is read only. Metadata not written.";
         return false;
     }
 
@@ -126,28 +130,28 @@ bool KExiv2::Private::saveToFile(const QFileInfo& finfo) const
 
     if (!writeRawFiles && (rawTiffBasedSupported.contains(ext) || rawTiffBasedNotSupported.contains(ext)) )
     {
-        qDebug() << finfo.fileName()
-                 << "is a TIFF based RAW file, writing to such a file is disabled by current settings.";
+        qCDebug(LIBKEXIV2_LOG) << finfo.fileName()
+                               << "is a TIFF based RAW file, writing to such a file is disabled by current settings.";
         return false;
     }
 
 /*
     if (rawTiffBasedNotSupported.contains(ext))
     {
-        qDebug() << finfo.fileName()
-                 << "is TIFF based RAW file not yet supported. Metadata not saved.";
+        qCDebug(LIBKEXIV2_LOG) << finfo.fileName()
+                               << "is TIFF based RAW file not yet supported. Metadata not saved.";
         return false;
     }
 
     if (rawTiffBasedSupported.contains(ext) && !writeRawFiles)
     {
-        qDebug() << finfo.fileName()
-                 << "is TIFF based RAW file supported but writing mode is disabled. "
-                 << "Metadata not saved.";
+        qCDebug(LIBKEXIV2_LOG) << finfo.fileName()
+                               << "is TIFF based RAW file supported but writing mode is disabled. "
+                               << "Metadata not saved.";
         return false;
     }
 
-    qDebug() << "File Extension: " << ext << " is supported for writing mode";
+    qCDebug(LIBKEXIV2_LOG) << "File Extension: " << ext << " is supported for writing mode";
 
     bool ret = false;
 */
@@ -165,7 +169,7 @@ bool KExiv2::Private::saveToFile(const QFileInfo& finfo) const
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
         return false;
     }
 }
@@ -176,7 +180,7 @@ bool KExiv2::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::AutoP
     {
         Exiv2::AccessMode mode;
         bool wroteComment = false, wroteEXIF = false, wroteIPTC = false, wroteXMP = false;
-        
+
         // We need to load target file metadata to merge with new one. It's mandatory with TIFF format:
         // like all tiff file structure is based on Exif.
         image->readMetadata();
@@ -191,7 +195,7 @@ bool KExiv2::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::AutoP
             wroteComment = true;
         }
 
-        qDebug() << "wroteComment: " << wroteComment;
+        qCDebug(LIBKEXIV2_LOG) << "wroteComment: " << wroteComment;
 
         // Exif metadata ----------------------------------
 
@@ -251,7 +255,7 @@ bool KExiv2::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::AutoP
             wroteEXIF = true;
         }
 
-        qDebug() << "wroteEXIF: " << wroteEXIF;
+        qCDebug(LIBKEXIV2_LOG) << "wroteEXIF: " << wroteEXIF;
 
         // Iptc metadata ----------------------------------
 
@@ -263,7 +267,7 @@ bool KExiv2::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::AutoP
             wroteIPTC = true;
         }
 
-        qDebug() << "wroteIPTC: " << wroteIPTC;
+        qCDebug(LIBKEXIV2_LOG) << "wroteIPTC: " << wroteIPTC;
 
         // Xmp metadata -----------------------------------
 
@@ -277,16 +281,16 @@ bool KExiv2::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::AutoP
 #endif
         }
 
-        qDebug() << "wroteXMP: " << wroteXMP;
+        qCDebug(LIBKEXIV2_LOG) << "wroteXMP: " << wroteXMP;
 
         if (!wroteComment && !wroteEXIF && !wroteIPTC && !wroteXMP)
         {
-            qDebug() << "Writing metadata is not supported for file" << finfo.fileName();
+            qCDebug(LIBKEXIV2_LOG) << "Writing metadata is not supported for file" << finfo.fileName();
             return false;
         }
         else if (!wroteEXIF || !wroteIPTC || !wroteXMP)
         {
-            qDebug() << "Support for writing metadata is limited for file" << finfo.fileName();
+            qCDebug(LIBKEXIV2_LOG) << "Support for writing metadata is limited for file" << finfo.fileName();
         }
 
         if (!updateFileTimeStamp)
@@ -308,8 +312,8 @@ bool KExiv2::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::AutoP
             {
                 ::utime(QFile::encodeName(filePath).constData(), &ut);
             }
-            
-            qDebug() << "File time stamp restored";
+
+            qCDebug(LIBKEXIV2_LOG) << "File time stamp restored";
         }
         else
         {
@@ -324,7 +328,7 @@ bool KExiv2::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::AutoP
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -343,13 +347,13 @@ void KExiv2Data::Private::clear()
 void KExiv2::Private::printExiv2ExceptionError(const QString& msg, Exiv2::Error& e)
 {
     std::string s(e.what());
-    qCritical() << msg.toLatin1().constData() << " (Error #"
+    qCCritical(LIBKEXIV2_LOG) << msg.toLatin1().constData() << " (Error #"
                 << e.code() << ": " << s.c_str();
 }
 
 void KExiv2::Private::printExiv2MessageHandler(int lvl, const char* msg)
 {
-    qDebug() << "Exiv2 (" << lvl << ") : " << msg;
+    qCDebug(LIBKEXIV2_LOG) << "Exiv2 (" << lvl << ") : " << msg;
 }
 
 QString KExiv2::Private::convertCommentValue(const Exiv2::Exifdatum& exifDatum) const
@@ -383,7 +387,7 @@ QString KExiv2::Private::convertCommentValue(const Exiv2::Exifdatum& exifDatum) 
         }
         else if (charset == "\"Jis\"")
         {
-            QTextCodec* codec = QTextCodec::codecForName("JIS7");
+            QTextCodec* const codec = QTextCodec::codecForName("JIS7");
             return codec->toUnicode(comment.c_str());
         }
         else if (charset == "\"Ascii\"")
@@ -401,7 +405,7 @@ QString KExiv2::Private::convertCommentValue(const Exiv2::Exifdatum& exifDatum) 
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return QString();

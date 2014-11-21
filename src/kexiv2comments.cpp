@@ -29,6 +29,7 @@
 
 #include "kexiv2_p.h"
 #include "kexiv2.h"
+#include "libkexiv2_debug.h"
 
 namespace KExiv2Iface
 {
@@ -46,12 +47,12 @@ bool KExiv2::canWriteComment(const QString& filePath)
     catch( Exiv2::Error& e )
     {
         std::string s(e.what());
-        qCritical() << "Cannot check Comment access mode using Exiv2 (Error #"
-                 << e.code() << ": " << s.c_str() << ")";
+        qCCritical(LIBKEXIV2_LOG) << "Cannot check Comment access mode using Exiv2 (Error #"
+                                  << e.code() << ": " << s.c_str() << ")";
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -90,6 +91,7 @@ QString KExiv2::detectLanguageAlt(const QString& value, QString& lang)
     if (value.size() > 6 && value.startsWith(QString("lang=\"")))
     {
         int pos = value.indexOf(QString("\""), 6);
+
         if (pos != -1)
         {
             lang = value.mid(6, pos-6);

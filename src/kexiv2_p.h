@@ -48,7 +48,6 @@
 #include <QLatin1String>
 #include <QFileInfo>
 #include <QSharedData>
-#include <QDebug>
 
 // KDE includes
 

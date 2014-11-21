@@ -27,6 +27,7 @@
 
 #include "kexiv2.h"
 #include "kexiv2_p.h"
+#include "libkexiv2_debug.h"
 
 namespace KExiv2Iface
 {
@@ -44,12 +45,12 @@ bool KExiv2::canWriteIptc(const QString& filePath)
     catch(Exiv2::Error& e)
     {
         std::string s(e.what());
-        qCritical() << "Cannot check Iptc access mode using Exiv2 (Error #"
-                    << e.code() << ": " << s.c_str() << ")";
+        qCCritical(LIBKEXIV2_LOG) << "Cannot check Iptc access mode using Exiv2 (Error #"
+                                  << e.code() << ": " << s.c_str() << ")";
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -73,7 +74,7 @@ bool KExiv2::clearIptc() const
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -106,14 +107,14 @@ QByteArray KExiv2::getIptc(bool addIrbHeader) const
     {
         if (!d->filePath.isEmpty())
         {
-            qCritical() << "From file " << d->filePath.toLatin1().constData();
+            qCCritical(LIBKEXIV2_LOG) << "From file " << d->filePath.toLatin1().constData();
         }
 
         d->printExiv2ExceptionError("Cannot get Iptc data using Exiv2 ",e);
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return QByteArray();
@@ -133,14 +134,14 @@ bool KExiv2::setIptc(const QByteArray& data) const
     {
         if (!d->filePath.isEmpty())
         {
-            qCritical() << "From file " << d->filePath.toLatin1().constData();
+            qCCritical(LIBKEXIV2_LOG) << "From file " << d->filePath.toLatin1().constData();
         }
 
         d->printExiv2ExceptionError("Cannot set Iptc data using Exiv2 ", e);
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -248,7 +249,7 @@ KExiv2::MetaDataMap KExiv2::getIptcTagsDataList(const QStringList& iptcKeysFilte
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return MetaDataMap();
@@ -268,7 +269,7 @@ QString KExiv2::getIptcTagTitle(const char* iptcTagName)
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return QString();
@@ -288,7 +289,7 @@ QString KExiv2::getIptcTagDescription(const char* iptcTagName)
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return QString();
@@ -328,7 +329,7 @@ bool KExiv2::removeIptcTag(const char* iptcTagName, bool setProgramName) const
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -354,7 +355,7 @@ bool KExiv2::setIptcTagData(const char* iptcTagName, const QByteArray& data, boo
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -384,7 +385,7 @@ QByteArray KExiv2::getIptcTagData(const char* iptcTagName) const
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return QByteArray();
@@ -417,7 +418,7 @@ QString KExiv2::getIptcTagString(const char* iptcTagName, bool escapeCR) const
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return QString();
@@ -442,7 +443,7 @@ bool KExiv2::setIptcTagString(const char* iptcTagName, const QString& value, boo
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -482,7 +483,7 @@ QStringList KExiv2::getIptcTagsStringList(const char* iptcTagName, bool escapeCR
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return QStringList();
@@ -500,7 +501,7 @@ bool KExiv2::setIptcTagsStringList(const char* iptcTagName, int maxSize,
         QStringList oldvals = oldValues;
         QStringList newvals = newValues;
 
-        qDebug() << d->filePath.toLatin1().constData() << " : " << iptcTagName
+        qCDebug(LIBKEXIV2_LOG) << d->filePath.toLatin1().constData() << " : " << iptcTagName
                  << " => " << newvals.join(",").toLatin1().constData();
 
         // Remove all old values.
@@ -549,7 +550,7 @@ bool KExiv2::setIptcTagsStringList(const char* iptcTagName, int maxSize,
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -575,7 +576,7 @@ QStringList KExiv2::getIptcKeywords() const
                 }
             }
 
-            qDebug() << d->filePath << " ==> Read Iptc Keywords: " << keywords;
+            qCDebug(LIBKEXIV2_LOG) << d->filePath << " ==> Read Iptc Keywords: " << keywords;
 
             return keywords;
         }
@@ -586,7 +587,7 @@ QStringList KExiv2::getIptcKeywords() const
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return QStringList();
@@ -603,7 +604,7 @@ bool KExiv2::setIptcKeywords(const QStringList& oldKeywords, const QStringList& 
         QStringList oldkeys = oldKeywords;
         QStringList newkeys = newKeywords;
 
-        qDebug() << d->filePath << " ==> New Iptc Keywords: " << newkeys;
+        qCDebug(LIBKEXIV2_LOG) << d->filePath << " ==> New Iptc Keywords: " << newkeys;
 
         // Remove all old keywords.
         Exiv2::IptcData iptcData(d->iptcMetadata());
@@ -650,7 +651,7 @@ bool KExiv2::setIptcKeywords(const QStringList& oldKeywords, const QStringList& 
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -685,7 +686,7 @@ QStringList KExiv2::getIptcSubjects() const
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return QStringList();
@@ -744,7 +745,7 @@ bool KExiv2::setIptcSubjects(const QStringList& oldSubjects, const QStringList& 
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -779,7 +780,7 @@ QStringList KExiv2::getIptcSubCategories() const
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return QStringList();
@@ -839,7 +840,7 @@ bool KExiv2::setIptcSubCategories(const QStringList& oldSubCategories, const QSt
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return false;
@@ -876,7 +877,7 @@ KExiv2::TagsMap KExiv2::getIptcTagsList() const
     }
     catch(...)
     {
-        qCritical() << "Default exception from Exiv2";
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
     }
 
     return TagsMap();

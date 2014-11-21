@@ -29,7 +29,6 @@
 
 // Qt includes
 
-#include <QDebug>
 #include <QStandardPaths>
 #include <QFile>
 #include <QValidator>
@@ -51,6 +50,10 @@
 #include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kstandarddirs.h>
+
+// Local includes
+
+#include "libkexiv2_debug.h"
 
 namespace KExiv2Iface
 {
@@ -123,7 +126,7 @@ SubjectWidget::SubjectWidget(QWidget* const parent)
                                           "libkexiv2/data/topicset.iptc-subjectcode.xml");
 
     if (!loadSubjectCodesFromXML(QUrl(path)))
-        qDebug() << "Cannot load IPTC/NAA subject codes XML database";
+        qCDebug(LIBKEXIV2_LOG) << "Cannot load IPTC/NAA subject codes XML database";
 
     // --------------------------------------------------------
 
