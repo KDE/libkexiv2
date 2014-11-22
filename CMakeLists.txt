@@ -119,7 +119,7 @@ endif()
 ############## CMake Config Files ##############
 
 message("${CMAKECONFIG_INSTALL_DIR}")
-set(CMAKECONFIG_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/KF5Kexiv2")
+set(CMAKECONFIG_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/KF5KExiv2")
 
 ecm_configure_package_config_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/KF5KExiv2Config.cmake.in"

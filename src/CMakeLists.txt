@@ -52,10 +52,10 @@ ecm_generate_headers(kexiv2_CamelCase_HEADERS
                      REQUIRED_HEADERS kexiv2_HEADERS
 )
 
-add_library(KF5Kexiv2 SHARED ${kexiv2_LIB_SRCS})
-add_library(KF5::Kexiv2 ALIAS KF5Kexiv2)
+add_library(KF5KExiv2 SHARED ${kexiv2_LIB_SRCS})
+add_library(KF5::KExiv2 ALIAS KF5KExiv2)
 
-generate_export_header(KF5Kexiv2 BASE_NAME libkexiv2 EXPORT_MACRO_NAME LIBKEXIV2_EXPORT)
+generate_export_header(KF5KExiv2 BASE_NAME libkexiv2 EXPORT_MACRO_NAME LIBKEXIV2_EXPORT)
 
 # Check if compilation is done through digiKam SC or not. If yes, do not install header files.
 if (NOT DIGIKAMSC_COMPILE_LIBKEXIV2)
@@ -82,11 +82,11 @@ if (NOT DIGIKAMSC_COMPILE_LIBKEXIV2)
 
 endif()
 
-target_include_directories(KF5Kexiv2 INTERFACE 
+target_include_directories(KF5KExiv2 INTERFACE
                            "$<INSTALL_INTERFACE:${KF5_INCLUDE_INSTALL_DIR}/KEXIV2;${KF5_INCLUDE_INSTALL_DIR}/KEXIV2/kexiv2>"
 )
 
-target_link_libraries(KF5Kexiv2
+target_link_libraries(KF5KExiv2
                       PRIVATE
                       ${EXIV2_LIBRARIES}
                       PUBLIC
@@ -98,14 +98,14 @@ if( WIN32 )
     target_link_libraries( kexiv2 ${EXPAT_LIBRARIES} )
 endif()
 
-install(TARGETS KF5Kexiv2
+install(TARGETS KF5KExiv2
         EXPORT  KF5KExiv2Targets ${KF5_INSTALL_TARGETS_DEFAULT_ARGS}
 )
 
-set_target_properties(KF5Kexiv2   PROPERTIES
+set_target_properties(KF5KExiv2   PROPERTIES
                       VERSION     ${KEXIV2_VERSION_STRING}
                       SOVERSION   ${KEXIV2_SOVERSION}
-                      EXPORT_NAME Kexiv2
+                      EXPORT_NAME KExiv2
 )
 
 install(FILES       ${CMAKE_CURRENT_SOURCE_DIR}/../data/topicset.iptc-subjectcode.xml
