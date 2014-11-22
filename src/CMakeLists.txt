@@ -57,7 +57,7 @@ ecm_generate_headers(kexiv2_CamelCase_HEADERS
 add_library(KF5KExiv2 SHARED ${kexiv2_LIB_SRCS})
 add_library(KF5::KExiv2 ALIAS KF5KExiv2)
 
-generate_export_header(KF5KExiv2 BASE_NAME KExiv2 EXPORT_MACRO_NAME LIBKEXIV2_EXPORT)
+generate_export_header(KF5KExiv2 BASE_NAME libkexiv2 EXPORT_MACRO_NAME LIBKEXIV2_EXPORT)
 
 # Check if compilation is done through digiKam SC or not. If yes, do not install header files.
 if (NOT DIGIKAMSC_COMPILE_LIBKEXIV2)
