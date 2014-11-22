@@ -50,7 +50,7 @@ ecm_generate_headers(kexiv2_CamelCase_HEADERS
                      RotationMatrix
                      SubjectWidget
 
-                     PREFIX           kexiv2
+                     PREFIX           KExiv2
                      REQUIRED_HEADERS kexiv2_HEADERS
 )
 
