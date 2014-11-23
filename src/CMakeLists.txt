@@ -98,7 +98,7 @@ target_link_libraries(KF5KExiv2
 )
 
 if( WIN32 )
-    target_link_libraries( kexiv2 ${EXPAT_LIBRARIES} )
+    target_link_libraries( KF5KExiv2 ${EXPAT_LIBRARIES} )
 endif()
 
 install(TARGETS KF5KExiv2
