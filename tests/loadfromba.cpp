@@ -49,8 +49,8 @@ int main (int argc, char **argv)
         return -1;
     }
 
-    QString filePath(argv[1]);
-    QString baFile("ba.dat");
+    QString filePath = QString::fromLocal8Bit(argv[1]);
+    QString baFile(QStringLiteral("ba.dat"));
 
     QImage image(filePath);
     image.save(baFile, "PNG");

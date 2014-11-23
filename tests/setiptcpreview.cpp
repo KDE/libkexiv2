@@ -51,7 +51,7 @@ int main (int argc, char **argv)
     }
 
     QImage  preview;
-    QString filePath(argv[1]);
+    QString filePath = QString::fromLocal8Bit(argv[1]);
     KExiv2  meta(filePath);
 
     QImage  image(filePath);

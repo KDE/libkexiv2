@@ -38,8 +38,7 @@
 
 #include <klocalizedstring.h>
 #include <kcombobox.h>
-#include <kdialog.h>
-#include <kiconloader.h>
+#include <QDialog>
 #include <ktextedit.h>
 
 // Local includes
@@ -276,7 +275,7 @@ AltLangStrEdit::AltLangStrEdit(QWidget* const parent)
     QGridLayout* const grid = new QGridLayout(this);
     d->titleLabel           = new QLabel(this);
     d->delValueButton       = new QToolButton(this);
-    d->delValueButton->setIcon(SmallIcon("edit-clear"));
+    d->delValueButton->setIcon(QIcon::fromTheme("edit-clear"));
     d->delValueButton->setToolTip(i18n("Remove entry for this language"));
     d->delValueButton->setEnabled(false);
 
@@ -296,7 +295,7 @@ AltLangStrEdit::AltLangStrEdit(QWidget* const parent)
     grid->addWidget(d->valueEdit,      1, 0, 1,-1);
     grid->setColumnStretch(1, 10);
     grid->setMargin(0);
-    grid->setSpacing(KDialog::spacingHint());
+//TODO PORT QT5     grid->setSpacing(QDialog::spacingHint());
 
     loadLangAltListEntries();
 
@@ -419,7 +418,7 @@ void AltLangStrEdit::loadLangAltListEntries()
         foreach(const QString& item, list)
         {
               d->languageCB->addItem(item);
-              d->languageCB->setItemIcon(d->languageCB->count()-1, SmallIcon("dialog-ok"));
+              d->languageCB->setItemIcon(d->languageCB->count()-1, QIcon::fromTheme("dialog-ok"));
         }
 
         d->languageCB->insertSeparator(d->languageCB->count());

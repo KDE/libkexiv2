@@ -46,7 +46,7 @@ int main (int argc, char **argv)
         return -1;
     }
 
-    QString filePath(argv[1]);
+    QString filePath = QString::fromLocal8Bit(argv[1]);
 
     KExiv2 meta;
 

@@ -13,8 +13,6 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR}/.. ${CMAKE_CURRENT_BINARY_DIR})
 
 add_definitions(${EXIV2_DEFINITIONS})
 
-remove_definitions(-DQT_NO_CAST_FROM_ASCII -DQT_NO_CAST_TO_ASCII)
-
 if( WIN32 )
     add_definitions( -DEXV_HAVE_DLL )
 endif()
@@ -93,7 +91,9 @@ target_link_libraries(KF5KExiv2
                       PRIVATE
                       ${EXIV2_LIBRARIES}
                       PUBLIC
-                      KF5::KDELibs4Support
+                      KF5::TextWidgets
+                      KF5::Completion
+                      KF5::CoreAddons
                       Qt5::Xml
 )
 

@@ -45,10 +45,8 @@
 // KDE includes
 
 #include <kcombobox.h>
-#include <kdialog.h>
-#include <kiconloader.h>
+#include <QDialog>
 #include <klocalizedstring.h>
-#include <kstandarddirs.h>
 
 // Local includes
 
@@ -210,9 +208,9 @@ SubjectWidget::SubjectWidget(QWidget* const parent)
     d->addSubjectButton = new QPushButton(i18n("&Add"));
     d->delSubjectButton = new QPushButton(i18n("&Delete"));
     d->repSubjectButton = new QPushButton(i18n("&Replace"));
-    d->addSubjectButton->setIcon(SmallIcon("list-add"));
-    d->delSubjectButton->setIcon(SmallIcon("edit-delete"));
-    d->repSubjectButton->setIcon(SmallIcon("view-refresh"));
+    d->addSubjectButton->setIcon(QIcon::fromTheme("list-add"));
+    d->delSubjectButton->setIcon(QIcon::fromTheme("edit-delete"));
+    d->repSubjectButton->setIcon(QIcon::fromTheme("view-refresh"));
     d->delSubjectButton->setEnabled(false);
     d->repSubjectButton->setEnabled(false);
 
@@ -244,7 +242,7 @@ SubjectWidget::SubjectWidget(QWidget* const parent)
     optionsBoxLayout->addWidget(m_detailEdit,   6, 1, 1, 4);
     optionsBoxLayout->setColumnStretch(4, 10);
     optionsBoxLayout->setMargin(0);
-    optionsBoxLayout->setSpacing(KDialog::spacingHint());
+//TODO PORT QT5     optionsBoxLayout->setSpacing(QDialog::spacingHint());
     d->optionsBox->setLayout(optionsBoxLayout);
 
     // --------------------------------------------------------
@@ -261,7 +259,7 @@ SubjectWidget::SubjectWidget(QWidget* const parent)
     mainLayout->setRowStretch(6, 10);
     mainLayout->setColumnStretch(2, 1);
     mainLayout->setMargin(0);
-    mainLayout->setSpacing(KDialog::spacingHint());
+//TODO PORT QT5     mainLayout->setSpacing(QDialog::spacingHint());
     setLayout(mainLayout);
 
     // --------------------------------------------------------
