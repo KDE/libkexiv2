@@ -84,7 +84,7 @@ if (NOT DIGIKAMSC_COMPILE_LIBKEXIV2)
 endif()
 
 target_include_directories(KF5KExiv2 INTERFACE
-                           "$<INSTALL_INTERFACE:${KF5_INCLUDE_INSTALL_DIR}/KExiv2>"
+                           "$<INSTALL_INTERFACE:${KF5_INCLUDE_INSTALL_DIR}/KExiv2;${KF5_INCLUDE_INSTALL_DIR}/KExiv2/kexiv2>"
 )
 
 target_link_libraries(KF5KExiv2
