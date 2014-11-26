@@ -941,7 +941,7 @@ bool KExiv2::rotateExifQImage(QImage& image, ImageOrientation orientation) const
 {
     QMatrix matrix = RotationMatrix::toMatrix(orientation);
 
-    if ((orientation != ORIENTATION_NORMAL) || (orientation != ORIENTATION_UNSPECIFIED))
+    if ((orientation != ORIENTATION_NORMAL) && (orientation != ORIENTATION_UNSPECIFIED))
     {
         image = image.transformed(matrix);
         return true;
