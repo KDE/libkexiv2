@@ -295,7 +295,8 @@ AltLangStrEdit::AltLangStrEdit(QWidget* const parent)
     grid->addWidget(d->valueEdit,      1, 0, 1,-1);
     grid->setColumnStretch(1, 10);
     grid->setMargin(0);
-//TODO PORT QT5     grid->setSpacing(QDialog::spacingHint());
+#pragma message: PORT QT5
+//  grid->setSpacing(QDialog::spacingHint());
 
     loadLangAltListEntries();
 

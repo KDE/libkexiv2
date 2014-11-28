@@ -242,7 +242,8 @@ SubjectWidget::SubjectWidget(QWidget* const parent)
     optionsBoxLayout->addWidget(m_detailEdit,   6, 1, 1, 4);
     optionsBoxLayout->setColumnStretch(4, 10);
     optionsBoxLayout->setMargin(0);
-//TODO PORT QT5     optionsBoxLayout->setSpacing(QDialog::spacingHint());
+#pragma message: PORT QT5
+//  optionsBoxLayout->setSpacing(QDialog::spacingHint());
     d->optionsBox->setLayout(optionsBoxLayout);
 
     // --------------------------------------------------------
@@ -259,7 +260,8 @@ SubjectWidget::SubjectWidget(QWidget* const parent)
     mainLayout->setRowStretch(6, 10);
     mainLayout->setColumnStretch(2, 1);
     mainLayout->setMargin(0);
-//TODO PORT QT5     mainLayout->setSpacing(QDialog::spacingHint());
+#pragma message: PORT QT5
+//  mainLayout->setSpacing(QDialog::spacingHint());
     setLayout(mainLayout);
 
     // --------------------------------------------------------
