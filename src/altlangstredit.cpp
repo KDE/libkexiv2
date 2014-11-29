@@ -33,12 +33,12 @@
 #include <QLabel>
 #include <QToolButton>
 #include <QGridLayout>
+#include <QApplication>
 
 // KDE includes
 
 #include <klocalizedstring.h>
 #include <kcombobox.h>
-#include <QDialog>
 #include <ktextedit.h>
 
 // Local includes
@@ -295,8 +295,7 @@ AltLangStrEdit::AltLangStrEdit(QWidget* const parent)
     grid->addWidget(d->valueEdit,      1, 0, 1,-1);
     grid->setColumnStretch(1, 10);
     grid->setMargin(0);
-#pragma message: PORT QT5
-//  grid->setSpacing(QDialog::spacingHint());
+    grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     loadLangAltListEntries();
 

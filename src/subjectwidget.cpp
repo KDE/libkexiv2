@@ -41,11 +41,11 @@
 #include <QListWidget>
 #include <QDomDocument>
 #include <QDomElement>
+#include <QApplication>
 
 // KDE includes
 
 #include <kcombobox.h>
-#include <QDialog>
 #include <klocalizedstring.h>
 
 // Local includes
@@ -242,8 +242,7 @@ SubjectWidget::SubjectWidget(QWidget* const parent)
     optionsBoxLayout->addWidget(m_detailEdit,   6, 1, 1, 4);
     optionsBoxLayout->setColumnStretch(4, 10);
     optionsBoxLayout->setMargin(0);
-#pragma message: PORT QT5
-//  optionsBoxLayout->setSpacing(QDialog::spacingHint());
+    optionsBoxLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     d->optionsBox->setLayout(optionsBoxLayout);
 
     // --------------------------------------------------------
@@ -260,8 +259,7 @@ SubjectWidget::SubjectWidget(QWidget* const parent)
     mainLayout->setRowStretch(6, 10);
     mainLayout->setColumnStretch(2, 1);
     mainLayout->setMargin(0);
-#pragma message: PORT QT5
-//  mainLayout->setSpacing(QDialog::spacingHint());
+    mainLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     setLayout(mainLayout);
 
     // --------------------------------------------------------
