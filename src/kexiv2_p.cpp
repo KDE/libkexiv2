@@ -43,7 +43,7 @@ extern "C"
 
 #include "libkexiv2_debug.h"
 
-// Pragma directives to reduce warnings from Boost header files.
+// Pragma directives to reduce warnings from Exiv2.
 #if not defined(__APPLE__) && defined(__GNUC__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
