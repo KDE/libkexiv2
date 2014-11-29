@@ -43,6 +43,17 @@ extern "C"
 
 #include "libkexiv2_debug.h"
 
+// Pragma directives to reduce warnings from Boost header files.
+#if not defined(__APPLE__) && defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
+
+#if defined(__APPLE__) && defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#endif
+
 namespace KExiv2Iface
 {
 
@@ -553,3 +564,12 @@ void KExiv2::Private::loadSidecarData(Exiv2::Image::AutoPtr xmpsidecar)
 #endif // _XMP_SUPPORT_
 
 }  // NameSpace KExiv2Iface
+
+// Restore warnings
+#if not defined(__APPLE__) && defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
+
+#if defined(__APPLE__) && defined(__clang__)
+#pragma clang diagnostic pop
+#endif
