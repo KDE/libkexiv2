@@ -164,14 +164,14 @@ int KExiv2Previews::height(int index)
 
 QString KExiv2Previews::mimeType(int index)
 {
-    if (index < 0 || index >= size()) return 0;
+    if (index < 0 || index >= size()) return QString();
 
     return QString::fromLatin1(d->properties[index].mimeType_.c_str());
 }
 
 QString KExiv2Previews::fileExtension(int index)
 {
-    if (index < 0 || index >= size()) return 0;
+    if (index < 0 || index >= size()) return QString();
 
     return QString::fromLatin1(d->properties[index].extension_.c_str());
 }
