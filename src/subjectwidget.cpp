@@ -120,7 +120,7 @@ SubjectWidget::SubjectWidget(QWidget* const parent)
     // See http://iptc.cms.apa.at/std/topicset/topicset.iptc-subjectcode.xml for details.
 
     QString path = QStandardPaths::locate(QStandardPaths::GenericDataLocation, 
-                                          "libkexiv2/data/topicset.iptc-subjectcode.xml");
+                                          QString::fromLatin1("libkexiv2/data/topicset.iptc-subjectcode.xml"));
 
     if (!loadSubjectCodesFromXML(QUrl(path)))
         qCDebug(LIBKEXIV2_LOG) << "Cannot load IPTC/NAA subject codes XML database";
@@ -128,7 +128,7 @@ SubjectWidget::SubjectWidget(QWidget* const parent)
     // --------------------------------------------------------
 
     // Subject Reference Number only accept digit.
-    QRegExp refDigitRx("^[0-9]{8}$");
+    QRegExp refDigitRx(QString::fromLatin1("^[0-9]{8}$"));
     QValidator* const refValidator = new QRegExpValidator(refDigitRx, this);
 
     // --------------------------------------------------------
@@ -208,9 +208,9 @@ SubjectWidget::SubjectWidget(QWidget* const parent)
     d->addSubjectButton = new QPushButton(i18n("&Add"));
     d->delSubjectButton = new QPushButton(i18n("&Delete"));
     d->repSubjectButton = new QPushButton(i18n("&Replace"));
-    d->addSubjectButton->setIcon(QIcon::fromTheme("list-add"));
-    d->delSubjectButton->setIcon(QIcon::fromTheme("edit-delete"));
-    d->repSubjectButton->setIcon(QIcon::fromTheme("view-refresh"));
+    d->addSubjectButton->setIcon(QIcon::fromTheme(QString::fromLatin1("list-add")).pixmap(16, 16));
+    d->delSubjectButton->setIcon(QIcon::fromTheme(QString::fromLatin1("edit-delete")).pixmap(16, 16));
+    d->repSubjectButton->setIcon(QIcon::fromTheme(QString::fromLatin1("view-refresh")).pixmap(16, 16));
     d->delSubjectButton->setEnabled(false);
     d->repSubjectButton->setEnabled(false);
 
@@ -369,13 +369,13 @@ void SubjectWidget::slotRefChanged()
 QString SubjectWidget::buildSubject() const
 {
     QString subject = m_iprEdit->text();
-    subject.append(":");
+    subject.append(QString::fromLatin1(":"));
     subject.append(m_refEdit->text());
-    subject.append(":");
+    subject.append(QString::fromLatin1(":"));
     subject.append(m_nameEdit->text());
-    subject.append(":");
+    subject.append(QString::fromLatin1(":"));
     subject.append(m_matterEdit->text());
-    subject.append(":");
+    subject.append(QString::fromLatin1(":"));
     subject.append(m_detailEdit->text());
     return subject;
 }
@@ -412,11 +412,11 @@ void SubjectWidget::slotSubjectSelectionChanged()
     if (!d->subjectsBox->selectedItems().isEmpty())
     {
         QString subject = d->subjectsBox->selectedItems()[0]->text();
-        m_iprEdit->setText(subject.section(':', 0, 0));
-        m_refEdit->setText(subject.section(':', 1, 1));
-        m_nameEdit->setText(subject.section(':', 2, 2));
-        m_matterEdit->setText(subject.section(':', 3, 3));
-        m_detailEdit->setText(subject.section(':', 4, 4));
+        m_iprEdit->setText(subject.section(QString::fromLatin1(":"), 0, 0));
+        m_refEdit->setText(subject.section(QString::fromLatin1(":"), 1, 1));
+        m_nameEdit->setText(subject.section(QString::fromLatin1(":"), 2, 2));
+        m_matterEdit->setText(subject.section(QString::fromLatin1(":"), 3, 3));
+        m_detailEdit->setText(subject.section(QString::fromLatin1(":"), 4, 4));
         d->delSubjectButton->setEnabled(true);
         d->repSubjectButton->setEnabled(true);
     }
@@ -464,14 +464,14 @@ bool SubjectWidget::loadSubjectCodesFromXML(const QUrl& url)
     if (!xmlfile.open(QIODevice::ReadOnly))
         return false;
 
-    QDomDocument xmlDoc("NewsML");
+    QDomDocument xmlDoc(QString::fromLatin1("NewsML"));
 
     if (!xmlDoc.setContent(&xmlfile))
         return false;
 
     QDomElement xmlDocElem = xmlDoc.documentElement();
 
-    if (xmlDocElem.tagName()!="NewsML")
+    if (xmlDocElem.tagName() != QString::fromLatin1("NewsML"))
         return false;
 
     for (QDomNode nbE1 = xmlDocElem.firstChild();
@@ -480,7 +480,7 @@ bool SubjectWidget::loadSubjectCodesFromXML(const QUrl& url)
         QDomElement newsItemElement = nbE1.toElement();
 
         if (newsItemElement.isNull()) continue;
-        if (newsItemElement.tagName() != "NewsItem") continue;
+        if (newsItemElement.tagName() != QString::fromLatin1("NewsItem")) continue;
 
         for (QDomNode nbE2 = newsItemElement.firstChild();
             !nbE2.isNull(); nbE2 = nbE2.nextSibling())
@@ -488,7 +488,7 @@ bool SubjectWidget::loadSubjectCodesFromXML(const QUrl& url)
             QDomElement topicSetElement = nbE2.toElement();
 
             if (topicSetElement.isNull()) continue;
-            if (topicSetElement.tagName() != "TopicSet") continue;
+            if (topicSetElement.tagName() != QString::fromLatin1("TopicSet")) continue;
 
             for (QDomNode nbE3 = topicSetElement.firstChild();
                 !nbE3.isNull(); nbE3 = nbE3.nextSibling())
@@ -496,7 +496,7 @@ bool SubjectWidget::loadSubjectCodesFromXML(const QUrl& url)
                 QDomElement topicElement = nbE3.toElement();
 
                 if (topicElement.isNull()) continue;
-                if (topicElement.tagName() != "Topic") continue;
+                if (topicElement.tagName() != QString::fromLatin1("Topic")) continue;
 
                 QString type, name, matter, detail, ref;
 
@@ -507,20 +507,20 @@ bool SubjectWidget::loadSubjectCodesFromXML(const QUrl& url)
 
                     if (topicSubElement.isNull()) continue;
 
-                    if (topicSubElement.tagName() == "TopicType")
-                        type = topicSubElement.attribute("FormalName");
+                    if (topicSubElement.tagName() == QString::fromLatin1("TopicType"))
+                        type = topicSubElement.attribute(QString::fromLatin1("FormalName"));
 
-                    if (topicSubElement.tagName() == "FormalName")
+                    if (topicSubElement.tagName() == QString::fromLatin1("FormalName"))
                         ref = topicSubElement.text();
 
-                    if (topicSubElement.tagName() == "Description" &&
-                        topicSubElement.attribute("Variant") == "Name")
+                    if (topicSubElement.tagName() == QString::fromLatin1("Description") &&
+                        topicSubElement.attribute(QString::fromLatin1("Variant")) == QString::fromLatin1("Name"))
                     {
-                        if (type == "Subject")
+                        if (type == QString::fromLatin1("Subject"))
                             name = topicSubElement.text();
-                        else if (type == "SubjectMatter")
+                        else if (type == QString::fromLatin1("SubjectMatter"))
                             matter = topicSubElement.text();
-                        else if (type == "SubjectDetail")
+                        else if (type == QString::fromLatin1("SubjectDetail"))
                             detail = topicSubElement.text();
                     }
                 }
