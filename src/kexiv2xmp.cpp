@@ -87,7 +87,7 @@ bool KExiv2::clearXmp() const
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError("Cannot clear Xmp data using Exiv2 ", e);
+        d->printExiv2ExceptionError(QString::fromLatin1("Cannot clear Xmp data using Exiv2 "), e);
     }
     catch(...)
     {
@@ -119,7 +119,7 @@ QByteArray KExiv2::getXmp() const
         if (!d->filePath.isEmpty())
 
 
-        d->printExiv2ExceptionError("Cannot get Xmp data using Exiv2 ", e);
+        d->printExiv2ExceptionError(QString::fromLatin1("Cannot get Xmp data using Exiv2 "), e);
     }
     catch(...)
     {
@@ -153,7 +153,7 @@ bool KExiv2::setXmp(const QByteArray& data) const
         if (!d->filePath.isEmpty())
             qCCritical(LIBKEXIV2_LOG) << "From file " << d->filePath.toLatin1().constData();
 
-        d->printExiv2ExceptionError("Cannot set Xmp data using Exiv2 ", e);
+        d->printExiv2ExceptionError(QString::fromLatin1("Cannot set Xmp data using Exiv2 "), e);
     }
     catch(...)
     {
@@ -205,7 +205,7 @@ KExiv2::MetaDataMap KExiv2::getXmpTagsDataList(const QStringList& xmpKeysFilter,
             }
 
             // To make a string just on one line.
-            value.replace('\n', ' ');
+            value.replace(QString::fromLatin1("\n"), QString::fromLatin1(" "));
 
             // Some XMP key are redondancy. check if already one exist...
             MetaDataMap::iterator it = metaDataMap.find(key);
@@ -216,7 +216,7 @@ KExiv2::MetaDataMap KExiv2::getXmpTagsDataList(const QStringList& xmpKeysFilter,
             {
                 if (!invertSelection)
                 {
-                    if (xmpKeysFilter.contains(key.section('.', 1, 1)))
+                    if (xmpKeysFilter.contains(key.section(QString::fromLatin1("."), 1, 1)))
                     {
                         if (it == metaDataMap.end())
                         {
@@ -225,7 +225,7 @@ KExiv2::MetaDataMap KExiv2::getXmpTagsDataList(const QStringList& xmpKeysFilter,
                         else
                         {
                             QString v = *it;
-                            v.append(", ");
+                            v.append(QString::fromLatin1(", "));
                             v.append(value);
                             metaDataMap.insert(key, v);
                         }
@@ -233,7 +233,7 @@ KExiv2::MetaDataMap KExiv2::getXmpTagsDataList(const QStringList& xmpKeysFilter,
                 }
                 else
                 {
-                    if (!xmpKeysFilter.contains(key.section('.', 1, 1)))
+                    if (!xmpKeysFilter.contains(key.section(QString::fromLatin1("."), 1, 1)))
                     {
                         if (it == metaDataMap.end())
                         {
@@ -242,7 +242,7 @@ KExiv2::MetaDataMap KExiv2::getXmpTagsDataList(const QStringList& xmpKeysFilter,
                         else
                         {
                             QString v = *it;
-                            v.append(", ");
+                            v.append(QString::fromLatin1(", "));
                             v.append(value);
                             metaDataMap.insert(key, v);
                         }
@@ -258,7 +258,7 @@ KExiv2::MetaDataMap KExiv2::getXmpTagsDataList(const QStringList& xmpKeysFilter,
                 else
                 {
                     QString v = *it;
-                    v.append(", ");
+                    v.append(QString::fromLatin1(", "));
                     v.append(value);
                     metaDataMap.insert(key, v);
                 }
@@ -269,7 +269,7 @@ KExiv2::MetaDataMap KExiv2::getXmpTagsDataList(const QStringList& xmpKeysFilter,
     }
     catch (Exiv2::Error& e)
     {
-        d->printExiv2ExceptionError("Cannot parse Xmp metadata using Exiv2 ", e);
+        d->printExiv2ExceptionError(QString::fromLatin1("Cannot parse Xmp metadata using Exiv2 "), e);
     }
     catch(...)
     {
@@ -298,7 +298,7 @@ QString KExiv2::getXmpTagTitle(const char* xmpTagName)
     }
     catch (Exiv2::Error& e)
     {
-        d->printExiv2ExceptionError("Cannot get Xmp metadata tag title using Exiv2 ", e);
+        d->printExiv2ExceptionError(QString::fromLatin1("Cannot get Xmp metadata tag title using Exiv2 "), e);
     }
     catch(...)
     {
@@ -325,7 +325,7 @@ QString KExiv2::getXmpTagDescription(const char* xmpTagName)
     }
     catch (Exiv2::Error& e)
     {
-        d->printExiv2ExceptionError("Cannot get Xmp metadata tag description using Exiv2 ", e);
+        d->printExiv2ExceptionError(QString::fromLatin1("Cannot get Xmp metadata tag description using Exiv2 "), e);
     }
     catch(...)
     {
@@ -358,15 +358,14 @@ QString KExiv2::getXmpTagString(const char* xmpTagName, bool escapeCR) const
             QString tagValue = QString::fromUtf8(os.str().c_str());
 
             if (escapeCR)
-                tagValue.replace('\n', ' ');
+                tagValue.replace(QString::fromLatin1("\n"), QString::fromLatin1(" "));
 
             return tagValue;
         }
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError(QString("Cannot find Xmp key '%1' into image using Exiv2 ")
-                                    .arg(xmpTagName), e);
+        d->printExiv2ExceptionError(QString::fromLatin1("Cannot find Xmp key '%1' into image using Exiv2 ").arg(QString::fromLatin1(xmpTagName)), e);
     }
     catch(...)
     {
@@ -400,7 +399,7 @@ bool KExiv2::setXmpTagString(const char* xmpTagName, const QString& value, bool 
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError("Cannot set Xmp tag string into image using Exiv2 ", e);
+        d->printExiv2ExceptionError(QString::fromLatin1("Cannot set Xmp tag string into image using Exiv2 "), e);
     }
     catch(...)
     {
@@ -452,7 +451,7 @@ bool KExiv2::setXmpTagString(const char* xmpTagName, const QString& value,
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError("Cannot set Xmp tag string into image using Exiv2 ", e);
+        d->printExiv2ExceptionError(QString::fromLatin1("Cannot set Xmp tag string into image using Exiv2 "), e);
     }
     catch(...)
     {
@@ -491,7 +490,7 @@ KExiv2::AltLangMap KExiv2::getXmpTagStringListLangAlt(const char* xmpTagName, bo
                     QString text = QString::fromUtf8(it2->second.c_str());
 
                     if (escapeCR)
-                        text.replace('\n', ' ');
+                        text.replace(QString::fromLatin1("\n"), QString::fromLatin1(" "));
 
                     map.insert(lang, text);
                 }
@@ -502,8 +501,7 @@ KExiv2::AltLangMap KExiv2::getXmpTagStringListLangAlt(const char* xmpTagName, bo
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError(QString("Cannot find Xmp key '%1' into image using Exiv2 ")
-                                    .arg(xmpTagName), e);
+        d->printExiv2ExceptionError(QString::fromLatin1("Cannot find Xmp key '%1' into image using Exiv2 ").arg(QString::fromLatin1(xmpTagName)), e);
     }
     catch(...)
     {
@@ -541,7 +539,7 @@ bool KExiv2::setXmpTagStringListLangAlt(const char* xmpTagName, const KExiv2::Al
             {
                 QString lang = it.key();
                 QString text = it.value();
-                QString txtLangAlt = QString("lang=%1 %2").arg(lang).arg(text);
+                QString txtLangAlt = QString::fromLatin1("lang=%1 %2").arg(lang).arg(text);
                 const std::string &txt(txtLangAlt.toUtf8().constData());
                 xmpTxtVal->read(txt);
             }
@@ -553,7 +551,7 @@ bool KExiv2::setXmpTagStringListLangAlt(const char* xmpTagName, const KExiv2::Al
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError("Cannot set Xmp tag string lang-alt into image using Exiv2 ", e);
+        d->printExiv2ExceptionError(QString::fromLatin1("Cannot set Xmp tag string lang-alt into image using Exiv2 "), e);
     }
     catch(...)
     {
@@ -595,7 +593,7 @@ QString KExiv2::getXmpTagStringLangAlt(const char* xmpTagName, const QString& la
                     if (langAlt == lang)
                     {
                         if (escapeCR)
-                            tagValue.replace('\n', ' ');
+                            tagValue.replace(QString::fromLatin1("\n"), QString::fromLatin1(" "));
 
                         return tagValue;
                     }
@@ -605,8 +603,7 @@ QString KExiv2::getXmpTagStringLangAlt(const char* xmpTagName, const QString& la
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError(QString("Cannot find Xmp key '%1' into image using Exiv2 ")
-                                    .arg(xmpTagName), e);
+        d->printExiv2ExceptionError(QString::fromLatin1("Cannot find Xmp key '%1' into image using Exiv2 ").arg(QString::fromLatin1(xmpTagName)), e);
     }
     catch(...)
     {
@@ -634,12 +631,12 @@ bool KExiv2::setXmpTagStringLangAlt(const char* xmpTagName, const QString& value
 
     try
     {
-        QString language("x-default"); // default alternative language.
+        QString language(QString::fromLatin1("x-default")); // default alternative language.
 
         if (!langAlt.isEmpty())
             language = langAlt;
 
-        QString txtLangAlt = QString("lang=%1 %2").arg(language).arg(value);
+        QString txtLangAlt = QString(QString::fromLatin1("lang=%1 %2")).arg(language).arg(value);
 
         const std::string &txt(txtLangAlt.toUtf8().constData());
         Exiv2::Value::AutoPtr xmpTxtVal = Exiv2::Value::create(Exiv2::langAlt);
@@ -668,7 +665,7 @@ bool KExiv2::setXmpTagStringLangAlt(const char* xmpTagName, const QString& value
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError("Cannot set Xmp tag string lang-alt into image using Exiv2 ", e);
+        d->printExiv2ExceptionError(QString::fromLatin1("Cannot set Xmp tag string lang-alt into image using Exiv2 "), e);
     }
     catch(...)
     {
@@ -710,7 +707,7 @@ QStringList KExiv2::getXmpTagStringSeq(const char* xmpTagName, bool escapeCR) co
                     QString seqValue = QString::fromUtf8(os.str().c_str());
 
                     if (escapeCR)
-                        seqValue.replace('\n', ' ');
+                        seqValue.replace(QString::fromLatin1("\n"), QString::fromLatin1(" "));
 
                     seq.append(seqValue);
                 }
@@ -722,8 +719,7 @@ QStringList KExiv2::getXmpTagStringSeq(const char* xmpTagName, bool escapeCR) co
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError(QString("Cannot find Xmp key '%1' into image using Exiv2 ")
-                                    .arg(xmpTagName), e);
+        d->printExiv2ExceptionError(QString::fromLatin1("Cannot find Xmp key '%1' into image using Exiv2 ").arg(QString::fromLatin1(xmpTagName)), e);
     }
     catch(...)
     {
@@ -771,7 +767,7 @@ bool KExiv2::setXmpTagStringSeq(const char* xmpTagName, const QStringList& seq,
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError("Cannot set Xmp tag string Seq into image using Exiv2 ", e);
+        d->printExiv2ExceptionError(QString::fromLatin1("Cannot set Xmp tag string Seq into image using Exiv2 "), e);
     }
     catch(...)
     {
@@ -812,7 +808,7 @@ QStringList KExiv2::getXmpTagStringBag(const char* xmpTagName, bool escapeCR) co
                     QString bagValue = QString::fromUtf8(os.str().c_str());
 
                     if (escapeCR)
-                        bagValue.replace('\n', ' ');
+                        bagValue.replace(QString::fromLatin1("\n"), QString::fromLatin1(" "));
 
                     bag.append(bagValue);
                 }
@@ -823,8 +819,7 @@ QStringList KExiv2::getXmpTagStringBag(const char* xmpTagName, bool escapeCR) co
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError(QString("Cannot find Xmp key '%1' into image using Exiv2 ")
-                                    .arg(xmpTagName), e);
+        d->printExiv2ExceptionError(QString::fromLatin1("Cannot find Xmp key '%1' into image using Exiv2 ").arg(QString::fromLatin1(xmpTagName)), e);
     }
     catch(...)
     {
@@ -872,7 +867,7 @@ bool KExiv2::setXmpTagStringBag(const char* xmpTagName, const QStringList& bag,
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError("Cannot set Xmp tag string Bag into image using Exiv2 ", e);
+        d->printExiv2ExceptionError(QString::fromLatin1("Cannot set Xmp tag string Bag into image using Exiv2 "), e);
     }
     catch(...)
     {
@@ -976,7 +971,7 @@ QVariant KExiv2::getXmpTagVariant(const char* xmpTagName, bool rationalAsListOfI
                 case Exiv2::date:
                 case Exiv2::time:
                 {
-                    QDateTime dateTime = QDateTime::fromString(it->toString().c_str(), Qt::ISODate);
+                    QDateTime dateTime = QDateTime::fromString(QString::fromLatin1(it->toString().c_str()), Qt::ISODate);
                     return QVariant(dateTime);
                 }
                 case Exiv2::asciiString:
@@ -988,7 +983,7 @@ QVariant KExiv2::getXmpTagVariant(const char* xmpTagName, bool rationalAsListOfI
                     QString tagValue = QString::fromLocal8Bit(os.str().c_str());
 
                     if (stringEscapeCR)
-                        tagValue.replace('\n', ' ');
+                        tagValue.replace(QString::fromLatin1("\n"), QString::fromLatin1(" "));
 
                     return QVariant(tagValue);
                 }
@@ -999,7 +994,7 @@ QVariant KExiv2::getXmpTagVariant(const char* xmpTagName, bool rationalAsListOfI
                     QString tagValue = QString::fromUtf8(os.str().c_str());
 
                     if (stringEscapeCR)
-                        tagValue.replace('\n', ' ');
+                        tagValue.replace(QString::fromLatin1("\n"), QString::fromLatin1(" "));
 
                     return tagValue;
                 }
@@ -1038,8 +1033,7 @@ QVariant KExiv2::getXmpTagVariant(const char* xmpTagName, bool rationalAsListOfI
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError(QString("Cannot find Xmp key '%1' into image using Exiv2 ")
-                                    .arg(xmpTagName), e);
+        d->printExiv2ExceptionError(QString::fromLatin1("Cannot find Xmp key '%1' into image using Exiv2 ").arg(QString::fromLatin1(xmpTagName)), e);
     }
     catch(...)
     {
@@ -1065,15 +1059,15 @@ bool KExiv2::registerXmpNameSpace(const QString& uri, const QString& prefix)
     {
         QString ns = uri;
 
-        if (!uri.endsWith('/'))
-            ns.append('/');
+        if (!uri.endsWith(QString::fromLatin1("/")))
+            ns.append(QString::fromLatin1("/"));
 
         Exiv2::XmpProperties::registerNs(ns.toLatin1().constData(), prefix.toLatin1().constData());
         return true;
     }
     catch( Exiv2::Error& e )
     {
-        Private::printExiv2ExceptionError("Cannot register a new Xmp namespace using Exiv2 ", e);
+        Private::printExiv2ExceptionError(QString::fromLatin1("Cannot register a new Xmp namespace using Exiv2 "), e);
     }
     catch(...)
     {
@@ -1098,15 +1092,15 @@ bool KExiv2::unregisterXmpNameSpace(const QString& uri)
     {
         QString ns = uri;
 
-        if (!uri.endsWith('/'))
-            ns.append('/');
+        if (!uri.endsWith(QString::fromLatin1("/")))
+            ns.append(QString::fromLatin1("/"));
 
         Exiv2::XmpProperties::unregisterNs(ns.toLatin1().constData());
         return true;
     }
     catch( Exiv2::Error& e )
     {
-        Private::printExiv2ExceptionError("Cannot unregister a new Xmp namespace using Exiv2 ", e);
+        Private::printExiv2ExceptionError(QString::fromLatin1("Cannot unregister a new Xmp namespace using Exiv2 "), e);
     }
     catch(...)
     {
@@ -1142,7 +1136,7 @@ bool KExiv2::removeXmpTag(const char* xmpTagName, bool setProgramName) const
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError("Cannot remove Xmp tag using Exiv2 ", e);
+        d->printExiv2ExceptionError(QString::fromLatin1("Cannot remove Xmp tag using Exiv2 "), e);
     }
     catch(...)
     {
@@ -1209,31 +1203,31 @@ KExiv2::TagsMap KExiv2::getXmpTagsList() const
     try
     {
         TagsMap tagsMap;
-        d->getXMPTagsListFromPrefix("dc",             tagsMap);
-        d->getXMPTagsListFromPrefix("digiKam",        tagsMap);
-        d->getXMPTagsListFromPrefix("xmp",            tagsMap);
-        d->getXMPTagsListFromPrefix("xmpRights",      tagsMap);
-        d->getXMPTagsListFromPrefix("xmpMM",          tagsMap);
-        d->getXMPTagsListFromPrefix("xmpBJ",          tagsMap);
-        d->getXMPTagsListFromPrefix("xmpTPg",         tagsMap);
-        d->getXMPTagsListFromPrefix("xmpDM",          tagsMap);
-        d->getXMPTagsListFromPrefix("MicrosoftPhoto", tagsMap);
-        d->getXMPTagsListFromPrefix("pdf",            tagsMap);
-        d->getXMPTagsListFromPrefix("photoshop",      tagsMap);
-        d->getXMPTagsListFromPrefix("crs",            tagsMap);
-        d->getXMPTagsListFromPrefix("tiff",           tagsMap);
-        d->getXMPTagsListFromPrefix("exif",           tagsMap);
-        d->getXMPTagsListFromPrefix("aux",            tagsMap);
-        d->getXMPTagsListFromPrefix("iptc",           tagsMap);
-        d->getXMPTagsListFromPrefix("iptcExt",        tagsMap);
-        d->getXMPTagsListFromPrefix("plus",           tagsMap);
-        d->getXMPTagsListFromPrefix("mwg-rs",         tagsMap);
-        d->getXMPTagsListFromPrefix("dwc",            tagsMap);
+        d->getXMPTagsListFromPrefix(QString::fromLatin1("dc"),             tagsMap);
+        d->getXMPTagsListFromPrefix(QString::fromLatin1("digiKam"),        tagsMap);
+        d->getXMPTagsListFromPrefix(QString::fromLatin1("xmp"),            tagsMap);
+        d->getXMPTagsListFromPrefix(QString::fromLatin1("xmpRights"),      tagsMap);
+        d->getXMPTagsListFromPrefix(QString::fromLatin1("xmpMM"),          tagsMap);
+        d->getXMPTagsListFromPrefix(QString::fromLatin1("xmpBJ"),          tagsMap);
+        d->getXMPTagsListFromPrefix(QString::fromLatin1("xmpTPg"),         tagsMap);
+        d->getXMPTagsListFromPrefix(QString::fromLatin1("xmpDM"),          tagsMap);
+        d->getXMPTagsListFromPrefix(QString::fromLatin1("MicrosoftPhoto"), tagsMap);
+        d->getXMPTagsListFromPrefix(QString::fromLatin1("pdf"),            tagsMap);
+        d->getXMPTagsListFromPrefix(QString::fromLatin1("photoshop"),      tagsMap);
+        d->getXMPTagsListFromPrefix(QString::fromLatin1("crs"),            tagsMap);
+        d->getXMPTagsListFromPrefix(QString::fromLatin1("tiff"),           tagsMap);
+        d->getXMPTagsListFromPrefix(QString::fromLatin1("exif"),           tagsMap);
+        d->getXMPTagsListFromPrefix(QString::fromLatin1("aux"),            tagsMap);
+        d->getXMPTagsListFromPrefix(QString::fromLatin1("iptc"),           tagsMap);
+        d->getXMPTagsListFromPrefix(QString::fromLatin1("iptcExt"),        tagsMap);
+        d->getXMPTagsListFromPrefix(QString::fromLatin1("plus"),           tagsMap);
+        d->getXMPTagsListFromPrefix(QString::fromLatin1("mwg-rs"),         tagsMap);
+        d->getXMPTagsListFromPrefix(QString::fromLatin1("dwc"),            tagsMap);
         return tagsMap;
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError("Cannot get Xmp Tags list using Exiv2 ", e);
+        d->printExiv2ExceptionError(QString::fromLatin1("Cannot get Xmp Tags list using Exiv2 "), e);
     }
     catch(...)
     {

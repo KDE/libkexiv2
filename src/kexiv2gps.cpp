@@ -134,7 +134,7 @@ bool KExiv2::getGPSLatitudeNumber(double* const latitude) const
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError("Cannot get GPS tag using Exiv2 ", e);
+        d->printExiv2ExceptionError(QString::fromLatin1("Cannot get GPS tag using Exiv2 "), e);
     }
     catch(...)
     {
@@ -230,7 +230,7 @@ bool KExiv2::getGPSLongitudeNumber(double* const longitude) const
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError("Cannot get GPS tag using Exiv2 ", e);
+        d->printExiv2ExceptionError(QString::fromLatin1("Cannot get GPS tag using Exiv2 "), e);
     }
     catch(...)
     {
@@ -256,15 +256,15 @@ bool KExiv2::getGPSAltitude(double* const altitude) const
 
             if (!altXmp.isEmpty())
             {
-                num = altXmp.section('/', 0, 0).toDouble();
-                den = altXmp.section('/', 1, 1).toDouble();
+                num = altXmp.section(QString::fromLatin1("/"), 0, 0).toDouble();
+                den = altXmp.section(QString::fromLatin1("/"), 1, 1).toDouble();
 
                 if (den == 0)
                     return false;
 
                 *altitude = num/den;
 
-                if (altRefXmp == QString("1"))
+                if (altRefXmp == QString::fromLatin1("1"))
                     *altitude *= -1.0;
 
                 return true;
@@ -304,7 +304,7 @@ bool KExiv2::getGPSAltitude(double* const altitude) const
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError("Cannot get GPS tag using Exiv2 ", e);
+        d->printExiv2ExceptionError(QString::fromLatin1("Cannot get GPS tag using Exiv2 "), e);
     }
     catch(...)
     {
@@ -354,15 +354,15 @@ bool KExiv2::initializeGPSInfo(const bool setProgramName)
         d->exifMetadata()["Exif.GPSInfo.GPSMapDatum"] = "WGS-84";
 
 #ifdef _XMP_SUPPORT_
-        setXmpTagString("Xmp.exif.GPSVersionID", QString("2.0.0.0"), false);
-        setXmpTagString("Xmp.exif.GPSMapDatum", QString("WGS-84"), false);
+        setXmpTagString("Xmp.exif.GPSVersionID", QString::fromLatin1("2.0.0.0"), false);
+        setXmpTagString("Xmp.exif.GPSMapDatum",  QString::fromLatin1("WGS-84"),  false);
 #endif // _XMP_SUPPORT_
 
         return true;
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError("Cannot initialize GPS data using Exiv2 ", e);
+        d->printExiv2ExceptionError(QString::fromLatin1("Cannot initialize GPS data using Exiv2 "), e);
     }
     catch(...)
     {
@@ -414,8 +414,8 @@ bool KExiv2::setGPSInfo(const double* const altitude, const double latitude, con
             d->exifMetadata()["Exif.GPSInfo.GPSAltitude"] = scratchBuf;
 
 #ifdef _XMP_SUPPORT_
-            setXmpTagString("Xmp.exif.GPSAltitudeRef", ((*altitude) >= 0) ? QString("0") : QString("1"), false);
-            setXmpTagString("Xmp.exif.GPSAltitude", QString(scratchBuf), false);
+            setXmpTagString("Xmp.exif.GPSAltitudeRef", ((*altitude) >= 0) ? QString::fromLatin1("0") : QString::fromLatin1("1"), false);
+            setXmpTagString("Xmp.exif.GPSAltitude",    QString::fromLatin1(scratchBuf),                                          false);
 #endif // _XMP_SUPPORT_
         }
 
@@ -451,8 +451,8 @@ bool KExiv2::setGPSInfo(const double* const altitude, const double latitude, con
          * because the reference is included in Xmp.exif.GPSLatitude.
          * Is there a historic reason for writing it anyway?
          */
-        setXmpTagString("Xmp.exif.GPSLatitudeRef", (latitude < 0) ? QString("S") : QString("N"), false);
-        setXmpTagString("Xmp.exif.GPSLatitude", convertToGPSCoordinateString(true, latitude), false);
+        setXmpTagString("Xmp.exif.GPSLatitudeRef", (latitude < 0) ? QString::fromLatin1("S") : QString::fromLatin1("N"), false);
+        setXmpTagString("Xmp.exif.GPSLatitude",    convertToGPSCoordinateString(true, latitude),                         false);
 #endif // _XMP_SUPPORT_
 
         // LONGITUDE
@@ -486,15 +486,15 @@ bool KExiv2::setGPSInfo(const double* const altitude, const double latitude, con
          * because the reference is included in Xmp.exif.GPSLongitude.
          * Is there a historic reason for writing it anyway?
          */
-        setXmpTagString("Xmp.exif.GPSLongitudeRef", (longitude < 0) ? QString("W") : QString("E"), false);
-        setXmpTagString("Xmp.exif.GPSLongitude", convertToGPSCoordinateString(false, longitude), false);
+        setXmpTagString("Xmp.exif.GPSLongitudeRef", (longitude < 0) ? QString::fromLatin1("W") : QString::fromLatin1("E"), false);
+        setXmpTagString("Xmp.exif.GPSLongitude",    convertToGPSCoordinateString(false, longitude),                        false);
 #endif // _XMP_SUPPORT_
 
         return true;
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError("Cannot set Exif GPS tag using Exiv2 ", e);
+        d->printExiv2ExceptionError(QString::fromLatin1("Cannot set Exif GPS tag using Exiv2 "), e);
     }
     catch(...)
     {
@@ -531,7 +531,7 @@ bool KExiv2::removeGPSInfo(const bool setProgramName)
         {
             QString key = QString::fromLocal8Bit(it->key().c_str());
 
-            if (key.section('.', 1, 1) == QString("GPSInfo"))
+            if (key.section(QString::fromLatin1("."), 1, 1) == QString::fromLatin1("GPSInfo"))
                 gpsTagsKeys.append(key);
         }
 
@@ -583,7 +583,7 @@ bool KExiv2::removeGPSInfo(const bool setProgramName)
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError("Cannot remove Exif GPS tag using Exiv2 ", e);
+        d->printExiv2ExceptionError(QString::fromLatin1("Cannot remove Exif GPS tag using Exiv2 "), e);
     }
     catch(...)
     {
@@ -744,7 +744,7 @@ QString KExiv2::convertToGPSCoordinateString(const long int numeratorDegrees, co
         denominatorSeconds == 1)
     {
         // use form DDD,MM,SSk
-        coordinate = "%1,%2,%3%4";
+        coordinate = QString::fromLatin1("%1,%2,%3%4");
         coordinate = coordinate.arg(numeratorDegrees).arg(numeratorMinutes).arg(numeratorSeconds).arg(directionReference);
     }
     else if (denominatorDegrees == 1   &&
@@ -752,12 +752,12 @@ QString KExiv2::convertToGPSCoordinateString(const long int numeratorDegrees, co
              denominatorSeconds == 1)
     {
         // use form DDD,MM.mmk
-        coordinate             = "%1,%2%3";
+        coordinate             = QString::fromLatin1("%1,%2%3");
         double minutes         = (double)numeratorMinutes / (double)denominatorMinutes;
         minutes               += (double)numeratorSeconds / 60.0;
         QString minutesString =  QString::number(minutes, 'f', 8);
 
-        while (minutesString.endsWith('0') && !minutesString.endsWith(".0"))
+        while (minutesString.endsWith(QString::fromLatin1("0")) && !minutesString.endsWith(QString::fromLatin1(".0")))
         {
             minutesString.chop(1);
         }
@@ -774,7 +774,7 @@ QString KExiv2::convertToGPSCoordinateString(const long int numeratorDegrees, co
     else
     {
         // use form DDD,MM.mmk
-        coordinate             = "%1,%2%3";
+        coordinate             = QString::fromLatin1("%1,%2%3");
         double degrees         = (double)numeratorDegrees / (double)denominatorDegrees;
         double wholeDegrees    = trunc(degrees);
         double minutes         = (double)numeratorMinutes / (double)denominatorMinutes;
@@ -782,7 +782,7 @@ QString KExiv2::convertToGPSCoordinateString(const long int numeratorDegrees, co
         minutes               += ((double)numeratorSeconds / (double)denominatorSeconds) / 60.0;
         QString minutesString  = QString::number(minutes, 'f', 8);
 
-        while (minutesString.endsWith('0') && !minutesString.endsWith(".0"))
+        while (minutesString.endsWith(QString::fromLatin1("0")) && !minutesString.endsWith(QString::fromLatin1(".0")))
         {
             minutesString.chop(1);
         }
@@ -827,7 +827,7 @@ QString KExiv2::convertToGPSCoordinateString(const bool isLatitude, double coord
     double minutes = coordinate * 60.0;
 
     // use form DDD,MM.mmk
-    coordinateString = "%1,%2%3";
+    coordinateString = QString::fromLatin1("%1,%2%3");
     coordinateString = coordinateString.arg(degrees);
     coordinateString = coordinateString.arg(minutes, 0, 'f', 8).arg(directionReference);
 
@@ -845,7 +845,7 @@ bool KExiv2::convertFromGPSCoordinateString(const QString& gpsString,
 
     *directionReference = gpsString.at(gpsString.length() - 1).toUpper().toLatin1();
     QString coordinate  = gpsString.left(gpsString.length() - 1);
-    QStringList parts   = coordinate.split(',');
+    QStringList parts   = coordinate.split(QString::fromLatin1(","));
 
     if (parts.size() == 2)
     {
@@ -890,7 +890,7 @@ bool KExiv2::convertFromGPSCoordinateString(const QString& gpsString, double* co
 
     char directionReference = gpsString.at(gpsString.length() - 1).toUpper().toLatin1();
     QString coordinate      = gpsString.left(gpsString.length() - 1);
-    QStringList parts       = coordinate.split(',');
+    QStringList parts       = coordinate.split(QString::fromLatin1(","));
 
     if (parts.size() == 2)
     {
@@ -931,7 +931,7 @@ bool KExiv2::convertToUserPresentableNumbers(const QString& gpsString,
 
     *directionReference = gpsString.at(gpsString.length() - 1).toUpper().toLatin1();
     QString coordinate  = gpsString.left(gpsString.length() - 1);
-    QStringList parts   = coordinate.split(',');
+    QStringList parts   = coordinate.split(QString::fromLatin1(","));
 
     if (parts.size() == 2)
     {

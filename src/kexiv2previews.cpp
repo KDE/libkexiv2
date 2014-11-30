@@ -84,7 +84,7 @@ KExiv2Previews::KExiv2Previews(const QString& filePath)
     }
     catch( Exiv2::Error& e )
     {
-        KExiv2::Private::printExiv2ExceptionError("Cannot load metadata using Exiv2 ", e);
+        KExiv2::Private::printExiv2ExceptionError(QString::fromLatin1("Cannot load metadata using Exiv2 "), e);
     }
     catch(...)
     {
@@ -102,7 +102,7 @@ KExiv2Previews::KExiv2Previews(const QByteArray& imgData)
     }
     catch( Exiv2::Error& e )
     {
-        KExiv2::Private::printExiv2ExceptionError("Cannot load metadata using Exiv2 ", e);
+        KExiv2::Private::printExiv2ExceptionError(QString::fromLatin1("Cannot load metadata using Exiv2 "), e);
     }
     catch(...)
     {
@@ -131,7 +131,7 @@ QSize KExiv2Previews::originalSize() const
 QString KExiv2Previews::originalMimeType() const
 {
     if (d->image.get())
-        return d->image->mimeType().c_str();
+        return QString::fromLatin1(d->image->mimeType().c_str());
 
     return QString();
 }
@@ -164,14 +164,14 @@ int KExiv2Previews::height(int index)
 
 QString KExiv2Previews::mimeType(int index)
 {
-    if (index < 0 || index >= size()) return 0;
+    if (index < 0 || index >= size()) return QString();
 
     return QString::fromLatin1(d->properties[index].mimeType_.c_str());
 }
 
 QString KExiv2Previews::fileExtension(int index)
 {
-    if (index < 0 || index >= size()) return 0;
+    if (index < 0 || index >= size()) return QString();
 
     return QString::fromLatin1(d->properties[index].extension_.c_str());
 }
@@ -190,7 +190,7 @@ QByteArray KExiv2Previews::data(int index)
     }
     catch( Exiv2::Error& e )
     {
-        KExiv2::Private::printExiv2ExceptionError("Cannot load metadata using Exiv2 ", e);
+        KExiv2::Private::printExiv2ExceptionError(QString::fromLatin1("Cannot load metadata using Exiv2 "), e);
         return QByteArray();
     }
     catch(...)
