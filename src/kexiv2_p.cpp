@@ -99,7 +99,7 @@ bool KExiv2::Private::saveToXMPSidecar(const QFileInfo& finfo) const
     }
     catch( Exiv2::Error& e )
     {
-        printExiv2ExceptionError("Cannot save metadata to XMP sidecar using Exiv2 ", e);
+        printExiv2ExceptionError(QString::fromLatin1("Cannot save metadata to XMP sidecar using Exiv2 "), e);
         return false;
     }
     catch(...)
@@ -120,21 +120,33 @@ bool KExiv2::Private::saveToFile(const QFileInfo& finfo) const
     QStringList rawTiffBasedSupported, rawTiffBasedNotSupported;
 
     // Raw files supported by Exiv2 0.21
-    rawTiffBasedSupported << "dng" << "nef" << "pef" << "orf" << "srw";
+    rawTiffBasedSupported << QString::fromLatin1("dng")
+                          << QString::fromLatin1("nef")
+                          << QString::fromLatin1("pef")
+                          << QString::fromLatin1("orf")
+                          << QString::fromLatin1("srw");
 
     if (Exiv2::testVersion(0,23,0))
     {
-        rawTiffBasedSupported << "cr2";
+        rawTiffBasedSupported << QString::fromLatin1("cr2");
     }
 
     // Raw files not supported by Exiv2 0.21
-    rawTiffBasedNotSupported
-        << "3fr" << "arw" << "dcr" << "erf" << "k25" << "kdc" 
-        << "mos" << "raw" << "sr2" << "srf" << "rw2";
+    rawTiffBasedNotSupported << QString::fromLatin1("3fr")
+                             << QString::fromLatin1("arw")
+                             << QString::fromLatin1("dcr")
+                             << QString::fromLatin1("erf")
+                             << QString::fromLatin1("k25")
+                             << QString::fromLatin1("kdc") 
+                             << QString::fromLatin1("mos")
+                             << QString::fromLatin1("raw")
+                             << QString::fromLatin1("sr2")
+                             << QString::fromLatin1("srf")
+                             << QString::fromLatin1("rw2");
 
     if (!Exiv2::testVersion(0,23,0))
     {
-        rawTiffBasedNotSupported << "cr2";
+        rawTiffBasedNotSupported << QString::fromLatin1("cr2");
     }
 
     QString ext = finfo.suffix().toLower();
@@ -175,7 +187,7 @@ bool KExiv2::Private::saveToFile(const QFileInfo& finfo) const
     }
     catch( Exiv2::Error& e )
     {
-        printExiv2ExceptionError("Cannot save metadata to image using Exiv2 ", e);
+        printExiv2ExceptionError(QString::fromLatin1("Cannot save metadata to image using Exiv2 "), e);
         return false;
     }
     catch(...)
@@ -223,24 +235,24 @@ bool KExiv2::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::AutoP
                 // With tiff image we cannot overwrite whole Exif data as well, because
                 // image data are stored in Exif container. We need to take a care about
                 // to not lost image data.
-                untouchedTags << "Exif.Image.ImageWidth";
-                untouchedTags << "Exif.Image.ImageLength";
-                untouchedTags << "Exif.Image.BitsPerSample";
-                untouchedTags << "Exif.Image.Compression";
-                untouchedTags << "Exif.Image.PhotometricInterpretation";
-                untouchedTags << "Exif.Image.FillOrder";
-                untouchedTags << "Exif.Image.SamplesPerPixel";
-                untouchedTags << "Exif.Image.StripOffsets";
-                untouchedTags << "Exif.Image.RowsPerStrip";
-                untouchedTags << "Exif.Image.StripByteCounts";
-                untouchedTags << "Exif.Image.XResolution";
-                untouchedTags << "Exif.Image.YResolution";
-                untouchedTags << "Exif.Image.PlanarConfiguration";
-                untouchedTags << "Exif.Image.ResolutionUnit";
+                untouchedTags << QString::fromLatin1("Exif.Image.ImageWidth");
+                untouchedTags << QString::fromLatin1("Exif.Image.ImageLength");
+                untouchedTags << QString::fromLatin1("Exif.Image.BitsPerSample");
+                untouchedTags << QString::fromLatin1("Exif.Image.Compression");
+                untouchedTags << QString::fromLatin1("Exif.Image.PhotometricInterpretation");
+                untouchedTags << QString::fromLatin1("Exif.Image.FillOrder");
+                untouchedTags << QString::fromLatin1("Exif.Image.SamplesPerPixel");
+                untouchedTags << QString::fromLatin1("Exif.Image.StripOffsets");
+                untouchedTags << QString::fromLatin1("Exif.Image.RowsPerStrip");
+                untouchedTags << QString::fromLatin1("Exif.Image.StripByteCounts");
+                untouchedTags << QString::fromLatin1("Exif.Image.XResolution");
+                untouchedTags << QString::fromLatin1("Exif.Image.YResolution");
+                untouchedTags << QString::fromLatin1("Exif.Image.PlanarConfiguration");
+                untouchedTags << QString::fromLatin1("Exif.Image.ResolutionUnit");
 
                 for (Exiv2::ExifData::iterator it = orgExif.begin(); it != orgExif.end(); ++it)
                 {
-                    if (untouchedTags.contains(it->key().c_str()))
+                    if (untouchedTags.contains(QString::fromLatin1(it->key().c_str())))
                     {
                         newExif[it->key().c_str()] = orgExif[it->key().c_str()];
                     }
@@ -250,7 +262,7 @@ bool KExiv2::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::AutoP
 
                 for (Exiv2::ExifData::iterator it = readedExif.begin(); it != readedExif.end(); ++it)
                 {
-                    if (!untouchedTags.contains(it->key().c_str()))
+                    if (!untouchedTags.contains(QString::fromLatin1(it->key().c_str())))
                     {
                         newExif[it->key().c_str()] = readedExif[it->key().c_str()];
                     }
@@ -335,7 +347,7 @@ bool KExiv2::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::AutoP
     }
     catch( Exiv2::Error& e )
     {
-        printExiv2ExceptionError("Cannot save metadata using Exiv2 ", e);
+        printExiv2ExceptionError(QString::fromLatin1("Cannot save metadata using Exiv2 "), e);
     }
     catch(...)
     {
@@ -412,7 +424,7 @@ QString KExiv2::Private::convertCommentValue(const Exiv2::Exifdatum& exifDatum) 
     }
     catch( Exiv2::Error& e )
     {
-        printExiv2ExceptionError("Cannot convert Comment using Exiv2 ", e);
+        printExiv2ExceptionError(QString::fromLatin1("Cannot convert Comment using Exiv2 "), e);
     }
     catch(...)
     {
@@ -458,11 +470,13 @@ int KExiv2::Private::getXMPTagsListFromPrefix(const QString& pf, KExiv2::TagsMap
 
     for (QList<const Exiv2::XmpPropertyInfo*>::iterator it = tags.begin(); it != tags.end(); ++it)
     {
-        while ( (*it) && !QString((*it)->name_).isNull() )
+        while ( (*it) && !QString::fromLatin1((*it)->name_).isNull() )
         {
             QString     key = QLatin1String( Exiv2::XmpKey( pf.toLatin1().data(), (*it)->name_ ).key().c_str() );
             QStringList values;
-            values << (*it)->name_ << (*it)->title_ << (*it)->desc_;
+            values << QString::fromLatin1((*it)->name_)
+                   << QString::fromLatin1((*it)->title_)
+                   << QString::fromLatin1((*it)->desc_);
             tagsMap.insert(key, values);
             ++(*it);
             i++;

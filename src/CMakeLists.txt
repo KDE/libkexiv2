@@ -7,8 +7,6 @@
 kde_enable_exceptions()
 
 include_directories(${EXIV2_INCLUDE_DIR})
-
-# HACK how to do this properly?
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/.. ${CMAKE_CURRENT_BINARY_DIR})
 
 add_definitions(${EXIV2_DEFINITIONS})

@@ -45,7 +45,7 @@ bool KExiv2::setImageProgramId(const QString& program, const QString& version) c
     try
     {
         QString software(program);
-        software.append("-");
+        software.append(QString::fromLatin1("-"));
         software.append(version);
 
         // Set program info into Exif.Image.ProcessingSoftware tag (only available with Exiv2 >= 0.14.0).
@@ -91,7 +91,7 @@ bool KExiv2::setImageProgramId(const QString& program, const QString& version) c
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError("Cannot set Program identity into image using Exiv2 ", e);
+        d->printExiv2ExceptionError(QString::fromLatin1("Cannot set Program identity into image using Exiv2 "), e);
     }
     catch(...)
     {
@@ -192,7 +192,7 @@ QSize KExiv2::getImageDimensions() const
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError("Cannot parse image dimensions tag using Exiv2 ", e);
+        d->printExiv2ExceptionError(QString::fromLatin1("Cannot parse image dimensions tag using Exiv2 "), e);
     }
     catch(...)
     {
@@ -232,7 +232,7 @@ bool KExiv2::setImageDimensions(const QSize& size, bool setProgramName) const
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError("Cannot set image dimensions using Exiv2 ", e);
+        d->printExiv2ExceptionError(QString::fromLatin1("Cannot set image dimensions using Exiv2 "), e);
     }
     catch(...)
     {
@@ -333,7 +333,7 @@ KExiv2::ImageOrientation KExiv2::getImageOrientation() const
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError("Cannot parse Exif Orientation tag using Exiv2 ", e);
+        d->printExiv2ExceptionError(QString::fromLatin1("Cannot parse Exif Orientation tag using Exiv2 "), e);
     }
     catch(...)
     {
@@ -410,7 +410,7 @@ bool KExiv2::setImageOrientation(ImageOrientation orientation, bool setProgramNa
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError("Cannot set Exif Orientation tag using Exiv2 ", e);
+        d->printExiv2ExceptionError(QString::fromLatin1("Cannot set Exif Orientation tag using Exiv2 "), e);
     }
     catch(...)
     {
@@ -453,9 +453,9 @@ KExiv2::ImageColorWorkSpace KExiv2::getImageColorWorkSpace() const
 
             if (!interopIndex.isNull())
             {
-                if (interopIndex == "R03")
+                if (interopIndex == QString::fromLatin1("R03"))
                     return WORKSPACE_ADOBERGB;
-                else if (interopIndex == "R98")
+                else if (interopIndex == QString::fromLatin1("R98"))
                     return WORKSPACE_SRGB;
             }
         }
@@ -476,7 +476,7 @@ KExiv2::ImageColorWorkSpace KExiv2::getImageColorWorkSpace() const
         }
         // Exif.Nikon3.ColorMode is set to "MODE2" for AdobeRGB, but there are sometimes two ColorMode fields
         // in a NEF, with the first one "COLOR" and the second one "MODE2"; but in this case, ColorSpace (above) was set.
-        if (getExifTagString("Exif.Nikon3.ColorMode").contains("MODE2"))
+        if (getExifTagString("Exif.Nikon3.ColorMode").contains(QString::fromLatin1("MODE2")))
             return WORKSPACE_ADOBERGB;
 
         //TODO: This makernote tag (0x00b4) must be added to libexiv2
@@ -523,7 +523,7 @@ bool KExiv2::setImageColorWorkSpace(ImageColorWorkSpace workspace, bool setProgr
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError("Cannot set Exif color workspace tag using Exiv2 ", e);
+        d->printExiv2ExceptionError(QString::fromLatin1("Cannot set Exif color workspace tag using Exiv2 "), e);
     }
     catch(...)
     {
@@ -548,7 +548,7 @@ QDateTime KExiv2::getImageDateTime() const
 
                 if (it != exifData.end())
                 {
-                    QDateTime dateTime = QDateTime::fromString(it->toString().c_str(), Qt::ISODate);
+                    QDateTime dateTime = QDateTime::fromString(QString::fromLatin1(it->toString().c_str()), Qt::ISODate);
 
                     if (dateTime.isValid())
                     {
@@ -563,7 +563,7 @@ QDateTime KExiv2::getImageDateTime() const
 
                 if (it != exifData.end())
                 {
-                    QDateTime dateTime = QDateTime::fromString(it->toString().c_str(), Qt::ISODate);
+                    QDateTime dateTime = QDateTime::fromString(QString::fromLatin1(it->toString().c_str()), Qt::ISODate);
 
                     if (dateTime.isValid())
                     {
@@ -578,7 +578,7 @@ QDateTime KExiv2::getImageDateTime() const
 
                 if (it != exifData.end())
                 {
-                    QDateTime dateTime = QDateTime::fromString(it->toString().c_str(), Qt::ISODate);
+                    QDateTime dateTime = QDateTime::fromString(QString::fromLatin1(it->toString().c_str()), Qt::ISODate);
 
                     if (dateTime.isValid())
                     {
@@ -602,7 +602,7 @@ QDateTime KExiv2::getImageDateTime() const
 
                 if (it != xmpData.end())
                 {
-                    QDateTime dateTime = QDateTime::fromString(it->toString().c_str(), Qt::ISODate);
+                    QDateTime dateTime = QDateTime::fromString(QString::fromLatin1(it->toString().c_str()), Qt::ISODate);
 
                     if (dateTime.isValid())
                     {
@@ -617,7 +617,7 @@ QDateTime KExiv2::getImageDateTime() const
 
                 if (it != xmpData.end())
                 {
-                    QDateTime dateTime = QDateTime::fromString(it->toString().c_str(), Qt::ISODate);
+                    QDateTime dateTime = QDateTime::fromString(QString::fromLatin1(it->toString().c_str()), Qt::ISODate);
 
                     if (dateTime.isValid())
                     {
@@ -632,7 +632,7 @@ QDateTime KExiv2::getImageDateTime() const
 
                 if (it != xmpData.end())
                 {
-                    QDateTime dateTime = QDateTime::fromString(it->toString().c_str(), Qt::ISODate);
+                    QDateTime dateTime = QDateTime::fromString(QString::fromLatin1(it->toString().c_str()), Qt::ISODate);
 
                     if (dateTime.isValid())
                     {
@@ -647,7 +647,7 @@ QDateTime KExiv2::getImageDateTime() const
 
                 if (it != xmpData.end())
                 {
-                    QDateTime dateTime = QDateTime::fromString(it->toString().c_str(), Qt::ISODate);
+                    QDateTime dateTime = QDateTime::fromString(QString::fromLatin1(it->toString().c_str()), Qt::ISODate);
 
                     if (dateTime.isValid())
                     {
@@ -662,7 +662,7 @@ QDateTime KExiv2::getImageDateTime() const
 
                 if (it != xmpData.end())
                 {
-                    QDateTime dateTime = QDateTime::fromString(it->toString().c_str(), Qt::ISODate);
+                    QDateTime dateTime = QDateTime::fromString(QString::fromLatin1(it->toString().c_str()), Qt::ISODate);
 
                     if (dateTime.isValid())
                     {
@@ -677,7 +677,7 @@ QDateTime KExiv2::getImageDateTime() const
 
                 if (it != xmpData.end())
                 {
-                    QDateTime dateTime = QDateTime::fromString(it->toString().c_str(), Qt::ISODate);
+                    QDateTime dateTime = QDateTime::fromString(QString::fromLatin1(it->toString().c_str()), Qt::ISODate);
 
                     if (dateTime.isValid())
                     {
@@ -692,7 +692,7 @@ QDateTime KExiv2::getImageDateTime() const
 
                 if (it != xmpData.end())
                 {
-                    QDateTime dateTime = QDateTime::fromString(it->toString().c_str(), Qt::ISODate);
+                    QDateTime dateTime = QDateTime::fromString(QString::fromLatin1(it->toString().c_str()), Qt::ISODate);
 
                     if (dateTime.isValid())
                     {
@@ -718,13 +718,13 @@ QDateTime KExiv2::getImageDateTime() const
 
             if (it != iptcData.end())
             {
-                QString IptcDateCreated(it->toString().c_str());
+                QString IptcDateCreated(QString::fromLatin1(it->toString().c_str()));
                 Exiv2::IptcKey keyTimeCreated("Iptc.Application2.TimeCreated");
                 Exiv2::IptcData::iterator it2 = iptcData.findKey(keyTimeCreated);
 
                 if (it2 != iptcData.end())
                 {
-                    QString IptcTimeCreated(it2->toString().c_str());
+                    QString IptcTimeCreated(QString::fromLatin1(it2->toString().c_str()));
                     QDate date = QDate::fromString(IptcDateCreated, Qt::ISODate);
                     QTime time = QTime::fromString(IptcTimeCreated, Qt::ISODate);
                     QDateTime dateTime = QDateTime(date, time);
@@ -744,13 +744,13 @@ QDateTime KExiv2::getImageDateTime() const
 
             if (it3 != iptcData.end())
             {
-                QString IptcDateDigitization(it3->toString().c_str());
+                QString IptcDateDigitization(QString::fromLatin1(it3->toString().c_str()));
                 Exiv2::IptcKey keyDigitizationTime("Iptc.Application2.DigitizationTime");
                 Exiv2::IptcData::iterator it4 = iptcData.findKey(keyDigitizationTime);
 
                 if (it4 != iptcData.end())
                 {
-                    QString IptcTimeDigitization(it4->toString().c_str());
+                    QString IptcTimeDigitization(QString::fromLatin1(it4->toString().c_str()));
                     QDate date = QDate::fromString(IptcDateDigitization, Qt::ISODate);
                     QTime time = QTime::fromString(IptcTimeDigitization, Qt::ISODate);
                     QDateTime dateTime = QDateTime(date, time);
@@ -766,7 +766,7 @@ QDateTime KExiv2::getImageDateTime() const
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError("Cannot parse Exif date & time tag using Exiv2 ", e);
+        d->printExiv2ExceptionError(QString::fromLatin1("Cannot parse Exif date & time tag using Exiv2 "), e);
     }
     catch(...)
     {
@@ -793,7 +793,7 @@ bool KExiv2::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitiz
         // For digital cameras, these dates should be both set, and identical.
         // Reference: http://www.exif.org/Exif2-2.PDF, chapter 4.6.5, table 4, section F.
 
-        const std::string &exifdatetime(dateTime.toString(QString("yyyy:MM:dd hh:mm:ss")).toLatin1().constData());
+        const std::string &exifdatetime(dateTime.toString(QString::fromLatin1("yyyy:MM:dd hh:mm:ss")).toLatin1().constData());
         d->exifMetadata()["Exif.Image.DateTime"]         = exifdatetime;
         d->exifMetadata()["Exif.Photo.DateTimeOriginal"] = exifdatetime;
 
@@ -841,7 +841,7 @@ bool KExiv2::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitiz
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError("Cannot set Date & Time into image using Exiv2 ", e);
+        d->printExiv2ExceptionError(QString::fromLatin1("Cannot set Date & Time into image using Exiv2 "), e);
     }
     catch(...)
     {
@@ -867,7 +867,7 @@ QDateTime KExiv2::getDigitizationDateTime(bool fallbackToCreationTime) const
 
             if (it != exifData.end())
             {
-                QDateTime dateTime = QDateTime::fromString(it->toString().c_str(), Qt::ISODate);
+                QDateTime dateTime = QDateTime::fromString(QString::fromLatin1(it->toString().c_str()), Qt::ISODate);
 
                 if (dateTime.isValid())
                 {
@@ -889,14 +889,14 @@ QDateTime KExiv2::getDigitizationDateTime(bool fallbackToCreationTime) const
 
             if (it != iptcData.end())
             {
-                QString IptcDateDigitization(it->toString().c_str());
+                QString IptcDateDigitization(QString::fromLatin1(it->toString().c_str()));
 
                 Exiv2::IptcKey keyDigitizationTime("Iptc.Application2.DigitizationTime");
                 Exiv2::IptcData::iterator it2 = iptcData.findKey(keyDigitizationTime);
 
                 if (it2 != iptcData.end())
                 {
-                    QString IptcTimeDigitization(it2->toString().c_str());
+                    QString IptcTimeDigitization(QString::fromLatin1(it2->toString().c_str()));
 
                     QDate date = QDate::fromString(IptcDateDigitization, Qt::ISODate);
                     QTime time = QTime::fromString(IptcTimeDigitization, Qt::ISODate);
@@ -913,7 +913,7 @@ QDateTime KExiv2::getDigitizationDateTime(bool fallbackToCreationTime) const
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError("Cannot parse Exif digitization date & time tag using Exiv2 ", e);
+        d->printExiv2ExceptionError(QString::fromLatin1("Cannot parse Exif digitization date & time tag using Exiv2 "), e);
     }
     catch(...)
     {
@@ -938,7 +938,7 @@ bool KExiv2::getImagePreview(QImage& preview) const
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError("Cannot get image preview using Exiv2 ", e);
+        d->printExiv2ExceptionError(QString::fromLatin1("Cannot get image preview using Exiv2 "), e);
     }
     catch(...)
     {
@@ -984,7 +984,7 @@ bool KExiv2::setImagePreview(const QImage& preview, bool setProgramName) const
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError("Cannot get image preview using Exiv2 ", e);
+        d->printExiv2ExceptionError(QString::fromLatin1("Cannot get image preview using Exiv2 "), e);
     }
     catch(...)
     {

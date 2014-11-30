@@ -80,9 +80,9 @@ bool KExiv2::initializeExiv2()
     if (!Exiv2::XmpParser::initialize())
         return false;
 
-    registerXmpNameSpace(QString("http://ns.adobe.com/lightroom/1.0/"), QString("lr"));
-    registerXmpNameSpace(QString("http://www.digikam.org/ns/kipi/1.0/"), QString("kipi"));
-    registerXmpNameSpace(QString("http://ns.microsoft.com/photo/1.2/"), QString("MP"));
+    registerXmpNameSpace(QString::fromLatin1("http://ns.adobe.com/lightroom/1.0/"),  QString::fromLatin1("lr"));
+    registerXmpNameSpace(QString::fromLatin1("http://www.digikam.org/ns/kipi/1.0/"), QString::fromLatin1("kipi"));
+    registerXmpNameSpace(QString::fromLatin1("http://ns.microsoft.com/photo/1.2/"),  QString::fromLatin1("MP"));
 
 #endif // _XMP_SUPPORT_
 
@@ -94,9 +94,9 @@ bool KExiv2::cleanupExiv2()
     // Fix memory leak if Exiv2 support XMP.
 #ifdef _XMP_SUPPORT_
 
-    unregisterXmpNameSpace(QString("http://ns.adobe.com/lightroom/1.0/"));
-    unregisterXmpNameSpace(QString("http://www.digikam.org/ns/kipi/1.0/"));
-    unregisterXmpNameSpace(QString("http://ns.microsoft.com/photo/1.2/"));
+    unregisterXmpNameSpace(QString::fromLatin1("http://ns.adobe.com/lightroom/1.0/"));
+    unregisterXmpNameSpace(QString::fromLatin1("http://www.digikam.org/ns/kipi/1.0/"));
+    unregisterXmpNameSpace(QString::fromLatin1("http://ns.microsoft.com/photo/1.2/"));
 
     Exiv2::XmpParser::terminate();
 
@@ -116,27 +116,27 @@ bool KExiv2::supportXmp()
 
 bool KExiv2::supportMetadataWritting(const QString& typeMime)
 {
-    if (typeMime == QString("image/jpeg"))
+    if (typeMime == QString::fromLatin1("image/jpeg"))
     {
         return true;
     }
-    else if (typeMime == QString("image/tiff"))
+    else if (typeMime == QString::fromLatin1("image/tiff"))
     {
         return true;
     }
-    else if (typeMime == QString("image/png"))
+    else if (typeMime == QString::fromLatin1("image/png"))
     {
         return true;
     }
-    else if (typeMime == QString("image/jp2"))
+    else if (typeMime == QString::fromLatin1("image/jp2"))
     {
         return true;
     }
-    else if (typeMime == QString("image/x-raw"))
+    else if (typeMime == QString::fromLatin1("image/x-raw"))
     {
         return true;
     }
-    else if (typeMime == QString("image/pgf"))
+    else if (typeMime == QString::fromLatin1("image/pgf"))
     {
         return true;
     }
@@ -149,12 +149,12 @@ QString KExiv2::Exiv2Version()
     // Since 0.14.0 release, we can extract run-time version of Exiv2.
     // else we return make version.
 
-    return QString(Exiv2::version());
+    return QString::fromLatin1(Exiv2::version());
 }
 
 QString KExiv2::version()
 {
-    return QString(KEXIV2_VERSION_STRING);
+    return QString::fromLatin1(KEXIV2_VERSION_STRING);
 }
 
 QString KExiv2::sidecarFilePathForFile(const QString& path)
@@ -163,7 +163,7 @@ QString KExiv2::sidecarFilePathForFile(const QString& path)
 
     if (!path.isEmpty())
     {
-        ret = path + QString(".xmp");
+        ret = path + QString::fromLatin1(".xmp");
     }
 
     return ret;
@@ -230,7 +230,7 @@ bool KExiv2::loadFromData(const QByteArray& imgData) const
         // Size and mimetype ---------------------------------
 
         d->pixelSize = QSize(image->pixelWidth(), image->pixelHeight());
-        d->mimeType  = image->mimeType().c_str();
+        d->mimeType  = QString::fromLatin1(image->mimeType().c_str());
 
         // Image comments ---------------------------------
 
@@ -256,7 +256,7 @@ bool KExiv2::loadFromData(const QByteArray& imgData) const
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError("Cannot load metadata using Exiv2 ", e);
+        d->printExiv2ExceptionError(QString::fromLatin1("Cannot load metadata using Exiv2 "), e);
     }
     catch(...)
     {
@@ -287,7 +287,7 @@ bool KExiv2::load(const QString& filePath) const
         // Size and mimetype ---------------------------------
 
         d->pixelSize = QSize(image->pixelWidth(), image->pixelHeight());
-        d->mimeType  = image->mimeType().c_str();
+        d->mimeType  = QString::fromLatin1(image->mimeType().c_str());
 
         // Image comments ---------------------------------
 
@@ -312,7 +312,7 @@ bool KExiv2::load(const QString& filePath) const
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError("Cannot load metadata from file ", e);
+        d->printExiv2ExceptionError(QString::fromLatin1("Cannot load metadata from file "), e);
     }
     catch(...)
     {
@@ -343,7 +343,7 @@ bool KExiv2::load(const QString& filePath) const
     }
     catch( Exiv2::Error& e )
     {
-        d->printExiv2ExceptionError("Cannot load XMP sidecar", e);
+        d->printExiv2ExceptionError(QString::fromLatin1("Cannot load XMP sidecar"), e);
     }
     catch(...)
     {
