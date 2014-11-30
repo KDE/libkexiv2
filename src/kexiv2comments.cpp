@@ -88,9 +88,9 @@ QString KExiv2::detectLanguageAlt(const QString& value, QString& lang)
 {
     // Ex. from an Xmp tag Xmp.tiff.copyright: "lang="x-default" (c) Gilles Caulier 2007"
 
-    if (value.size() > 6 && value.startsWith(QString("lang=\"")))
+    if (value.size() > 6 && value.startsWith(QString::fromLatin1("lang=\"")))
     {
-        int pos = value.indexOf(QString("\""), 6);
+        int pos = value.indexOf(QString::fromLatin1("\""), 6);
 
         if (pos != -1)
         {
