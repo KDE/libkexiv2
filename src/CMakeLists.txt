@@ -105,7 +105,7 @@ if (NOT DIGIKAMSC_COMPILE_LIBKEXIV2)
             COMPONENT   Devel
     )
 
-    install(FILES       "${CMAKE_CURRENT_BINARY_DIR}/libkexiv2_version.h"
+    install(FILES       "${CMAKE_BINARY_DIR}/libkexiv2_version.h"
             DESTINATION "${KF5_INCLUDE_INSTALL_DIR}"
             COMPONENT   Devel
     )
