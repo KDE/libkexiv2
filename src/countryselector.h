@@ -30,10 +30,7 @@
 
 #include <QtCore/QString>
 #include <QtWidgets/QWidget>
-
-// KDE includes
-
-#include <kcombobox.h>
+#include <QtWidgets/QComboBox>
 
 // Local includes
 
@@ -42,7 +39,7 @@
 namespace KExiv2Iface
 {
 
-class LIBKEXIV2_EXPORT CountrySelector : public KComboBox
+class LIBKEXIV2_EXPORT CountrySelector : public QComboBox
 {
 
 public:

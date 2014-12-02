@@ -42,10 +42,10 @@
 #include <QDomDocument>
 #include <QDomElement>
 #include <QApplication>
+#include <QComboBox>
 
 // KDE includes
 
-#include <kcombobox.h>
 #include <klocalizedstring.h>
 
 // Local includes
@@ -106,7 +106,7 @@ public:
     QRadioButton*                      stdBtn;
     QRadioButton*                      customBtn;
 
-    KComboBox*                         refCB;
+    QComboBox*                         refCB;
 
     QListWidget*                       subjectsBox;
 };
@@ -138,7 +138,7 @@ SubjectWidget::SubjectWidget(QWidget* const parent)
     d->btnGroup            = new QButtonGroup(this);
     d->stdBtn              = new QRadioButton;
     d->customBtn           = new QRadioButton;
-    d->refCB               = new KComboBox;
+    d->refCB               = new QComboBox;
     QLabel* const codeLink = new QLabel(i18n("Use standard "
                                        "<b><a href='http://www.iptc.org/site/NewsCodes'>"
                                        "reference code</a></b>"));
@@ -279,7 +279,7 @@ SubjectWidget::SubjectWidget(QWidget* const parent)
     connect(d->btnGroup, static_cast<void (QButtonGroup::*)(int)>(&QButtonGroup::buttonReleased),
             this, &SubjectWidget::slotEditOptionChanged);
 
-    connect(d->refCB, static_cast<void (KComboBox::*)(int)>(&KComboBox::activated),
+    connect(d->refCB, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated),
             this, &SubjectWidget::slotRefChanged);
 
     // --------------------------------------------------------

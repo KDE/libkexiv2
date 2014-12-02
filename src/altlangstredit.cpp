@@ -34,11 +34,11 @@
 #include <QToolButton>
 #include <QGridLayout>
 #include <QApplication>
+#include <QComboBox>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kcombobox.h>
 #include <ktextedit.h>
 
 // Local includes
@@ -264,7 +264,7 @@ public:
 
     MsgTextEdit*                   valueEdit;
 
-    KComboBox*                     languageCB;
+    QComboBox*                     languageCB;
 
     KExiv2::AltLangMap             values;
 };
@@ -279,8 +279,8 @@ AltLangStrEdit::AltLangStrEdit(QWidget* const parent)
     d->delValueButton->setToolTip(i18n("Remove entry for this language"));
     d->delValueButton->setEnabled(false);
 
-    d->languageCB = new KComboBox(this);
-    d->languageCB->setSizeAdjustPolicy(KComboBox::AdjustToContents);
+    d->languageCB = new QComboBox(this);
+    d->languageCB->setSizeAdjustPolicy(QComboBox::AdjustToContents);
     d->languageCB->setWhatsThis(i18n("Select item language here."));
 
     d->valueEdit  = new MsgTextEdit(this);
@@ -301,7 +301,7 @@ AltLangStrEdit::AltLangStrEdit(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    connect(d->languageCB, static_cast<void (KComboBox::*)(int)>(&KComboBox::currentIndexChanged),
+    connect(d->languageCB, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
             this, &AltLangStrEdit::slotSelectionChanged);
 
     connect(d->delValueButton, &QToolButton::clicked,
@@ -435,7 +435,7 @@ void AltLangStrEdit::loadLangAltListEntries()
         }
     }
 
-    d->languageCB->setCurrentItem(d->currentLanguage);
+    d->languageCB->setCurrentIndex(d->languageCB->findText(d->currentLanguage));
 
     d->languageCB->blockSignals(false);
 }

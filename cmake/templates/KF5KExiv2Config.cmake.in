@@ -14,6 +14,6 @@
 @PACKAGE_INIT@
 
 find_dependency(Qt5Core Qt5Widgets Qt5Gui Qt5Xml @REQUIRED_QT_VERSION@)
-find_dependency(KF5TextWidgets KF5Completion)
+find_dependency(KF5I18n CoreAddons KF5TextWidgets)
 
 include("${CMAKE_CURRENT_LIST_DIR}/KF5KExiv2Targets.cmake")

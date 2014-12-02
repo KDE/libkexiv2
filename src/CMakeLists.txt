@@ -89,10 +89,10 @@ target_link_libraries(KF5KExiv2
                       PRIVATE
                       ${EXIV2_LIBRARIES}
                       PUBLIC
-                      KF5::TextWidgets
-                      KF5::Completion
-                      KF5::CoreAddons
                       Qt5::Xml
+                      KF5::I18n
+                      KF5::CoreAddons
+                      KF5::TextWidgets
 )
 
 if( WIN32 )

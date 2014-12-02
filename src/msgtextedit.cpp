@@ -37,7 +37,9 @@ class MsgTextEdit::Private
 {
 public:
 
-    Private(){}
+    Private()
+    {
+    }
 
     QString message;
 };

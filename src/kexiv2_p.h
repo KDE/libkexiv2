@@ -49,10 +49,6 @@
 #include <QFileInfo>
 #include <QSharedData>
 
-// KDE includes
-
-#include <kstringhandler.h>
-
 // Exiv2 includes -------------------------------------------------------
 
 // NOTE: All Exiv2 header must be stay there to not expose external source code to Exiv2 API

@@ -39,6 +39,10 @@ extern "C"
 
 #include <QTextCodec>
 
+// KDE includes
+
+#include <kstringhandler.h>
+
 // Local includes
 
 #include "libkexiv2_debug.h"
@@ -440,7 +444,7 @@ QString KExiv2::Private::detectEncodingAndDecode(const std::string& value) const
     // (Mozilla chardet, KHTML's autodetection, QTextCodec::codecForContent),
     // but that is probably too much.
     // We check for UTF8, Local encoding and ASCII.
-    // TODO: Gilles ==> Marcel : Look like KEncodingDetector class can provide a full implementation for encoding detection.
+    // Look like KEncodingDetector class can provide a full implementation for encoding detection.
 
     if (value.empty())
     {
@@ -457,9 +461,7 @@ QString KExiv2::Private::detectEncodingAndDecode(const std::string& value) const
     // to reliably autodetect different ISO-8859 charsets.
     // So we can use either local encoding, or latin1.
 
-    //TODO: KDE4PORT: check for regression of #134999 (very probably no regression!)
     return QString::fromLocal8Bit(value.c_str());
-    //return QString::fromLatin1(value.c_str());
 }
 
 int KExiv2::Private::getXMPTagsListFromPrefix(const QString& pf, KExiv2::TagsMap& tagsMap) const
