@@ -55,31 +55,6 @@ add_library(KF5::KExiv2 ALIAS KF5KExiv2)
 
 generate_export_header(KF5KExiv2 BASE_NAME libkexiv2 EXPORT_MACRO_NAME LIBKEXIV2_EXPORT)
 
-# Check if compilation is done through digiKam SC or not. If yes, do not install header files.
-if (NOT DIGIKAMSC_COMPILE_LIBKEXIV2)
-
-    install(FILES       ${CMAKE_CURRENT_BINARY_DIR}/libkexiv2_export.h
-            DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KExiv2/kexiv2
-            COMPONENT   Devel
-    )
-
-    install(FILES       ${kexiv2_CamelCase_HEADERS}
-            DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KExiv2/KExiv2
-            COMPONENT   Devel
-    )
-
-    install(FILES       ${kexiv2_HEADERS}
-            DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KExiv2/kexiv2
-            COMPONENT   Devel
-    )
-
-# TODO remove this, if it's ok to be installed from the main CMakeLists
-#    install(FILES       "${CMAKE_CURRENT_BINARY_DIR}/libkexiv2_version.h"
-#            DESTINATION "${KF5_INCLUDE_INSTALL_DIR}"
-#            COMPONENT   Devel
-#    )
-
-endif()
 
 target_include_directories(KF5KExiv2 INTERFACE
                            "$<INSTALL_INTERFACE:${KF5_INCLUDE_INSTALL_DIR}/KExiv2;${KF5_INCLUDE_INSTALL_DIR}/KExiv2/kexiv2>"
@@ -111,3 +86,28 @@ set_target_properties(KF5KExiv2   PROPERTIES
 
 install(FILES       ${CMAKE_CURRENT_SOURCE_DIR}/../data/topicset.iptc-subjectcode.xml
         DESTINATION ${DATA_INSTALL_DIR}/libkexiv2/data)
+
+# Check if compilation is done through digiKam SC or not. If yes, do not install header files.
+if (NOT DIGIKAMSC_COMPILE_LIBKEXIV2)
+
+    install(FILES       ${CMAKE_CURRENT_BINARY_DIR}/libkexiv2_export.h
+            DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KExiv2/kexiv2
+            COMPONENT   Devel
+    )
+
+    install(FILES       ${kexiv2_CamelCase_HEADERS}
+            DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KExiv2/KExiv2
+            COMPONENT   Devel
+    )
+
+    install(FILES       ${kexiv2_HEADERS}
+            DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KExiv2/kexiv2
+            COMPONENT   Devel
+    )
+
+    install(FILES       "${CMAKE_CURRENT_BINARY_DIR}/libkexiv2_version.h"
+            DESTINATION "${KF5_INCLUDE_INSTALL_DIR}"
+            COMPONENT   Devel
+    )
+
+endif()

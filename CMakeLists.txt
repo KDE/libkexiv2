@@ -144,15 +144,4 @@ install(EXPORT      KF5KExiv2Targets
         NAMESPACE   KF5::
 )
 
-# Check if compilation is done through digiKam SC or not. If yes, do not install header files.
-if (NOT DIGIKAMSC_COMPILE_LIBKEXIV2)
-
-    install(FILES       "${CMAKE_CURRENT_BINARY_DIR}/libkexiv2_version.h"
-            DESTINATION "${KF5_INCLUDE_INSTALL_DIR}"
-            COMPONENT   Devel
-    )
-
-endif()
-
-
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
