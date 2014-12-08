@@ -114,6 +114,7 @@ ecm_setup_version(${LIBKEXIV2_LIB_VERSION}
 
 add_definitions(-DTRANSLATION_DOMAIN=\"libkexiv2\")
 
+add_subdirectory(data)
 add_subdirectory(src)
 
 if (BUILD_TESTING)
