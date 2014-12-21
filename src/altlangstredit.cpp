@@ -524,4 +524,9 @@ void AltLangStrEdit::changeEvent(QEvent* e)
     QWidget::changeEvent(e);
 }
 
+MsgTextEdit* AltLangStrEdit::textEdit() const
+{
+    return d->valueEdit;
+}
+
 }  // namespace KExiv2Iface

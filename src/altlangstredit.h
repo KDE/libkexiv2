@@ -39,6 +39,8 @@
 namespace KExiv2Iface
 {
 
+class MsgTextEdit;
+
 class LIBKEXIV2_EXPORT AltLangStrEdit : public QWidget
 {
     Q_OBJECT
@@ -79,6 +81,8 @@ public:
      * signalValueAdded() will be emitted.
      */
     void addCurrent();
+
+    MsgTextEdit* textEdit() const;
 
 Q_SIGNALS:
 
