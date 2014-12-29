@@ -19,4 +19,4 @@
 
 #include "libkexiv2_debug.h"
 
-Q_LOGGING_CATEGORY(LIBKEXIV2_LOG, "log_libkexiv2")
+Q_LOGGING_CATEGORY(LIBKEXIV2_LOG, "libkexiv2")
