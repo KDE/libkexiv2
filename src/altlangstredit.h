@@ -51,7 +51,7 @@ public:
     ~AltLangStrEdit();
 
     void setTitle(const QString& title);
-    void setClickMessage(const QString& msg);
+    void setPlaceholderText(const QString& msg);
 
     void    setCurrentLanguageCode(const QString& lang);
     QString currentLanguageCode() const;
