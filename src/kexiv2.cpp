@@ -420,7 +420,7 @@ bool KExiv2::save(const QString& imageFilePath) const
 
     if (writeToFile)
     {
-        qCDebug(LIBKEXIV2_LOG) << "Will write Metadata to file" << finfo.fileName();
+        qCDebug(LIBKEXIV2_LOG) << "Will write Metadata to file" << finfo.absoluteFilePath();
         writtenToFile = d->saveToFile(finfo);
 
         if (writeToFile)
