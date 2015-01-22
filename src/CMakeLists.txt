@@ -7,7 +7,7 @@
 kde_enable_exceptions()
 
 include_directories(${EXIV2_INCLUDE_DIR})
-include_directories(${CMAKE_CURRENT_BINARY_DIR}/.. ${CMAKE_CURRENT_BINARY_DIR})
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/..)
 
 add_definitions(${EXIV2_DEFINITIONS})
 
@@ -58,6 +58,7 @@ generate_export_header(KF5KExiv2 BASE_NAME libkexiv2 EXPORT_MACRO_NAME LIBKEXIV2
 
 target_include_directories(KF5KExiv2 INTERFACE
                            "$<INSTALL_INTERFACE:${KF5_INCLUDE_INSTALL_DIR}/KExiv2;${KF5_INCLUDE_INSTALL_DIR}/KExiv2/kexiv2>"
+                           "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/..>"
 )
 
 target_link_libraries(KF5KExiv2

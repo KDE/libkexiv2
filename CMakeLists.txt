@@ -103,8 +103,8 @@ set_package_properties("Exiv2"     PROPERTIES
 
 ecm_setup_version(${LIBKEXIV2_LIB_VERSION}
                   VARIABLE_PREFIX      KEXIV2
-                  VERSION_HEADER       "${CMAKE_CURRENT_BINARY_DIR}/libkexiv2_version.h"
-                  PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF5KExiv2ConfigVersion.cmake"
+                  VERSION_HEADER       "libkexiv2_version.h"
+                  PACKAGE_VERSION_FILE "KF5KExiv2ConfigVersion.cmake"
                   SOVERSION            ${LIBKEXIV2_SO_VERSION}
 )
 
