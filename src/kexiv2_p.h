@@ -145,6 +145,10 @@ public:
      */
     QString detectEncodingAndDecode(const std::string& value)      const;
 
+    /** UTF8 autodetection from a string.
+     */
+    bool isUtf8(const char* const buffer)                          const;
+
     int getXMPTagsListFromPrefix(const QString& pf, KExiv2::TagsMap& tagsMap) const;
 
     const Exiv2::ExifData& exifMetadata()  const { return data.constData()->exifMetadata;  }
