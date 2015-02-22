@@ -65,9 +65,9 @@ namespace KExiv2Iface
    (I did not proof that mathematically, but empirically)
 
    static const RotationMatrix identity;               //( 1,  0,  0,  1)
-   static const RotationMatrix rotate90;               //( 0, -1,  1,  0)
+   static const RotationMatrix rotate90;               //( 0,  1, -1,  0)
    static const RotationMatrix rotate180;              //(-1,  0,  0, -1)
-   static const RotationMatrix rotate270;              //( 0,  1, -1,  0)
+   static const RotationMatrix rotate270;              //( 0, -1,  1,  0)
    static const RotationMatrix flipHorizontal;         //(-1,  0,  0,  1)
    static const RotationMatrix flipVertical;           //( 1,  0,  0, -1)
    static const RotationMatrix rotate90flipHorizontal; //( 0,  1,  1,  0), first rotate, then flip
@@ -79,9 +79,9 @@ namespace Matrix
 {
 
 static const RotationMatrix identity               ( 1,  0,  0,  1);
-static const RotationMatrix rotate90               ( 0, -1,  1,  0);
+static const RotationMatrix rotate90               ( 0,  1, -1,  0);
 static const RotationMatrix rotate180              (-1,  0,  0, -1);
-static const RotationMatrix rotate270              ( 0,  1, -1,  0);
+static const RotationMatrix rotate270              ( 0, -1,  1,  0);
 static const RotationMatrix flipHorizontal         (-1,  0,  0,  1);
 static const RotationMatrix flipVertical           ( 1,  0,  0, -1);
 static const RotationMatrix rotate90flipHorizontal ( 0,  1,  1,  0);
