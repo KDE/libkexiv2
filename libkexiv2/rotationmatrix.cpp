@@ -7,7 +7,7 @@
  * @date   2009-08-03
  * @brief  Tools for combining rotation operations
  *
- * @author Copyright (C) 2006-2012 by Gilles Caulier
+ * @author Copyright (C) 2006-2015 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  * @author Copyright (C) 2004-2012 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
@@ -65,9 +65,9 @@ namespace KExiv2Iface
    (I did not proof that mathematically, but empirically)
 
    static const RotationMatrix identity;               //( 1,  0,  0,  1)
-   static const RotationMatrix rotate90;               //( 0, -1,  1,  0)
+   static const RotationMatrix rotate90;               //( 0,  1, -1,  0)
    static const RotationMatrix rotate180;              //(-1,  0,  0, -1)
-   static const RotationMatrix rotate270;              //( 0,  1, -1,  0)
+   static const RotationMatrix rotate270;              //( 0, -1,  1,  0)
    static const RotationMatrix flipHorizontal;         //(-1,  0,  0,  1)
    static const RotationMatrix flipVertical;           //( 1,  0,  0, -1)
    static const RotationMatrix rotate90flipHorizontal; //( 0,  1,  1,  0), first rotate, then flip
@@ -79,9 +79,9 @@ namespace Matrix
 {
 
 static const RotationMatrix identity               ( 1,  0,  0,  1);
-static const RotationMatrix rotate90               ( 0, -1,  1,  0);
+static const RotationMatrix rotate90               ( 0,  1, -1,  0);
 static const RotationMatrix rotate180              (-1,  0,  0, -1);
-static const RotationMatrix rotate270              ( 0,  1, -1,  0);
+static const RotationMatrix rotate270              ( 0, -1,  1,  0);
 static const RotationMatrix flipHorizontal         (-1,  0,  0,  1);
 static const RotationMatrix flipVertical           ( 1,  0,  0, -1);
 static const RotationMatrix rotate90flipHorizontal ( 0,  1,  1,  0);
@@ -104,6 +104,7 @@ RotationMatrix matrix(RotationMatrix::TransformationAction action)
         case RotationMatrix::Rotate270:
             return rotate270;
     }
+
     return identity;
 }
 
@@ -130,6 +131,7 @@ RotationMatrix matrix(KExiv2::ImageOrientation exifOrientation)
         case KExiv2::ORIENTATION_UNSPECIFIED:
             return identity;
     }
+
     return identity;
 }
 
