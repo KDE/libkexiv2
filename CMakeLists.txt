@@ -88,6 +88,7 @@ find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
 )
 
 find_package(KF5 ${KF5_VERSION} REQUIRED COMPONENTS
+             CoreAddons
              I18n
              TextWidgets
 )
