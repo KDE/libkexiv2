@@ -701,6 +701,69 @@ QDateTime KExiv2::getImageDateTime() const
                     }
                 }
             }
+            
+            // Video files support
+            
+            {
+                Exiv2::XmpKey key("Xmp.video.DateTimeOriginal");
+                Exiv2::XmpData::iterator it = xmpData.findKey(key);
+
+                if (it != xmpData.end())
+                {
+                    QDateTime dateTime = QDateTime::fromString(QString::fromLatin1(it->toString().c_str()), Qt::ISODate);
+
+                    if (dateTime.isValid())
+                    {
+                        qCDebug(LIBKEXIV2_LOG) << "DateTime => Xmp.video.DateTimeOriginal => " << dateTime;
+                        return dateTime;
+                    }
+                }
+            }
+            {
+                Exiv2::XmpKey key("Xmp.video.DateUTC");
+                Exiv2::XmpData::iterator it = xmpData.findKey(key);
+
+                if (it != xmpData.end())
+                {
+                    QDateTime dateTime = QDateTime::fromString(QString::fromLatin1(it->toString().c_str()), Qt::ISODate);
+
+                    if (dateTime.isValid())
+                    {
+                        qCDebug(LIBKEXIV2_LOG) << "DateTime => Xmp.video.DateUTC => " << dateTime;
+                        return dateTime;
+                    }
+                }
+            }
+            {
+                Exiv2::XmpKey key("Xmp.video.ModificationDate");
+                Exiv2::XmpData::iterator it = xmpData.findKey(key);
+
+                if (it != xmpData.end())
+                {
+                    QDateTime dateTime = QDateTime::fromString(QString::fromLatin1(it->toString().c_str()), Qt::ISODate);
+
+                    if (dateTime.isValid())
+                    {
+                        qCDebug(LIBKEXIV2_LOG) << "DateTime => Xmp.video.ModificationDate => " << dateTime;
+                        return dateTime;
+                    }
+                }
+            }            
+            {
+                Exiv2::XmpKey key("Xmp.video.DateTimeDigitized");
+                Exiv2::XmpData::iterator it = xmpData.findKey(key);
+
+                if (it != xmpData.end())
+                {
+                    QDateTime dateTime = QDateTime::fromString(QString::fromLatin1(it->toString().c_str()), Qt::ISODate);
+
+                    if (dateTime.isValid())
+                    {
+                        qCDebug(LIBKEXIV2_LOG) << "DateTime => Xmp.video.DateTimeDigitized => " << dateTime;
+                        return dateTime;
+                    }
+                }
+            }  
         }
 
 #endif // _XMP_SUPPORT_
@@ -808,15 +871,21 @@ bool KExiv2::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitiz
 
         Exiv2::Value::AutoPtr xmpTxtVal = Exiv2::Value::create(Exiv2::xmpText);
         xmpTxtVal->read(xmpdatetime);
-        d->xmpMetadata().add(Exiv2::XmpKey("Xmp.exif.DateTimeOriginal"), xmpTxtVal.get());
-        d->xmpMetadata().add(Exiv2::XmpKey("Xmp.photoshop.DateCreated"), xmpTxtVal.get());
-        d->xmpMetadata().add(Exiv2::XmpKey("Xmp.tiff.DateTime"),         xmpTxtVal.get());
-        d->xmpMetadata().add(Exiv2::XmpKey("Xmp.xmp.CreateDate"),        xmpTxtVal.get());
-        d->xmpMetadata().add(Exiv2::XmpKey("Xmp.xmp.MetadataDate"),      xmpTxtVal.get());
-        d->xmpMetadata().add(Exiv2::XmpKey("Xmp.xmp.ModifyDate"),        xmpTxtVal.get());
+        d->xmpMetadata().add(Exiv2::XmpKey("Xmp.exif.DateTimeOriginal"),  xmpTxtVal.get());
+        d->xmpMetadata().add(Exiv2::XmpKey("Xmp.photoshop.DateCreated"),  xmpTxtVal.get());
+        d->xmpMetadata().add(Exiv2::XmpKey("Xmp.tiff.DateTime"),          xmpTxtVal.get());
+        d->xmpMetadata().add(Exiv2::XmpKey("Xmp.xmp.CreateDate"),         xmpTxtVal.get());
+        d->xmpMetadata().add(Exiv2::XmpKey("Xmp.xmp.MetadataDate"),       xmpTxtVal.get());
+        d->xmpMetadata().add(Exiv2::XmpKey("Xmp.xmp.ModifyDate"),         xmpTxtVal.get());
+        d->xmpMetadata().add(Exiv2::XmpKey("Xmp.video.DateTimeOriginal"), xmpTxtVal.get());
+        d->xmpMetadata().add(Exiv2::XmpKey("Xmp.video.DateUTC"),          xmpTxtVal.get());
+        d->xmpMetadata().add(Exiv2::XmpKey("Xmp.video.ModificationDate"), xmpTxtVal.get());
 
         if(setDateTimeDigitized)
-            d->xmpMetadata().add(Exiv2::XmpKey("Xmp.exif.DateTimeDigitized"), xmpTxtVal.get());
+        {
+            d->xmpMetadata().add(Exiv2::XmpKey("Xmp.exif.DateTimeDigitized"),  xmpTxtVal.get());
+            d->xmpMetadata().add(Exiv2::XmpKey("Xmp.video.DateTimeDigitized"), xmpTxtVal.get());
+        }
 
         // Tag not updated:
         // "Xmp.dc.DateTime" is a sequence of date relevant of dublin core change.
@@ -877,7 +946,48 @@ QDateTime KExiv2::getDigitizationDateTime(bool fallbackToCreationTime) const
             }
         }
 
-        // In second, trying to get Date & time from Iptc tags.
+        // In second, we trying XMP
+
+#ifdef _XMP_SUPPORT_
+
+        if (!d->xmpMetadata().empty())
+        {
+            Exiv2::XmpData xmpData(d->xmpMetadata());
+            {
+                Exiv2::XmpKey key("Xmp.exif.DateTimeDigitized");
+                Exiv2::XmpData::iterator it = xmpData.findKey(key);
+
+                if (it != xmpData.end())
+                {
+                    QDateTime dateTime = QDateTime::fromString(QString::fromLatin1(it->toString().c_str()), Qt::ISODate);
+
+                    if (dateTime.isValid())
+                    {
+                        qCDebug(LIBKEXIV2_LOG) << "DateTime (XMP-Exif digitalized): " << dateTime.toString().toLatin1().constData();
+                        return dateTime;
+                    }
+                }
+            }           
+            {
+                Exiv2::XmpKey key("Xmp.video.DateTimeDigitized");
+                Exiv2::XmpData::iterator it = xmpData.findKey(key);
+
+                if (it != xmpData.end())
+                {
+                    QDateTime dateTime = QDateTime::fromString(QString::fromLatin1(it->toString().c_str()), Qt::ISODate);
+
+                    if (dateTime.isValid())
+                    {
+                        qCDebug(LIBKEXIV2_LOG) << "DateTime (XMP-Video digitalized): " << dateTime.toString().toLatin1().constData();
+                        return dateTime;
+                    }
+                }
+            }  
+        }
+        
+#endif // _XMP_SUPPORT_
+        
+        // In third, trying to get Date & time from Iptc tags.
 
         if (!d->iptcMetadata().empty())
         {
