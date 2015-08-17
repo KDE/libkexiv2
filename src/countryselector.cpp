@@ -242,7 +242,7 @@ public:
         countryCodeMap.insert( QString::fromLatin1("STP"), i18n("Sao Tome and Principe") );
         countryCodeMap.insert( QString::fromLatin1("SAU"), i18n("Saudi Arabia") );
         countryCodeMap.insert( QString::fromLatin1("SEN"), i18n("Senegal") );
-        countryCodeMap.insert( QString::fromLatin1("SCG"), i18n("Serbia and Montenegro") );
+        countryCodeMap.insert( QString::fromLatin1("SCG"), i18n("Serbia") );
         countryCodeMap.insert( QString::fromLatin1("SYC"), i18n("Seychelles") );
         countryCodeMap.insert( QString::fromLatin1("SLE"), i18n("Sierra Leone") );
         countryCodeMap.insert( QString::fromLatin1("SGP"), i18n("Singapore") );
