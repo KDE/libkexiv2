@@ -240,7 +240,7 @@ public:
         countryCodeMap.insert( "STP", i18n("Sao Tome and Principe") );
         countryCodeMap.insert( "SAU", i18n("Saudi Arabia") );
         countryCodeMap.insert( "SEN", i18n("Senegal") );
-        countryCodeMap.insert( "SCG", i18n("Serbia and Montenegro") );
+        countryCodeMap.insert( "SCG", i18n("Serbia") );
         countryCodeMap.insert( "SYC", i18n("Seychelles") );
         countryCodeMap.insert( "SLE", i18n("Sierra Leone") );
         countryCodeMap.insert( "SGP", i18n("Singapore") );
