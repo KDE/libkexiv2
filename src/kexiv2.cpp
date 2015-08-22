@@ -84,6 +84,7 @@ bool KExiv2::initializeExiv2()
     registerXmpNameSpace(QString::fromLatin1("http://www.digikam.org/ns/kipi/1.0/"), QString::fromLatin1("kipi"));
     registerXmpNameSpace(QString::fromLatin1("http://ns.microsoft.com/photo/1.2/"),  QString::fromLatin1("MP"));
     registerXmpNameSpace(QString::fromLatin1("http://ns.acdsee.com/iptc/1.0/"),      QString::fromLatin1("acdsee"));
+    registerXmpNameSpace(QString::fromLatin1("http://www.video"),                    QString::fromLatin1("video"));
 
 #endif // _XMP_SUPPORT_
 
@@ -99,7 +100,8 @@ bool KExiv2::cleanupExiv2()
     unregisterXmpNameSpace(QString::fromLatin1("http://www.digikam.org/ns/kipi/1.0/"));
     unregisterXmpNameSpace(QString::fromLatin1("http://ns.microsoft.com/photo/1.2/"));
     unregisterXmpNameSpace(QString::fromLatin1("http://ns.acdsee.com/iptc/1.0/"));
-
+    unregisterXmpNameSpace(QString::fromLatin1("http://www.video"));
+    
     Exiv2::XmpParser::terminate();
 
 #endif // _XMP_SUPPORT_
