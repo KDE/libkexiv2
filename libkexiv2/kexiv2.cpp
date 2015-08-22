@@ -7,7 +7,7 @@
  * @date   2006-09-15
  * @brief  Exiv2 library interface for KDE
  *
- * @author Copyright (C) 2006-2014 by Gilles Caulier
+ * @author Copyright (C) 2006-2015 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  * @author Copyright (C) 2006-2013 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
@@ -107,10 +107,11 @@ bool KExiv2::initializeExiv2()
     if (!Exiv2::XmpParser::initialize())
         return false;
 
-    registerXmpNameSpace(QString("http://ns.adobe.com/lightroom/1.0/"), QString("lr"));
+    registerXmpNameSpace(QString("http://ns.adobe.com/lightroom/1.0/"),  QString("lr"));
     registerXmpNameSpace(QString("http://www.digikam.org/ns/kipi/1.0/"), QString("kipi"));
-    registerXmpNameSpace(QString("http://ns.microsoft.com/photo/1.2/"), QString("MP"));
-    registerXmpNameSpace(QString("http://ns.acdsee.com/iptc/1.0/"), QString("acdsee"));
+    registerXmpNameSpace(QString("http://ns.microsoft.com/photo/1.2/"),  QString("MP"));
+    registerXmpNameSpace(QString("http://ns.acdsee.com/iptc/1.0/"),      QString("acdsee"));
+    registerXmpNameSpace(QString("http://www.video"),                    QString("video"));
 
 #endif // _XMP_SUPPORT_
 
@@ -126,6 +127,7 @@ bool KExiv2::cleanupExiv2()
     unregisterXmpNameSpace(QString("http://www.digikam.org/ns/kipi/1.0/"));
     unregisterXmpNameSpace(QString("http://ns.microsoft.com/photo/1.2/"));
     unregisterXmpNameSpace(QString("http://ns.acdsee.com/iptc/1.0/"));
+    unregisterXmpNameSpace(QString("http://www.video"));
 
     Exiv2::XmpParser::terminate();
 
