@@ -40,7 +40,7 @@
 namespace KExiv2Iface
 {
 
-class CountrySelector::Private
+class Q_DECL_HIDDEN CountrySelector::Private
 {
 public:
 

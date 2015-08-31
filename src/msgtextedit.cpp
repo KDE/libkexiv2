@@ -33,7 +33,7 @@
 namespace KExiv2Iface
 {
 
-class MsgTextEdit::Private
+class Q_DECL_HIDDEN MsgTextEdit::Private
 {
 public:
 

@@ -35,7 +35,7 @@
 namespace KExiv2Iface
 {
 
-class KExiv2Previews::Private
+class Q_DECL_HIDDEN KExiv2Previews::Private
 {
 public:
 

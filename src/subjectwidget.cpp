@@ -55,7 +55,7 @@
 namespace KExiv2Iface
 {
 
-class SubjectWidget::Private
+class Q_DECL_HIDDEN SubjectWidget::Private
 {
 public:
 

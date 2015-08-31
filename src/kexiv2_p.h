@@ -103,7 +103,7 @@
 namespace KExiv2Iface
 {
 
-class KExiv2Data::Private : public QSharedData
+class Q_DECL_HIDDEN KExiv2Data::Private : public QSharedData
 {
 public:
 
@@ -124,7 +124,7 @@ public:
 
 // --------------------------------------------------------------------------
 
-class KExiv2::Private
+class Q_DECL_HIDDEN KExiv2::Private
 {
 public:
 
