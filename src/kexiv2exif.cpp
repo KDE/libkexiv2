@@ -190,14 +190,14 @@ KExiv2::MetaDataMap KExiv2::getExifTagsDataList(const QStringList& exifKeysFilte
             }
             else if (key == QString::fromLatin1("Exif.Image.0x935c"))
             {
-                tagValue = i18n("Data of size %1", md->value().size());
+                tagValue = QString::number(md->value().size());
             }
             else
             {
                 std::ostringstream os;
                 os << *md;
 
-                // Exif tag contents can be an i18n strings, no only simple ascii.
+                // Exif tag contents can be an translated strings, no only simple ascii.
                 tagValue = QString::fromLocal8Bit(os.str().c_str());
             }
 

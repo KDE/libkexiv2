@@ -570,7 +570,7 @@ public:
     QString getExifTagDescription(const char* exifTagName);
 
     /** Takes a QVariant value as it could have been retrieved by getExifTagVariant with the given exifTagName,
-        and returns its value properly converted to a string (including i18n).
+        and returns its value properly converted to a string (including translations from Exiv2).
         This is equivalent to calling getExifTagString directly.
         If escapeCR is true CR characters will be removed from the result.
      */

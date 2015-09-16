@@ -87,12 +87,6 @@ find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
              Xml
 )
 
-find_package(KF5 ${KF5_VERSION} REQUIRED COMPONENTS
-             CoreAddons
-             I18n
-             TextWidgets
-)
-
 find_package(Exiv2 ${EXIV2_MIN_VERSION} REQUIRED)
 set_package_properties("Exiv2"     PROPERTIES
                        DESCRIPTION "Required to build libkexiv2"
@@ -110,9 +104,6 @@ ecm_setup_version(${LIBKEXIV2_LIB_VERSION}
 
 ############## Targets #########################
 
-add_definitions(-DTRANSLATION_DOMAIN=\"libkexiv2\")
-
-add_subdirectory(data)
 add_subdirectory(src)
 
 if (BUILD_TESTING)

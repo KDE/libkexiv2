@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2010-2014, Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2010-2015, Gilles Caulier, <caulier dot gilles at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -27,24 +27,16 @@ set(kexiv2_LIB_SRCS kexiv2.cpp
                     kexiv2xmp.cpp
                     kexiv2previews.cpp
                     rotationmatrix.cpp
-                    msgtextedit.cpp
-                    altlangstredit.cpp
-                    countryselector.cpp
-                    subjectwidget.cpp
                     libkexiv2_debug.cpp
 )
 
 ecm_generate_headers(kexiv2_CamelCase_HEADERS
 
                      HEADER_NAMES
-                     AltLangStrEdit
-                     CountrySelector
                      KExiv2Data
                      KExiv2
                      KExiv2Previews
-                     MsgTextEdit
                      RotationMatrix
-                     SubjectWidget
 
                      PREFIX           KExiv2
                      REQUIRED_HEADERS kexiv2_HEADERS
@@ -66,9 +58,8 @@ target_link_libraries(KF5KExiv2
                       ${EXIV2_LIBRARIES}
                       PUBLIC
                       Qt5::Xml
-                      KF5::I18n
-                      KF5::CoreAddons
-                      KF5::TextWidgets
+                      Qt5::Core
+                      Qt5::Gui
 )
 
 if( WIN32 )
