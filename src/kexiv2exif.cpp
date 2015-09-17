@@ -37,9 +37,6 @@
 #include <QTextCodec>
 #include <QBuffer>
 
-// KDE includes
-
-#include <klocalizedstring.h>
 
 // Local includes
 
