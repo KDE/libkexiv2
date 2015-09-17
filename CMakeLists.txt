@@ -87,6 +87,8 @@ find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
              Xml
 )
 
+find_package(KF5I18n)
+
 find_package(Exiv2 ${EXIV2_MIN_VERSION} REQUIRED)
 set_package_properties("Exiv2"     PROPERTIES
                        DESCRIPTION "Required to build libkexiv2"

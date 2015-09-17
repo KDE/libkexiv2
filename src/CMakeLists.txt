@@ -60,6 +60,7 @@ target_link_libraries(KF5KExiv2
                       Qt5::Xml
                       Qt5::Core
                       Qt5::Gui
+                      KF5::I18n
 )
 
 if( WIN32 )
