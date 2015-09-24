@@ -371,7 +371,7 @@ void KExiv2::Private::printExiv2ExceptionError(const QString& msg, Exiv2::Error&
 {
     std::string s(e.what());
     qCCritical(LIBKEXIV2_LOG) << msg.toLatin1().constData() << " (Error #"
-                << e.code() << ": " << s.c_str();
+                              << e.code() << ": " << s.c_str();
 }
 
 void KExiv2::Private::printExiv2MessageHandler(int lvl, const char* msg)
@@ -459,7 +459,6 @@ QString KExiv2::Private::detectEncodingAndDecode(const std::string& value) const
 
     return QString::fromLocal8Bit(value.c_str());
 }
-
 
 bool KExiv2::Private::isUtf8(const char* const buffer) const
 {
@@ -582,24 +581,45 @@ done:
 
 int KExiv2::Private::getXMPTagsListFromPrefix(const QString& pf, KExiv2::TagsMap& tagsMap) const
 {
-    QList<const Exiv2::XmpPropertyInfo*> tags;
-    tags << Exiv2::XmpProperties::propertyList(pf.toLatin1().data());
     int i = 0;
 
-    for (QList<const Exiv2::XmpPropertyInfo*>::iterator it = tags.begin(); it != tags.end(); ++it)
+#ifdef _XMP_SUPPORT_
+
+    try
     {
-        while ( (*it) && !QString::fromLatin1((*it)->name_).isNull() )
+        QList<const Exiv2::XmpPropertyInfo*> tags;
+        tags << Exiv2::XmpProperties::propertyList(pf.toLatin1().data());
+
+        for (QList<const Exiv2::XmpPropertyInfo*>::iterator it = tags.begin(); it != tags.end(); ++it)
         {
-            QString     key = QLatin1String( Exiv2::XmpKey( pf.toLatin1().data(), (*it)->name_ ).key().c_str() );
-            QStringList values;
-            values << QString::fromLatin1((*it)->name_)
-                   << QString::fromLatin1((*it)->title_)
-                   << QString::fromLatin1((*it)->desc_);
-            tagsMap.insert(key, values);
-            ++(*it);
-            i++;
+            while ( (*it) && !QString::fromLatin1((*it)->name_).isNull() )
+            {
+                QString     key = QLatin1String( Exiv2::XmpKey( pf.toLatin1().data(), (*it)->name_ ).key().c_str() );
+                QStringList values;
+                values << QString::fromLatin1((*it)->name_)
+                       << QString::fromLatin1((*it)->title_)
+                       << QString::fromLatin1((*it)->desc_);
+                tagsMap.insert(key, values);
+                ++(*it);
+                i++;
+            }
         }
     }
+    catch( Exiv2::Error& e )
+    {
+        printExiv2ExceptionError(QString::fromLatin1("Cannot get Xmp tags list using Exiv2 "), e);
+    }
+    catch(...)
+    {
+        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
+    }
+
+#else
+
+    Q_UNUSED(pf);
+    Q_UNUSED(tagsMap);
+
+#endif // _XMP_SUPPORT_
 
     return i;
 }

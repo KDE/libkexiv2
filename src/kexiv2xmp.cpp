@@ -1200,41 +1200,28 @@ bool KExiv2::removeXmpSubjects(const QStringList& subjectsToRemove, bool setProg
 
 KExiv2::TagsMap KExiv2::getXmpTagsList() const
 {
-    try
-    {
-        TagsMap tagsMap;
-        d->getXMPTagsListFromPrefix(QString::fromLatin1("dc"),             tagsMap);
-        d->getXMPTagsListFromPrefix(QString::fromLatin1("digiKam"),        tagsMap);
-        d->getXMPTagsListFromPrefix(QString::fromLatin1("xmp"),            tagsMap);
-        d->getXMPTagsListFromPrefix(QString::fromLatin1("xmpRights"),      tagsMap);
-        d->getXMPTagsListFromPrefix(QString::fromLatin1("xmpMM"),          tagsMap);
-        d->getXMPTagsListFromPrefix(QString::fromLatin1("xmpBJ"),          tagsMap);
-        d->getXMPTagsListFromPrefix(QString::fromLatin1("xmpTPg"),         tagsMap);
-        d->getXMPTagsListFromPrefix(QString::fromLatin1("xmpDM"),          tagsMap);
-        d->getXMPTagsListFromPrefix(QString::fromLatin1("MicrosoftPhoto"), tagsMap);
-        d->getXMPTagsListFromPrefix(QString::fromLatin1("pdf"),            tagsMap);
-        d->getXMPTagsListFromPrefix(QString::fromLatin1("photoshop"),      tagsMap);
-        d->getXMPTagsListFromPrefix(QString::fromLatin1("crs"),            tagsMap);
-        d->getXMPTagsListFromPrefix(QString::fromLatin1("tiff"),           tagsMap);
-        d->getXMPTagsListFromPrefix(QString::fromLatin1("exif"),           tagsMap);
-        d->getXMPTagsListFromPrefix(QString::fromLatin1("aux"),            tagsMap);
-        d->getXMPTagsListFromPrefix(QString::fromLatin1("iptc"),           tagsMap);
-        d->getXMPTagsListFromPrefix(QString::fromLatin1("iptcExt"),        tagsMap);
-        d->getXMPTagsListFromPrefix(QString::fromLatin1("plus"),           tagsMap);
-        d->getXMPTagsListFromPrefix(QString::fromLatin1("mwg-rs"),         tagsMap);
-        d->getXMPTagsListFromPrefix(QString::fromLatin1("dwc"),            tagsMap);
-        return tagsMap;
-    }
-    catch( Exiv2::Error& e )
-    {
-        d->printExiv2ExceptionError(QString::fromLatin1("Cannot get Xmp Tags list using Exiv2 "), e);
-    }
-    catch(...)
-    {
-        qCCritical(LIBKEXIV2_LOG) << "Default exception from Exiv2";
-    }
-
-    return TagsMap();
+    TagsMap tagsMap;
+    d->getXMPTagsListFromPrefix(QString::fromLatin1("dc"),             tagsMap);
+    d->getXMPTagsListFromPrefix(QString::fromLatin1("digiKam"),        tagsMap);
+    d->getXMPTagsListFromPrefix(QString::fromLatin1("xmp"),            tagsMap);
+    d->getXMPTagsListFromPrefix(QString::fromLatin1("xmpRights"),      tagsMap);
+    d->getXMPTagsListFromPrefix(QString::fromLatin1("xmpMM"),          tagsMap);
+    d->getXMPTagsListFromPrefix(QString::fromLatin1("xmpBJ"),          tagsMap);
+    d->getXMPTagsListFromPrefix(QString::fromLatin1("xmpTPg"),         tagsMap);
+    d->getXMPTagsListFromPrefix(QString::fromLatin1("xmpDM"),          tagsMap);
+    d->getXMPTagsListFromPrefix(QString::fromLatin1("MicrosoftPhoto"), tagsMap);
+    d->getXMPTagsListFromPrefix(QString::fromLatin1("pdf"),            tagsMap);
+    d->getXMPTagsListFromPrefix(QString::fromLatin1("photoshop"),      tagsMap);
+    d->getXMPTagsListFromPrefix(QString::fromLatin1("crs"),            tagsMap);
+    d->getXMPTagsListFromPrefix(QString::fromLatin1("tiff"),           tagsMap);
+    d->getXMPTagsListFromPrefix(QString::fromLatin1("exif"),           tagsMap);
+    d->getXMPTagsListFromPrefix(QString::fromLatin1("aux"),            tagsMap);
+    d->getXMPTagsListFromPrefix(QString::fromLatin1("iptc"),           tagsMap);
+    d->getXMPTagsListFromPrefix(QString::fromLatin1("iptcExt"),        tagsMap);
+    d->getXMPTagsListFromPrefix(QString::fromLatin1("plus"),           tagsMap);
+    d->getXMPTagsListFromPrefix(QString::fromLatin1("mwg-rs"),         tagsMap);
+    d->getXMPTagsListFromPrefix(QString::fromLatin1("dwc"),            tagsMap);
+    return tagsMap;
 }
 
 }  // NameSpace KExiv2Iface

@@ -381,7 +381,7 @@ bool KExiv2::save(const QString& imageFilePath) const
     if (givenFileInfo.isSymLink())
     {
         qCDebug(LIBKEXIV2_LOG) << "filePath" << imageFilePath << "is a symlink."
-                 << "Using target" << givenFileInfo.canonicalPath();
+                               << "Using target" << givenFileInfo.canonicalPath();
 
         regularFilePath = givenFileInfo.canonicalPath();// Walk all the symlinks
     }
