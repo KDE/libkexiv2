@@ -1180,41 +1180,28 @@ bool KExiv2::removeXmpSubjects(const QStringList& subjectsToRemove, bool setProg
 
 KExiv2::TagsMap KExiv2::getXmpTagsList() const
 {
-    try
-    {
-        TagsMap tagsMap;
-        d->getXMPTagsListFromPrefix("dc",             tagsMap);
-        d->getXMPTagsListFromPrefix("digiKam",        tagsMap);
-        d->getXMPTagsListFromPrefix("xmp",            tagsMap);
-        d->getXMPTagsListFromPrefix("xmpRights",      tagsMap);
-        d->getXMPTagsListFromPrefix("xmpMM",          tagsMap);
-        d->getXMPTagsListFromPrefix("xmpBJ",          tagsMap);
-        d->getXMPTagsListFromPrefix("xmpTPg",         tagsMap);
-        d->getXMPTagsListFromPrefix("xmpDM",          tagsMap);
-        d->getXMPTagsListFromPrefix("MicrosoftPhoto", tagsMap);
-        d->getXMPTagsListFromPrefix("pdf",            tagsMap);
-        d->getXMPTagsListFromPrefix("photoshop",      tagsMap);
-        d->getXMPTagsListFromPrefix("crs",            tagsMap);
-        d->getXMPTagsListFromPrefix("tiff",           tagsMap);
-        d->getXMPTagsListFromPrefix("exif",           tagsMap);
-        d->getXMPTagsListFromPrefix("aux",            tagsMap);
-        d->getXMPTagsListFromPrefix("iptc",           tagsMap);
-        d->getXMPTagsListFromPrefix("iptcExt",        tagsMap);
-        d->getXMPTagsListFromPrefix("plus",           tagsMap);
-        d->getXMPTagsListFromPrefix("mwg-rs",         tagsMap);
-        d->getXMPTagsListFromPrefix("dwc",            tagsMap);
-        return tagsMap;
-    }
-    catch( Exiv2::Error& e )
-    {
-        d->printExiv2ExceptionError("Cannot get Xmp Tags list using Exiv2 ", e);
-    }
-    catch(...)
-    {
-        kError() << "Default exception from Exiv2";
-    }
-
-    return TagsMap();
+    TagsMap tagsMap;
+    d->getXMPTagsListFromPrefix("dc",             tagsMap);
+    d->getXMPTagsListFromPrefix("digiKam",        tagsMap);
+    d->getXMPTagsListFromPrefix("xmp",            tagsMap);
+    d->getXMPTagsListFromPrefix("xmpRights",      tagsMap);
+    d->getXMPTagsListFromPrefix("xmpMM",          tagsMap);
+    d->getXMPTagsListFromPrefix("xmpBJ",          tagsMap);
+    d->getXMPTagsListFromPrefix("xmpTPg",         tagsMap);
+    d->getXMPTagsListFromPrefix("xmpDM",          tagsMap);
+    d->getXMPTagsListFromPrefix("MicrosoftPhoto", tagsMap);
+    d->getXMPTagsListFromPrefix("pdf",            tagsMap);
+    d->getXMPTagsListFromPrefix("photoshop",      tagsMap);
+    d->getXMPTagsListFromPrefix("crs",            tagsMap);
+    d->getXMPTagsListFromPrefix("tiff",           tagsMap);
+    d->getXMPTagsListFromPrefix("exif",           tagsMap);
+    d->getXMPTagsListFromPrefix("aux",            tagsMap);
+    d->getXMPTagsListFromPrefix("iptc",           tagsMap);
+    d->getXMPTagsListFromPrefix("iptcExt",        tagsMap);
+    d->getXMPTagsListFromPrefix("plus",           tagsMap);
+    d->getXMPTagsListFromPrefix("mwg-rs",         tagsMap);
+    d->getXMPTagsListFromPrefix("dwc",            tagsMap);
+    return tagsMap;
 }
 
 }  // NameSpace KExiv2Iface

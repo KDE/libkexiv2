@@ -172,7 +172,7 @@ bool KExiv2::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::AutoP
     {
         Exiv2::AccessMode mode;
         bool wroteComment = false, wroteEXIF = false, wroteIPTC = false, wroteXMP = false;
-        
+
         // We need to load target file metadata to merge with new one. It's mandatory with TIFF format:
         // like all tiff file structure is based on Exif.
         image->readMetadata();
@@ -304,7 +304,7 @@ bool KExiv2::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::AutoP
             {
                 ::utime(QFile::encodeName(filePath), &ut);
             }
-            
+
             kDebug() << "File time stamp restored";
         }
         else
@@ -379,7 +379,7 @@ QString KExiv2::Private::convertCommentValue(const Exiv2::Exifdatum& exifDatum) 
         }
         else if (charset == "\"Jis\"")
         {
-            QTextCodec* codec = QTextCodec::codecForName("JIS7");
+            QTextCodec* const codec = QTextCodec::codecForName("JIS7");
             return codec->toUnicode(comment.c_str());
         }
         else if (charset == "\"Ascii\"")
@@ -409,7 +409,6 @@ QString KExiv2::Private::detectEncodingAndDecode(const std::string& value) const
     // (Mozilla chardet, KHTML's autodetection, QTextCodec::codecForContent),
     // but that is probably too much.
     // We check for UTF8, Local encoding and ASCII.
-    // TODO: Gilles ==> Marcel : Look like KEncodingDetector class can provide a full implementation for encoding detection.
 
     if (value.empty())
     {
@@ -426,29 +425,48 @@ QString KExiv2::Private::detectEncodingAndDecode(const std::string& value) const
     // to reliably autodetect different ISO-8859 charsets.
     // So we can use either local encoding, or latin1.
 
-    //TODO: KDE4PORT: check for regression of #134999 (very probably no regression!)
     return QString::fromLocal8Bit(value.c_str());
-    //return QString::fromLatin1(value.c_str());
 }
 
 int KExiv2::Private::getXMPTagsListFromPrefix(const QString& pf, KExiv2::TagsMap& tagsMap) const
 {
-    QList<const Exiv2::XmpPropertyInfo*> tags;
-    tags << Exiv2::XmpProperties::propertyList(pf.toAscii().data());
     int i = 0;
 
-    for (QList<const Exiv2::XmpPropertyInfo*>::iterator it = tags.begin(); it != tags.end(); ++it)
+#ifdef _XMP_SUPPORT_
+
+    try
     {
-        while ( (*it) && !QString((*it)->name_).isNull() )
+        QList<const Exiv2::XmpPropertyInfo*> tags;
+        tags << Exiv2::XmpProperties::propertyList(pf.toAscii().data());
+
+        for (QList<const Exiv2::XmpPropertyInfo*>::iterator it = tags.begin(); it != tags.end(); ++it)
         {
-            QString     key = QLatin1String( Exiv2::XmpKey( pf.toAscii().data(), (*it)->name_ ).key().c_str() );
-            QStringList values;
-            values << (*it)->name_ << (*it)->title_ << (*it)->desc_;
-            tagsMap.insert(key, values);
-            ++(*it);
-            i++;
+            while ( (*it) && !QString((*it)->name_).isNull() )
+            {
+                QString     key = QLatin1String( Exiv2::XmpKey( pf.toAscii().data(), (*it)->name_ ).key().c_str() );
+                QStringList values;
+                values << (*it)->name_ << (*it)->title_ << (*it)->desc_;
+                tagsMap.insert(key, values);
+                ++(*it);
+                i++;
+            }
         }
     }
+    catch( Exiv2::Error& e )
+    {
+        printExiv2ExceptionError("Cannot get Xmp tags list using Exiv2 ", e);
+    }
+    catch(...)
+    {
+        kError() << "Default exception from Exiv2";
+    }
+
+#else
+
+    Q_UNUSED(pf);
+    Q_UNUSED(tagsMap);
+
+#endif // _XMP_SUPPORT_
 
     return i;
 }
