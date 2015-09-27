@@ -76,27 +76,22 @@ set_target_properties(KF5KExiv2   PROPERTIES
                       EXPORT_NAME KExiv2
 )
 
-# Check if compilation is done through digiKam SC or not. If yes, do not install header files.
-if (NOT DIGIKAMSC_COMPILE_LIBKEXIV2)
+install(FILES       ${CMAKE_CURRENT_BINARY_DIR}/libkexiv2_export.h
+        DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KExiv2/kexiv2
+        COMPONENT   Devel
+)
 
-    install(FILES       ${CMAKE_CURRENT_BINARY_DIR}/libkexiv2_export.h
-            DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KExiv2/kexiv2
-            COMPONENT   Devel
-    )
+install(FILES       ${kexiv2_CamelCase_HEADERS}
+        DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KExiv2/KExiv2
+        COMPONENT   Devel
+)
 
-    install(FILES       ${kexiv2_CamelCase_HEADERS}
-            DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KExiv2/KExiv2
-            COMPONENT   Devel
-    )
+install(FILES       ${kexiv2_HEADERS}
+        DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KExiv2/kexiv2
+        COMPONENT   Devel
+)
 
-    install(FILES       ${kexiv2_HEADERS}
-            DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KExiv2/kexiv2
-            COMPONENT   Devel
-    )
-
-    install(FILES       "${CMAKE_BINARY_DIR}/libkexiv2_version.h"
-            DESTINATION "${KF5_INCLUDE_INSTALL_DIR}"
-            COMPONENT   Devel
-    )
-
-endif()
+install(FILES       "${CMAKE_BINARY_DIR}/libkexiv2_version.h"
+        DESTINATION "${KF5_INCLUDE_INSTALL_DIR}"
+        COMPONENT   Devel
+)
