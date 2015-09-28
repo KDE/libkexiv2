@@ -91,7 +91,7 @@ install(FILES       ${kexiv2_HEADERS}
         COMPONENT   Devel
 )
 
-install(FILES       "${CMAKE_BINARY_DIR}/libkexiv2_version.h"
-        DESTINATION "${KF5_INCLUDE_INSTALL_DIR}"
+install(FILES       ${CMAKE_CURRENT_BINARY_DIR}/libkexiv2_version.h
+        DESTINATION ${KF5_INCLUDE_INSTALL_DIR}
         COMPONENT   Devel
 )
