@@ -24,7 +24,7 @@ include_directories(${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR
 set(LIBKEXIV2_AREA_CODE_GENERAL 51003)
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=${LIBKEXIV2_AREA_CODE_GENERAL})
 
-set(EXIV2_MIN_VERSION "0.24")
+set(EXIV2_MIN_VERSION "0.25")
 find_package(Exiv2)
 MACRO_LOG_FEATURE(EXIV2_FOUND "Exiv2" "Required to build libkexiv2." "http://www.exiv2.org"
                   TRUE ${EXIV2_MIN_VERSION} "")
