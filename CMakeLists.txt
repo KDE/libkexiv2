@@ -81,7 +81,6 @@ include(FeatureSummary)
 
 find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
              Core
-             Widgets
              Gui
              Xml
 )
