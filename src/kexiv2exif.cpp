@@ -37,7 +37,6 @@
 #include <QTextCodec>
 #include <QBuffer>
 
-
 // Local includes
 
 #include "rotationmatrix.h"

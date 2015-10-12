@@ -28,12 +28,7 @@
 #include <QImage>
 #include <QString>
 #include <QFile>
-
-// KDE includes
-
-#include "qdebug.h"
-#define PRINT_DEBUG qDebug()
-#define ENDL
+#include <QDebug>
 
 // Local includes
 
@@ -43,10 +38,10 @@ using namespace KExiv2Iface;
 
 int main (int argc, char **argv)
 {
-    if(argc != 2) 
+    if (argc != 2)
     {
-        PRINT_DEBUG << "setiptcpreview - update/add jpeg iptc preview to image" ENDL;
-        PRINT_DEBUG << "Usage: <image>" ENDL;
+        qDebug() << "setiptcpreview - update/add jpeg iptc preview to image";
+        qDebug() << "Usage: <image>";
         return -1;
     }
 

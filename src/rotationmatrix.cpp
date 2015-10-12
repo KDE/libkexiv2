@@ -25,6 +25,8 @@
  *
  * ============================================================ */
 
+// Local includes
+
 #include "rotationmatrix.h"
 
 namespace KExiv2Iface

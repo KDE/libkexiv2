@@ -39,6 +39,7 @@ int main (int /*argc*/, char** /*argv*/)
 
     qDebug() << "-- Standard Exif Tags -------------------------------------------------------------";
     KExiv2::TagsMap exiftags = meta.getStdExifTagsList();
+
     for (KExiv2::TagsMap::const_iterator it = exiftags.constBegin(); it != exiftags.constEnd(); ++it )
     {
         QString     key    = it.key();
@@ -51,6 +52,7 @@ int main (int /*argc*/, char** /*argv*/)
 
     qDebug() << "-- Makernote Tags -----------------------------------------------------------------";
     KExiv2::TagsMap mntags = meta.getMakernoteTagsList();
+
     for (KExiv2::TagsMap::const_iterator it = mntags.constBegin(); it != mntags.constEnd(); ++it )
     {
         QString     key    = it.key();
@@ -63,6 +65,7 @@ int main (int /*argc*/, char** /*argv*/)
 
     qDebug() << "-- Standard Iptc Tags -----------------------------------------------------------------";
     KExiv2::TagsMap iptctags = meta.getIptcTagsList();
+
     for (KExiv2::TagsMap::const_iterator it = iptctags.constBegin(); it != iptctags.constEnd(); ++it )
     {
         QString     key    = it.key();
@@ -75,6 +78,7 @@ int main (int /*argc*/, char** /*argv*/)
 
     qDebug() << "-- Standard Xmp Tags -----------------------------------------------------------------";
     KExiv2::TagsMap xmptags = meta.getXmpTagsList();
+
     for (KExiv2::TagsMap::const_iterator it = xmptags.constBegin(); it != xmptags.constEnd(); ++it )
     {
         QString     key    = it.key();

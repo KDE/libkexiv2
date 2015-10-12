@@ -26,9 +26,6 @@
 
 #include <QString>
 #include <QFile>
-
-// KDE includes
-
 #include <QDebug>
 
 // Local includes
