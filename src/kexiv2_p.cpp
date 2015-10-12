@@ -32,7 +32,12 @@
 extern "C"
 {
 #include <sys/stat.h>
+
+#ifndef _MSC_VER
 #include <utime.h>
+#else
+#include <sys/utime.h>
+#endif
 }
 
 // Qt includes
