@@ -57,7 +57,6 @@ target_link_libraries(KF5KExiv2
                       PRIVATE
                       ${EXIV2_LIBRARIES}
                       PUBLIC
-                      Qt5::Xml
                       Qt5::Core
                       Qt5::Gui
 )

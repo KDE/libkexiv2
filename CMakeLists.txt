@@ -82,7 +82,6 @@ include(FeatureSummary)
 find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
              Core
              Gui
-             Xml
 )
 
 find_package(Exiv2 ${EXIV2_MIN_VERSION} REQUIRED)
