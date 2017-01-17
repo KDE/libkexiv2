@@ -49,7 +49,7 @@ extern "C"
 #include "libkexiv2_debug.h"
 
 // Pragma directives to reduce warnings from Exiv2.
-#if not defined(__APPLE__) && defined(__GNUC__)
+#if !defined(__APPLE__) && defined(__GNUC__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #endif
@@ -723,7 +723,7 @@ void KExiv2::Private::loadSidecarData(Exiv2::Image::AutoPtr xmpsidecar)
 }  // NameSpace KExiv2Iface
 
 // Restore warnings
-#if not defined(__APPLE__) && defined(__GNUC__)
+#if !defined(__APPLE__) && defined(__GNUC__)
 #pragma GCC diagnostic pop
 #endif
 
