@@ -4,8 +4,8 @@ libdir=${LIB_INSTALL_DIR}
 includedir=${INCLUDE_INSTALL_DIR}
 
 Name: ${PROJECT_NAME}
-Description: A C++ library to manipulate EXIF/IPTC/XMP metadata using Exiv2 library. This library is used by digiKam and kipi-plugins.
-URL: http://www.digikam.org/sharedlibs
+Description: A C++ library to manipulate EXIF/IPTC/XMP metadata using Exiv2 library.
+URL: https://cgit.kde.org/libkexiv2.git/
 Requires:
 Version: ${KEXIV2_LIB_VERSION_STRING}
 Libs: -L${LIB_INSTALL_DIR} -lkexiv2

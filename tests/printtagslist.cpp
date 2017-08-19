@@ -1,7 +1,7 @@
 /** ===========================================================
  *
- * This file is a part of digiKam project
- * <a href="http://www.digikam.org">http://www.digikam.org</a>
+ * This file is a part of KDE project
+ *
  *
  * @date   2009-07-12
  * @brief  a command line tool to print all tags list supported by Exiv2

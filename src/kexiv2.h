@@ -1,8 +1,8 @@
 /** ===========================================================
  * @file
  *
- * This file is a part of digiKam project
- * <a href="http://www.digikam.org">http://www.digikam.org</a>
+ * This file is a part of KDE project
+ *
  *
  * @date   2006-09-15
  * @brief  Exiv2 library interface for KDE
@@ -947,7 +947,7 @@ public:
 
     /** Register a namespace which Exiv2 doesn't know yet. This is only needed
         when new Xmp properties are added manually. 'uri' is the namespace url and prefix the
-        string used to construct new Xmp key (ex. "Xmp.digiKam.tagList").
+        string used to construct new Xmp key.
         NOTE: If the Xmp metadata is read from an image, namespaces are decoded and registered
         by Exiv2 at the same time.
      */
@@ -1077,17 +1077,6 @@ protected:
     /** Re-implement this method to set automatically the Program Name and Program Version
         information in Exif and Iptc metadata if 'on' argument is true. This method is called by all methods which
         change tags in metadata. By default this method does nothing and returns true.
-
-        In digiKam this method is re-implementated like this:
-
-        if (on)
-        {
-            QString version(digikam_version);
-            QString software("digiKam");
-            return setImageProgramId(software, version);
-        }
-
-        return true;
      */
     virtual bool setProgramId(bool on=true) const;
 
