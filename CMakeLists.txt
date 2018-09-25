@@ -4,17 +4,17 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-project(libkexiv2)
-
-message(STATUS "----------------------------------------------------------------------------------")
-message(STATUS "Starting CMake configuration for: ${PROJECT_NAME}")
-
 set(CMAKE_MIN_VERSION   "3.0.0")
 set(ECM_MIN_VERSION     "1.1.0")
 set(REQUIRED_QT_VERSION "5.2.0")
 set(EXIV2_MIN_VERSION   "0.24")
 
 cmake_minimum_required(VERSION ${CMAKE_MIN_VERSION})
+
+project(libkexiv2)
+
+message(STATUS "----------------------------------------------------------------------------------")
+message(STATUS "Starting CMake configuration for: ${PROJECT_NAME}")
 
 # =======================================================
 # Information to update before to release this library.
