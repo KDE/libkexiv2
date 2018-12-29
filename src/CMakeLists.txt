@@ -6,7 +6,6 @@
 
 kde_enable_exceptions()
 
-include_directories(${EXIV2_INCLUDE_DIR})
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/..)
 
 add_definitions(${EXIV2_DEFINITIONS})
@@ -55,7 +54,7 @@ target_include_directories(KF5KExiv2 INTERFACE
 
 target_link_libraries(KF5KExiv2
                       PRIVATE
-                      ${EXIV2_LIBRARIES}
+                      LibExiv2::LibExiv2
                       PUBLIC
                       Qt5::Core
                       Qt5::Gui

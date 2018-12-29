@@ -7,6 +7,6 @@ Name: ${PROJECT_NAME}
 Description: A C++ library to manipulate EXIF/IPTC/XMP metadata using Exiv2 library.
 URL: https://cgit.kde.org/libkexiv2.git/
 Requires:
-Version: ${KEXIV2_LIB_VERSION_STRING}
+Version: ${libkexiv2_VERSION}
 Libs: -L${LIB_INSTALL_DIR} -lkexiv2
 Cflags: -I${INCLUDE_INSTALL_DIR}

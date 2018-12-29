@@ -153,7 +153,7 @@ QString KExiv2::Exiv2Version()
     // Since 0.14.0 release, we can extract run-time version of Exiv2.
     // else we return make version.
 
-    return QString::fromLatin1(Exiv2::version());
+    return QString::fromStdString(Exiv2::versionString());
 }
 
 QString KExiv2::version()

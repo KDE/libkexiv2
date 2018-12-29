@@ -61,33 +61,12 @@
 #pragma GCC visibility push(default)
 #endif
 
-#include <exiv2/exv_conf.h>
-#include <exiv2/error.hpp>
-#include <exiv2/image.hpp>
-#include <exiv2/jpgimage.hpp>
-#include <exiv2/datasets.hpp>
-#include <exiv2/tags.hpp>
-#include <exiv2/preview.hpp>
-#include <exiv2/properties.hpp>
-#include <exiv2/types.hpp>
-#include <exiv2/exif.hpp>
-#include <exiv2/xmpsidecar.hpp>
+#include <exiv2/exiv2.hpp>
 
 // Check if Exiv2 support XMP
 
 #ifdef EXV_HAVE_XMP_TOOLKIT
 #   define _XMP_SUPPORT_ 1
-#endif
-
-// Make sure an EXIV2_TEST_VERSION macro exists:
-
-#ifdef EXIV2_VERSION
-#    ifndef EXIV2_TEST_VERSION
-#        define EXIV2_TEST_VERSION(major,minor,patch) \
-         ( EXIV2_VERSION >= EXIV2_MAKE_VERSION(major,minor,patch) )
-#    endif
-#else
-#    define EXIV2_TEST_VERSION(major,minor,patch) (false)
 #endif
 
 // With exiv2 > 0.20.0, all makernote header files have been removed to increase binary compatibility.

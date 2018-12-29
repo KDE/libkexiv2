@@ -7,11 +7,11 @@
 set(CMAKE_MIN_VERSION   "3.0.0")
 set(ECM_MIN_VERSION     "1.1.0")
 set(REQUIRED_QT_VERSION "5.2.0")
-set(EXIV2_MIN_VERSION   "0.24")
+set(EXIV2_MIN_VERSION   "0.25")
 
 cmake_minimum_required(VERSION ${CMAKE_MIN_VERSION})
 
-project(libkexiv2)
+project(libkexiv2 VERSION "5.0.0")
 
 message(STATUS "----------------------------------------------------------------------------------")
 message(STATUS "Starting CMake configuration for: ${PROJECT_NAME}")
@@ -47,18 +47,12 @@ message(STATUS "Starting CMake configuration for: ${PROJECT_NAME}")
 # 2.4.0 => 11.3.0                              - Add new method to access on text edit widget from AltLangStrEdit
 # 5.0.0 => 15.0.0    (Released with KDE 5.x)
 
-# Library API version
-set(KEXIV2_LIB_MAJOR_VERSION "5")
-set(KEXIV2_LIB_MINOR_VERSION "0")
-set(KEXIV2_LIB_PATCH_VERSION "0")
-
 # Library ABI version used by linker.
 # For details : http://www.gnu.org/software/libtool/manual/libtool.html#Updating-version-info
 set(KEXIV2_LIB_SO_CUR_VERSION "15")
 set(KEXIV2_LIB_SO_REV_VERSION "0")
 set(KEXIV2_LIB_SO_AGE_VERSION "0")
 
-set(LIBKEXIV2_LIB_VERSION "${KEXIV2_LIB_MAJOR_VERSION}.${KEXIV2_LIB_MINOR_VERSION}.${KEXIV2_LIB_PATCH_VERSION}")
 set(LIBKEXIV2_SO_VERSION  "${KEXIV2_LIB_SO_CUR_VERSION}.${KEXIV2_LIB_SO_REV_VERSION}.${KEXIV2_LIB_SO_AGE_VERSION}")
 
 ############## ECM setup ######################
@@ -77,6 +71,13 @@ include(KDEFrameworkCompilerSettings NO_POLICY_SCOPE)
 include(GenerateExportHeader)
 include(FeatureSummary)
 
+ecm_setup_version(${libkexiv2_VERSION}
+                  VARIABLE_PREFIX      KEXIV2
+                  VERSION_HEADER       "src/libkexiv2_version.h"
+                  PACKAGE_VERSION_FILE "KF5KExiv2ConfigVersion.cmake"
+                  SOVERSION            ${LIBKEXIV2_SO_VERSION}
+)
+
 ############## Find Packages ###################
 
 find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
@@ -84,20 +85,7 @@ find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
              Gui
 )
 
-find_package(Exiv2 ${EXIV2_MIN_VERSION} REQUIRED)
-set_package_properties("Exiv2"     PROPERTIES
-                       DESCRIPTION "Required to build libkexiv2"
-                       URL         "http://www.exiv2.org"
-                       TYPE        RECOMMENDED
-                       PURPOSE     "Library to manage image metadata"
-)
-
-ecm_setup_version(${LIBKEXIV2_LIB_VERSION}
-                  VARIABLE_PREFIX      KEXIV2
-                  VERSION_HEADER       "src/libkexiv2_version.h"
-                  PACKAGE_VERSION_FILE "KF5KExiv2ConfigVersion.cmake"
-                  SOVERSION            ${LIBKEXIV2_SO_VERSION}
-)
+find_package(LibExiv2 ${EXIV2_MIN_VERSION} REQUIRED)
 
 ############## Targets #########################
 
