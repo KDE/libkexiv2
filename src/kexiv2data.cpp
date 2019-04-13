@@ -35,7 +35,7 @@ namespace KExiv2Iface
 {
 
 KExiv2Data::KExiv2Data()
-    : d(0)
+    : d(nullptr)
 {
 }
 

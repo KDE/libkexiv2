@@ -1066,7 +1066,7 @@ KExiv2::TagsMap KExiv2::getStdExifTagsList() const
 
         const Exiv2::GroupInfo* gi = Exiv2::ExifTags::groupList();
 
-        while (gi->tagList_ != 0)
+        while (gi->tagList_ != nullptr)
         {
             if (QString::fromLatin1(gi->ifdName_) != QString::fromLatin1("Makernote"))
             {
@@ -1118,7 +1118,7 @@ KExiv2::TagsMap KExiv2::getMakernoteTagsList() const
 
         const Exiv2::GroupInfo* gi = Exiv2::ExifTags::groupList();
 
-        while (gi->tagList_ != 0)
+        while (gi->tagList_ != nullptr)
         {
             if (QString::fromLatin1(gi->ifdName_) == QString::fromLatin1("Makernote"))
             {

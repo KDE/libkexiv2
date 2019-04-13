@@ -41,7 +41,7 @@ public:
 
     Private()
     {
-        manager = 0;
+        manager = nullptr;
     }
 
     ~Private()

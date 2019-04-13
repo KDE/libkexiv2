@@ -93,7 +93,7 @@ QByteArray KExiv2::getIptc(bool addIrbHeader) const
 
             if (addIrbHeader)
             {
-                c2 = Exiv2::Photoshop::setIptcIrb(0, 0, iptc);
+                c2 = Exiv2::Photoshop::setIptcIrb(nullptr, 0, iptc);
             }
             else
             {
