@@ -170,7 +170,7 @@ int main (int argc, char **argv)
     else
         removeFaceTags(meta,bag.toLatin1().constData());
 
-        meta.applyChanges();
+    meta.applyChanges();
 
     QString recoverName = QString::fromLatin1("Xmp.mwg-rs.Regions/mwg-rs:RegionList[1]/mwg-rs:Name");
 
