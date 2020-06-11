@@ -17,7 +17,7 @@ The library documentation is available on header files.
 
 CMake      >= 3.0.0                    https://www.cmake.org
 ECM        >= 1.1.0                    https://commits.kde.org/extra-cmake-modules
-libqt      >= 5.2.0                    https://qt.io
+libqt      >= 5.9.0                    https://qt.io
 libexiv2   >= 0.24.0                   https://www.exiv2.org
 
 -- INSTALL ------------------------------------------------------------

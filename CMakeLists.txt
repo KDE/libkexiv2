@@ -6,7 +6,7 @@
 
 set(CMAKE_MIN_VERSION   "3.0.0")
 set(ECM_MIN_VERSION     "1.1.0")
-set(REQUIRED_QT_VERSION "5.2.0")
+set(REQUIRED_QT_VERSION "5.12.0")
 set(EXIV2_MIN_VERSION   "0.25")
 
 cmake_minimum_required(VERSION ${CMAKE_MIN_VERSION})
