@@ -52,9 +52,15 @@
 #include "libkexiv2_export.h"
 #include "kexiv2data.h"
 
+/**
+ * KExiv2Iface
+ */
 namespace KExiv2Iface
 {
 
+/**
+ * KExiv2
+ */
 class LIBKEXIV2_EXPORT KExiv2
 {
 

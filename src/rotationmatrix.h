@@ -40,6 +40,9 @@
 namespace KExiv2Iface
 {
 
+/**
+ * RotationMatrix
+ */
 class LIBKEXIV2_EXPORT RotationMatrix
 {
 
