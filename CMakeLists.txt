@@ -48,7 +48,7 @@ message(STATUS "Starting CMake configuration for: ${PROJECT_NAME}")
 # 5.0.0 => 15.0.0    (Released with KDE 5.x)
 
 # Library ABI version used by linker.
-# For details : http://www.gnu.org/software/libtool/manual/libtool.html#Updating-version-info
+# For details : https://www.gnu.org/software/libtool/manual/libtool.html#Updating-version-info
 set(KEXIV2_LIB_SO_CUR_VERSION "15")
 set(KEXIV2_LIB_SO_REV_VERSION "0")
 set(KEXIV2_LIB_SO_AGE_VERSION "0")

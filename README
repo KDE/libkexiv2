@@ -15,10 +15,10 @@ The library documentation is available on header files.
 
 -- DEPENDENCIES -------------------------------------------------------
 
-CMake      >= 2.8.12                   http://www.cmake.org
-ECM        >= 1.1.0                    https://projects.kde.org/projects/kdesupport/extra-cmake-modules
-libqt      >= 5.2.0                    http://qt-project.org
-libexiv2   >= 0.24.0                   http://www.exiv2.org
+CMake      >= 3.0.0                    https://www.cmake.org
+ECM        >= 1.1.0                    https://commits.kde.org/extra-cmake-modules
+libqt      >= 5.2.0                    https://qt.io
+libexiv2   >= 0.24.0                   https://www.exiv2.org
 
 -- INSTALL ------------------------------------------------------------
 

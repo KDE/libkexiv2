@@ -55,7 +55,7 @@
 //       and reduce Exiv2 dependency to client code.
 
 // The pragmas are required to be able to catch exceptions thrown by libexiv2:
-// See http://gcc.gnu.org/wiki/Visibility, the section about c++ exceptions.
+// See https://gcc.gnu.org/wiki/Visibility, the section about c++ exceptions.
 // They are needed for all libexiv2 versions that do not care about visibility.
 #ifdef __GNUC__
 #pragma GCC visibility push(default)
@@ -70,8 +70,8 @@
 #endif
 
 // With exiv2 > 0.20.0, all makernote header files have been removed to increase binary compatibility.
-// See Exiv2 bugzilla entry http://dev.exiv2.org/issues/719
-// and wiki topic           http://dev.exiv2.org/boards/3/topics/583
+// See Exiv2 bugzilla entry https://dev.exiv2.org/issues/719
+// and wiki topic           https://dev.exiv2.org/boards/3/topics/583
 
 #ifdef __GNUC__
 #pragma GCC visibility pop

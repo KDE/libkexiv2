@@ -854,7 +854,7 @@ bool KExiv2::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitiz
         // DateTimeDigitized is set by slide scanners etc. when a picture is digitized.
         // DateTimeOriginal specifies the date/time when the picture was taken.
         // For digital cameras, these dates should be both set, and identical.
-        // Reference: http://www.exif.org/Exif2-2.PDF, chapter 4.6.5, table 4, section F.
+        // Reference: https://www.exif.org/Exif2-2.PDF, chapter 4.6.5, table 4, section F.
 
         const std::string &exifdatetime(dateTime.toString(QString::fromLatin1("yyyy:MM:dd hh:mm:ss")).toLatin1().constData());
         d->exifMetadata()["Exif.Image.DateTime"]         = exifdatetime;
@@ -1086,7 +1086,7 @@ bool KExiv2::setImagePreview(const QImage& preview, bool setProgramName) const
         val.read((Exiv2::byte *)data.data(), data.size());
         d->iptcMetadata()["Iptc.Application2.Preview"] = val;
 
-        // See http://www.iptc.org/std/IIM/4.1/specification/IIMV4.1.pdf Appendix A for details.
+        // See https://www.iptc.org/std/IIM/4.1/specification/IIMV4.1.pdf Appendix A for details.
         d->iptcMetadata()["Iptc.Application2.PreviewFormat"]  = 11;  // JPEG
         d->iptcMetadata()["Iptc.Application2.PreviewVersion"] = 1;
 

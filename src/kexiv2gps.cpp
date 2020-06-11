@@ -728,7 +728,7 @@ QString KExiv2::convertToGPSCoordinateString(const long int numeratorDegrees, co
     /**
      * Precision:
      * A second at sea level measures 30m for our purposes, a minute 1800m.
-     * (for more details, see http://en.wikipedia.org/wiki/Geographic_coordinate_system)
+     * (for more details, see https://en.wikipedia.org/wiki/Geographic_coordinate_system)
      * This means with a decimal precision of 8 for minutes we get +/-0,018mm.
      * (if I calculated correctly)
      */

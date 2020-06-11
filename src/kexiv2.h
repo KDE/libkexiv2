@@ -6,11 +6,11 @@
  *
  * @date   2006-09-15
  * @brief  Exiv2 library interface for KDE
- * @brief  Exiv2: http://www.exiv2.org
- * @brief  Exif : http://www.exif.org/Exif2-2.PDF
- * @brief  Iptc : http://www.iptc.org/std/IIM/4.1/specification/IIMV4.1.pdf
- * @brief  Xmp  : http://www.adobe.com/devnet/xmp/pdfs/xmp_specification.pdf
- * @brief         http://www.iptc.org/std/Iptc4xmpCore/1.0/specification/Iptc4xmpCore_1.0-spec-XMPSchema_8.pdf
+ * @brief  Exiv2: https://www.exiv2.org
+ * @brief  Exif : https://www.exif.org/Exif2-2.PDF
+ * @brief  Iptc : https://www.iptc.org/std/IIM/4.1/specification/IIMV4.1.pdf
+ * @brief  Xmp  : https://www.adobe.com/devnet/xmp.html
+ * @brief         https://www.iptc.org/std/Iptc4xmpCore/1.0/specification/Iptc4xmpCore_1.0-spec-XMPSchema_8.pdf
  * @brief  Paper: http://www.metadataworkinggroup.com/pdf/mwg_guidance.pdf
  *
  * @author Copyright (C) 2006-2015 by Gilles Caulier
