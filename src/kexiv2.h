@@ -36,16 +36,16 @@
 
 // QT includes
 
-#include <QtCore/QByteArray>
-#include <QtCore/QString>
-#include <QtCore/QDateTime>
-#include <QtCore/QMap>
-#include <QtCore/QSharedDataPointer>
-#include <QtCore/QStringList>
-#include <QtCore/QVariant>
-#include <QtCore/QRegExp>
-#include <QtCore/QUrl>
-#include <QtGui/QImage>
+#include <QByteArray>
+#include <QString>
+#include <QDateTime>
+#include <QMap>
+#include <QSharedDataPointer>
+#include <QStringList>
+#include <QVariant>
+#include <QRegExp>
+#include <QUrl>
+#include <QImage>
 
 // Local includes
 
