@@ -60,15 +60,15 @@ set(LIBKEXIV2_SO_VERSION  "${KEXIV2_LIB_SO_CUR_VERSION}.${KEXIV2_LIB_SO_REV_VERS
 find_package(ECM ${ECM_MIN_VERSION} CONFIG REQUIRED)
 set(CMAKE_MODULE_PATH ${libkexiv2_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
 
-include(ECMGenerateHeaders)
-include(ECMGeneratePriFile)
-include(ECMPackageConfigHelpers)
-include(ECMSetupVersion)
-include(ECMMarkNonGuiExecutable)
 include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(KDEFrameworkCompilerSettings NO_POLICY_SCOPE)
+
+include(ECMGenerateHeaders)
+include(ECMSetupVersion)
+include(ECMMarkNonGuiExecutable)
 include(GenerateExportHeader)
+include(CMakePackageConfigHelpers)
 include(FeatureSummary)
 
 ecm_setup_version(${libkexiv2_VERSION}
@@ -100,7 +100,7 @@ endif()
 message("${CMAKECONFIG_INSTALL_DIR}")
 set(CMAKECONFIG_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/KF5KExiv2")
 
-ecm_configure_package_config_file(
+configure_package_config_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/KF5KExiv2Config.cmake.in"
     "${CMAKE_CURRENT_BINARY_DIR}/KF5KExiv2Config.cmake"
     INSTALL_DESTINATION ${CMAKECONFIG_INSTALL_DIR}
