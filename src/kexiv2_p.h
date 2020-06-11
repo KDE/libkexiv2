@@ -222,9 +222,9 @@ public:
      * Only keys in keys are considered for merging.
      * Fields from src take precedence over existing data from dest.
      */
-    void mergeFields(const Data& src, Data& dest)
+    void mergeFields(const Data& src, Data& dest) const
     {
-        foreach (const KeyString& keyString, keys)
+        for (const KeyString& keyString : keys)
         {
             Key key(keyString.latin1());
             typename Data::const_iterator it = src.findKey(key);
@@ -254,9 +254,9 @@ public:
      * Keys must exist in src to kept in dest.
      * Fields from src take precedence over existing data from dest.
      */
-    void exclusiveMerge(const Data& src, Data& dest)
+    void exclusiveMerge(const Data& src, Data& dest) const
     {
-        foreach (const KeyString& keyString, keys)
+        for (const KeyString& keyString : keys)
         {
             Key key(keyString.latin1());
             typename Data::const_iterator it = src.findKey(key);

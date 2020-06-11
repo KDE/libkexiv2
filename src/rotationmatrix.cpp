@@ -192,7 +192,7 @@ RotationMatrix& RotationMatrix::operator*=(TransformationAction action)
 
 RotationMatrix& RotationMatrix::operator*=(QList<TransformationAction> actions)
 {
-    foreach(const TransformationAction& action, actions)
+    for (const TransformationAction& action : qAsConst(actions))
     {
         *this *= Matrix::matrix(action);
     }
