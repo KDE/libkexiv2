@@ -26,7 +26,13 @@ set(kexiv2_LIB_SRCS kexiv2.cpp
                     kexiv2xmp.cpp
                     kexiv2previews.cpp
                     rotationmatrix.cpp
-                    libkexiv2_debug.cpp
+)
+ecm_qt_declare_logging_category(kexiv2_LIB_SRCS
+    HEADER libkexiv2_debug.h
+    IDENTIFIER LIBKEXIV2_LOG
+    CATEGORY_NAME "libKExiv2"
+    DESCRIPTION "libKExiv2"
+    EXPORT kexiv2
 )
 
 ecm_generate_headers(kexiv2_CamelCase_HEADERS
@@ -92,4 +98,10 @@ install(FILES       ${kexiv2_HEADERS}
 install(FILES       ${CMAKE_CURRENT_BINARY_DIR}/libkexiv2_version.h
         DESTINATION ${KF5_INCLUDE_INSTALL_DIR}
         COMPONENT   Devel
+)
+
+ecm_qt_install_logging_categories(
+    EXPORT kexiv2
+    FILE libkexiv2.categories
+    DESTINATION "${KDE_INSTALL_LOGGINGCATEGORIESDIR}"
 )

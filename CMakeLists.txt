@@ -5,7 +5,7 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 set(CMAKE_MIN_VERSION   "3.0.0")
-set(ECM_MIN_VERSION     "1.1.0")
+set(ECM_MIN_VERSION     "5.68.0")
 set(REQUIRED_QT_VERSION "5.12.0")
 set(EXIV2_MIN_VERSION   "0.25")
 
@@ -67,6 +67,7 @@ include(KDEFrameworkCompilerSettings NO_POLICY_SCOPE)
 include(ECMGenerateHeaders)
 include(ECMSetupVersion)
 include(ECMMarkNonGuiExecutable)
+include(ECMQtDeclareLoggingCategory)
 include(GenerateExportHeader)
 include(CMakePackageConfigHelpers)
 include(FeatureSummary)
