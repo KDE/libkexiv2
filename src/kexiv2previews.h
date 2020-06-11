@@ -44,6 +44,8 @@ namespace KExiv2Iface
 {
 
 /**
+ * @class KExiv2Previews kexiv2previews.h <KExiv2/KExiv2Previews>
+ *
  * KExiv2Previews
  */
 class LIBKEXIV2_EXPORT KExiv2Previews

@@ -59,6 +59,8 @@ namespace KExiv2Iface
 {
 
 /**
+ * @class KExiv2 kexiv2.h <KExiv2/KExiv2>
+ *
  * KExiv2
  */
 class LIBKEXIV2_EXPORT KExiv2
