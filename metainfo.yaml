@@ -1,0 +1,12 @@
+fancyname: KExiv2
+description: Wrapper around Exiv2 library to manipulate picture metadata as EXIF and XMP
+type: functional
+public_lib: true
+platforms:
+    - name: Linux
+    - name: FreeBSD
+    - name: Windows
+release: true
+libraries:
+    - cmake: "KF5::KExiv2"
+cmakename: KF5KExiv2
