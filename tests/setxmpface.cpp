@@ -1,26 +1,10 @@
-/** ===========================================================
- *
- * This file is a part of KDE project
- *
- *
- * @date   2013-02-21
- * @brief  a command line tool to set faces in Picassa format
- *
- * @author Copyright (C) 2013 by Munteanu Veaceslav
- *         <a href="mailto:slavuttici at gmail dot com">slavuttici at gmail dot com</a>
- *
- * This program is free software; you can redistribute it
- * and/or modify it under the terms of the GNU General
- * Public License as published by the Free Software Foundation;
- * either version 2, or (at your option)
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * ============================================================ */
+/*
+    A command line tool to set faces in Picassa format
+
+    SPDX-FileCopyrightText: 2013 Munteanu Veaceslav <slavuttici at gmail dot com>
+
+    SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 // Qt includes
 
