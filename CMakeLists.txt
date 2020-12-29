@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 #
 
-set(CMAKE_MIN_VERSION   "3.0.0")
+set(CMAKE_MIN_VERSION   "3.5.0")
 set(ECM_MIN_VERSION     "5.68.0")
 set(QT_MIN_VERSION      "5.12.0")
 set(EXIV2_MIN_VERSION   "0.25")
