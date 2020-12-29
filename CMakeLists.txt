@@ -73,17 +73,18 @@ include(CMakePackageConfigHelpers)
 include(FeatureSummary)
 
 ecm_setup_version(${libkexiv2_VERSION}
-                  VARIABLE_PREFIX      KEXIV2
-                  VERSION_HEADER       "src/libkexiv2_version.h"
-                  PACKAGE_VERSION_FILE "KF5KExiv2ConfigVersion.cmake"
-                  SOVERSION            ${LIBKEXIV2_SO_VERSION}
+    VARIABLE_PREFIX      KEXIV2
+    VERSION_HEADER       "src/libkexiv2_version.h"
+    PACKAGE_VERSION_FILE "KF5KExiv2ConfigVersion.cmake"
+    SOVERSION            ${LIBKEXIV2_SO_VERSION}
 )
 
 ############## Find Packages ###################
 
-find_package(Qt5 ${QT_MIN_VERSION} REQUIRED NO_MODULE COMPONENTS
-             Core
-             Gui
+find_package(Qt5 ${QT_MIN_VERSION} REQUIRED NO_MODULE
+    COMPONENTS
+        Core
+        Gui
 )
 
 find_package(LibExiv2 ${EXIV2_MIN_VERSION} REQUIRED)
@@ -123,16 +124,16 @@ configure_package_config_file(
 )
 
 install(FILES
-        "${CMAKE_CURRENT_BINARY_DIR}/KF5KExiv2Config.cmake"
-        "${CMAKE_CURRENT_BINARY_DIR}/KF5KExiv2ConfigVersion.cmake"
-        DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
-        COMPONENT   Devel
+    "${CMAKE_CURRENT_BINARY_DIR}/KF5KExiv2Config.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/KF5KExiv2ConfigVersion.cmake"
+    DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
+    COMPONENT   Devel
 )
 
 install(EXPORT      KF5KExiv2Targets
-        DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
-        FILE        KF5KExiv2Targets.cmake
-        NAMESPACE   KF5::
+    DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
+    FILE        KF5KExiv2Targets.cmake
+    NAMESPACE   KF5::
 )
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
