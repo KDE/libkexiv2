@@ -52,7 +52,10 @@ message(STATUS "Starting CMake configuration for: ${PROJECT_NAME}")
 set(KEXIV2_LIB_SO_CUR_VERSION "15")
 set(KEXIV2_LIB_SO_REV_VERSION "0")
 set(KEXIV2_LIB_SO_AGE_VERSION "0")
-
+# TODO Qt6 or next ABI break: the very SO version is usually a single number, not a triple.
+# The library non-SO version as decribed in the link above is a separate thing
+# (cmp. VVERSION & SOVERSION args of set_target_properties(KF5KExiv2)
+# You can start with 0 or 1 when KF6KExiv2 is created
 set(LIBKEXIV2_SO_VERSION  "${KEXIV2_LIB_SO_CUR_VERSION}.${KEXIV2_LIB_SO_REV_VERSION}.${KEXIV2_LIB_SO_AGE_VERSION}")
 
 ############## ECM setup ######################
