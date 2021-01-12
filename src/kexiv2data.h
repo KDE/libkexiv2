@@ -29,14 +29,9 @@ public:
 
     KExiv2Data& operator=(const KExiv2Data&);
 
-public:
-
-    // Declared as public due to use in KExiv2Priv class
-    class Private;
-
 private:
 
-    QSharedDataPointer<Private> d;
+    QSharedDataPointer<class KExiv2DataPrivate> d;
 
     friend class KExiv2;
 };

@@ -43,7 +43,7 @@ namespace KExiv2Iface
 {
 
 KExiv2Private::KExiv2Private()
-    : data(new KExiv2Data::Private)
+    : data(new KExiv2DataPrivate)
 {
     writeRawFiles         = false;
     updateFileTimeStamp   = false;
@@ -331,7 +331,7 @@ bool KExiv2Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::AutoPtr
     return false;
 }
 
-void KExiv2Data::Private::clear()
+void KExiv2DataPrivate::clear()
 {
     imageComments.clear();
     exifMetadata.clear();

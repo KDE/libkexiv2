@@ -62,7 +62,7 @@
 namespace KExiv2Iface
 {
 
-class Q_DECL_HIDDEN KExiv2Data::Private : public QSharedData
+class KExiv2DataPrivate : public QSharedData
 {
 public:
 
@@ -157,7 +157,7 @@ public:
     QSize                                          pixelSize;
     QString                                        mimeType;
 
-    QSharedDataPointer<KExiv2Data::Private> data;
+    QSharedDataPointer<KExiv2DataPrivate> data;
 };
 
 // --------------------------------------------------------------------------------------------
