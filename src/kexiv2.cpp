@@ -17,36 +17,33 @@ namespace KExiv2Iface
 {
 
 KExiv2::KExiv2()
-    : d(new Private)
+    : d(new KExiv2Private)
 {
 }
 
 KExiv2::KExiv2(const KExiv2& metadata)
-    : d(new Private)
+    : d(new KExiv2Private)
 {
-    d->copyPrivateData(metadata.d);
+    d->copyPrivateData(metadata.d.get());
 }
 
 KExiv2::KExiv2(const KExiv2Data& data)
-    : d(new Private)
+    : d(new KExiv2Private)
 {
     setData(data);
 }
 
 KExiv2::KExiv2(const QString& filePath)
-    : d(new Private)
+    : d(new KExiv2Private)
 {
     load(filePath);
 }
 
-KExiv2::~KExiv2()
-{
-    delete d;
-}
+KExiv2::~KExiv2() = default;
 
 KExiv2& KExiv2::operator=(const KExiv2& metadata)
 {
-    d->copyPrivateData(metadata.d);
+    d->copyPrivateData(metadata.d.get());
 
     return *this;
 }

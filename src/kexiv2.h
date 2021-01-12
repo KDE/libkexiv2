@@ -8,6 +8,10 @@
 #ifndef KEXIV2_H
 #define KEXIV2_H
 
+// Std
+
+#include <memory>
+
 // QT includes
 
 #include <QByteArray>
@@ -1073,8 +1077,7 @@ private:
 
     /** Internal container to store private members. Used to improve binary compatibility
      */
-    class Private;
-    Private* const d;
+    std::unique_ptr<class KExiv2Private> const d;
 
     friend class KExiv2Previews;
 };

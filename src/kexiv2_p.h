@@ -83,14 +83,14 @@ public:
 
 // --------------------------------------------------------------------------
 
-class Q_DECL_HIDDEN KExiv2::Private
+class KExiv2Private
 {
 public:
 
-    Private();
-    ~Private();
+    KExiv2Private();
+    ~KExiv2Private();
 
-    void copyPrivateData(const Private* const other);
+    void copyPrivateData(const KExiv2Private* const other);
 
     bool saveToXMPSidecar(const QFileInfo& finfo)                            const;
     bool saveToFile(const QFileInfo& finfo)                                  const;

@@ -8,6 +8,10 @@
 #ifndef KEXIV2PREVIEWS
 #define KEXIV2PREVIEWS
 
+// Std
+
+#include <memory>
+
 // Qt includes
 
 #include <QByteArray>
@@ -81,9 +85,7 @@ public:
     QImage image(int index = 0);
 
 private:
-
-    class Private;
-    Private* const d;
+    std::unique_ptr<class KExiv2PreviewsPrivate> const d;
 };
 
 } // namespace KExiv2Iface

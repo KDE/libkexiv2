@@ -42,22 +42,20 @@ extern "C"
 namespace KExiv2Iface
 {
 
-KExiv2::Private::Private()
+KExiv2Private::KExiv2Private()
     : data(new KExiv2Data::Private)
 {
     writeRawFiles         = false;
     updateFileTimeStamp   = false;
     useXMPSidecar4Reading = false;
-    metadataWritingMode   = WRITETOIMAGEONLY;
+    metadataWritingMode   = KExiv2::WRITETOIMAGEONLY;
     loadedFromSidecar     = false;
-    Exiv2::LogMsg::setHandler(KExiv2::Private::printExiv2MessageHandler);
+    Exiv2::LogMsg::setHandler(KExiv2Private::printExiv2MessageHandler);
 }
 
-KExiv2::Private::~Private()
-{
-}
+KExiv2Private::~KExiv2Private() = default;
 
-void KExiv2::Private::copyPrivateData(const Private* const other)
+void KExiv2Private::copyPrivateData(const KExiv2Private* const other)
 {
     data                  = other->data;
     filePath              = other->filePath;
@@ -67,7 +65,7 @@ void KExiv2::Private::copyPrivateData(const Private* const other)
     metadataWritingMode   = other->metadataWritingMode;
 }
 
-bool KExiv2::Private::saveToXMPSidecar(const QFileInfo& finfo) const
+bool KExiv2Private::saveToXMPSidecar(const QFileInfo& finfo) const
 {
     QString filePath = KExiv2::sidecarFilePathForFile(finfo.filePath());
 
@@ -94,7 +92,7 @@ bool KExiv2::Private::saveToXMPSidecar(const QFileInfo& finfo) const
     }
 }
 
-bool KExiv2::Private::saveToFile(const QFileInfo& finfo) const
+bool KExiv2Private::saveToFile(const QFileInfo& finfo) const
 {
     if (!finfo.isWritable())
     {
@@ -173,7 +171,7 @@ bool KExiv2::Private::saveToFile(const QFileInfo& finfo) const
     }
 }
 
-bool KExiv2::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::AutoPtr image) const
+bool KExiv2Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::AutoPtr image) const
 {
     try
     {
@@ -343,19 +341,19 @@ void KExiv2Data::Private::clear()
 #endif
 }
 
-void KExiv2::Private::printExiv2ExceptionError(const QString& msg, Exiv2::Error& e)
+void KExiv2Private::printExiv2ExceptionError(const QString& msg, Exiv2::Error& e)
 {
     std::string s(e.what());
     qCCritical(LIBKEXIV2_LOG) << msg.toLatin1().constData() << " (Error #"
                               << e.code() << ": " << s.c_str();
 }
 
-void KExiv2::Private::printExiv2MessageHandler(int lvl, const char* msg)
+void KExiv2Private::printExiv2MessageHandler(int lvl, const char* msg)
 {
     qCDebug(LIBKEXIV2_LOG) << "Exiv2 (" << lvl << ") : " << msg;
 }
 
-QString KExiv2::Private::convertCommentValue(const Exiv2::Exifdatum& exifDatum) const
+QString KExiv2Private::convertCommentValue(const Exiv2::Exifdatum& exifDatum) const
 {
     try
     {
@@ -410,7 +408,7 @@ QString KExiv2::Private::convertCommentValue(const Exiv2::Exifdatum& exifDatum) 
     return QString();
 }
 
-QString KExiv2::Private::detectEncodingAndDecode(const std::string& value) const
+QString KExiv2Private::detectEncodingAndDecode(const std::string& value) const
 {
     // For charset autodetection, we could use sophisticated code
     // (Mozilla chardet, KHTML's autodetection, QTextCodec::codecForContent),
@@ -436,7 +434,7 @@ QString KExiv2::Private::detectEncodingAndDecode(const std::string& value) const
     return QString::fromLocal8Bit(value.c_str());
 }
 
-bool KExiv2::Private::isUtf8(const char* const buffer) const
+bool KExiv2Private::isUtf8(const char* const buffer) const
 {
     int i, n;
     register unsigned char c;
@@ -555,7 +553,7 @@ done:
 #undef I
 #undef X
 
-int KExiv2::Private::getXMPTagsListFromPrefix(const QString& pf, KExiv2::TagsMap& tagsMap) const
+int KExiv2Private::getXMPTagsListFromPrefix(const QString& pf, KExiv2::TagsMap& tagsMap) const
 {
     int i = 0;
 
@@ -601,7 +599,7 @@ int KExiv2::Private::getXMPTagsListFromPrefix(const QString& pf, KExiv2::TagsMap
 }
 
 #ifdef _XMP_SUPPORT_
-void KExiv2::Private::loadSidecarData(Exiv2::Image::AutoPtr xmpsidecar)
+void KExiv2Private::loadSidecarData(Exiv2::Image::AutoPtr xmpsidecar)
 {
     // Having a sidecar is a special situation.
     // The sidecar data often "dominates", see in particular bug 309058 for important aspects:

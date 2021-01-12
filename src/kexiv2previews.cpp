@@ -15,16 +15,16 @@
 namespace KExiv2Iface
 {
 
-class Q_DECL_HIDDEN KExiv2Previews::Private
+class KExiv2PreviewsPrivate
 {
 public:
 
-    Private()
+    KExiv2PreviewsPrivate()
     {
         manager = nullptr;
     }
 
-    ~Private()
+    ~KExiv2PreviewsPrivate()
     {
         delete manager;
     }
@@ -55,7 +55,7 @@ public:
 };
 
 KExiv2Previews::KExiv2Previews(const QString& filePath)
-    : d(new Private)
+    : d(new KExiv2PreviewsPrivate)
 {
     try
     {
@@ -64,7 +64,7 @@ KExiv2Previews::KExiv2Previews(const QString& filePath)
     }
     catch( Exiv2::Error& e )
     {
-        KExiv2::Private::printExiv2ExceptionError(QString::fromLatin1("Cannot load metadata using Exiv2 "), e);
+        KExiv2Private::printExiv2ExceptionError(QString::fromLatin1("Cannot load metadata using Exiv2 "), e);
     }
     catch(...)
     {
@@ -73,7 +73,7 @@ KExiv2Previews::KExiv2Previews(const QString& filePath)
 }
 
 KExiv2Previews::KExiv2Previews(const QByteArray& imgData)
-    : d(new Private)
+    : d(new KExiv2PreviewsPrivate)
 {
     try
     {
@@ -82,7 +82,7 @@ KExiv2Previews::KExiv2Previews(const QByteArray& imgData)
     }
     catch( Exiv2::Error& e )
     {
-        KExiv2::Private::printExiv2ExceptionError(QString::fromLatin1("Cannot load metadata using Exiv2 "), e);
+        KExiv2Private::printExiv2ExceptionError(QString::fromLatin1("Cannot load metadata using Exiv2 "), e);
     }
     catch(...)
     {
@@ -90,10 +90,7 @@ KExiv2Previews::KExiv2Previews(const QByteArray& imgData)
     }
 }
 
-KExiv2Previews::~KExiv2Previews()
-{
-    delete d;
-}
+KExiv2Previews::~KExiv2Previews() = default;
 
 bool KExiv2Previews::isEmpty()
 {
@@ -170,7 +167,7 @@ QByteArray KExiv2Previews::data(int index)
     }
     catch( Exiv2::Error& e )
     {
-        KExiv2::Private::printExiv2ExceptionError(QString::fromLatin1("Cannot load metadata using Exiv2 "), e);
+        KExiv2Private::printExiv2ExceptionError(QString::fromLatin1("Cannot load metadata using Exiv2 "), e);
         return QByteArray();
     }
     catch(...)
