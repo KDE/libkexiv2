@@ -72,7 +72,7 @@ if( WIN32 )
 endif()
 
 set_target_properties(KF5KExiv2  PROPERTIES
-    VERSION     ${KEXIV2_VERSION_STRING}
+    VERSION     ${KEXIV2_VERSION}
     SOVERSION   ${KEXIV2_SOVERSION}
     EXPORT_NAME KExiv2
 )
