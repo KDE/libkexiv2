@@ -4,9 +4,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 #
 
-set(CMAKE_MIN_VERSION   "3.5.0")
-set(ECM_MIN_VERSION     "5.68.0")
-set(QT_MIN_VERSION      "5.12.0")
+set(CMAKE_MIN_VERSION   "3.16.0")
+set(ECM_MIN_VERSION     "5.80.0")
+set(QT_MIN_VERSION      "5.15.0")
 set(EXIV2_MIN_VERSION   "0.25")
 
 cmake_minimum_required(VERSION ${CMAKE_MIN_VERSION})
@@ -75,13 +75,6 @@ include(GenerateExportHeader)
 include(CMakePackageConfigHelpers)
 include(FeatureSummary)
 
-ecm_setup_version(${libkexiv2_VERSION}
-    VARIABLE_PREFIX      KEXIV2
-    VERSION_HEADER       "src/libkexiv2_version.h"
-    PACKAGE_VERSION_FILE "KF5KExiv2ConfigVersion.cmake"
-    SOVERSION            ${LIBKEXIV2_SO_VERSION}
-)
-
 ############## Find Packages ###################
 
 find_package(Qt5 ${QT_MIN_VERSION} REQUIRED NO_MODULE
@@ -114,29 +107,5 @@ add_subdirectory(src)
 if (BUILD_TESTING)
     add_subdirectory(tests)
 endif()
-
-############## CMake Config Files ##############
-
-message("${CMAKECONFIG_INSTALL_DIR}")
-set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KF5KExiv2")
-
-configure_package_config_file(
-    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/KF5KExiv2Config.cmake.in"
-    "${CMAKE_CURRENT_BINARY_DIR}/KF5KExiv2Config.cmake"
-    INSTALL_DESTINATION ${CMAKECONFIG_INSTALL_DIR}
-)
-
-install(FILES
-    "${CMAKE_CURRENT_BINARY_DIR}/KF5KExiv2Config.cmake"
-    "${CMAKE_CURRENT_BINARY_DIR}/KF5KExiv2ConfigVersion.cmake"
-    DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
-    COMPONENT   Devel
-)
-
-install(EXPORT      KF5KExiv2Targets
-    DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
-    FILE        KF5KExiv2Targets.cmake
-    NAMESPACE   KF5::
-)
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
