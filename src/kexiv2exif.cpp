@@ -910,7 +910,7 @@ QImage KExiv2::getExifThumbnail(bool fixOrientation) const
 
 bool KExiv2::rotateExifQImage(QImage& image, ImageOrientation orientation) const
 {
-    QMatrix matrix = RotationMatrix::toMatrix(orientation);
+    QTransform matrix = RotationMatrix::toTransform(orientation);
 
     if ((orientation != ORIENTATION_NORMAL) && (orientation != ORIENTATION_UNSPECIFIED))
     {

@@ -9,14 +9,17 @@
 #ifndef LIBKEXIV2_ROTATIONMATRIX_H
 #define LIBKEXIV2_ROTATIONMATRIX_H
 
-// Qt includes
-
-#include <QMatrix>
-
 // Local includes
 
 #include "kexiv2.h"
 #include "libkexiv2_export.h"
+
+// Qt includes
+
+#if KEXIV2_ENABLE_DEPRECATED_SINCE(5, 1)
+#include <QMatrix>
+#endif
+#include <QTransform>
 
 namespace KExiv2Iface
 {
@@ -84,11 +87,30 @@ public:
      */
     KExiv2::ImageOrientation exifOrientation() const;
 
-    /// Returns a QMatrix representing this matrix
-    QMatrix toMatrix() const;
+    /**
+     * Returns a QTransform representing this matrix
+     * @since 5.1
+     */
+    QTransform toTransform() const;
 
+    /**
+     * Returns a QTransform for the given Exif orientation
+     * @since 5.1
+     */
+    static QTransform toTransform(KExiv2::ImageOrientation orientation);
+
+#if KEXIV2_ENABLE_DEPRECATED_SINCE(5, 1)
+    /// Returns a QMatrix representing this matrix
+    /// @deprecated Since 5.1, use toTransform() const.
+    KEXIV2_DEPRECATED_VERSION(5, 1, "Use toTransform() const")
+    QMatrix toMatrix() const;
+#endif
+
+#if KEXIV2_ENABLE_DEPRECATED_SINCE(5, 1)
     /// Returns a QMatrix for the given Exif orientation
+    KEXIV2_DEPRECATED_VERSION(5, 1, "Use toTransform(KExiv2::ImageOrientation)")
     static QMatrix toMatrix(KExiv2::ImageOrientation orientation);
+#endif
 
     RotationMatrix(int m11, int m12, int m21, int m22);
 

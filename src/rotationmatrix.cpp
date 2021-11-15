@@ -267,11 +267,63 @@ KExiv2::ImageOrientation RotationMatrix::exifOrientation() const
     return KExiv2::ORIENTATION_UNSPECIFIED;
 }
 
+QTransform RotationMatrix::toTransform() const
+{
+    return toTransform(exifOrientation());
+}
+
+QTransform RotationMatrix::toTransform(KExiv2::ImageOrientation orientation)
+{
+    QTransform matrix;
+
+    switch (orientation)
+    {
+        case KExiv2::ORIENTATION_NORMAL:
+        case KExiv2::ORIENTATION_UNSPECIFIED:
+            break;
+
+        case KExiv2::ORIENTATION_HFLIP:
+            matrix.scale(-1, 1);
+            break;
+
+        case KExiv2::ORIENTATION_ROT_180:
+            matrix.rotate(180);
+            break;
+
+        case KExiv2::ORIENTATION_VFLIP:
+            matrix.scale(1, -1);
+            break;
+
+        case KExiv2::ORIENTATION_ROT_90_HFLIP:
+            matrix.scale(-1, 1);
+            matrix.rotate(90);
+            break;
+
+        case KExiv2::ORIENTATION_ROT_90:
+            matrix.rotate(90);
+            break;
+
+        case KExiv2::ORIENTATION_ROT_90_VFLIP:
+            matrix.scale(1, -1);
+            matrix.rotate(90);
+            break;
+
+        case KExiv2::ORIENTATION_ROT_270:
+            matrix.rotate(270);
+            break;
+    }
+
+    return matrix;
+}
+
+#if KEXIV2_BUILD_DEPRECATED_SINCE(5, 1)
 QMatrix RotationMatrix::toMatrix() const
 {
     return toMatrix(exifOrientation());
 }
+#endif
 
+#if KEXIV2_BUILD_DEPRECATED_SINCE(5, 1)
 QMatrix RotationMatrix::toMatrix(KExiv2::ImageOrientation orientation)
 {
     QMatrix matrix;
@@ -315,5 +367,6 @@ QMatrix RotationMatrix::toMatrix(KExiv2::ImageOrientation orientation)
 
     return matrix;
 }
+#endif
 
 }  // namespace KExiv2Iface

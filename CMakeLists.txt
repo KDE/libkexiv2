@@ -11,7 +11,7 @@ set(EXIV2_MIN_VERSION   "0.25")
 
 cmake_minimum_required(VERSION ${CMAKE_MIN_VERSION})
 
-project(libkexiv2 VERSION "5.0.0")
+project(libkexiv2 VERSION "5.1.0")
 
 message(STATUS "----------------------------------------------------------------------------------")
 message(STATUS "Starting CMake configuration for: ${PROJECT_NAME}")
@@ -58,6 +58,10 @@ set(KEXIV2_LIB_SO_AGE_VERSION "0")
 # You can start with 0 or 1 when KF6KExiv2 is created
 set(LIBKEXIV2_SO_VERSION  "${KEXIV2_LIB_SO_CUR_VERSION}.${KEXIV2_LIB_SO_REV_VERSION}.${KEXIV2_LIB_SO_AGE_VERSION}")
 
+############## Build options ######################
+
+set(EXCLUDE_DEPRECATED_BEFORE_AND_AT 0 CACHE STRING "Control the range of deprecated API excluded from the build [default=0].")
+
 ############## ECM setup ######################
 
 find_package(ECM ${ECM_MIN_VERSION} CONFIG REQUIRED)
@@ -67,11 +71,11 @@ include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(KDECompilerSettings NO_POLICY_SCOPE)
 
+include(ECMGenerateExportHeader)
 include(ECMGenerateHeaders)
 include(ECMSetupVersion)
 include(ECMMarkNonGuiExecutable)
 include(ECMQtDeclareLoggingCategory)
-include(GenerateExportHeader)
 include(CMakePackageConfigHelpers)
 include(FeatureSummary)
 
