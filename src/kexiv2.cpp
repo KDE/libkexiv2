@@ -65,6 +65,10 @@ bool KExiv2::initializeExiv2()
 
 #endif // _XMP_SUPPORT_
 
+#ifdef EXV_ENABLE_BMFF
+    Exiv2::enableBMFF(true);
+#endif
+
     return true;
 }
 
