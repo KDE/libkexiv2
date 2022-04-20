@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 #
 
-set(KEXIV2_INSTALL_INCLUDEDIR "${KDE_INSTALL_INCLUDEDIR_KF5}/KExiv2")
+set(KEXIV2_INSTALL_INCLUDEDIR "${KDE_INSTALL_INCLUDEDIR_KF}/KExiv2")
 set(KEXIV2_CMAKECONFIG_NAME "KF5KExiv2")
 
 ecm_setup_version(${libkexiv2_VERSION}
@@ -85,7 +85,7 @@ set_target_properties(KExiv2  PROPERTIES
 )
 
 install(TARGETS KExiv2
-    EXPORT  KExiv2Targets ${KF5_INSTALL_TARGETS_DEFAULT_ARGS}
+    EXPORT  KExiv2Targets ${KF_INSTALL_TARGETS_DEFAULT_ARGS}
 )
 
 install(FILES
