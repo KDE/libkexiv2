@@ -64,11 +64,15 @@ target_include_directories(KExiv2
 
 target_link_libraries(KExiv2
     PUBLIC
-        Qt5::Gui
-        Qt5::Core
+        Qt::Gui
+        Qt::Core
     PRIVATE
         LibExiv2::LibExiv2
 )
+
+if (TARGET Qt6::Core5Compat)
+    target_link_libraries(KExiv2 PRIVATE Qt6::Core5Compat) # QRegExp
+endif()
 
 if( WIN32 )
     target_link_libraries(KExiv2 ${EXPAT_LIBRARIES})
@@ -99,7 +103,7 @@ install(FILES
 
 install(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/libkexiv2_version.h
-    DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5}
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF}
     COMPONENT   Devel
 )
 

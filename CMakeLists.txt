@@ -5,7 +5,7 @@
 #
 
 set(CMAKE_MIN_VERSION   "3.16.0")
-set(ECM_MIN_VERSION     "5.80.0")
+set(ECM_MIN_VERSION     "5.90.0")
 set(QT_MIN_VERSION      "5.15.0")
 set(EXIV2_MIN_VERSION   "0.25")
 
@@ -77,11 +77,14 @@ include(FeatureSummary)
 
 ############## Find Packages ###################
 
-find_package(Qt5 ${QT_MIN_VERSION} REQUIRED NO_MODULE
+find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} REQUIRED NO_MODULE
     COMPONENTS
         Core
         Gui
 )
+if (QT_MAJOR_VERSION STREQUAL "6")
+    find_package(Qt6Core5Compat)
+endif()
 
 find_package(LibExiv2 ${EXIV2_MIN_VERSION} REQUIRED)
 
