@@ -437,7 +437,7 @@ QString KExiv2Private::detectEncodingAndDecode(const std::string& value) const
 bool KExiv2Private::isUtf8(const char* const buffer) const
 {
     int i, n;
-    register unsigned char c;
+    unsigned char c;
     bool gotone = false;
 
     if (!buffer)
