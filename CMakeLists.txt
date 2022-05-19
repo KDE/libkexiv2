@@ -13,6 +13,9 @@ cmake_minimum_required(VERSION ${CMAKE_MIN_VERSION})
 
 project(libkexiv2 VERSION "5.0.0")
 
+set(CMAKE_CXX_STANDARD 14) # exiv is not compatible with C++ > 14 yet
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 message(STATUS "----------------------------------------------------------------------------------")
 message(STATUS "Starting CMake configuration for: ${PROJECT_NAME}")
 
