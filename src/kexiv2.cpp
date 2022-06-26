@@ -417,7 +417,7 @@ bool KExiv2::save(const QString& imageFilePath) const
     if (writeToSidecar || (writeToSidecarIfFileNotPossible && !writtenToFile))
     {
         qCDebug(LIBKEXIV2_LOG) << "Will write XMP sidecar for file" << givenFileInfo.fileName();
-        writtenToSidecar = d->saveToXMPSidecar(imageFilePath);
+        writtenToSidecar = d->saveToXMPSidecar(QFileInfo(imageFilePath));
 
         if (writtenToSidecar)
         {
