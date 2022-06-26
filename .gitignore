@@ -6,3 +6,4 @@ tests/databases/*/*.db
 .cache
 .idea
 /cmake-build*
+build*
