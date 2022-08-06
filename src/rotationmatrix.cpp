@@ -267,14 +267,14 @@ KExiv2::ImageOrientation RotationMatrix::exifOrientation() const
     return KExiv2::ORIENTATION_UNSPECIFIED;
 }
 
-QMatrix RotationMatrix::toMatrix() const
+QTransform RotationMatrix::toTransform() const
 {
-    return toMatrix(exifOrientation());
+    return toTransform(exifOrientation());
 }
 
-QMatrix RotationMatrix::toMatrix(KExiv2::ImageOrientation orientation)
+QTransform RotationMatrix::toTransform(KExiv2::ImageOrientation orientation)
 {
-    QMatrix matrix;
+    QTransform matrix;
 
     switch (orientation)
     {
@@ -315,5 +315,19 @@ QMatrix RotationMatrix::toMatrix(KExiv2::ImageOrientation orientation)
 
     return matrix;
 }
+
+#if KEXIV2_BUILD_DEPRECATED_SINCE(5, 1)
+QMatrix RotationMatrix::toMatrix() const
+{
+    return toMatrix(exifOrientation());
+}
+#endif
+
+#if KEXIV2_BUILD_DEPRECATED_SINCE(5, 1)
+QMatrix RotationMatrix::toMatrix(KExiv2::ImageOrientation orientation)
+{
+    return toTransform(orientation).toAffine();
+}
+#endif
 
 }  // namespace KExiv2Iface

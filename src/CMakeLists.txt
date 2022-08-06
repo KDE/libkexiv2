@@ -53,8 +53,16 @@ ecm_generate_headers(kexiv2_CamelCase_HEADERS
     REQUIRED_HEADERS kexiv2_HEADERS
 )
 
-generate_export_header(KExiv2
-    BASE_NAME libkexiv2
+ecm_generate_export_header(KExiv2
+    #BASE_NAME libkexiv2
+    #VERSION ${KF_VERSION}
+    BASE_NAME kexiv2
+    EXPORT_FILE_NAME libkexiv2_export.h
+    EXPORT_MACRO_NAME LIBKEXIV2_EXPORT
+    VERSION ${libkexiv2_VERSION}
+    DEPRECATED_BASE_VERSION 0
+    DEPRECATION_VERSIONS 5.1
+    EXCLUDE_DEPRECATED_BEFORE_AND_AT ${EXCLUDE_DEPRECATED_BEFORE_AND_AT}
 )
 
 target_include_directories(KExiv2
