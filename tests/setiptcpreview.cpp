@@ -8,7 +8,7 @@
 
 // Qt includes
 
-#include <QMatrix>
+#include <QTransform>
 #include <QImage>
 #include <QString>
 #include <QFile>
@@ -34,7 +34,7 @@ int main (int argc, char **argv)
     KExiv2  meta(filePath);
 
     QImage  image(filePath);
-    QMatrix matrix;
+    QTransform matrix;
     matrix.rotate(90);
     image = image.transformed(matrix);
 
