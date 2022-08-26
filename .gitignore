@@ -1,9 +1,10 @@
 *.kate-swp
-tests/databases/*/*.db
+CMakeLists.txt.user*
 /.clang-format
 /compile_commands.json
 .clangd
-.cache
 .idea
 /cmake-build*
+.cache
 build*
+tests/databases/*/*.db
