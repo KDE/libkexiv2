@@ -4,12 +4,11 @@
 # SPDX-License-Identifier: BSD-3-Clause
 #
 
-set(CMAKE_MIN_VERSION   "3.16.0")
+cmake_minimum_required(VERSION 3.16)
+
 set(ECM_MIN_VERSION     "5.90.0")
 set(QT_MIN_VERSION      "5.15.0")
 set(EXIV2_MIN_VERSION   "0.25")
-
-cmake_minimum_required(VERSION ${CMAKE_MIN_VERSION})
 
 project(libkexiv2 VERSION "5.0.0")
 
