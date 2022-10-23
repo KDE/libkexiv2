@@ -703,7 +703,11 @@ QByteArray KExiv2::getExifTagData(const char* exifTagName) const
         {
             char* const s = new char[(*it).size()];
             (*it).copy((Exiv2::byte*)s, Exiv2::bigEndian);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
             QByteArray data(s, (*it).size());
+#else
+            QByteArray data(s, (*it).size() - 1 /* remove '\0' */);
+#endif
             delete[] s;
 
             return data;
