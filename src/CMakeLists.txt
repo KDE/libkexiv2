@@ -18,6 +18,12 @@ kde_enable_exceptions()
 
 add_library(KExiv2 SHARED)
 
+set_target_properties(KExiv2  PROPERTIES
+    OUTPUT_NAME KF${QT_MAJOR_VERSION}KExiv2
+    VERSION     ${KEXIV2_VERSION}
+    SOVERSION   ${KEXIV2_SOVERSION}
+)
+
 if( WIN32 )
     target_compile_definitions(KExiv2 PRIVATE -DEXV_HAVE_DLL)
 endif()
@@ -85,12 +91,6 @@ endif()
 if( WIN32 )
     target_link_libraries(KExiv2 ${EXPAT_LIBRARIES})
 endif()
-
-set_target_properties(KExiv2  PROPERTIES
-    OUTPUT_NAME KF${QT_MAJOR_VERSION}KExiv2
-    VERSION     ${KEXIV2_VERSION}
-    SOVERSION   ${KEXIV2_SOVERSION}
-)
 
 install(TARGETS KExiv2
     EXPORT  KExiv2Targets ${KF_INSTALL_TARGETS_DEFAULT_ARGS}
