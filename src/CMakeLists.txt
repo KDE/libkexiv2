@@ -59,9 +59,19 @@ ecm_generate_headers(kexiv2_CamelCase_HEADERS
     REQUIRED_HEADERS kexiv2_HEADERS
 )
 
+if (QT_MAJOR_VERSION STREQUAL "5")
+    set(_generate_export_header_version_args)
+else()
+    # For Qt6/KF6 world transitively include the version header
+    if(ECM_VERSION VERSION_LESS "5.106")
+        set(include_version_header_code "#include <libkexiv2_version.h>\n")
+        set(_generate_export_header_version_args CUSTOM_CONTENT_FROM_VARIABLE include_version_header_code)
+    else()
+        set(_generate_export_header_version_args USE_VERSION_HEADER libkexiv2_version.h)
+    endif()
+endif()
+
 ecm_generate_export_header(KExiv2
-    #BASE_NAME libkexiv2
-    #VERSION ${KF_VERSION}
     BASE_NAME kexiv2
     EXPORT_FILE_NAME libkexiv2_export.h
     EXPORT_MACRO_NAME LIBKEXIV2_EXPORT
@@ -69,6 +79,7 @@ ecm_generate_export_header(KExiv2
     DEPRECATED_BASE_VERSION 0
     DEPRECATION_VERSIONS 5.1
     EXCLUDE_DEPRECATED_BEFORE_AND_AT ${EXCLUDE_DEPRECATED_BEFORE_AND_AT}
+    ${_generate_export_header_version_args}
 )
 
 target_include_directories(KExiv2
