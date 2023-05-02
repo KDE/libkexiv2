@@ -14,7 +14,6 @@
 
 // Qt includes
 
-#include <QTextCodec>
 #include <QBuffer>
 
 // Local includes
@@ -266,19 +265,9 @@ QString KExiv2::getExifComment() const
     return QString();
 }
 
-static bool is7BitAscii(const QByteArray& s)
+static bool is7BitAscii(const QString& s)
 {
-    const int size = s.size();
-
-    for (int i=0; i<size; i++)
-    {
-        if (!isascii(s[i]))
-        {
-            return false;
-        }
-    }
-
-    return true;
+    return std::all_of(s.begin(), s.end(), [](QChar c) { return c.unicode() <= 0x7f; });
 }
 
 bool KExiv2::setExifComment(const QString& comment, bool setProgramName) const
@@ -296,19 +285,13 @@ bool KExiv2::setExifComment(const QString& comment, bool setProgramName) const
             setExifTagString("Exif.Image.ImageDescription", comment, setProgramName);
 
             // Write as Unicode only when necessary.
-            QTextCodec* latin1Codec = QTextCodec::codecForName("iso8859-1");
-            if (latin1Codec->canEncode(comment))
+            if (is7BitAscii(comment))
             {
-                // We know it's in the ISO-8859-1 8bit range.
-                // Check if it's in the ASCII 7bit range
-                if (is7BitAscii(comment.toLatin1()))
-                {
-                    // write as ASCII
-                    std::string exifComment("charset=\"Ascii\" ");
-                    exifComment += comment.toLatin1().constData();
-                    d->exifMetadata()["Exif.Photo.UserComment"] = exifComment;
-                    return true;
-                }
+                // write as ASCII
+                std::string exifComment("charset=\"Ascii\" ");
+                exifComment += comment.toLatin1().constData();
+                d->exifMetadata()["Exif.Photo.UserComment"] = exifComment;
+                return true;
             }
             // write as Unicode (UCS-2)
             std::string exifComment("charset=\"Unicode\" ");
