@@ -29,9 +29,17 @@ public:
         delete manager;
     }
 
+#if EXIV2_TEST_VERSION(0,28,0)
+    void load(Exiv2::Image::UniquePtr image_)
+#else
     void load(Exiv2::Image::AutoPtr image_)
+#endif
     {
+#if EXIV2_TEST_VERSION(0,28,0)
+        image                              = std::move(image_);
+#else
         image                              = image_;
+#endif
 
         image->readMetadata();
 
@@ -49,7 +57,11 @@ public:
 
 public:
 
+#if EXIV2_TEST_VERSION(0,28,0)
+    Exiv2::Image::UniquePtr         image;
+#else
     Exiv2::Image::AutoPtr           image;
+#endif
     Exiv2::PreviewManager*          manager;
     QList<Exiv2::PreviewProperties> properties;
 };
@@ -59,8 +71,13 @@ KExiv2Previews::KExiv2Previews(const QString& filePath)
 {
     try
     {
+#if EXIV2_TEST_VERSION(0,28,0)
+        Exiv2::Image::UniquePtr image = Exiv2::ImageFactory::open((const char*)(QFile::encodeName(filePath).constData()));
+        d->load(std::move(image));
+#else
         Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)(QFile::encodeName(filePath).constData()));
         d->load(image);
+#endif
     }
     catch( Exiv2::Error& e )
     {
@@ -77,8 +94,13 @@ KExiv2Previews::KExiv2Previews(const QByteArray& imgData)
 {
     try
     {
+#if EXIV2_TEST_VERSION(0,28,0)
+        Exiv2::Image::UniquePtr image = Exiv2::ImageFactory::open((Exiv2::byte*)imgData.data(), imgData.size());
+        d->load(std::move(image));
+#else
         Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((Exiv2::byte*)imgData.data(), imgData.size());
         d->load(image);
+#endif
     }
     catch( Exiv2::Error& e )
     {

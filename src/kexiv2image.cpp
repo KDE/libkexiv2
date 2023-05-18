@@ -94,13 +94,21 @@ QSize KExiv2::getImageDimensions() const
         Exiv2::ExifData::iterator it = exifData.findKey(key);
 
         if (it != exifData.end() && it->count())
+#if EXIV2_TEST_VERSION(0,28,0)
+            width = it->toUint32();
+#else
             width = it->toLong();
+#endif
 
         Exiv2::ExifKey key2("Exif.Photo.PixelYDimension");
         Exiv2::ExifData::iterator it2 = exifData.findKey(key2);
 
         if (it2 != exifData.end() && it2->count())
+#if EXIV2_TEST_VERSION(0,28,0)
+            height = it2->toUint32();
+#else
             height = it2->toLong();
+#endif
 
         if (width != -1 && height != -1)
             return QSize(width, height);
@@ -114,13 +122,21 @@ QSize KExiv2::getImageDimensions() const
         Exiv2::ExifData::iterator it3 = exifData.findKey(key3);
 
         if (it3 != exifData.end() && it3->count())
+#if EXIV2_TEST_VERSION(0,28,0)
+            width = it3->toUint32();
+#else
             width = it3->toLong();
+#endif
 
         Exiv2::ExifKey key4("Exif.Image.ImageLength");
         Exiv2::ExifData::iterator it4 = exifData.findKey(key4);
 
         if (it4 != exifData.end() && it4->count())
+#if EXIV2_TEST_VERSION(0,28,0)
+            height = it4->toUint32();
+#else
             height = it4->toLong();
+#endif
 
         if (width != -1 && height != -1)
             return QSize(width, height);
@@ -261,7 +277,11 @@ KExiv2::ImageOrientation KExiv2::getImageOrientation() const
 
         if (it != exifData.end() && it->count())
         {
+#if EXIV2_TEST_VERSION(0,28,0)
+            orientation = it->toUint32();
+#else
             orientation = it->toLong();
+#endif
             qCDebug(LIBKEXIV2_LOG) << "Orientation => Exif.MinoltaCs7D.Rotation => " << (int)orientation;
 
             switch(orientation)
@@ -282,7 +302,11 @@ KExiv2::ImageOrientation KExiv2::getImageOrientation() const
 
         if (it != exifData.end() && it->count())
         {
+#if EXIV2_TEST_VERSION(0,28,0)
+            orientation = it->toUint32();
+#else
             orientation = it->toLong();
+#endif
             qCDebug(LIBKEXIV2_LOG) << "Orientation => Exif.MinoltaCs5D.Rotation => " << (int)orientation;
 
             switch(orientation)
@@ -305,7 +329,11 @@ KExiv2::ImageOrientation KExiv2::getImageOrientation() const
 
         if (it != exifData.end() && it->count())
         {
+#if EXIV2_TEST_VERSION(0,28,0)
+            orientation = it->toUint32();
+#else
             orientation = it->toLong();
+#endif
             qCDebug(LIBKEXIV2_LOG) << "Orientation => Exif.Image.Orientation => " << (int)orientation;
             return (ImageOrientation)orientation;
         }
@@ -381,7 +409,11 @@ bool KExiv2::setImageOrientation(ImageOrientation orientation, bool setProgramNa
 
         if (it != d->exifMetadata().end() && it->count())
         {
+#if EXIV2_TEST_VERSION(0,28,0)
+            RotationMatrix operation((KExiv2Iface::KExiv2::ImageOrientation)it->toUint32());
+#else
             RotationMatrix operation((KExiv2Iface::KExiv2::ImageOrientation)it->toLong());
+#endif
             operation *= orientation;
             (*it) = static_cast<uint16_t>(operation.exifOrientation());
         }
@@ -849,7 +881,11 @@ bool KExiv2::setImageDateTime(const QDateTime& dateTime, bool setDateTimeDigitiz
 
         const std::string &xmpdatetime(dateTime.toString(Qt::ISODate).toLatin1().constData());
 
+#if EXIV2_TEST_VERSION(0,28,0)
+        Exiv2::Value::UniquePtr xmpTxtVal = Exiv2::Value::create(Exiv2::xmpText);
+#else
         Exiv2::Value::AutoPtr xmpTxtVal = Exiv2::Value::create(Exiv2::xmpText);
+#endif
         xmpTxtVal->read(xmpdatetime);
         d->xmpMetadata().add(Exiv2::XmpKey("Xmp.exif.DateTimeOriginal"),  xmpTxtVal.get());
         d->xmpMetadata().add(Exiv2::XmpKey("Xmp.photoshop.DateCreated"),  xmpTxtVal.get());

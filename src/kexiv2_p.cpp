@@ -76,9 +76,17 @@ bool KExiv2Private::saveToXMPSidecar(const QFileInfo& finfo) const
 
     try
     {
+#if EXIV2_TEST_VERSION(0,28,0)
+        Exiv2::Image::UniquePtr image;
+#else
         Exiv2::Image::AutoPtr image;
+#endif
         image = Exiv2::ImageFactory::create(Exiv2::ImageType::xmp, (const char*)(QFile::encodeName(filePath).constData()));
+#if EXIV2_TEST_VERSION(0,28,0)
+        return saveOperations(finfo, std::move(image));
+#else
         return saveOperations(finfo, image);
+#endif
     }
     catch( Exiv2::Error& e )
     {
@@ -155,9 +163,17 @@ bool KExiv2Private::saveToFile(const QFileInfo& finfo) const
 
     try
     {
+#if EXIV2_TEST_VERSION(0,28,0)
+        Exiv2::Image::UniquePtr image;
+#else
         Exiv2::Image::AutoPtr image;
+#endif
         image = Exiv2::ImageFactory::open((const char*)(QFile::encodeName(finfo.filePath()).constData()));
+#if EXIV2_TEST_VERSION(0,28,0)
+        return saveOperations(finfo, std::move(image));
+#else
         return saveOperations(finfo, image);
+#endif
     }
     catch( Exiv2::Error& e )
     {
@@ -171,7 +187,11 @@ bool KExiv2Private::saveToFile(const QFileInfo& finfo) const
     }
 }
 
+#if EXIV2_TEST_VERSION(0,28,0)
+bool KExiv2Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::UniquePtr image) const
+#else
 bool KExiv2Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::AutoPtr image) const
+#endif
 {
     try
     {
@@ -345,7 +365,12 @@ void KExiv2Private::printExiv2ExceptionError(const QString& msg, Exiv2::Error& e
 {
     std::string s(e.what());
     qCCritical(LIBKEXIV2_LOG) << msg.toLatin1().constData() << " (Error #"
-                              << e.code() << ": " << s.c_str();
+#if EXIV2_TEST_VERSION(0,28,0)
+                              << Exiv2::Error(e.code()).what()
+#else
+                              << e.code() << ": " << s.c_str()
+#endif
+                              << ")";
 }
 
 void KExiv2Private::printExiv2MessageHandler(int lvl, const char* msg)
@@ -599,7 +624,11 @@ int KExiv2Private::getXMPTagsListFromPrefix(const QString& pf, KExiv2::TagsMap& 
 }
 
 #ifdef _XMP_SUPPORT_
+#if EXIV2_TEST_VERSION(0,28,0)
+void KExiv2Private::loadSidecarData(Exiv2::Image::UniquePtr xmpsidecar)
+#else
 void KExiv2Private::loadSidecarData(Exiv2::Image::AutoPtr xmpsidecar)
+#endif
 {
     // Having a sidecar is a special situation.
     // The sidecar data often "dominates", see in particular bug 309058 for important aspects:

@@ -19,7 +19,12 @@ bool KExiv2::canWriteXmp(const QString& filePath)
 #ifdef _XMP_SUPPORT_
     try
     {
-        Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
+#if EXIV2_TEST_VERSION(0,28,0)
+        Exiv2::Image::UniquePtr image =
+#else
+        Exiv2::Image::AutoPtr image = 
+#endif
+                                      Exiv2::ImageFactory::open((const char*)
                                       (QFile::encodeName(filePath).constData()));
 
         Exiv2::AccessMode mode = image->checkMode(Exiv2::mdXmp);
@@ -29,7 +34,12 @@ bool KExiv2::canWriteXmp(const QString& filePath)
     {
         std::string s(e.what());
         qCCritical(LIBKEXIV2_LOG) << "Cannot check Xmp access mode using Exiv2 (Error #"
-                    << e.code() << ": " << s.c_str() << ")";
+#if EXIV2_TEST_VERSION(0,28,0)
+                    << Exiv2::Error(e.code()).what()
+#else
+                    << e.code() << ": " << s.c_str()
+#endif
+                    << ")";
     }
     catch(...)
     {
@@ -374,7 +384,11 @@ bool KExiv2::setXmpTagString(const char* xmpTagName, const QString& value, bool 
     try
     {
         const std::string &txt(value.toUtf8().constData());
+#if EXIV2_TEST_VERSION(0,28,0)
+        Exiv2::Value::UniquePtr xmpTxtVal = Exiv2::Value::create(Exiv2::xmpText);
+#else
         Exiv2::Value::AutoPtr xmpTxtVal = Exiv2::Value::create(Exiv2::xmpText);
+#endif
         xmpTxtVal->read(txt);
         d->xmpMetadata()[xmpTagName].setValue(xmpTxtVal.get());
         return true;
@@ -515,7 +529,11 @@ bool KExiv2::setXmpTagStringListLangAlt(const char* xmpTagName, const KExiv2::Al
 
         if (!values.isEmpty())
         {
+#if EXIV2_TEST_VERSION(0,28,0)
+            Exiv2::Value::UniquePtr xmpTxtVal = Exiv2::Value::create(Exiv2::langAlt);
+#else
             Exiv2::Value::AutoPtr xmpTxtVal = Exiv2::Value::create(Exiv2::langAlt);
+#endif
 
             for (AltLangMap::const_iterator it = values.constBegin(); it != values.constEnd(); ++it)
             {
@@ -621,7 +639,11 @@ bool KExiv2::setXmpTagStringLangAlt(const char* xmpTagName, const QString& value
         QString txtLangAlt = QString(QString::fromLatin1("lang=%1 %2")).arg(language).arg(value);
 
         const std::string &txt(txtLangAlt.toUtf8().constData());
+#if EXIV2_TEST_VERSION(0,28,0)
+        Exiv2::Value::UniquePtr xmpTxtVal = Exiv2::Value::create(Exiv2::langAlt);
+#else
         Exiv2::Value::AutoPtr xmpTxtVal = Exiv2::Value::create(Exiv2::langAlt);
+#endif
 
         // Search if an Xmp tag already exist.
 
@@ -735,7 +757,11 @@ bool KExiv2::setXmpTagStringSeq(const char* xmpTagName, const QStringList& seq,
         else
         {
             const QStringList list = seq;
+#if EXIV2_TEST_VERSION(0,28,0)
+            Exiv2::Value::UniquePtr xmpTxtSeq = Exiv2::Value::create(Exiv2::xmpSeq);
+#else
             Exiv2::Value::AutoPtr xmpTxtSeq = Exiv2::Value::create(Exiv2::xmpSeq);
+#endif
 
             for (QStringList::const_iterator it = list.constBegin(); it != list.constEnd(); ++it )
             {
@@ -835,7 +861,11 @@ bool KExiv2::setXmpTagStringBag(const char* xmpTagName, const QStringList& bag,
         else
         {
             QStringList list = bag;
+#if EXIV2_TEST_VERSION(0,28,0)
+            Exiv2::Value::UniquePtr xmpTxtBag = Exiv2::Value::create(Exiv2::xmpBag);
+#else
             Exiv2::Value::AutoPtr xmpTxtBag = Exiv2::Value::create(Exiv2::xmpBag);
+#endif
 
             for (QStringList::const_iterator it = list.constBegin(); it != list.constEnd(); ++it )
             {
@@ -929,7 +959,11 @@ QVariant KExiv2::getXmpTagVariant(const char* xmpTagName, bool rationalAsListOfI
                 case Exiv2::unsignedLong:
                 case Exiv2::signedShort:
                 case Exiv2::signedLong:
+#if EXIV2_TEST_VERSION(0,28,0)
+                    return QVariant((int)it->toUint32());
+#else
                     return QVariant((int)it->toLong());
+#endif
                 case Exiv2::unsignedRational:
                 case Exiv2::signedRational:
                     if (rationalAsListOfInts)

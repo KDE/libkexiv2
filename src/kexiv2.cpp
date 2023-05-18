@@ -207,7 +207,11 @@ bool KExiv2::loadFromData(const QByteArray& imgData) const
 
     try
     {
+#if EXIV2_TEST_VERSION(0,28,0)
+        Exiv2::Image::UniquePtr image = Exiv2::ImageFactory::open((Exiv2::byte*)imgData.data(), imgData.size());
+#else
         Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((Exiv2::byte*)imgData.data(), imgData.size());
+#endif
 
         d->filePath.clear();
         image->readMetadata();
@@ -263,7 +267,11 @@ bool KExiv2::load(const QString& filePath) const
 
     try
     {
+#if EXIV2_TEST_VERSION(0,28,0)
+        Exiv2::Image::UniquePtr image;
+#else
         Exiv2::Image::AutoPtr image;
+#endif
 
         image        = Exiv2::ImageFactory::open((const char*)(QFile::encodeName(filePath)).constData());
 
@@ -312,7 +320,11 @@ bool KExiv2::load(const QString& filePath) const
             QString xmpSidecarPath = sidecarFilePathForFile(filePath);
             QFileInfo xmpSidecarFileInfo(xmpSidecarPath);
 
+#if EXIV2_TEST_VERSION(0,28,0)
+            Exiv2::Image::UniquePtr xmpsidecar;
+#else
             Exiv2::Image::AutoPtr xmpsidecar;
+#endif
 
             if (xmpSidecarFileInfo.exists() && xmpSidecarFileInfo.isReadable())
             {
@@ -321,7 +333,11 @@ bool KExiv2::load(const QString& filePath) const
                 xmpsidecar->readMetadata();
 
                 // Merge
+#if EXIV2_TEST_VERSION(0,28,0)
+                d->loadSidecarData(std::move(xmpsidecar));
+#else
                 d->loadSidecarData(xmpsidecar);
+#endif
                 hasLoaded = true;
             }
         }
