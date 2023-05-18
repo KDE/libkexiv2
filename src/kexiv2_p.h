@@ -94,7 +94,11 @@ public:
 
     bool saveToXMPSidecar(const QFileInfo& finfo)                            const;
     bool saveToFile(const QFileInfo& finfo)                                  const;
+#if EXIV2_TEST_VERSION(0,28,0)
+    bool saveOperations(const QFileInfo& finfo, Exiv2::Image::UniquePtr image) const;
+#else
     bool saveOperations(const QFileInfo& finfo, Exiv2::Image::AutoPtr image) const;
+#endif
 
     /** Wrapper method to convert a Comments content to a QString.
      */
@@ -125,7 +129,11 @@ public:
 #ifdef _XMP_SUPPORT_
     Exiv2::XmpData&        xmpMetadata()         { return data.data()->xmpMetadata;        }
 
+#if EXIV2_TEST_VERSION(0,28,0)
+    void loadSidecarData(Exiv2::Image::UniquePtr xmpsidecar);
+#else
     void loadSidecarData(Exiv2::Image::AutoPtr xmpsidecar);
+#endif
 #endif
 
 public:

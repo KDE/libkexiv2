@@ -18,7 +18,12 @@ bool KExiv2::canWriteIptc(const QString& filePath)
 {
     try
     {
-        Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
+#if EXIV2_TEST_VERSION(0,28,0)
+        Exiv2::Image::UniquePtr image = 
+#else
+        Exiv2::Image::AutoPtr image = 
+#endif
+                                      Exiv2::ImageFactory::open((const char*)
                                       (QFile::encodeName(filePath).constData()));
 
         Exiv2::AccessMode mode = image->checkMode(Exiv2::mdIptc);
@@ -28,7 +33,12 @@ bool KExiv2::canWriteIptc(const QString& filePath)
     {
         std::string s(e.what());
         qCCritical(LIBKEXIV2_LOG) << "Cannot check Iptc access mode using Exiv2 (Error #"
-                                  << e.code() << ": " << s.c_str() << ")";
+#if EXIV2_TEST_VERSION(0,28,0)
+                                  << Exiv2::Error(e.code()).what()
+#else
+                                  << e.code() << ": " << s.c_str()
+#endif
+                                  << ")";
     }
     catch(...)
     {
@@ -80,7 +90,11 @@ QByteArray KExiv2::getIptc(bool addIrbHeader) const
                 c2 = Exiv2::IptcParser::encode(d->iptcMetadata());
             }
 
+#if EXIV2_TEST_VERSION(0,28,0)
+            QByteArray data((const char*)c2.c_data(), c2.size());
+#else
             QByteArray data((const char*)c2.pData_, c2.size_);
+#endif
             return data;
 
         }
@@ -510,7 +524,11 @@ bool KExiv2::setIptcTagsStringList(const char* iptcTagName, int maxSize,
             QString key = *it;
             key.truncate(maxSize);
 
+#if EXIV2_TEST_VERSION(0,28,0)
+            Exiv2::Value::UniquePtr val = Exiv2::Value::create(Exiv2::string);
+#else
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::string);
+#endif
             val->read(key.toUtf8().constData());
             iptcData.add(iptcTag, val.get());
         }
@@ -611,7 +629,11 @@ bool KExiv2::setIptcKeywords(const QStringList& oldKeywords, const QStringList& 
             QString key = *it;
             key.truncate(64);
 
+#if EXIV2_TEST_VERSION(0,28,0)
+            Exiv2::Value::UniquePtr val = Exiv2::Value::create(Exiv2::string);
+#else
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::string);
+#endif
             val->read(key.toUtf8().constData());
             iptcData.add(iptcTag, val.get());
         }
@@ -705,7 +727,11 @@ bool KExiv2::setIptcSubjects(const QStringList& oldSubjects, const QStringList& 
             QString key = *it;
             key.truncate(236);
 
+#if EXIV2_TEST_VERSION(0,28,0)
+            Exiv2::Value::UniquePtr val = Exiv2::Value::create(Exiv2::string);
+#else
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::string);
+#endif
             val->read(key.toUtf8().constData());
             iptcData.add(iptcTag, val.get());
         }
@@ -800,7 +826,11 @@ bool KExiv2::setIptcSubCategories(const QStringList& oldSubCategories, const QSt
             QString key = *it;
             key.truncate(32);
 
+#if EXIV2_TEST_VERSION(0,28,0)
+            Exiv2::Value::UniquePtr val = Exiv2::Value::create(Exiv2::string);
+#else
             Exiv2::Value::AutoPtr val = Exiv2::Value::create(Exiv2::string);
+#endif
             val->read(key.toUtf8().constData());
             iptcData.add(iptcTag, val.get());
         }

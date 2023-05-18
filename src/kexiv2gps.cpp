@@ -325,7 +325,11 @@ bool KExiv2::initializeGPSInfo(const bool setProgramName)
         // Do all the easy constant ones first.
         // GPSVersionID tag: standard says is should be four bytes: 02 00 00 00
         // (and, must be present).
+#if EXIV2_TEST_VERSION(0,28,0)
+        Exiv2::Value::UniquePtr value = Exiv2::Value::create(Exiv2::unsignedByte);
+#else
         Exiv2::Value::AutoPtr value = Exiv2::Value::create(Exiv2::unsignedByte);
+#endif
         value->read("2 0 0 0");
         d->exifMetadata().add(Exiv2::ExifKey("Exif.GPSInfo.GPSVersionID"), value.get());
 
@@ -380,7 +384,11 @@ bool KExiv2::setGPSInfo(const double* const altitude, const double latitude, con
         if (altitude)
         {
             // Altitude reference: byte "00" meaning "above sea level", "01" mening "behing sea level".
+#if EXIV2_TEST_VERSION(0,28,0)
+            Exiv2::Value::UniquePtr value = Exiv2::Value::create(Exiv2::unsignedByte);
+#else
             Exiv2::Value::AutoPtr value = Exiv2::Value::create(Exiv2::unsignedByte);
+#endif
 
             if ((*altitude) >= 0) value->read("0");
             else               value->read("1");

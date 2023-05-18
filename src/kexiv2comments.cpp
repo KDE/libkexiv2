@@ -18,7 +18,12 @@ bool KExiv2::canWriteComment(const QString& filePath)
 {
     try
     {
-        Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
+#if EXIV2_TEST_VERSION(0,28,0)
+        Exiv2::Image::UniquePtr image
+#else
+        Exiv2::Image::AutoPtr image
+#endif
+                                    = Exiv2::ImageFactory::open((const char*)
                                       (QFile::encodeName(filePath).constData()));
 
         Exiv2::AccessMode mode = image->checkMode(Exiv2::mdComment);
@@ -28,7 +33,12 @@ bool KExiv2::canWriteComment(const QString& filePath)
     {
         std::string s(e.what());
         qCCritical(LIBKEXIV2_LOG) << "Cannot check Comment access mode using Exiv2 (Error #"
-                                  << e.code() << ": " << s.c_str() << ")";
+#if EXIV2_TEST_VERSION(0,28,0)
+                                  << Exiv2::Error(e.code()).what()
+#else
+                                  << e.code() << ": " << s.c_str()
+#endif
+                                  << ")";
     }
     catch(...)
     {

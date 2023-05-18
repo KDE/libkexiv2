@@ -28,7 +28,12 @@ bool KExiv2::canWriteExif(const QString& filePath)
 {
     try
     {
-        Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
+#if EXIV2_TEST_VERSION(0,28,0)
+        Exiv2::Image::UniquePtr image =
+#else
+        Exiv2::Image::AutoPtr image =
+#endif
+                                      Exiv2::ImageFactory::open((const char*)
                                       (QFile::encodeName(filePath).constData()));
 
         Exiv2::AccessMode mode = image->checkMode(Exiv2::mdExif);
@@ -39,7 +44,12 @@ bool KExiv2::canWriteExif(const QString& filePath)
     {
         std::string s(e.what());
         qCCritical(LIBKEXIV2_LOG) << "Cannot check Exif access mode using Exiv2 (Error #"
-                    << e.code() << ": " << s.c_str() << ")";
+#if EXIV2_TEST_VERSION(0,28,0)
+                    << Exiv2::Error(e.code()).what()
+#else
+                    << e.code() << ": " << s.c_str()
+#endif
+                    << ")";
     }
     catch(...)
     {
@@ -658,7 +668,11 @@ bool KExiv2::getExifTagLong(const char* exifTagName, long& val, int component) c
 
         if (it != exifData.end() && it->count() > 0)
         {
+#if EXIV2_TEST_VERSION(0,28,0)
+            val = it->toUint32(component);
+#else
             val = it->toLong(component);
+#endif
             return true;
         }
     }
@@ -722,7 +736,11 @@ QVariant KExiv2::getExifTagVariant(const char* exifTagName, bool rationalAsListO
                 case Exiv2::signedShort:
                 case Exiv2::signedLong:
                     if (it->count() > component)
+#if EXIV2_TEST_VERSION(0,28,0)
+                        return QVariant((int)it->toUint32(component));
+#else
                         return QVariant((int)it->toLong(component));
+#endif
                     else
                         return QVariant(QVariant::Int);
                 case Exiv2::unsignedRational:
@@ -854,7 +872,11 @@ QImage KExiv2::getExifThumbnail(bool fixOrientation) const
     {
         Exiv2::ExifThumbC thumb(d->exifMetadata());
         Exiv2::DataBuf const c1 = thumb.copy();
+#if EXIV2_TEST_VERSION(0,28,0)
+        thumbnail.loadFromData(c1.c_data(), c1.size());
+#else
         thumbnail.loadFromData(c1.pData_, c1.size_);
+#endif
 
         if (!thumbnail.isNull())
         {
@@ -870,7 +892,11 @@ QImage KExiv2::getExifThumbnail(bool fixOrientation) const
 
                 if (it != exifData.end() && it->count())
                 {
+#if EXIV2_TEST_VERSION(0,28,0)
+                    long orientation = it->toUint32();
+#else
                     long orientation = it->toLong();
+#endif
                     qCDebug(LIBKEXIV2_LOG) << "Exif Thumbnail Orientation: " << (int)orientation;
                     rotateExifQImage(thumbnail, (ImageOrientation)orientation);
                 }
@@ -948,9 +974,15 @@ bool KExiv2::setTiffThumbnail(const QImage& thumbImage, bool setProgramName) con
         // Make sure IFD0 is explicitly marked as a main image
         Exiv2::ExifData::const_iterator pos = d->exifMetadata().findKey(Exiv2::ExifKey("Exif.Image.NewSubfileType"));
 
+#if EXIV2_TEST_VERSION(0,28,0)
+        if (pos == d->exifMetadata().end() || pos->count() != 1 || pos->toUint32() != 0)
+#else
         if (pos == d->exifMetadata().end() || pos->count() != 1 || pos->toLong() != 0)
+#endif
         {
-#if EXIV2_TEST_VERSION(0,27,0)
+#if EXIV2_TEST_VERSION(0,28,0)
+            throw Exiv2::Error(Exiv2::ErrorCode::kerErrorMessage, "Exif.Image.NewSubfileType missing or not set as main image");
+#elif EXIV2_TEST_VERSION(0,27,0)
             throw Exiv2::Error(Exiv2::kerErrorMessage, "Exif.Image.NewSubfileType missing or not set as main image");
 #else
             throw Exiv2::Error(1, "Exif.Image.NewSubfileType missing or not set as main image");
@@ -979,9 +1011,17 @@ bool KExiv2::setTiffThumbnail(const QImage& thumbImage, bool setProgramName) con
             Exiv2::DataBuf buf((Exiv2::byte *)data.data(), data.size());
             Exiv2::ULongValue val;
             val.read("0");
+#if EXIV2_TEST_VERSION(0,28,0)
+            val.setDataArea(buf.c_data(), buf.size());
+#else
             val.setDataArea(buf.pData_, buf.size_);
+#endif
             d->exifMetadata()["Exif.SubImage1.JPEGInterchangeFormat"]       = val;
+#if EXIV2_TEST_VERSION(0,28,0)
+            d->exifMetadata()["Exif.SubImage1.JPEGInterchangeFormatLength"] = uint32_t(buf.size());
+#else
             d->exifMetadata()["Exif.SubImage1.JPEGInterchangeFormatLength"] = uint32_t(buf.size_);
+#endif
             d->exifMetadata()["Exif.SubImage1.Compression"]                 = uint16_t(6); // JPEG (old-style)
             d->exifMetadata()["Exif.SubImage1.NewSubfileType"]              = uint32_t(1); // Thumbnail image
             return true;
