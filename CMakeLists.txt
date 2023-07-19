@@ -92,7 +92,7 @@ find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} REQUIRED NO_MODULE
         Gui
 )
 if (QT_MAJOR_VERSION STREQUAL "6")
-    find_package(Qt6Core5Compat)
+    find_package(Qt6Core5Compat REQUIRED)
 endif()
 
 find_package(LibExiv2 ${EXIV2_MIN_VERSION} REQUIRED)
