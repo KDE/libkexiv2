@@ -6,7 +6,7 @@
 
 cmake_minimum_required(VERSION 3.16)
 
-set(ECM_MIN_VERSION     "5.90.0")
+set(ECM_MIN_VERSION     "5.91.0")
 set(QT_MIN_VERSION      "5.15.0")
 set(EXIV2_MIN_VERSION   "0.25")
 
@@ -74,6 +74,7 @@ include(ECMSetupVersion)
 include(ECMMarkNonGuiExecutable)
 include(ECMQtDeclareLoggingCategory)
 include(ECMGenerateExportHeader)
+include(ECMDeprecationSettings)
 include(CMakePackageConfigHelpers)
 include(FeatureSummary)
 
@@ -99,10 +100,12 @@ find_package(LibExiv2 ${EXIV2_MIN_VERSION} REQUIRED)
 
 ############## Targets #########################
 
+ecm_set_disabled_deprecation_versions(
+    QT 5.14 # QTransform::toAffine
+)
+
 add_definitions(
     -DQT_DEPRECATED_WARNINGS
-    -DQT_DISABLE_DEPRECATED_BEFORE=0x050E00
-    -DQT_DEPRECATED_WARNINGS_SINCE=0x060000
     -DQT_USE_QSTRINGBUILDER
     -DQT_NO_CAST_TO_ASCII
     -DQT_NO_CAST_FROM_ASCII
