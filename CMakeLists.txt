@@ -58,7 +58,7 @@ set(KEXIV2_LIB_SO_AGE_VERSION "0")
 # TODO Qt6 or next ABI break: the very SO version is usually a single number, not a triple.
 # The library non-SO version as decribed in the link above is a separate thing
 # (cmp. VVERSION & SOVERSION args of set_target_properties(KF5KExiv2)
-# You can start with 0 or 1 when KF6KExiv2 is created
+# See below (where QT_MAJOR_VERSION is available) for resetting LIBKEXIV2_SO_VERSION to 0 with Qt6 builds
 set(LIBKEXIV2_SO_VERSION  "${KEXIV2_LIB_SO_CUR_VERSION}.${KEXIV2_LIB_SO_REV_VERSION}.${KEXIV2_LIB_SO_AGE_VERSION}")
 
 ############## ECM setup ######################
@@ -84,6 +84,11 @@ if (QT_MAJOR_VERSION STREQUAL "6")
 set(EXCLUDE_DEPRECATED_BEFORE_AND_AT 5.1.0 CACHE STRING "Control the range of deprecated API excluded from the build [default=5.1.0].")
 else()
 set(EXCLUDE_DEPRECATED_BEFORE_AND_AT 0 CACHE STRING "Control the range of deprecated API excluded from the build [default=0].")
+endif()
+
+if (QT_MAJOR_VERSION STREQUAL "6")
+    # starting with 0 for the new Qt6 series
+    set(LIBKEXIV2_SO_VERSION "0")
 endif()
 
 ############## Find Packages ###################
