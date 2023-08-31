@@ -494,16 +494,20 @@ bool KExiv2::setExifTagData(const char* exifTagName, const QByteArray& data, boo
 bool KExiv2::setExifTagVariant(const char* exifTagName, const QVariant& val,
                                bool rationalWantSmallDenominator, bool setProgramName) const
 {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    switch (val.metaType().id())
+#else
     switch (val.type())
+#endif
     {
-        case QVariant::Int:
-        case QVariant::UInt:
-        case QVariant::Bool:
-        case QVariant::LongLong:
-        case QVariant::ULongLong:
+        case QMetaType::Int:
+        case QMetaType::UInt:
+        case QMetaType::Bool:
+        case QMetaType::LongLong:
+        case QMetaType::ULongLong:
             return setExifTagLong(exifTagName, val.toInt(), setProgramName);
 
-        case QVariant::Double:
+        case QMetaType::Double:
         {
             long num, den;
 
@@ -514,7 +518,7 @@ bool KExiv2::setExifTagVariant(const char* exifTagName, const QVariant& val,
 
             return setExifTagRational(exifTagName, num, den, setProgramName);
         }
-        case QVariant::List:
+        case QMetaType::QVariantList:
         {
             long num = 0, den = 1;
             QList<QVariant> list = val.toList();
@@ -528,8 +532,8 @@ bool KExiv2::setExifTagVariant(const char* exifTagName, const QVariant& val,
             return setExifTagRational(exifTagName, num, den, setProgramName);
         }
 
-        case QVariant::Date:
-        case QVariant::DateTime:
+        case QMetaType::QDate:
+        case QMetaType::QDateTime:
         {
             QDateTime dateTime = val.toDateTime();
 
@@ -556,11 +560,11 @@ bool KExiv2::setExifTagVariant(const char* exifTagName, const QVariant& val,
             return false;
         }
 
-        case QVariant::String:
-        case QVariant::Char:
+        case QMetaType::QString:
+        case QMetaType::QChar:
             return setExifTagString(exifTagName, val.toString(), setProgramName);
 
-        case QVariant::ByteArray:
+        case QMetaType::QByteArray:
             return setExifTagData(exifTagName, val.toByteArray(), setProgramName);
         default:
             break;
@@ -575,19 +579,23 @@ QString KExiv2::createExifUserStringFromValue(const char* exifTagName, const QVa
         Exiv2::ExifKey key(exifTagName);
         Exiv2::Exifdatum datum(key);
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+        switch (val.metaType().id())
+#else
         switch (val.type())
+#endif
         {
-            case QVariant::Int:
-            case QVariant::Bool:
-            case QVariant::LongLong:
-            case QVariant::ULongLong:
+            case QMetaType::Int:
+            case QMetaType::Bool:
+            case QMetaType::LongLong:
+            case QMetaType::ULongLong:
                 datum = (int32_t)val.toInt();
                 break;
-            case QVariant::UInt:
+            case QMetaType::UInt:
                 datum = (uint32_t)val.toUInt();
                 break;
 
-            case QVariant::Double:
+            case QMetaType::Double:
             {
                 long num, den;
                 convertToRationalSmallDenominator(val.toDouble(), &num, &den);
@@ -597,7 +605,7 @@ QString KExiv2::createExifUserStringFromValue(const char* exifTagName, const QVa
                 datum = rational;
                 break;
             }
-            case QVariant::List:
+            case QMetaType::QVariantList:
             {
                 long num = 0, den = 1;
                 QList<QVariant> list = val.toList();
@@ -612,8 +620,8 @@ QString KExiv2::createExifUserStringFromValue(const char* exifTagName, const QVa
                 break;
             }
 
-            case QVariant::Date:
-            case QVariant::DateTime:
+            case QMetaType::QDate:
+            case QMetaType::QDateTime:
             {
                 QDateTime dateTime = val.toDateTime();
                 if(!dateTime.isValid())
@@ -624,8 +632,8 @@ QString KExiv2::createExifUserStringFromValue(const char* exifTagName, const QVa
                 break;
             }
 
-            case QVariant::String:
-            case QVariant::Char:
+            case QMetaType::QString:
+            case QMetaType::QChar:
                 datum = (std::string)val.toString().toLatin1().constData();
                 break;
             default:
@@ -742,14 +750,22 @@ QVariant KExiv2::getExifTagVariant(const char* exifTagName, bool rationalAsListO
                         return QVariant((int)it->toLong(component));
 #endif
                     else
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+                        return QVariant(QMetaType(QMetaType::Int));
+#else
                         return QVariant(QVariant::Int);
+#endif
                 case Exiv2::unsignedRational:
                 case Exiv2::signedRational:
 
                     if (rationalAsListOfInts)
                     {
                         if (it->count() <= component)
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+                            return QVariant(QMetaType(QMetaType::QVariantList));
+#else
                             return QVariant(QVariant::List);
+#endif
 
                         QList<QVariant> list;
                         list << (*it).toRational(component).first;
@@ -760,14 +776,22 @@ QVariant KExiv2::getExifTagVariant(const char* exifTagName, bool rationalAsListO
                     else
                     {
                         if (it->count() <= component)
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+                            return QVariant(QMetaType(QMetaType::Double));
+#else
                             return QVariant(QVariant::Double);
+#endif
 
                         // prefer double precision
                         double num = (*it).toRational(component).first;
                         double den = (*it).toRational(component).second;
 
                         if (den == 0.0)
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+                            return QVariant(QMetaType(QMetaType::Double));
+#else
                             return QVariant(QVariant::Double);
+#endif
 
                         return QVariant(num / den);
                     }
