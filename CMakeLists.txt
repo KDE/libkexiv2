@@ -88,6 +88,10 @@ endif()
 
 ############## Find Packages ###################
 
+if (QT_MAJOR_VERSION STREQUAL "6")
+    set(REQUIRED_QT_VERSION "6.5.0")
+endif()
+
 find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} REQUIRED NO_MODULE
     COMPONENTS
         Core
@@ -101,9 +105,15 @@ find_package(LibExiv2 ${EXIV2_MIN_VERSION} REQUIRED)
 
 ############## Targets #########################
 
-ecm_set_disabled_deprecation_versions(
-    QT 5.14 # QTransform::toAffine
-)
+if (QT_MAJOR_VERSION STREQUAL "6")
+    ecm_set_disabled_deprecation_versions(
+        QT 6.5
+    )
+else()
+    ecm_set_disabled_deprecation_versions(
+        QT 5.14 # QTransform::toAffine
+    )
+endif()
 
 add_definitions(
     -DQT_DEPRECATED_WARNINGS
