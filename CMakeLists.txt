@@ -10,7 +10,7 @@ set(ECM_MIN_VERSION     "5.91.0")
 set(QT_MIN_VERSION      "5.15.0")
 set(EXIV2_MIN_VERSION   "0.25")
 
-project(libkexiv2 VERSION "5.0.0")
+project(libkexiv2 VERSION "5.1.0")
 
 set(CMAKE_CXX_STANDARD 14) # exiv is not compatible with C++ > 14 yet
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -48,6 +48,7 @@ message(STATUS "Starting CMake configuration for: ${PROJECT_NAME}")
 # 2.3.1 => 11.2.0                              - Add new method to set specific XMP tag string
 # 2.4.0 => 11.3.0                              - Add new method to access on text edit widget from AltLangStrEdit
 # 5.0.0 => 15.0.0    (Released with KDE 5.x)
+# 5.1.0 => 15.0.0    (Released with KDE Gear) - Add QTransform-varianst methods RotationMatrix
 
 # Library ABI version used by linker.
 # For details : https://www.gnu.org/software/libtool/manual/libtool.html#Updating-version-info
