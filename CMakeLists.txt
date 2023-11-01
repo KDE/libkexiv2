@@ -94,7 +94,7 @@ endif()
 ############## Find Packages ###################
 
 if (QT_MAJOR_VERSION STREQUAL "6")
-    set(REQUIRED_QT_VERSION "6.5.0")
+    set(QT_MIN_VERSION "6.5.0")
 endif()
 
 find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} REQUIRED NO_MODULE
