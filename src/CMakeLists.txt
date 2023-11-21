@@ -108,10 +108,6 @@ target_link_libraries(KExiv2
         LibExiv2::LibExiv2
 )
 
-if (TARGET Qt6::Core5Compat)
-    target_link_libraries(KExiv2 PRIVATE Qt6::Core5Compat) # QRegExp
-endif()
-
 if( WIN32 )
     target_link_libraries(KExiv2 ${EXPAT_LIBRARIES})
 endif()
