@@ -1,0 +1,34 @@
+/*!
+    \page kexiv2-index.html
+    \title KExiv2
+
+    libKExiv2 is a wrapper around \l {https://exiv2.org/} {exiv2}, providing read/write access to EXIF, IPTC and XMP metadata.
+
+    The main differences to exiv2 are:
+
+    \list
+    \li Functions take standard Qt containers as parameters
+    \li Helper functions for GPS data
+    \li Transparent XMP sidecar support
+    \endlist
+
+    To get started, have a look at the KExiv2Iface::KExiv2 class.
+
+    \section1 Using the Module
+
+    \include {module-use.qdocinc} {using the c++ api}
+
+    \section2 Building with CMake
+
+    \include {module-use.qdocinc} {building with cmake} {KF6} {KExiv2} {KF6::KExiv2}
+
+    \section1 API Reference
+
+    \list
+        \li \l{KExiv2 C++ Classes}
+    \endlist
+
+    \section1 Licenses
+
+    TODO
+*/
