@@ -19,14 +19,27 @@
 namespace KExiv2Iface
 {
 
+/*!
+ * \class KExiv2Iface::KExiv2Data
+ * \inmodule KExiv2
+ * \inheaderfile KExiv2/KExiv2Data
+ */
 class LIBKEXIV2_EXPORT KExiv2Data
 {
 public:
 
+    /*!
+     */
     KExiv2Data();
+    /*!
+     */
     KExiv2Data(const KExiv2Data&);
+    /*!
+     */
     ~KExiv2Data();
 
+    /*!
+     */
     KExiv2Data& operator=(const KExiv2Data&);
 
 private:

@@ -72,6 +72,7 @@ include(ECMMarkNonGuiExecutable)
 include(ECMQtDeclareLoggingCategory)
 include(ECMGenerateExportHeader)
 include(ECMDeprecationSettings)
+include(ECMGenerateQDoc)
 include(CMakePackageConfigHelpers)
 include(FeatureSummary)
 
