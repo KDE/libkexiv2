@@ -2,7 +2,6 @@
    \module KExiv2
    \title KExiv2 C++ Classes
    \inmodule modules
-   \cmakepackage KF6
-   \cmakecomponent KExiv2
+   \cmakepackage KExiv2Qt6
    \brief Todo.
  */
