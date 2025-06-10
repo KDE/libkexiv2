@@ -20,7 +20,14 @@
 
     \section2 Building with CMake
 
-    \include {module-use.qdocinc} {building with cmake} {KF6} {KExiv2} {KF6::KExiv2}
+    Use the \c find_package() command to locate the library:
+
+    \code
+    find_package(KExiv2Qt6 REQUIRED)
+    target_link_libraries(mytarget PRIVATE KExiv2Qt6)
+    \endcode
+
+    For more details, see the \l {https://doc.qt.io/qt-6/cmake-manual.html} {Build with CMake} overview.
 
     \section1 API Reference
 
