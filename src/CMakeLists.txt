@@ -27,7 +27,7 @@ ecm_setup_version(${libkexiv2_VERSION}
 
 kde_enable_exceptions()
 
-add_library(KExiv2 SHARED)
+add_library(KExiv2)
 
 set_target_properties(KExiv2  PROPERTIES
     OUTPUT_NAME KF${QT_MAJOR_VERSION}KExiv2
