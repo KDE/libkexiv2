@@ -4,19 +4,11 @@
 # SPDX-License-Identifier: BSD-3-Clause
 #
 
-if (QT_MAJOR_VERSION STREQUAL "5")
-    set(KEXIV2_INSTALL_INCLUDEDIR "${KDE_INSTALL_INCLUDEDIR_KF}/KExiv2")
-    set(KEXIV2_CMAKECONFIG_NAME "KF${QT_MAJOR_VERSION}KExiv2")
-    set(LIBRARYFILE_NAME "KF5KExiv2")
-    set(TARGET_EXPORT_NAME "KExiv2")
-    set(NAMESPACE_NAME "KF5::")
-else()
-    set(KEXIV2_INSTALL_INCLUDEDIR "${KDE_INSTALL_INCLUDEDIR}/KExiv2Qt6")
-    set(KEXIV2_CMAKECONFIG_NAME "KExiv2Qt6")
-    set(LIBRARYFILE_NAME "KExiv2Qt6")
-    set(TARGET_EXPORT_NAME "KExiv2Qt6")
-    set(NAMESPACE_NAME "")
-endif()
+set(KEXIV2_INSTALL_INCLUDEDIR "${KDE_INSTALL_INCLUDEDIR}/KExiv2Qt6")
+set(KEXIV2_CMAKECONFIG_NAME "KExiv2Qt6")
+set(LIBRARYFILE_NAME "KExiv2Qt6")
+set(TARGET_EXPORT_NAME "KExiv2Qt6")
+set(NAMESPACE_NAME "")
 
 ecm_setup_version(${libkexiv2_VERSION}
     VARIABLE_PREFIX      KEXIV2
@@ -72,16 +64,12 @@ ecm_generate_headers(kexiv2_CamelCase_HEADERS
     REQUIRED_HEADERS kexiv2_HEADERS
 )
 
-if (QT_MAJOR_VERSION STREQUAL "5")
-    set(_generate_export_header_version_args)
+# For Qt6/KF6 world transitively include the version header
+if(ECM_VERSION VERSION_LESS "5.106")
+    set(include_version_header_code "#include <libkexiv2_version.h>\n")
+    set(_generate_export_header_version_args CUSTOM_CONTENT_FROM_VARIABLE include_version_header_code)
 else()
-    # For Qt6/KF6 world transitively include the version header
-    if(ECM_VERSION VERSION_LESS "5.106")
-        set(include_version_header_code "#include <libkexiv2_version.h>\n")
-        set(_generate_export_header_version_args CUSTOM_CONTENT_FROM_VARIABLE include_version_header_code)
-    else()
-        set(_generate_export_header_version_args USE_VERSION_HEADER libkexiv2_version.h)
-    endif()
+    set(_generate_export_header_version_args USE_VERSION_HEADER libkexiv2_version.h)
 endif()
 
 ecm_generate_export_header(KExiv2
