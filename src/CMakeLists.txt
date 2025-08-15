@@ -85,7 +85,7 @@ target_link_libraries(KExiv2
         Qt::Gui
         Qt::Core
     PRIVATE
-        LibExiv2::LibExiv2
+        ${EXIV_TARGET_NAME}
 )
 
 if( WIN32 )

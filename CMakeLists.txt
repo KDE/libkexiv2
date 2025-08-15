@@ -85,7 +85,17 @@ find_package(Qt6 ${QT_MIN_VERSION} REQUIRED NO_MODULE
         Gui
 )
 
-find_package(LibExiv2 ${EXIV2_MIN_VERSION} REQUIRED)
+find_package(exiv2 REQUIRED CONFIG)
+if (${exiv2_VERSION} VERSION_LESS ${EXIV2_MIN_VERSION})
+    message(ERROR "exiv version ${exiv2_VERSION} is too old. ${EXIV2_MIN_VERSION} is required")
+endif()
+# not all exiv2 versions define the namespaced target and not all versions include the non namespaced one
+# so use this check until we can depend on version >= 0.28.2 and use the namespaced one
+if (TARGET Exiv2::exiv2lib)
+    set (EXIV_TARGET_NAME Exiv2::exiv2lib)
+else()
+    set (EXIV_TARGET_NAME exiv2lib)
+endif()
 
 ############## Targets #########################
 
