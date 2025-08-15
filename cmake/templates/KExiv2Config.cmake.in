@@ -4,7 +4,7 @@ include(CMakeFindDependencyMacro)
 find_dependency(Qt6Core @QT_MIN_VERSION@)
 find_dependency(Qt6Gui @QT_MIN_VERSION@)
 if(NOT @BUILD_SHARED_LIBS@)
-    find_dependency(LibExiv2 @EXIV2_MIN_VERSION@)
+    find_dependency(exiv2)
 endif()
 
 include("${CMAKE_CURRENT_LIST_DIR}/@KEXIV2_CMAKECONFIG_NAME@Targets.cmake")
