@@ -494,11 +494,7 @@ bool KExiv2::setExifTagData(const char* exifTagName, const QByteArray& data, boo
 bool KExiv2::setExifTagVariant(const char* exifTagName, const QVariant& val,
                                bool rationalWantSmallDenominator, bool setProgramName) const
 {
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
     switch (val.metaType().id())
-#else
-    switch (val.type())
-#endif
     {
         case QMetaType::Int:
         case QMetaType::UInt:
@@ -579,11 +575,7 @@ QString KExiv2::createExifUserStringFromValue(const char* exifTagName, const QVa
         Exiv2::ExifKey key(exifTagName);
         Exiv2::Exifdatum datum(key);
 
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
         switch (val.metaType().id())
-#else
-        switch (val.type())
-#endif
         {
             case QMetaType::Int:
             case QMetaType::Bool:
@@ -750,22 +742,14 @@ QVariant KExiv2::getExifTagVariant(const char* exifTagName, bool rationalAsListO
                         return QVariant((int)it->toLong(component));
 #endif
                     else
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
                         return QVariant(QMetaType(QMetaType::Int));
-#else
-                        return QVariant(QVariant::Int);
-#endif
                 case Exiv2::unsignedRational:
                 case Exiv2::signedRational:
 
                     if (rationalAsListOfInts)
                     {
                         if (it->count() <= component)
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
                             return QVariant(QMetaType(QMetaType::QVariantList));
-#else
-                            return QVariant(QVariant::List);
-#endif
 
                         QList<QVariant> list;
                         list << (*it).toRational(component).first;
@@ -776,22 +760,14 @@ QVariant KExiv2::getExifTagVariant(const char* exifTagName, bool rationalAsListO
                     else
                     {
                         if (it->count() <= component)
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
                             return QVariant(QMetaType(QMetaType::Double));
-#else
-                            return QVariant(QVariant::Double);
-#endif
 
                         // prefer double precision
                         double num = (*it).toRational(component).first;
                         double den = (*it).toRational(component).second;
 
                         if (den == 0.0)
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
                             return QVariant(QMetaType(QMetaType::Double));
-#else
-                            return QVariant(QVariant::Double);
-#endif
 
                         return QVariant(num / den);
                     }

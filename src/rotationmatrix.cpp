@@ -172,7 +172,7 @@ RotationMatrix& RotationMatrix::operator*=(TransformationAction action)
 
 RotationMatrix& RotationMatrix::operator*=(QList<TransformationAction> actions)
 {
-    for (const TransformationAction& action : qAsConst(actions))
+    for (const TransformationAction& action : std::as_const(actions))
     {
         *this *= Matrix::matrix(action);
     }
@@ -315,23 +315,5 @@ QTransform RotationMatrix::toTransform(KExiv2::ImageOrientation orientation)
 
     return matrix;
 }
-
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-#if KEXIV2_BUILD_DEPRECATED_SINCE(5, 1)
-QMatrix RotationMatrix::toMatrix() const
-{
-    return toMatrix(exifOrientation());
-}
-#endif
-#endif
-
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-#if KEXIV2_BUILD_DEPRECATED_SINCE(5, 1)
-QMatrix RotationMatrix::toMatrix(KExiv2::ImageOrientation orientation)
-{
-    return toTransform(orientation).toAffine();
-}
-#endif
-#endif
 
 }  // namespace KExiv2Iface

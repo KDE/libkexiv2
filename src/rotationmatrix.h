@@ -17,11 +17,6 @@
 // Qt includes
 #include <QtGlobal>
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-#if KEXIV2_ENABLE_DEPRECATED_SINCE(5, 1)
-#include <QMatrix>
-#endif
-#endif
 #include <QTransform>
 
 namespace KExiv2Iface
@@ -101,23 +96,6 @@ public:
      * @since 5.1
      */
     static QTransform toTransform(KExiv2::ImageOrientation orientation);
-
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-#if KEXIV2_ENABLE_DEPRECATED_SINCE(5, 1)
-    /// Returns a QMatrix representing this matrix
-    /// @deprecated Since 5.1, use toTransform().
-    KEXIV2_DEPRECATED_VERSION(5, 1, "Use toTransform()")
-    QMatrix toMatrix() const;
-#endif
-#endif
-
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-#if KEXIV2_ENABLE_DEPRECATED_SINCE(5, 1)
-    /// Returns a QMatrix for the given Exif orientation
-    KEXIV2_DEPRECATED_VERSION(5, 1, "Use toTransform(KExiv2::ImageOrientation)")
-    static QMatrix toMatrix(KExiv2::ImageOrientation orientation);
-#endif
-#endif
 
     RotationMatrix(int m11, int m12, int m21, int m22);
 

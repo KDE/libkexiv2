@@ -980,11 +980,7 @@ QVariant KExiv2::getXmpTagVariant(const char* xmpTagName, bool rationalAsListOfI
                         double den = (*it).toRational().second;
 
                         if (den == 0.0)
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
                             return QVariant(QMetaType(QMetaType::Double));
-#else
-                            return QVariant(QVariant::Double);
-#endif
 
                         return QVariant(num / den);
                     }
