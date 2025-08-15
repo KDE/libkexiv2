@@ -982,10 +982,8 @@ bool KExiv2::setTiffThumbnail(const QImage& thumbImage, bool setProgramName) con
         {
 #if EXIV2_TEST_VERSION(0,28,0)
             throw Exiv2::Error(Exiv2::ErrorCode::kerErrorMessage, "Exif.Image.NewSubfileType missing or not set as main image");
-#elif EXIV2_TEST_VERSION(0,27,0)
-            throw Exiv2::Error(Exiv2::kerErrorMessage, "Exif.Image.NewSubfileType missing or not set as main image");
 #else
-            throw Exiv2::Error(1, "Exif.Image.NewSubfileType missing or not set as main image");
+            throw Exiv2::Error(Exiv2::kerErrorMessage, "Exif.Image.NewSubfileType missing or not set as main image");
 #endif
         }
 

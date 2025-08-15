@@ -8,7 +8,7 @@ cmake_minimum_required(VERSION 3.16)
 
 set(ECM_MIN_VERSION     "6.0")
 set(QT_MIN_VERSION      "6.5.0")
-set(EXIV2_MIN_VERSION   "0.25")
+set(EXIV2_MIN_VERSION   "0.27")
 
 project(libkexiv2 VERSION "5.1.0")
 
