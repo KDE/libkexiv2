@@ -21,6 +21,8 @@ kde_enable_exceptions()
 
 add_library(KExiv2)
 
+ecm_generate_qdoc(KExiv2 kexiv2.qdocconf)
+
 set_target_properties(KExiv2  PROPERTIES
     OUTPUT_NAME KF6KExiv2
     VERSION     ${KEXIV2_VERSION}

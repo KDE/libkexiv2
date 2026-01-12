@@ -1,0 +1,8 @@
+/*!
+   \module KExiv2
+   \title KExiv2 C++ Classes
+   \inmodule modules
+   \cmakepackage KExiv2Qt6
+   \cmaketargetitem KExiv2Qt6
+   \brief Todo.
+ */

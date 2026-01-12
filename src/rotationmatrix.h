@@ -22,78 +22,118 @@
 namespace KExiv2Iface
 {
 
-/**
- * @class RotationMatrix rotationmatrix.h <KExiv2/RotationMatrix>
- *
- * RotationMatrix
+/*!
+ * \class KExiv2Iface::RotationMatrix
+ * \inmodule KExiv2
+ * \inheaderfile KExiv2/RotationMatrix
  */
 class LIBKEXIV2_EXPORT RotationMatrix
 {
 
 public:
 
-    /** This describes single transform primitives.
-     *  Note some of the defined Exif rotation flags combine
-     *  two of these actions.
-     *  The enum values correspond to those defined
-     *  as JXFORM_CODE in the often used the JPEG tool transupp.h.
+    /*!
+     * \enum KExiv2Iface::RotationMatrix::TransformationAction
+     * This describes single transform primitives.
+     *
+     * Note some of the defined Exif rotation flags combine
+     * two of these actions.
+     *
+     * The enum values correspond to those defined
+     * as JXFORM_CODE in the often used the JPEG tool transupp.h.
+     *
+     * \value NoTransformation
+     *        No transformation
+     * \value FlipHorizontal
+     *        Horizontal flip
+     * \value FlipVertical
+     *        Vertical flip
+     * \value Rotate90
+     *        90-degree clockwise rotation
+     * \value Rotate180
+     *        180-degree rotation
+     * \value Rotate180
+     *        270-degree clockwise (or 90 ccw)
      */
     enum TransformationAction
     {
-        NoTransformation = 0, /// no transformation
-        FlipHorizontal   = 1, /// horizontal flip
-        FlipVertical     = 2, /// vertical flip
-        Rotate90         = 5, /// 90-degree clockwise rotation
-        Rotate180        = 6, /// 180-degree rotation
-        Rotate270        = 7  /// 270-degree clockwise (or 90 ccw)
+        NoTransformation = 0,
+        FlipHorizontal   = 1,
+        FlipVertical     = 2,
+        Rotate90         = 5,
+        Rotate180        = 6,
+        Rotate270        = 7
     };
 
 public:
 
-    /// Constructs the identity matrix (the matrix describing no transformation)
+    /*!
+     * Constructs the identity matrix (the matrix describing no transformation).
+     */
     RotationMatrix();
-    /// Returns the matrix corresponding to the given TransformationAction
+    /*!
+     * Returns the matrix corresponding to the given TransformationAction.
+     */
     RotationMatrix(TransformationAction action);
-    /// Returns the matrix corresponding to the given TransformationAction
+    /*!
+     * Returns the matrix corresponding to the given TransformationAction.
+     */
     RotationMatrix(KExiv2::ImageOrientation exifOrientation);
 
+    /*!
+     */
     bool operator==(const RotationMatrix& ma) const;
+    /*!
+     */
     bool operator!=(const RotationMatrix& ma) const;
 
-    /// Returns true of this matrix describes no transformation (is the identity matrix)
+    /*!
+     * Returns true of this matrix describes no transformation (is the identity matrix).
+     */
     bool isNoTransform() const;
 
+    /*!
+     */
     RotationMatrix& operator*=(const RotationMatrix& ma);
 
-    /// Applies the given transform to this matrix
+    /*!
+     * Applies the given transform to this matrix.
+     */
     RotationMatrix& operator*=(TransformationAction action);
 
-    /// Applies the given transform actions to this matrix
+    /*!
+     * Applies the given transform actions to this matrix.
+     */
     RotationMatrix& operator*=(QList<TransformationAction> actions);
 
-    /// Applies the given Exif orientation flag to this matrix
+    /*!
+     * Applies the given Exif orientation flag to this matrix.
+     */
     RotationMatrix& operator*=(KExiv2::ImageOrientation exifOrientation);
 
-    /** Returns the actions described by this matrix. The order matters.
+    /*! Returns the actions described by this matrix. The order matters.
+     *
      *  Not all possible matrices are supported, but all those that can be combined
      *  by Exif rotation flags and the transform actions above.
+     *
      *  If isNoTransform() or the matrix is not supported returns an empty list. */
     QList<TransformationAction> transformations() const;
 
-    /** Returns the Exif orienation flag describing this matrix.
+    /*! Returns the Exif orienation flag describing this matrix.
+     *
      *  Returns ORIENTATION_UNSPECIFIED if no flag matches this matrix.
      */
     KExiv2::ImageOrientation exifOrientation() const;
 
-   /**
-     * Returns a QTransform representing this matrix
-     * @since 5.1
+    /*!
+     * Returns a QTransform representing this matrix.
+     * \since 5.1
      */
     QTransform toTransform() const;
 
-    /**
-     * Returns a QTransform for the given Exif orientation
-     * @since 5.1
+    /*!
+     * Returns a QTransform for the given Exif orientation.
+     * \since 5.1
      */
     static QTransform toTransform(KExiv2::ImageOrientation orientation);
 

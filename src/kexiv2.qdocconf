@@ -1,0 +1,31 @@
+include($KDE_DOCS/global/qt-module-defaults.qdocconf)
+
+project = KExiv2
+description = Todo
+
+documentationinheaders = true
+
+headerdirs += .
+sourcedirs += .
+
+outputformats = HTML
+
+depends += kde qtcore
+
+navigation.landingpage = "KExiv2"
+
+qhp.projects            = KExiv2
+
+qhp.KExiv2.file                = kexiv2.qhp
+qhp.KExiv2.namespace           =
+qhp.KExiv2.virtualFolder       = kexiv2
+qhp.KExiv2.indexTitle          = KExiv2
+qhp.KExiv2.indexRoot           =
+
+qhp.KExiv2.subprojects         = classes
+qhp.KExiv2.subprojects.classes.title = C++ Classes
+qhp.KExiv2.subprojects.classes.indexTitle = KExiv2 C++ Classes
+qhp.KExiv2.subprojects.classes.selectors = class fake:headerfile
+qhp.KExiv2.subprojects.classes.sortPages = true
+
+tagfile = kexiv2.tags
