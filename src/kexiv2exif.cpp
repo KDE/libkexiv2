@@ -893,12 +893,14 @@ QImage KExiv2::getExifThumbnail(bool fixOrientation) const
                 if (it != exifData.end() && it->count())
                 {
 #if EXIV2_TEST_VERSION(0,28,0)
-                    long orientation = it->toUint32();
+                    const long orientation = it->toUint32();
 #else
-                    long orientation = it->toLong();
+                    const long orientation = it->toLong();
 #endif
                     qCDebug(LIBKEXIV2_LOG) << "Exif Thumbnail Orientation: " << (int)orientation;
-                    rotateExifQImage(thumbnail, (ImageOrientation)orientation);
+                    if (orientation >= ORIENTATION_FIRST_VALUE && orientation <= ORIENTATION_LAST_VALUE) {
+                        rotateExifQImage(thumbnail, (ImageOrientation)orientation);
+                    }
                 }
 
                 return thumbnail;

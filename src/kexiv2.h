@@ -104,6 +104,7 @@ public:
     enum ImageOrientation
     {
         ORIENTATION_UNSPECIFIED  = 0,
+        ORIENTATION_FIRST_VALUE  = ORIENTATION_UNSPECIFIED,
         ORIENTATION_NORMAL       = 1,
         ORIENTATION_HFLIP        = 2,
         ORIENTATION_ROT_180      = 3,
@@ -111,7 +112,8 @@ public:
         ORIENTATION_ROT_90_HFLIP = 5,
         ORIENTATION_ROT_90       = 6,
         ORIENTATION_ROT_90_VFLIP = 7,
-        ORIENTATION_ROT_270      = 8
+        ORIENTATION_ROT_270      = 8,
+        ORIENTATION_LAST_VALUE  = ORIENTATION_ROT_270
     };
 
     /*!
