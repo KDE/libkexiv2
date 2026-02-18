@@ -5,6 +5,8 @@
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
+#include <mutex>
+
 #include "kexiv2.h"
 #include "kexiv2_p.h"
 
@@ -25,6 +27,8 @@ KExiv2::KExiv2(const KExiv2& metadata)
     : d(new KExiv2Private)
 {
     d->copyPrivateData(metadata.d.get());
+
+    initializeExiv2();
 }
 
 KExiv2::KExiv2(const KExiv2Data& data)
@@ -50,18 +54,21 @@ KExiv2& KExiv2::operator=(const KExiv2& metadata)
 
 //-- Statics methods ----------------------------------------------
 
-bool KExiv2::initializeExiv2()
+static bool s_exiv2InitializationSuccessful = false;
+static std::once_flag s_exiv2Initialized;
+
+static void initializeExiv2Internal()
 {
 #ifdef _XMP_SUPPORT_
 
     if (!Exiv2::XmpParser::initialize())
-        return false;
+        return;
 
-    registerXmpNameSpace(QString::fromLatin1("http://ns.adobe.com/lightroom/1.0/"),  QString::fromLatin1("lr"));
-    registerXmpNameSpace(QString::fromLatin1("http://www.digikam.org/ns/kipi/1.0/"), QString::fromLatin1("kipi"));
-    registerXmpNameSpace(QString::fromLatin1("http://ns.microsoft.com/photo/1.2/"),  QString::fromLatin1("MP"));
-    registerXmpNameSpace(QString::fromLatin1("http://ns.acdsee.com/iptc/1.0/"),      QString::fromLatin1("acdsee"));
-    registerXmpNameSpace(QString::fromLatin1("http://www.video"),                    QString::fromLatin1("video"));
+    KExiv2::registerXmpNameSpace(QString::fromLatin1("http://ns.adobe.com/lightroom/1.0/"),  QString::fromLatin1("lr"));
+    KExiv2::registerXmpNameSpace(QString::fromLatin1("http://www.digikam.org/ns/kipi/1.0/"), QString::fromLatin1("kipi"));
+    KExiv2::registerXmpNameSpace(QString::fromLatin1("http://ns.microsoft.com/photo/1.2/"),  QString::fromLatin1("MP"));
+    KExiv2::registerXmpNameSpace(QString::fromLatin1("http://ns.acdsee.com/iptc/1.0/"),      QString::fromLatin1("acdsee"));
+    KExiv2::registerXmpNameSpace(QString::fromLatin1("http://www.video"),                    QString::fromLatin1("video"));
 
 #endif // _XMP_SUPPORT_
 
@@ -69,7 +76,13 @@ bool KExiv2::initializeExiv2()
     Exiv2::enableBMFF(true);
 #endif
 
-    return true;
+    s_exiv2InitializationSuccessful = true;
+}
+
+bool KExiv2::initializeExiv2()
+{
+    std::call_once(s_exiv2Initialized, initializeExiv2Internal);
+    return s_exiv2InitializationSuccessful;
 }
 
 bool KExiv2::cleanupExiv2()
