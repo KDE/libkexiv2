@@ -56,12 +56,22 @@ KExiv2& KExiv2::operator=(const KExiv2& metadata)
 
 static bool s_exiv2InitializationSuccessful = false;
 static std::once_flag s_exiv2Initialized;
+static std::mutex s_exiv2Mutex;
+
+static void exiv2LockFunction(void *pLockData, bool lockUnlock)
+{
+    std::mutex *mutex = reinterpret_cast<std::mutex*>(pLockData);
+    if (lockUnlock)
+        mutex->lock();
+    else
+        mutex->unlock();
+}
 
 static void initializeExiv2Internal()
 {
 #ifdef _XMP_SUPPORT_
 
-    if (!Exiv2::XmpParser::initialize())
+    if (!Exiv2::XmpParser::initialize(exiv2LockFunction, &s_exiv2Mutex))
         return;
 
     KExiv2::registerXmpNameSpace(QString::fromLatin1("http://ns.adobe.com/lightroom/1.0/"),  QString::fromLatin1("lr"));
