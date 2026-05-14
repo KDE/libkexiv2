@@ -91,7 +91,7 @@ if( WIN32 )
 endif()
 
 install(TARGETS KExiv2
-    EXPORT  KExiv2Targets ${KF_INSTALL_TARGETS_DEFAULT_ARGS}
+    EXPORT  KExiv2Targets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS}
 )
 
 install(FILES
