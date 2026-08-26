@@ -7,7 +7,7 @@
 set(KEXIV2_INSTALL_INCLUDEDIR "${KDE_INSTALL_INCLUDEDIR}/KExiv2Qt6")
 set(KEXIV2_CMAKECONFIG_NAME "KExiv2Qt6")
 
-ecm_setup_version(${libkexiv2_VERSION}
+ecm_setup_version(PROJECT
     VARIABLE_PREFIX      KEXIV2
     VERSION_HEADER       "libkexiv2_version.h"
     PACKAGE_VERSION_FILE "${KEXIV2_CMAKECONFIG_NAME}ConfigVersion.cmake"
