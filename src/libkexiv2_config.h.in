@@ -1,0 +1,2 @@
+/* Defines if Exiv2::DecodeParams exists */
+#cmakedefine01 HAVE_EXIV2_DECODE_PARAMS

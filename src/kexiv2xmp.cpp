@@ -10,6 +10,7 @@
 #include "kexiv2.h"
 #include "kexiv2_p.h"
 #include "libkexiv2_debug.h"
+#include "libkexiv2_config.h"
 
 namespace KExiv2Iface
 {
@@ -22,7 +23,7 @@ bool KExiv2::canWriteXmp(const QString& filePath)
 #if EXIV2_TEST_VERSION(0,28,0)
         Exiv2::Image::UniquePtr image =
 #else
-        Exiv2::Image::AutoPtr image = 
+        Exiv2::Image::AutoPtr image =
 #endif
                                       Exiv2::ImageFactory::open((const char*)
                                       (QFile::encodeName(filePath).constData()));
@@ -134,7 +135,14 @@ bool KExiv2::setXmp(const QByteArray& data) const
             std::string xmpPacket;
             xmpPacket.assign(data.data(), data.size());
 
+#if HAVE_EXIV2_DECODE_PARAMS
+            // 1000 is the internal default max_recursion_depth used by Exiv2:
+            // https://github.com/Exiv2/exiv2/blob/60d59d6796a2cde2fe58a6e5cd0ef0040085965a/src/image.cpp#L890
+            const Exiv2::DecodeParams dp(1000);
+            if (Exiv2::XmpParser::decode(d->xmpMetadata(), xmpPacket, dp) != 0)
+#else
             if (Exiv2::XmpParser::decode(d->xmpMetadata(), xmpPacket) != 0)
+#endif
                 return false;
             else
                 return true;

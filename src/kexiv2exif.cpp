@@ -7,6 +7,7 @@
 
 #include "kexiv2.h"
 #include "kexiv2_p.h"
+#include "libkexiv2_config.h"
 
 // C++ includes
 
@@ -130,7 +131,14 @@ bool KExiv2::setExif(const QByteArray& data) const
     {
         if (!data.isEmpty())
         {
+#if HAVE_EXIV2_DECODE_PARAMS
+            // 1000 is the internal default max_recursion_depth used by Exiv2:
+            // https://github.com/Exiv2/exiv2/blob/60d59d6796a2cde2fe58a6e5cd0ef0040085965a/src/image.cpp#L890
+            const Exiv2::DecodeParams dp(1000);
+            Exiv2::ExifParser::decode(d->exifMetadata(), (const Exiv2::byte*)data.data(), data.size(), dp);
+#else
             Exiv2::ExifParser::decode(d->exifMetadata(), (const Exiv2::byte*)data.data(), data.size());
+#endif
             return (!d->exifMetadata().empty());
         }
     }

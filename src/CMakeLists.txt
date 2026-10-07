@@ -31,6 +31,8 @@ if( WIN32 )
     target_compile_definitions(KExiv2 PRIVATE -DEXV_HAVE_DLL)
 endif()
 
+configure_file(libkexiv2_config.h.in ${CMAKE_CURRENT_BINARY_DIR}/libkexiv2_config.h)
+
 target_sources(KExiv2 PRIVATE
     kexiv2.cpp
     kexiv2_p.cpp

@@ -98,6 +98,17 @@ else()
     set (EXIV_TARGET_NAME exiv2lib)
 endif()
 
+include(CheckCXXSourceCompiles)
+set(CMAKE_REQUIRED_LIBRARIES ${EXIV_TARGET_NAME})
+check_cxx_source_compiles("
+    #include <exiv2/exif.hpp>
+    int main() {
+        Exiv2::DecodeParams dp(1000);
+        return 0;
+    }
+" HAVE_EXIV2_DECODE_PARAMS)
+unset(CMAKE_REQUIRED_LIBRARIES)
+
 ############## Targets #########################
 
 ecm_set_disabled_deprecation_versions(
